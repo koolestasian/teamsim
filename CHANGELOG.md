@@ -14,3 +14,5 @@ All notable changes to this project are documented here. The format follows
   realism mode, live view and offline test suite.
 - `fixtures/demo`: the fictional "Lantern Shelf" team dataset and retrieval evaluation set.
 - `fixtures/teamctx-schema`: a pinned copy of teamctx's store schema for the checker tests.
+- ADR 0003: the scope covers scored tests and simulated feedback, with feedback shipped only
+  once it can be measured.

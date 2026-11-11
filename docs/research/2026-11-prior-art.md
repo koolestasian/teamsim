@@ -52,7 +52,8 @@ search excerpts. A deeper pass is the first milestone.
 ## What this means for teamsim
 
 1. Stay out of opinion prediction. It is crowded and well funded, and the evidence says it is
-   unreliable.
+   unreliable. (Changed 2026-11-11: [ADR 0003](../adr/0003-scope-tests-and-simulated-feedback.md)
+   brings simulated feedback into scope, on the condition that it can be measured.)
 2. The gap is simulated people for testing whether software works. A test teammate does not
    need to be an accurate human. It needs to be varied, messy, reproducible and checkable. The
    known weaknesses (compression, sycophancy, too-clean behaviour) still matter, so build in

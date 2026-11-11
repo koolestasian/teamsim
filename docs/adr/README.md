@@ -26,4 +26,5 @@ Statuses: `Proposed`, `Accepted`, `Superseded by NNNN`, `Deprecated`.
 | ADR | Title | Status |
 |---|---|---|
 | [0001](0001-dual-licence.md) | Dual licence: MIT OR Apache-2.0 | Accepted |
-| [0002](0002-start-from-the-teamctx-prototype.md) | Start from the teamctx simulation prototype; decide the stack after research | Accepted |
+| [0002](0002-start-from-the-teamctx-prototype.md) | Start from the teamctx simulation prototype; decide the stack after research | Accepted (goals amended by 0003) |
+| [0003](0003-scope-tests-and-simulated-feedback.md) | Scope: scored tests and simulated feedback | Accepted |

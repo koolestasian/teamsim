@@ -37,13 +37,17 @@ A live run needs the Discord emulator and a teamctx build; see the
 
 ## Direction
 
-- **Testing, not opinion prediction.** Simulated people are poor stand-ins for real opinions
-  (see the research). A test team does not need to be an accurate human; it needs to be
-  varied, messy, reproducible and checkable.
-- **Ground truth first.** The simulator knows what it planted, so results are scores, not
-  impressions.
+See [ADR 0003](docs/adr/0003-scope-tests-and-simulated-feedback.md) for the scope.
+
+- **Ground truth first.** The simulator knows what it planted, so test results are scores, not
+  impressions. A test team does not need to be an accurate human; it needs to be varied,
+  messy, reproducible and checkable.
+- **Simulated feedback, measured or not shipped.** Teammates will also give opinions on the
+  product. Simulated people are poor stand-ins for real opinions (see the research), so this
+  feedback is a set of hypotheses to check with real people, and it ships only once its
+  diversity and bias can be measured.
 - **Easy to run.** One command, a local model by default, presets instead of code. It should
-  work for students and people without a professional setup.
+  work without a professional test setup.
 
 ## Licence
 
