@@ -13,8 +13,8 @@ run: this is a read-only survey of docs, package registries, GitHub metadata and
    clock, time travel or a way to set message timestamps. The prototype hit this: its
    Discord emulator stamps ids and times with the current time, so multi-week history
    cannot be replayed. Real platforms are the same, because they assign timestamps
-   server-side. Of the self-hosted servers I checked, only two let a privileged client set them (Matrix
-   appservices, Mattermost system admins). If scenarios need "three weeks of history", teamsim
+   server-side. Of the self-hosted servers I checked, three can back-date history (Matrix appservices,
+   Mattermost system admins, Rocket.Chat's CSV importer), but none offers live clock control. If scenarios need "three weeks of history", teamsim
    has to own the clock.
 2. **Slack, GitHub and Linear have a usable, Apache-2.0 local emulator today.** Discord has
    one (the one the prototype uses), but it is the weakest fit: no threads, no forum posts,
@@ -45,21 +45,69 @@ From the prototype's RUNBOOK and REALISM notes (the Discord emulator is
 
 ## Local emulators
 
-Licences and activity from the GitHub API and npm registry on 2026-11-11. GitHub "open" counts include pull requests unless the cell says "issues".
+All facts in this section and the next were checked on 2026-11-11. Each row ends with
+reference keys, listed under the table. Counts (stars, open issues and PRs, merged PRs) are
+snapshots from the GitHub REST and search APIs on that date, and GitHub "open" counts include
+pull requests unless a cell says "issues". Where a claim depends on source code or a README,
+the commit SHA is given. Baseline's docs are not versioned, so its rows cite the page as read
+on the check date.
 
 | Platform | Tool | What it covers | Documented gaps | Licence and activity |
 |---|---|---|---|---|
-| Discord | Baseline `@deploybaseline/discord` | REST v10 (100 operations), gateway with intents, RESUME, sharding, interactions, OAuth2, rate limits; simulate endpoints for message, edit, delete, reaction, member join and leave, interaction, gateway disconnect | Threads, forum posts, stickers, polls, audit logs, invites; "No webhooks other than interaction webhooks"; no voice; presence not dispatched; sessions and rate counters reset on restart; no clock | Apache-2.0. npm: 2 versions, latest 0.14.0 published 2026-10-22. No public source: the GitHub org has 0 public repos and the repo linked from npm returns 404. Org created 2026-09-03 |
-| Discord | `verifo` (dksingh1997/verifo) | REST v10 fake with threads and webhooks | No gateway ("The full `Client` ... is not emulated") | MIT. 8 stars, last commit 2026-09-26 |
-| Discord | Spacebar server | A re-implementation of the Discord backend, including gateway and CDN | Status "Development"; compatibility with bots not checked here | AGPL-3.0. 182 open issues, no GitHub releases, last push 2026-11-06 |
-| Slack | Baseline Slack | Web API, OAuth v2, incoming webhooks, Events API (signed), Socket Mode, slash commands, block actions and modals; `thread_ts` and `conversations.replies`; reactions; modern file upload; scheduled messages | Slack Connect, Grid admin, user groups, reminders, canvases, lists, workflows; "exact rate limiting"; no way to move the clock; no dedicated "post as user" call (seed a user token and call `chat.postMessage`) | Apache-2.0 for the CLI and Discord packages (npm); other packages not checked. Same source caveat as above |
-| Slack, GitHub, Linear | `vercel-labs/emulate` | Same family of services; the Slack part is documented with threads, reactions, files, events and signed callbacks; snapshot, restore and reset in the programmatic API | The package README at the commit I read lists Socket Mode and slash commands as not implemented, unlike Baseline's page | Apache-2.0, public. 1,978 stars. v0.13.1 released 2026-11-08, 32 open issues, 90 open PRs, 26 PRs merged in the last 30 days. No Discord or Jira |
-| GitHub | `emulate` and Baseline | Repos, contents, commits, issues, PRs, reviews, comments, labels, milestones, branches, releases, orgs and teams, search, Actions, checks, GitHub Apps; repo webhooks with "real HTTP delivery to registered URLs on all state changes" | Reactions, git smart-HTTP clone and push are not listed (not verified either way); no clock | Apache-2.0 |
-| GitLab | `verifo` (docs list GitLab) | Not examined in depth | Unknown | MIT, small project |
-| Linear | `emulate` and Baseline | GraphQL issues, comments, labels, projects, cycles, OAuth, webhooks | "Full schema coverage ... notification inbox ... customer APIs ... not implemented". Open issue: webhook deliveries omit `Linear-Timestamp` and Issue payloads lack `state` | Apache-2.0 |
-| Jira | Baseline Jira | REST, JQL, Agile boards and sprints, OAuth 3LO, webhooks (docs page only) | Not examined | Apache-2.0 |
+| Discord | Baseline `@deploybaseline/discord` | REST v10 (100 operations), gateway with intents, RESUME, sharding, interactions, OAuth2, rate limits; simulate endpoints for message, edit, delete, reaction, member join and leave, interaction, gateway disconnect | Threads, forum posts, stickers, polls, audit logs, invites; "No webhooks other than interaction webhooks"; no voice; presence not dispatched; sessions and rate counters reset on restart; no clock | Apache-2.0. npm: 2 versions, latest 0.14.0 published 2026-10-22. No public source: the GitHub org has 0 public repos and the repo linked from npm returns 404. Org created 2026-09-03 Refs: B1, B2, B3. |
+| Discord | `verifo` (dksingh1997/verifo) | REST v10 fake with threads and webhooks | No gateway ("The full `Client` ... is not emulated") | MIT. 8 stars, last commit 2026-09-26 Refs: V1. |
+| Discord | Spacebar server | A re-implementation of the Discord backend, including gateway and CDN | Status "Development"; compatibility with bots not checked here | AGPL-3.0. 182 open issues, no GitHub releases, last push 2026-11-06 Refs: P1. |
+| Slack | Baseline Slack | Web API, OAuth v2, incoming webhooks, Events API (signed), Socket Mode, slash commands, block actions and modals; `thread_ts` and `conversations.replies`; reactions; modern file upload; scheduled messages | Slack Connect, Grid admin, user groups, reminders, canvases, lists, workflows; "exact rate limiting"; no way to move the clock; no dedicated "post as user" call (seed a user token and call `chat.postMessage`) | Apache-2.0 for the CLI and Discord packages (npm); other packages not checked. Same source caveat as above Refs: B2, B4. |
+| Slack, GitHub, Linear | `vercel-labs/emulate` | Same family of services; the Slack part is documented with threads, reactions, files, events and signed callbacks; snapshot, restore and reset in the programmatic API | The package README at the commit I read lists Socket Mode and slash commands as not implemented, unlike Baseline's page | Apache-2.0, public. 1,978 stars. v0.13.1 released 2026-11-08, 32 open issues, 90 open PRs, 26 PRs merged in the last 30 days. No Discord or Jira Refs: E1, E2, E3. |
+| GitHub | `emulate` and Baseline | Repos, contents, commits, issues, PRs, reviews, comments, labels, milestones, branches, releases, orgs and teams, search, Actions, checks, GitHub Apps; repo webhooks with "real HTTP delivery to registered URLs on all state changes" | Reactions, git smart-HTTP clone and push are not listed (not verified either way); no clock | Apache-2.0 Refs: E1, B4. |
+| GitLab | `verifo` (docs list GitLab) | Not examined in depth | Unknown | MIT, small project Refs: V1 (repo description only; the GitLab doc page was not read). |
+| Linear | `emulate` and Baseline | GraphQL issues, comments, labels, projects, cycles, OAuth, webhooks | "Full schema coverage ... notification inbox ... customer APIs ... not implemented". Open issue: webhook deliveries omit `Linear-Timestamp` and Issue payloads lack `state` | Apache-2.0 Refs: E1, E4, B4. |
+| Jira | Baseline Jira | REST, JQL, Agile boards and sprints, OAuth 3LO, webhooks (docs page only) | Not examined | Apache-2.0 Refs: B4. |
 
 Notes:
+
+Reference keys (all checked 2026-11-11):
+
+- B1: Baseline Discord docs, <https://docs.deploybaseline.com/discord> (the "100 HTTP
+  operations" figure, supported routes, simulate endpoints, the limits list including "No
+  webhooks other than interaction webhooks"). The docs name the vendor spec as
+  `discord/discord-api-spec` at `ed01408`.
+- B2: npm registry records,
+  <https://registry.npmjs.org/@deploybaseline/discord> and
+  <https://registry.npmjs.org/@deploybaseline/cli> (licence Apache-2.0, `engines` node
+  >=24, two versions each, `0.14.0` published 2026-10-22). Package page:
+  <https://www.npmjs.com/package/@deploybaseline/discord>, which returned HTTP 403 to my
+  fetcher, so the registry JSON is what I read.
+- B3: GitHub organisation, <https://api.github.com/orgs/deploybaseline> (`public_repos: 0`,
+  created 2026-09-03); the repository the npm records link to,
+  <https://github.com/deploybaseline/baseline-cli>, returns 404.
+- B4: Baseline docs, <https://docs.deploybaseline.com/slack> (supported methods, Events API,
+  Socket Mode, the unsupported list including "exact rate limiting"),
+  <https://docs.deploybaseline.com/providers> (provider list with GitHub, Linear and Jira)
+  and <https://docs.deploybaseline.com> (Node 24 or later, default ports).
+- E1: `vercel-labs/emulate` README at commit
+  `26a8fe7e32db3346b0ac928586422ac2709b922b` (tip of `main` on 2026-11-11), sections
+  "GitHub API", "Slack API" and "Linear API". Licence, stars (1,978) and activity:
+  <https://api.github.com/repos/vercel-labs/emulate>. Release:
+  <https://github.com/vercel-labs/emulate/releases/tag/v0.13.1> (published 2026-11-08).
+  Issue and PR counts (32 open issues, 90 open PRs, 26 PRs merged since 2026-10-11) come from
+  GitHub search queries `repo:vercel-labs/emulate is:issue is:open`, `is:pr is:open` and
+  `is:pr is:merged merged:>2026-10-11`.
+- E2: the Slack package README, which also lists Socket Mode and slash commands as not
+  implemented, at
+  <https://github.com/vercel-labs/emulate/blob/9cb8659c75cf44fd327f727327618c321bf1480d/packages/@emulators/slack/README.md>.
+  The same limits sentence is in E1 ("Current Slack limits").
+- E3: the repository has no `discord` or `jira` package under `packages/@emulators` (contents
+  API listing at the same commit as E1).
+- E4: Linear limits sentence in E1 ("Current Linear limits"), and the open issue
+  <https://github.com/vercel-labs/emulate/issues/323>.
+- V1: `dksingh1997/verifo` `docs/discord.md` at commit
+  `e85a1c132267bbd225a0c6e300bc7cf37da0f51f`; licence and star count from
+  <https://api.github.com/repos/dksingh1997/verifo>; last commit 2026-09-26.
+- P1: `spacebarchat/server` README at commit `96571d975d08641e6a1c4602aafe728b171f8bc3`
+  (status badge "Development"); licence, last push and 182 open issues from
+  <https://api.github.com/repos/spacebarchat/server> and the search API; the releases
+  endpoint returns 0 releases.
 
 - **Baseline and `emulate` look related.** They use the same tagline ("Local drop-in
   replacement services for CI and no-network sandboxes") and the same default ports for the
@@ -70,14 +118,14 @@ Notes:
   with `npx`. Its docs say nothing about native Windows support beyond one flag that is documented as unsupported on Windows; the prototype runs it in WSL by project choice, which this survey
   cannot tell apart from a Windows limitation. `emulate` declares no engine; its repo pins a
   Node version I did not check. Both bind to 127.0.0.1 and use plain HTTP.
-- **Closed or hosted options were rejected.** Rystic (rystic.ai) offers Slack, Linear, Jira
+- **Closed or hosted options were rejected.** Rystic (<https://www.rystic.ai>, install doc <https://www.rystic.ai/docs/installation>) offers Slack, Linear, Jira
   and GitHub Pulls simulators and self-reports 95.0% agreement with the live API across 884
   checks for Slack, but its install doc requires an account and a network connection while a
   simulator runs (it checks in with the vendor), and states no software licence. A hosted
-  mock (sandboxapis.dev) was also seen. Neither fits an offline, open-source default.
+  mock (<https://sandboxapis.dev/docs/slack>) was also seen. Neither fits an offline, open-source default.
 - **Unit-test libraries are not emulators.** `discord.js` mocks, `dpytest`-style tools and
   Slack mock clients replace the SDK, not the server, so a product that opens its own gateway
-  connection cannot use them. Slack's own `steno` tool is archived (GitHub, last push
+  connection cannot use them. Slack's own `steno` tool is archived (<https://api.github.com/repos/slackapi/steno>: `archived: true`, last push
   2021-08-10).
 
 ## Self-hosted real chat servers
@@ -87,22 +135,67 @@ product under test must already integrate with that chat system.
 
 | Server | Licence | Latest release and activity | Setup | Time and history |
 |---|---|---|---|---|
-| Matrix, Synapse (element-hq) | AGPL-3.0 | 1.165.0 on 2026-11-10; 2,117 open issues. The older matrix-org repo is archived (last release 1.98.0, 2023-12-12) | Python or Docker | Appservices can set event time with `ts` ("origin_server_ts") on send and state calls (spec v1.3) and act as virtual users with `user_id`. Ordering in the event graph stays "now" |
-| Matrix, Tuwunel | Apache-2.0 | 1.9.4 on 2026-10-10; 73 open issues | Rust single binary (platform support not checked) | Same Matrix spec |
-| Mattermost | Source: AGPL-3.0 or commercial, with compiled releases under MIT; Team Edition is "under 250 activated users" | 12.1.0 on 2026-11-05 | One Docker command (`mattermost/mattermost-preview`) or a Linux binary with PostgreSQL | In `server/channels/api4/post.go` on `master`, a non-admin `create_at` is reset to 0, so a system admin can post with a past time |
-| Rocket.Chat | MIT, except `ee/` directories under a separate licence | 9.0.0 on 2026-11-10; 4,391 open issues | Docker Compose with a database (not verified in detail) | Not checked |
-| Zulip | Apache-2.0 | 12.4 on 2026-11-06 | Not checked | Not checked |
-| Gitea (go-gitea) | MIT | 28.3.0 on 2026-11-01 | A single binary for Windows, macOS and Linux with SQLite built in (Gitea docs) | Not checked |
+| Matrix, Synapse (element-hq) | AGPL-3.0 | 1.165.0 on 2026-11-10 ([release](https://github.com/element-hq/synapse/releases/tag/v1.165.0)); 2,117 open issues and PRs. The older matrix-org repo is archived (last release [1.98.0](https://github.com/matrix-org/synapse/releases/tag/v1.98.0), 2023-12-12) | Python or Docker | Appservices can set event time with `ts` ("origin_server_ts") on send and state calls (spec v1.3) and act as virtual users with `user_id`. Ordering in the event graph stays "now" |
+| Matrix, Tuwunel | Apache-2.0 | 1.9.4 on 2026-10-10 ([release](https://github.com/matrix-construct/tuwunel/releases/tag/v1.9.4)); 73 open issues and PRs | Rust single binary (platform support not checked) | Same Matrix spec |
+| Mattermost | Source: AGPL-3.0 or commercial, with compiled releases under MIT ([LICENSE.txt](https://github.com/mattermost/mattermost/blob/238dcf33c618/LICENSE.txt)); Team Edition is "under 250 activated users" | 12.1.0 on 2026-11-05 ([release](https://github.com/mattermost/mattermost/releases/tag/v12.1.0)) | One Docker command (`mattermost/mattermost-preview`) or a Linux binary with PostgreSQL | In `server/channels/api4/post.go` on `master`, a non-admin `create_at` is reset to 0, so a system admin can post with a past time (source at commit `238dcf33c618`, line 125) |
+| Rocket.Chat | MIT, except `ee/` directories under a separate licence | 9.0.0 on 2026-11-10 ([release](https://github.com/RocketChat/Rocket.Chat/releases/tag/9.0.0)); 4,391 open issues and PRs | Docker Compose with a database (not verified in detail) | The CSV importer's message file has a per-message timestamp in milliseconds (example line `"user","1479162481336","text"`), so history can be imported. Whether it can be seeded through the live API was not checked |
+| Zulip | Apache-2.0 | 12.4 on 2026-11-06 ([release](https://github.com/zulip/zulip/releases/tag/12.4)) | Not checked | Not checked |
+| Gitea (go-gitea) | MIT | 28.3.0 on 2026-11-01 ([release](https://github.com/go-gitea/gitea/releases/tag/v28.3.0)) | A single binary for Windows, macOS and Linux with SQLite built in (Gitea docs) | Not checked |
 | GitLab CE | MIT for CE | 19.6 docs | "16 GB is the baseline", 8 GB minimum (GitLab docs) | Not checked |
-| Plane | AGPL-3.0 | v1.5.0-rc1 on 2026-11-10 | Docker | Not checked |
+| Plane | AGPL-3.0 | v1.5.0-rc1 on 2026-11-10 ([release](https://github.com/makeplane/plane/releases/tag/v1.5.0-rc1)) | Docker | Not checked |
 
-Takeaway: Matrix and Mattermost are the only two where historical timestamps are possible,
-and both are heavy for a student laptop (a database and a server). TheAgentCompany (see the
-prior-art note) uses this route (GitLab, Rocket.Chat, Plane) and is described there as heavy
-to set up. The licences matter if teamsim ever bundles one: AGPL (Synapse, Plane) and
-Mattermost's source licence are not compatible with simply shipping a copy inside an
-MIT-or-Apache project; running one as a separate process the user installs is a different
-case. I am not giving legal advice here.
+Self-hosted references (checked 2026-11-11): licences and open counts from
+`https://api.github.com/repos/<owner>/<repo>` for each repository above (the `license`
+field; for Rocket.Chat, the repository's `LICENSE` at
+<https://github.com/RocketChat/Rocket.Chat/blob/ad54cf373053099a0b3af84a0f5b305c5ee4c61f/LICENSE>);
+Matrix `ts` and `user_id` behaviour,
+<https://spec.matrix.org/latest/application-service-api/#timestamp-massaging> (spec page
+version 1.19; "Added in v1.3"); Mattermost editions and the Docker preview command,
+<https://docs.mattermost.com/product-overview/editions-and-offerings> and
+<https://docs.mattermost.com/deployment-guide/server/deploy-containers>; Rocket.Chat CSV
+format, <https://docs.rocket.chat/docs/import-from-csv>; Gitea,
+<https://docs.gitea.com/installation/install-from-binary>; GitLab,
+<https://docs.gitlab.com/install/requirements/>.
+
+Two different things need separating:
+
+- **Historical seeding** (back-dating messages once, before the product connects). Matrix
+  appservices can set event time, Mattermost system admins can set `create_at`, and
+  Rocket.Chat's CSV importer takes a per-message timestamp. I did not check Zulip, Gitea,
+  GitLab or Plane for an equivalent, so "cannot" is not established for them.
+- **Live clock control** (advancing time while the product runs, for example to expire tokens
+  or trigger a digest). None of the emulators or servers I read documents it. Matrix keeps
+  event ordering at "now" even with a changed timestamp.
+
+All of these are heavy for a student laptop (a database and a server) except the Gitea
+binary. TheAgentCompany (see the prior-art note) uses this route (GitLab, Rocket.Chat, Plane)
+and is described there as heavy to set up.
+
+**Licences, if teamsim ever ships or bundles one.** I am not giving legal advice; the
+distinctions below come from the licence texts.
+
+- *Aggregation (a separate, independent AGPL server shipped or installed next to
+  teamsim).* AGPL-3.0 section 5 says that "Inclusion of a covered work in an aggregate does
+  not cause this License to apply to the other parts of the aggregate", provided the
+  compilation does not limit users' access or legal rights beyond what the separate works
+  allow ([text](https://www.gnu.org/licenses/agpl-3.0.en.html)). So teamsim's MIT or
+  Apache-2.0 code is not affected. Obligations apply to the AGPL component itself: if
+  teamsim distributes a copy (an image, a bundled binary), it must carry the licence text and
+  make the Corresponding Source for that component available. If the user installs it from
+  upstream, teamsim only links to it and has no such duty. Merely running an unmodified
+  server needs nothing further, because the section 13 network-source duty applies "if you
+  modify the Program".
+- *Copying or linking AGPL code into teamsim, or modifying the server.* That makes a covered
+  work: the result must be offered under AGPL, and a modified server exposed to remote users
+  must offer its source (section 13). That would conflict with an MIT-or-Apache teamsim, so
+  avoid it. Writing against a server's public protocol (the Matrix spec, a REST API) does not
+  copy its code.
+- *Mattermost.* Its LICENSE.txt says compiled versions from Mattermost, Inc. are MIT, while
+  building from source is AGPL or commercial, and use of the "Mattermost" mark needs prior
+  written approval. Redistributing their compiled build is therefore an MIT question plus a
+  trademark one. Team Edition is documented as meant for "under 250 activated users".
+- Whether two things are "separate and independent" depends on how they are connected.
+  Talking over a network protocol to a server the user installs is the safest case.
 
 ## Real platforms in test mode
 
@@ -266,8 +359,8 @@ emulator changes. A real-platform adapter later is the same interface.
 - Whether Baseline or `emulate` run natively on Windows, or the exact Node version `emulate`
   needs.
 - Behaviour of any emulator beyond what its docs, README or source say; nothing was run.
-- Spacebar's compatibility with bot libraries, and Rocket.Chat, Zulip, Tuwunel and Gitea setup
-  and time features.
+- Spacebar's compatibility with bot libraries; Rocket.Chat setup and whether its importer's
+  timestamps are visible through the live API; Zulip, Tuwunel and Gitea setup and time features.
 - Whether real Slack or Discord accept back-dated messages by any supported route.
 - The full context of the Discord policy sentence about "maintaining activity", and the
   effective dates of the GitHub terms.
