@@ -32,7 +32,7 @@ everything.
 
 **What would change the recommendation:** a clean-machine install test where Python plus Node
 proves much harder than Node alone (go to B); a first user who needs Slack, GitHub or Linear
-in v0.1 and fast per-test resets (go to B); a need for a single downloadable binary that
+in v0.1 and fast resets to the seed between scenarios (go to B); a need for a single downloadable binary that
 outweighs the rewrite (go to C). Details under "What would change it".
 
 ## What any stack has to carry
@@ -96,17 +96,21 @@ reads stay an optional, product-specific extra (`2026-11-prototype-audit.md`, se
   - macOS and Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`, or `brew install uv`.
   - Then on all three: `uvx teamsim run --preset demo` (illustrative command). uv downloads a
     Python if none is found ("By default, uv will automatically download Python versions if they
-    cannot be found on the system", uv docs). Before a PyPI release, `uvx --from git+<repo URL>`
-    runs it from the repository. `pipx install teamsim` also works for people who already use
-    Python.
+    cannot be found on the system", uv docs). Before a PyPI release,
+    `uvx --from git+<repo-URL> teamsim run --preset demo` runs it from the repository (`--from`
+    picks the package source; the command name still follows). `pipx install teamsim` also
+    works for people who already use Python.
   - Runs that use an emulator also need Node 24 or later: the Windows `.msi` installer, nvm or
     the standalone binary (nodejs.org download page). teamsim should check for `node` at start
     and print what to install, never install it silently.
 - **Emulators.** HTTP and JSON over loopback, through the prototype's emulator client pattern.
   `emulate` is started with its CLI (`npx emulate --service slack --seed config.yaml`). Its
-  snapshot, reset and restore are documented in the JavaScript API; from the CLI the README
-  documents reset through its inspector only. So a clean state between scenarios means
-  restarting the process with its seed, which the prototype already does for Discord
+  built-in Slack, GitHub and Linear emulators offer only `reset()` (back to the seed) and
+  `close()` in the JavaScript API; `snapshot()` and `restore()` exist only for custom
+  emulators (`packages/emulate/src/api.ts` and the README at the commit in Sources). From the
+  CLI the README documents reset through its inspector only. So a clean state between
+  scenarios means restarting the process with its seed, which reaches the same state as
+  `reset()` more slowly, and which the prototype already does for Discord
   (`2026-11-prototype-audit.md`, section 2.2 step 2). Whether `emulate` exposes reset over
   HTTP was not checked.
 - **Local models.** `urllib` through the prototype's host-allowlisted transport, given a base URL
@@ -134,11 +138,18 @@ reads stay an optional, product-specific extra (`2026-11-prototype-audit.md`, se
 - **Language and runtime.** Node 24 (LTS, first released 2025-05-06) or Node 26 (LTS, first
   released 2026-05-05). From Node 27 every major release becomes LTS (Node release page).
   Baseline's Discord package needs Node 24 or later. Node runs `.ts` files directly when they
-  use only erasable syntax, with no type checking (Node 26 docs), so the TypeScript compiler is
-  a dev dependency for CI checks only.
-- **Process model.** `emulate` can run inside the teamsim process (`createEmulator`, with
-  `snapshot()`, `reset()` and `restore()` in its README). That is B's main technical gain:
-  fast, exact resets between scenarios. Baseline's Discord still runs as a child process; I did
+  use only erasable syntax, with no type checking, but "refuses to handle TypeScript files
+  inside folders under a node_modules path" (Node 26 docs, "Type stripping in dependencies").
+  An installed package, which is what `npx teamsim` runs, must therefore ship compiled
+  JavaScript: B needs a build step (the TypeScript compiler as a dev dependency) before every
+  release, and CI has to test the built package, not only the sources. Writing plain
+  JavaScript with type comments would avoid the build step at the cost of weaker type checks.
+- **Process model.** `emulate` can run inside the teamsim process (`createEmulator`). For the
+  built-in Slack, GitHub and Linear emulators that gives an in-process `reset()` back to the
+  seed; arbitrary `snapshot()` and `restore()` exist only for custom emulators
+  (`packages/emulate/src/api.ts` at the commit in Sources). That is B's main technical gain:
+  faster resets to the seed between scenarios, not mid-scenario checkpoints. A gets the same
+  end state by restarting the emulator. Baseline's Discord still runs as a child process; I did
   not check whether it has a programmatic API.
 - **Install and run.** One prerequisite, then one command:
   - Windows: the `.msi` installer or the `.zip` archive. macOS and Linux: nvm or the standalone
@@ -159,7 +170,8 @@ reads stay an optional, product-specific extra (`2026-11-prototype-audit.md`, se
   list no TOML module), and the live view page, which is already plain JavaScript. The roughly
   5,800 lines of `simlib/` and 2,900 lines of tests are rewritten
   (`2026-11-prototype-audit.md`, section 2.1).
-- **Costs.** A full rewrite of a working, tested core, including the security patterns. Node
+- **Costs.** A full rewrite of a working, tested core, including the security patterns, plus
+  a compile step before each release. Node
   also has no WebSocket server in core (its `WebSocket` global is a browser-compatible client),
   so a teamsim-owned Discord fake would still need a package or hand-written framing.
 
@@ -194,7 +206,8 @@ costs, and nothing found in run 1 needs what it would add.
 | Runtimes for an emulator run | uv + Node | Node | binary + Node |
 | Prototype code kept | Most | Design, view | Design |
 | Core third-party code | None | `emulate` + deps | None if JSON |
-| In-process emulator reset | No | Yes | No |
+| In-process reset to seed | No (restart) | Yes | No (restart) |
+| Build step to release | No | Yes (tsc) | Yes (binaries) |
 | Tests from day one | 230 | 0 | 0 |
 
 ## Decisions for the maintainer
@@ -279,8 +292,10 @@ The cost to state plainly in the README: an emulator-backed run needs uv and Nod
   emulator, demo run) and time it against Node alone. If the second runtime is the step that
   fails or takes much longer, switch to B.
 - **First user and workspace.** If the first user needs Slack, GitHub or Linear in v0.1 and a
-  restart of `emulate` between scenarios is too slow, B's in-process `reset()` matters. Measure
-  restart time first.
+  restart of `emulate` between scenarios is too slow, B's in-process `reset()` to the seed
+  matters. Measure restart time first. This only covers resets to the seed: if scenarios need
+  checkpoints in the middle of a run, no option gets them from the built-in emulators today,
+  so B would not help unless `emulate` adds them or teamsim writes custom emulators.
 - **Emulator risk.** If Baseline's Discord package stops working (it has no public source,
   `2026-11-emulators.md` ref B3) and teamsim must own a Discord fake with a WebSocket gateway,
   re-weigh: none of the three standard libraries has a WebSocket server, but Node and Go have
@@ -310,13 +325,15 @@ All checked 2026-11-11.
 - Python versions and dates: <https://devguide.python.org/versions/>
 - `tomllib` ("Added in version 3.11"): <https://docs.python.org/3/library/tomllib.html>
 - uv install commands: <https://docs.astral.sh/uv/getting-started/installation/>
-- uv tools, `uvx`, `--from git+`: <https://docs.astral.sh/uv/guides/tools/>
+- uv tools, `uvx`, `--from git+` ("Requesting different sources"):
+  <https://docs.astral.sh/uv/guides/tools/>
 - uv automatic Python downloads: <https://docs.astral.sh/uv/concepts/python-versions/>
 - uv licence: <https://api.github.com/repos/astral-sh/uv> (`license.spdx_id`: Apache-2.0)
 - Node release lines and the Node 27 schedule change:
   <https://nodejs.org/en/about/previous-releases>
 - Node install methods: <https://nodejs.org/en/download>
-- Node TypeScript type stripping (v26.13.1 docs): <https://nodejs.org/api/typescript.html>
+- Node TypeScript type stripping, including "Type stripping in dependencies" (v26.13.1 docs):
+  <https://nodejs.org/api/typescript.html>
 - `node:test` stable since v20: <https://nodejs.org/api/test.html>
 - `fetch` stable since v21, `WebSocket` client since v22: <https://nodejs.org/api/globals.html>
 - Node API index (no TOML module): <https://nodejs.org/api/index.html>
@@ -324,8 +341,10 @@ All checked 2026-11-11.
   <https://api.github.com/repos/golang/go>
 - Go `Client.CheckRedirect`: <https://pkg.go.dev/net/http>; standard library index:
   <https://pkg.go.dev/std>
-- `emulate` README (CLI, programmatic API, snapshot, reset, inspector), tip of `main` at
-  `26a8fe7e32db3346b0ac928586422ac2709b922b`: <https://github.com/vercel-labs/emulate>;
+- `emulate` README (CLI, programmatic API, inspector; its snapshot example uses a custom
+  emulator) and `packages/emulate/src/api.ts` (the built-in `Emulator` interface has `reset()`
+  and `close()` only), tip of `main` at `26a8fe7e32db3346b0ac928586422ac2709b922b`:
+  <https://github.com/vercel-labs/emulate>;
   repository `engines` (`node >=24`) in its root `package.json`
 - `emulate` 0.13.1 on npm (three runtime dependencies, no `engines`):
   <https://registry.npmjs.org/emulate/latest>
