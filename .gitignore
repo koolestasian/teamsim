@@ -1,0 +1,24 @@
+# Secrets and local settings
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Simulation runtime state and reports (written on every run)
+prototypes/*/.state/
+prototypes/*/reports/
+prototypes/*/watch-speed
+prototypes/*/*.log
+
+# Databases
+*.db
+*.db-wal
+*.db-shm
+
+# Editors and OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,21 @@
+name: Feature request
+description: Suggest something teamsim should simulate or check
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to test?
+      description: The product, the team behaviour you want simulated, and what should be checked.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like teamsim to do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you do today instead?

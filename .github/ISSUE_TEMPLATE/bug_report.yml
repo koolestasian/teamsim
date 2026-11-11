@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work the way the docs say it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not report security vulnerabilities here. Use the private link in .github/SECURITY.md.
+        Do not paste real chat messages, names, keys or tokens.
+  - type: input
+    id: version
+    attributes:
+      label: Commit
+      description: The commit hash you ran.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and Python version
+      placeholder: "for example Windows 11, Python 3.14.0"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include the relevant part of the report or log, with secrets removed.
+    validations:
+      required: true
