@@ -368,9 +368,9 @@ Issues for a general teamsim, where the product under test is arbitrary and less
   (`REALISM.md:24`, `RUNBOOK.md:32`), `crates/...` paths (`simlib/runner.py:40`,
   `simlib/script.py:777`, `fixtures/demo/README.md:71-98`, `fixtures/demo/eval-baseline.toml:1-2`).
   These are not private, but they point at files that are not in this repository.
-- `RUNBOOK.md:155` says "Nothing here is committed or pushed ... this folder must stay local",
-  which is no longer true. `RUNBOOK.md:90` names `open-live-view.cmd`, which is not in the
-  repository. `REALISM.md:5` cites a report folder that is gitignored.
+- Stale documentation: `RUNBOOK.md:155` still says the folder must stay local, which is no
+  longer true; `RUNBOOK.md:90` names a local launch script that is not in the repository;
+  `REALISM.md:5` cites a report folder that is gitignored.
 - `REALISM.md:3-6` and `REALISM.md:64-69` describe learning from a real team server through
   numbers only; that is within the project rules, and no names, ids or text from it appear in
   the files read for this audit.
@@ -449,8 +449,10 @@ sycophancy check and a comparison with published human results. Measured against
    versioned prompts and structured answers (ratings plus free text), so results can be
    compared across runs and models.
 5. **Measurements.** Diversity across personas (for example the spread of ratings and of
-   reasons), a sycophancy check (feedback on a deliberately degraded product build, or the
-   same question asked with positive and negative framing, must change), repeat runs with
+   reasons); two separate sycophancy controls: a sensitivity control (judgments must get
+   worse on a deliberately degraded build of the product) and a framing control (judgments
+   must stay stable when only the wording of the question changes, for example positive
+   versus negative framing); repeat runs with
    different seeds and models to show variance, and a comparison set of published human
    results to score against. The prototype's pattern of comparing live numbers with an
    offline baseline (`simlib/runner.py:642-655`) can be reused for this.
