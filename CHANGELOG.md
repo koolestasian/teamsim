@@ -16,3 +16,5 @@ All notable changes to this project are documented here. The format follows
 - `fixtures/teamctx-schema`: a pinned copy of teamctx's store schema for the checker tests.
 - ADR 0003: the scope covers scored tests and simulated feedback, with feedback shipped only
   once it can be measured.
+- Research: a deep prior-art pass, an audit of the prototype, a survey of workspace emulators,
+  and a note on personas, measurement and local models (`docs/research/`).
