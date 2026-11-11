@@ -10,14 +10,17 @@ excerpts through a mirror site, so it is used for leads, never as evidence.
 1. **Do not let the model invent the teammates' opinions.** Persona collapse, sycophancy and
    drift are measured, universal and not fixed by more personas. The script should own who each
    teammate is, what stance they hold and when they speak. The model only writes the words.
-2. **Use a hybrid.** Scripted timeline for ground truth and reproducibility (what the prototype
-   does today), a model for wording and for replies to the product, with every generated line
-   recorded so a run can be replayed exactly.
+2. **Use a hybrid when generation is on.** Scripted timeline for ground truth and reproducibility
+   (what the prototype does today), a model for wording and for replies to the product, with
+   every accepted line recorded so a run can be replayed exactly. **An ordinary scored-test run
+   needs no model at all** in this proposal: the scripted team stays the default, and generation
+   is an option that feedback and reactive teammates need.
 3. **Simulated feedback is measurable, but only partly.** Diversity and sycophancy can be scored
    with numbers on every run. Agreement with humans can be checked only at the level of the persona
    engine (public surveys), not for a given product. Ship feedback behind an "experimental" label
    until it passes a bar set in advance (see "Gate for simulated feedback").
-4. **Local by default is feasible, but not for every message.** A 3-4B model on an ordinary laptop
+4. **"Local by default" applies only when generation is on, and it is feasible only for a
+   minority of messages.** A 3-4B model on an ordinary laptop
    CPU writes about 7 tokens per second. That is fine for tens of generated messages per run, too
    slow for hundreds. Talk to any OpenAI-compatible endpoint so the user picks the runtime.
 5. **v0.1 teammate actions: chat plus tasks/issues, with repo events scripted only.** Details at
@@ -64,14 +67,21 @@ behaviour.
 
 ## 2. Measuring diversity and sycophancy with numbers
 
-Cheap enough to run on every run, with no human in the loop. Diversity metrics 1-3 and the first
-two sycophancy checks need only the standard library.
+Cheap to run on every run, with no human in the loop, but not free. Knowing the *assigned* stance
+does not tell you the stance the *free text* expresses, so every generated line first needs a
+label. Two ways, and the choice sets the cost:
+- *Constrained output:* the generator returns the line plus a stance tag in a fixed schema.
+  Cheap, but the model grades itself, so validate the tags on a hand-labelled sample.
+- *Separate judge or classifier:* one extra call per scored line. SYCON-Bench itself uses GPT-4o
+  to judge each response (arXiv 2505.23840v4). Calibrate on hand-labelled lines.
+Only the arithmetic after labelling (counts, entropy, TVD, flips) is standard-library code.
+Lexical metrics and the planted-flaw check need no stance label (see below).
 
 **Diversity**
 1. *Lexical:* distinct-n and Self-BLEU over the teammates' lines for the same prompt. Cheap, but
    fooled by random words, so never use alone (precision/recall paper, arXiv 2402.10693).
-2. *Stance spread:* because the script assigns stances, compare the stances the text expresses
-   with the assigned distribution. Use concentration, entropy and total variation distance, the
+2. *Stance spread:* label the stance each line expresses (see above), then compare with the
+   assigned distribution. Use concentration, entropy and total variation distance, the
    collapse measures in Ozkan (concentration 0.36 to 0.69, entropy 1.46 to 0.77 when collapsed).
 3. *Spread ratio:* standard deviation of the simulated answers divided by the human one. Collapse
    sits near 0.4-0.56, over-dispersion near 1.26-1.37 (same paper), so a pass band between them
@@ -82,20 +92,25 @@ two sycophancy checks need only the standard library.
    embedding model, which is a dependency question for the stack ADR.
 
 **Sycophancy**
-1. *Stance flip under pressure:* SYCON-Bench's Turn of Flip and Number of Flip, counted
-   automatically because teamsim knows each teammate's assigned stance. SycEval (Stanford, AIES
+1. *Stance flip under pressure:* SYCON-Bench's Turn of Flip and Number of Flip. teamsim knows
+   each teammate's assigned stance, so a flip is a labelled stance that differs from it; the
+   label comes from the generator tag or a judge. SycEval (Stanford, AIES
    2025) reports 58% sycophantic behaviour across three frontier models with rebuttals, so
    expect non-zero flips.
 2. *Planted-flaw test (teamsim's own idea, untested):* describe the product with one known flaw
-   in its docs or behaviour. Score the share of teammates who raise it. A sycophantic panel
+   in its docs or behaviour. Score the share of teammates who raise it (a keyword or fact match
+   against the planted flaw, so no stance label is needed). A sycophantic panel
    praises a product it was handed evidence against. Ground truth makes this a number.
 3. *Validation rate:* ELEPHANT (arXiv 2505.13995, ICLR 2026) measures validation, indirectness,
    framing and moral sycophancy with human-validated LLM scorers; across 11 models users' face
    was preserved about 45 points more than humans did. Heavier: needs a judge model.
 
-**Cost.** The lexical, stance and spread metrics and the stance-flip and planted-flaw checks are
-arithmetic on text the run already produced: effectively free. A judge-model metric needs one extra call per scored line (about 400 lines for a run of the
-size of the prototype's).
+**Cost.** Lexical metrics, the spread ratio over labelled answers and the planted-flaw match are
+arithmetic on text the run already has. Stance metrics add either a schema tag on each generated
+line (no extra call, needs a validation sample) or one judge call per scored line (up to about
+400 for a run the size of the prototype's). With a scripted, model-free run the stance is the
+assigned one by construction, so these metrics only become informative once a model writes or
+reacts.
 
 **Judges are not neutral.** PersonaEval reports that role-play studies often lean on unvalidated
 LLM judges (via search excerpt; not opened). Prefer rule-based and ground-truth checks, and
@@ -209,13 +224,18 @@ not find an Ollama issue on it). Do not rely on it. Record and replay instead (n
 Mechanics:
 - The script emits *slots*: speaker, intent, stance, facts that must appear, length, time. A model
   fills a slot; a checker rejects it if a required fact is missing, a forbidden fact appears, or the
-  stance classifier disagrees; reject, retry, then fall back to the scripted line.
-- Store each accepted line keyed by (seed, slot, persona, model, prompt version). Later runs read
-  the store, so they are free and identical. TinyTroupe already caches model responses for this
-  reason (its README, 2026-03 release 0.7.0).
+  stance label (generator tag or classifier) disagrees with the assigned one; reject, retry, then fall back to the scripted line.
+- Two different stores. (1) A *generation cache* keyed on the complete request: model, prompt
+  version, persona, slot, seed, the full conversation context given to the model, and the scenario
+  version. For a reactive reply that context includes the product's message, so a changed product
+  response is a cache miss and never reuses a reply written for an earlier one. TinyTroupe also
+  caches model responses (its README, release 0.7.0, 2026-03). (2) An explicit *replay* of a
+  recorded run: the whole sequence of posted lines is saved, and replaying it posts them as they
+  were without calling a model or reading the product's output. Replay reproduces what the team
+  said; it cannot show how the same team would answer a different product.
 - A reactive teammate (replying to the product) gets a slot filled at run time with the product's
-  message as untrusted data, and is recorded the same way. Product output is untrusted
-  input to the persona, as chat is to the product.
+  message as untrusted data. Product output is untrusted input to the persona, as chat is to the
+  product.
 - Keep a no-model mode (scripted lines only) so the core test works with nothing installed.
 
 ## 6. How the realism patterns generalise
@@ -253,12 +273,33 @@ is a lead to check.
 | Chat plus tasks/issues | Same text modality and the same stance machinery, so the persona cost is near zero. Adds what many team products actually act on: assignments, status changes, due dates, comment threads. The extra cost is workspace-side state, covered by another task |
 | Plus repo | Needs code written by the teammate. Small models are the weak point and there is no check of "teammate wrote correct code" cheaper than running it |
 
-**Recommendation:** chat plus tasks/issues, with a small closed set of teammate actions chosen by
+**Recommendation (a competing proposal, see "Where the run-1 notes disagree"):** chat plus
+tasks/issues, with a small closed set of teammate actions chosen by
 the script (post, reply, react, edit, delete, create a task, assign, change status, comment).
 Repo support in v0.1 should be scripted events only (commit, open PR, review, merge) with no
 model-written code. Ship scored tests first. Build the diversity and sycophancy meters into v0.1
 because they also test the chat teammates, but keep simulated feedback behind the gate in
 section 3 until it passes.
+
+## Where the run-1 notes disagree
+
+Two points where this note differs from the other run-1 notes (the prior-art and emulator notes).
+They are competing proposals for the maintainer to decide, not settled.
+
+1. **v0.1 teammate actions.** The prior-art and emulator notes recommend **chat only** for v0.1,
+   with issues next through an existing emulator and repo last (the emulator note: v0.2 issues,
+   after the first user is chosen). This note recommends chat **plus tasks/issues** from the
+   persona side, because the persona cost is near zero. That argument ignores the emulator,
+   fixture and scoring work the other notes count, which is where the real cost sits. If that
+   cost is as they say, chat only first is the safer order and nothing in the persona work
+   changes: the stance machinery carries over to issue comments later.
+2. **Model by default.** The prior-art note recommends a scripted, seeded, **model-free default**
+   with LLM-played teammates as an optional layer, and no "local model by default" promise until
+   a model is shown able to play a teammate. This note agrees on the default: an ordinary
+   scored-test run needs no model. Where it adds to that note: if generation is on (reactive
+   teammates, simulated feedback), prefer a hybrid with recorded lines, and "local by default"
+   applies only in that mode, only for a minority of lines on laptop CPUs, and only after the
+   candidate models pass the diversity and sycophancy checks here.
 
 ## What I could not verify
 
