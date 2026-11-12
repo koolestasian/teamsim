@@ -1,5 +1,9 @@
 # How team-facing product capabilities are evaluated in research: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: how research evaluates the things teamsim scores in team-facing products: memory and
 search over team chat, multi-party understanding, decisions and due dates, knowledge updates and
 conflicting sources, prompt injection, privacy and secrets, catch-up. Peer-reviewed papers and
@@ -14,7 +18,7 @@ stated, so treat each as a preprint.
 
 1. **Long-term memory benchmarks agree on five task types**: single-hop extraction, multi-hop
    (multi-session) reasoning, temporal reasoning, knowledge update and abstention (LongMemEval,
-   LoCoMo, EverMemBench, SlackBench). The pattern is: humans write the questions and mark the
+   LoCoMo, EverMemBench; SlackBench covers search, abstention, summaries and inference instead). The pattern is: humans write the questions and mark the
    evidence turns, a model writes the filler chat, answers are scored by exact-ish match or an
    LLM judge validated on a small human-labelled sample. Teamsim already plants facts this way.
    What it lacks is abstention, knowledge-update and multi-hop checks. [full text]
@@ -33,25 +37,26 @@ stated, so treat each as a preprint.
 4. **Abstention and false premises are where assistants fail quietly.** On LoCoMo, a long-context
    model fell to 2.1% on unanswerable ("adversarial") questions while a short-context GPT-4 got
    70.2%. In SlackBench, abstention ("hallucination") queries scored 12.8% to 59.6% on a filtered
-   subset across eight harness-model pairs, at or below the search queries for all eight; a
+   subset across eight harness-model pairs, at or below the search queries in seven of the eight; a
    correct abstention must also give the right reason. Teamsim should add "ask about something never planted" and "ask with a wrong
    premise". [full text]
 5. **Injection scores depend on benchmark design more than on the model.** Static template
    benchmarks are near saturated for frontier models; adaptive human attacks are not (208,095
-   human-written attacks: GPT-4o 58%, a defence-trained model 32%). One audit found a scorer that
+   unique human-written attack prompts, replayed on newer models: GPT-4o 58%, a defence-trained model 32%). One audit found a scorer that
    counted "the target tool was called" reported 21.7% where the argument-level truth was 1.2%,
    and 91% of payloads were never delivered. Teamsim must verify delivery, score on observable
    actions and exact strings, never on wording heuristics. [full text for the audit]
 6. **Multi-user injection is a separate threat and teamsim's setting is where it lives.**
    "Cross-user poisoning" (an ordinary teammate message that later steers the agent while it
-   serves someone else) succeeded 82% (GPT-4.1) and 98% (Claude Sonnet 4) on Slack-style tasks
+   serves someone else) succeeded 82% (GPT-4.1) and 95% (Claude Sonnet 4) on Slack-style tasks
    where standard prompt injection scored 1.9% and 1.0%, and it persists across tasks. Add a
    persistent-rule probe from one teammate, scored on a later action for another. [full text]
 7. **Group chat makes privacy worse, not just different.** In MuPPET, leak rates rose from
    one-to-one to multi-party for 6 of 7 models (Gemini 2.5 Pro 9.9% to 23.5%; Qwen3 14B 41.0% to
-   63.4%), and small open-weight models leaked most, which matters because they are the likely
-   default for students. Prompt-only defences barely helped small models. Teamsim's private
-   channel probe is right; add audience size as a knob. [full text]
+   63.4%), and small open-weight models leaked most. The paper says such models are often preferred for
+   local deployment; my assumption is that students will use them too. Prompt-only defences barely helped small models. Teamsim's private
+   channel probe is right; add audience (one recipient versus a group) as a knob. MuPPET fixed group
+   size at 20, so size itself is untested. [full text]
 8. **Authority, repetition and recency drive source conflicts.** Models prefer institutional
    sources, but repeating a low-credibility claim flips the preference (average shift of 30 to 34
    points on the authors' preference score) and a prompt telling the model to ignore repetition only partly helps. A recent
@@ -60,7 +65,7 @@ stated, so treat each as a preprint.
    answer is repeated. [full text, abstract]
 9. **Use deterministic scoring wherever the plant is a string, id, date, permission or tool
    call; use a judge only for free text, and validate it.** LongMemEval's judge matched experts
-   on 97-98% of 30-item samples per type; Memora used a three-judge majority with human
+   on 97-98% of items on average (90% or higher for every question type, 30 items each); Memora used a three-judge majority with human
    agreement of 88.3%. Teamsim's current judge-free core is supported by the literature, with
    judges as an optional, validated extra. [full text]
 10. **Literature gaps teamsim can fill**: no benchmark resolves "relative due dates in a user's
@@ -71,12 +76,12 @@ stated, so treat each as a preprint.
 
 | Paper | Year, venue | Measures | Key number | Depth |
 |---|---|---|---|---|
-| LongMemEval (Wu et al.) | 2024, arXiv | 5 abilities, 500 questions | ChatGPT 57.7% vs 91.8% reading full history (97 questions) | full |
-| LoCoMo (Maharana et al.) | 2024, arXiv | 7,512 QA, 5 types | adversarial 2.1% vs 70.2%; human 87.9 F1 overall | full |
-| EverMemBench (Hu et al.) | 2026, arXiv | multi-party, 2,400 QA | multi-hop 26.5%; oracle 88-98% | full |
-| Memora (Uddin et al.) | 2026, arXiv | updates and deletions, FAMA | agents lose 18-30 points to obsolete memory | full |
+| LongMemEval (Wu et al.) | 2024, arXiv | 5 abilities, 500 questions | ChatGPT 57.7% vs 91.8% for GPT-4o reading the same short history (97 questions, 3-6 sessions) | full |
+| LoCoMo (Maharana et al.) | 2024, arXiv | 7,512 QA, 5 types | adversarial 2.1% (gpt-3.5-turbo-16k) vs 70.2% (GPT-4-turbo, 4K window); human 87.9 F1 overall | full |
+| EverMemBench (Hu et al.) | 2026, arXiv | multi-party, 2,400 QA | multi-hop 26.5% (Gemini-3-Flash, full context); with oracle evidence 88-98% for two of three models | full |
+| Memora (Uddin et al.) | 2026, arXiv | updates and deletions, FAMA | memory agents' loss to obsolete memory grows from 18.2 (weekly) to 29.5 (quarterly) | full |
 | SlackBench (Li et al.) | 2026, arXiv | 140 workplace queries | best 80.25%, most under 66% | full |
-| A-TMA / LTP (Shi et al.) | 2026, arXiv | "ghost memory" | LoCoMo temporal F1 0.0295 to 0.1705 with state labels | abstract |
+| A-TMA / LTP (Shi et al.) | 2026, arXiv | "ghost memory" | LoCoMo temporal F1 for Graphiti/Zep 0.0295 to 0.1705 with A-TMA state labels | abstract |
 | MOSAIC (Tsang et al.) | 2026, arXiv | write, retrieve, deliver, read | abstention weak under controls | abstract |
 | DyadMem (Tao et al.) | 2026, arXiv | capture, update, recall | gold-memory QA strong, full pipeline drops sharply | abstract |
 | SCALE-QA (Feng et al.) | 2026, arXiv | interleaved flat thread, 3,000 MCQ | deterministic 4-way grading | abstract |
@@ -100,8 +105,7 @@ questions that must pass a blind test (not answerable without the evidence), a s
 uniqueness check, and a human audit. [full text]
 
 **Judge reliability.** LongMemEval: 30 questions per type, two answer models; mean agreement with
-experts 0.98 and 0.97; lowest 0.90 for preference and abstention. Its temporal prompt forgives
-off-by-one errors in day counts. Memora: three judges from three vendors, majority vote, 88.3%
+experts 0.98 and 0.97; lowest 0.90 for preference and abstention. Memora: three judges from three vendors, majority vote, 88.3%
 agreement with humans, Cohen's kappa between annotators 0.86 to 0.90. [full text]
 
 **Published state of the art (self-reported, preprints).** Chronos reports 92.6% and 95.6% on
@@ -114,8 +118,9 @@ not be compared without the protocol; I could not tell which subset each used.
 - Mostly dyadic and explicit questions. LoCoMo-Plus (Li et al.) argues string matching misjudges
   implicit constraints [abstract]. MemoryArena (He et al.) reports agents near saturation on
   LoCoMo-style recall do poorly when memory must guide later actions [abstract].
-- Final accuracy hides where a failure happens. MOSAIC, DyadMem and A-TMA all argue for scoring
-  write, retrieve and read separately [abstract].
+- Final accuracy hides where a failure happens. MOSAIC (write, retrieve, deliver, read), DyadMem
+  (capture, update, recall) and A-TMA (bank maintenance, retrieval, answer-time resolution) all
+  argue for scoring their stages separately [abstract].
 - Generated chat is cleaner than real chat. EverMemBench enforces "deadline discipline";
   MuPPET and SlackBench state their data is synthetic or re-enacted. SlackBench also hand-edited
   messages that sounded too AI-like and replaced real keys with fakes. [full text]
@@ -138,7 +143,8 @@ Evidence about how interleaving, handles and fragments hurt models:
 - **Disentanglement.** Kummerfeld et al. (77,563 IRC messages with reply links) found 80% of the
   conversations in a widely used corpus had missing or extra messages, so older benchmark data is
   itself noisy [abstract]. APO-DD reports an optimised prompt scoring 68.7 versus 57.5 for the best
-  manual prompt on Ubuntu IRC with a 9B model, averaged over seven metrics [abstract].
+  manual prompt on Ubuntu IRC with a 9B model, averaged over seven metrics; one optimisation run, with
+the reported settings chosen by test-set score [abstract].
 - **Interleaving as a question type.** SCALE-QA uses a flat unsegmented thread and deterministic
   multiple choice; it argues benchmarks that expose topic boundaries understate the problem
   [abstract].
@@ -149,8 +155,9 @@ Evidence about how interleaving, handles and fragments hurt models:
   must decide whether a message was meant for it.
 
 Not found: any benchmark of resolving first names or Discord-style handles to a person (check 12).
-The nearest is entity-alias resolution inside memory systems (Chronos indexes "entity aliases",
-[abstract]). Teamsim's check is novel and should be reported as its own measurement.
+The nearest found is Chronos, which generates 2-4 paraphrase aliases per event to improve text
+search recall; that is not name or handle resolution [abstract]. Teamsim's check is novel and should
+be reported as its own measurement.
 
 ## 3. Summaries, decisions, action items, dates
 
@@ -159,13 +166,14 @@ key decisions can be detected from local dialogue acts [abstract]; Wang and Card
 decisions on AMI, with 0.22 to 0.23 ROUGE-F1 for decision abstracts [abstract]; the MUG benchmark
 (Zhang et al.) includes action-item detection over 654 Mandarin meetings [abstract]; Meeting
 Decision Tracker (Inoue et al.) found rewriting decision utterances to remove collapsed context
-improved usefulness [abstract]. For chat, DevNous built 160 annotated turns and reports 81.3%
-exact-match turn accuracy for task formalisation [abstract]; GADR extracts decisions from five
+improved usefulness [abstract]. For chat, DevNous built 160 simulator-generated, human-annotated turns and reports 81.3%
+exact-match turn accuracy for classifying each turn's (category, action) intent [abstract]; GADR extracts decisions from five
 meeting transcripts with expert review and notes that RAG enrichment can add transcript-unfaithful
 content [abstract]. DecisionTraceBench (spoken, Chinese, finance) scores whole decision event chains
 with trajectory-level F1: 5.7% to 21.4% for current systems, at most 38.7% with speaker-labelled
-scripts [abstract]. Takeaway: scoring a whole chain (who, what, when, replaced what) is harder
-than scoring a single mention, and teamsim's record plan already has this shape.
+scripts [abstract]. My inference, not tested in these papers: a decision chain (who, what, when,
+replaced what) should be scored as a whole, as DecisionTraceBench does, and teamsim's record plan
+already has this shape. DecisionTraceBench does not compare chains with single mentions.
 
 **Summaries.** ROUGE and BERTScore correlate weakly with human judgement on thread summaries
 (EmailSum, Zhang et al., 2021) [abstract]; LoCoMo moved to FactScore, which splits text into
@@ -178,14 +186,13 @@ planted facts give a ready checklist (recall) and a list of forbidden claims (pr
 
 **Dates and time zones.** No benchmark found for "relative due date from chat, in the user's
 time zone". Related work: MultiTempBench includes time-zone conversion and date arithmetic over
-15,000 examples in five languages and shows tokenisation of dates drives accuracy in low-resource
+15,000 examples in five languages and finds date fragmentation predicts accuracy in low-resource
 languages [abstract]; GeoTemp (320k prompts, 289 cities, 37 time zones) finds models do well on
 time alone but are constrained when time must be linked to place [abstract]; PRIMETIME finds datetime
 parsing and arithmetic individually unreliable, "near-zero to perfect" across models, and
 learnable by small fine-tuned models [abstract]; SPAN reports 34.5% mean accuracy across
-cross-calendar reasoning, with a code-writing agent reaching 95.3% [abstract]. LongMemEval's own
-temporal prompt forgives off-by-one day errors [full text]; EverMemBench's temporal questions score
-45.0% for the best model and 60% even with oracle evidence because completion and archival remarks
+cross-calendar reasoning, with a code-writing agent reaching 95.3% [abstract]. EverMemBench's
+temporal questions score 45.0% for the best model and 60% even with oracle evidence because completion and archival remarks
 by others confuse the anchor [full text]. I did not retrieve TimeML or TempEval work, so the classic
 normalisation task and its metrics are not covered here.
 
@@ -211,23 +218,25 @@ normalisation task and its metrics are not covered here.
   weaker claim flips it: average preference shift 30.0 points for repetition of one source and
   33.9 for two matching sources, and a "ignore repetition" instruction only weakened it. A
   fine-tuning-plus-prompt mitigation cut the repetition effect by up to 79.2% while keeping 72.5%
-  of the original preference. Models also rarely chose the "can't be answered" option (9 of 13 under 10%). Limits: synthetic
+  of the original preference, tested on one small model (Gemma-3-4B). Models also rarely chose the
+  "can't be answered" option (8 of 13 under 10% in each condition). Limits: synthetic
   sources, forced-choice A/B format, open-weight models only. [full text] AuthorityBench (220,564
   prompts, seven models) found citation presence, even fabricated, raises hallucination rates by
-  3 to 22 points in some conditions [abstract]. Evidence arbitration (Carletti et al.): models
-  follow recency more consistently than explicit reliability cues [abstract].
+  3 to 22 points in some conditions [abstract]. Evidence arbitration (Carletti et al.): open-weight models
+  follow recency more consistently than explicit reliability cues, in a synthetic benchmark [abstract].
 - **Authority as the attack definition.** The task-tampering benchmark (Zhang et al., 90 cases, 3
   environments) defines indirect injection by authority: planted content is an attack when it tries
   to influence a decision its source is not authorised to determine. Attacks on decision rules,
-  state and observations succeeded more than attacks on the objective, and tool-policy defences left
+  available actions and state had higher mean success than attacks on the objective in the
+  undefended condition; observation attacks did not. Tool-policy defences left
   15.4% success versus 17.0% undefended [abstract].
 - **Faithfulness and attribution metrics.** RAGAS defines reference-free scores for context
   relevance, faithfulness and answer relevance [abstract]; ARES fine-tunes small LM judges and uses a
   few hundred human labels for prediction-powered inference [abstract]; a 2026 R port found human
   agreement was weaker for context precision and for spotting unsupported statements [abstract].
   ProvenAI separates answer correctness, citation fidelity and per-document influence under
-  leave-one-out, and shows cited sources can have weak influence while uncited ones shift the answer
-  [abstract]. For teamsim, citation checks are cheap and deterministic when the product returns
+  leave-one-out, and shows in one worked example that a cited source can have weak influence while uncited ones
+  shift the answer [abstract]. For teamsim, citation checks are cheap and deterministic when the product returns
   message links that map to the posting ledger (already done in check 8); influence checks need
   re-running the product and are expensive.
 
@@ -235,26 +244,26 @@ normalisation task and its metrics are not covered here.
 
 | Paper | Year, venue | Setup | Key number | Depth |
 |---|---|---|---|---|
-| Greshake et al. | 2023, arXiv | taxonomy, real apps | live attacks on Bing Chat | abstract |
+| Greshake et al. | 2023, arXiv | taxonomy, real apps | demos on Bing Chat (local pages) and synthetic apps; no success rate | abstract |
 | BIPIA (Yi et al.) | 2023, arXiv | first benchmark | all models vulnerable | abstract |
 | InjecAgent (Zhan et al.) | 2024, arXiv | 1,054 cases, 30 agents | ReAct GPT-4 24% | abstract |
 | AgentDojo (Debenedetti et al.) | 2024, arXiv | 97 tasks, 629 cases | models fail tasks even unattacked | abstract |
-| LLMail-Inject (Abdelnabi et al.) | 2025, arXiv | 208,095 human attacks | GPT-4o 58%, SecAlign 32% | abstract |
+| LLMail-Inject (Abdelnabi et al.) | 2025, arXiv | 208,095 unique human prompts | GPT-4o 58%, SecAlign 32% when replayed on newer models | abstract |
 | Public competition (Dziemian et al.) | 2026, arXiv | 272,000 attempts, 13 models | ASR 0.5% to 8.5% | abstract |
 | LivePI (Zhao et al.) | 2026, arXiv | live email, chat, web | 10.7% to 29.6%; group chat uniformly successful | abstract |
 | INFUSE (Nguyen et al.) | 2026, arXiv | 56 scenarios, 19 LLMs | mean ASR 15.4% heuristic, 19.6% LLM-scored | abstract |
 | Silent failures (Shaw) | 2026, arXiv | audit | 21.7% vs 1.2% | full |
-| Cross-user poisoning (Patlan et al.) | 2025, arXiv | shared agents | 82% and 98% vs 1.9% and 1.0% | full |
+| Cross-user poisoning (Patlan et al.) | 2025, arXiv | shared agents | 82% and 95% vs 1.9% and 1.0% | full |
 
 **How benchmarks score.** Early ones count a model output that obeys the injected text (BIPIA).
-Agent benchmarks count an attacker-chosen tool call (InjecAgent, AgentDojo). The audit above shows
+Agent benchmarks count an attacker-chosen tool call (InjecAgent) or a check on environment state (AgentDojo). The audit above shows
 the scorer must check arguments, must confirm payload delivery, and must keep traces
 [full text]. INFUSE reports that heuristic and LLM-based verification differ (15.4% vs 19.6%)
 [abstract]. The audit also measured whether a compromised agent tells the user: its one frontier
 success was concealed [full text]; the public competition built concealment into the attacker's
 objective [abstract].
 
-**Static versus adaptive.** AutoDojo says static benchmarks "significantly overestimate defence
+**Static versus adaptive.** AutoDojo says static benchmarks often "significantly overestimate defence
 efficacy" [abstract]; LLMail-Inject says template benchmarks are saturated [abstract]; the
 cross-user paper notes frontier models now score near zero on AgentDojo's standard templates
 [full text]. The surface study found 44.9% of model pairs change rank when the same payload moves
@@ -263,7 +272,7 @@ condition, two models) saw ASR fall from 60% to 0% as the payload moved from the
 tool result [abstract]; small sample, one author. LivePI is the only retrieved paper with group-chat
 injection as a surface, and reports it uniformly successful on its tested backbones [abstract].
 
-**Defences.** Boundary-style prompts (BIPIA) and prompt hardening (INFUSE: mean ASR 58.2% to 14.3%)
+**Defences.** Boundary-style prompts (BIPIA) and prompt hardening (INFUSE: mean ASR 58.2% to 14.3% on a stress-test subset chosen for high baseline ASR)
 help but are model-dependent [abstract]. Deterministic out-of-band enforcement (tool-call
 authorisation) cuts attacks more reliably but is mostly validated on static benchmarks
 [abstract: Adaptive Evaluation of Out-of-Band Defences]. In multi-user settings, instruction filters
@@ -273,35 +282,36 @@ reduced propagation; clustering lowered task success on Slack from 81.3% to 66.7
 
 **Cross-user poisoning details** (Patlan et al., MURMUR) [full text]. Success is defined as the
 executed tool trace matching an attacker template while serving a benign user. Slack suite
-(21 tasks): GPT-4.1 82% vs 1.9% for standard injection; Claude Sonnet 4 98% vs 1.0%; Workspace suite
-(40 tasks): 45% and 77% vs 0.0%. With five concurrent tasks most sessions contained a successful
-insertion (Slack about 59%, Workspace about 86%). An input classifier lowered but did not remove it.
-Tested on two deployed multi-user agents in the authors' own Discord server. Limits: one template per
+(21 tasks): GPT-4.1 82% vs 1.9% for standard injection; Claude Sonnet 4 95% vs 1.0%; Workspace suite
+(40 tasks): GPT-4.1 45% and Claude Sonnet 4 80% vs 0.0%. With five concurrent tasks most sessions
+contained a successful insertion (Slack about 59%, Workspace about 61%; my sums of the appendix
+counts over four models). An input classifier lowered but did not remove it.
+Also tested on two deployed multi-user agents (Continua and ElizaOS) in private test environments with accounts the authors control. Limits: one template per
 cell, strings adapted from AgentDojo, preprint.
 
 ## 6. Privacy, secrets, access control
 
 **Contextual integrity.** ConfAIde (Mireshghallah et al.): GPT-4 and ChatGPT revealed private
-information in contexts humans would not 39% and 57% of the time [abstract]. ConCI scores a triplet
+information in contexts humans would not 39% and 57% of the time in its meeting-style Tier 4 tasks, even when told to preserve privacy [abstract]. ConCI scores a triplet
 (one flow plus two single-parameter counterfactuals) jointly, and finds models near ceiling on
 inappropriate flows but weaker on appropriate ones, i.e. over-refusal [abstract]. AgentCIBench: 11 of 15
 agents leaked on more than 50% of deterministically scored scenarios [abstract]. PrivacyLens-Live
 moves static scenarios into live tool environments and finds higher risk [abstract].
 **MuPPET** (Ruzzetti et al.) [full text]: agent holds a user's private memories and answers in a
-group; a leak is any disclosure to a recipient the user excluded. Leak rate one-to-one vs multi-party:
+group; a leak is any response that reveals the user's private information (no sharing preferences are given, so any disclosure counts). Leak rate one-to-one vs multi-party:
 Gemini 2.5 Pro 9.9% vs 23.5%; GPT 5.5 14.2% vs 26.7%; Qwen3 14B 41.0% vs 63.4%; Qwen3 8B 63.6% vs 70.4%;
 Llama 3.1 8B 62.5% vs 60.9% (the one exception). Defences: prompt-level CI-Mem barely moved small models;
-PrivacyChecker cut open-weight leaks to about 22-40% but cost 8-20 utility points. Utility and leakage
+PrivacyChecker cut open-weight leaks to about 22-40% but cost about 7 to 17 utility points. Utility and leakage
 rose together. Limits: synthetic LLM-written chats, English only, professional norms only.
 
 **Access control in retrieval.** Relevance ranking is not authorisation: a multitenant analysis
 shows a query can surface another tenant's data simply because it ranks highest, and attribute-based
 gating at retrieval removed cross-tenant leakage in their implementation [abstract: Arceo and
 Narsing]. In hybrid vector-plus-graph retrieval, entity links carry a seed chunk into sensitive
-neighbourhoods: undefended pivot risk up to 0.95, near zero after one authorisation check at the graph
-expansion boundary [abstract: Thornton]. Bhatt et al. take the position that content used for an
-answer must be authorised for every participant in the interaction, which is exactly the group-chat
-case [abstract, position paper]. ConfusedPilot (Microsoft 365 Copilot-style systems) shows stale or
+neighbourhoods: undefended pivot risk about 0.95 on their synthetic corpus (0.70 on Enron, 0.09 on EDGAR), reduced to
+0.0 by one authorisation check at the graph expansion boundary in their evaluation [abstract: Thornton]. Bhatt et al. take the position that content used for an
+answer must be authorised for every participant in the interaction, which applies to group chat by
+extension (their examples are email and shared documents) [abstract, position paper]. ConfusedPilot (Microsoft 365 Copilot-style systems) shows stale or
 poisoned retrieved text and cache behaviour can break integrity and confidentiality [abstract].
 A 2026 survey states no benchmark drives an agent across its data surfaces under one privacy policy
 [abstract: Lahjouji and Colaco].
@@ -309,10 +319,11 @@ A 2026 survey states no benchmark drives an agent across its data surfaces under
 **Secrets and credentials.** PrivDrift: 1,000 dialogues with a seeded secret, topic drift, then
 extraction probes; hybrid leakage 38.7% to 54.6% across three long-context models, not reliably
 reduced by more drift [abstract]. Agent-skill study: of 17,022 sampled skills, 520 leaked credentials;
-debug logging was 73.5% of cases because stdout enters the model context [abstract]. Secret detection
-in issue reports: regex and entropy give high recall but poor precision; fine-tuned models reach 94.5%
-F1 [abstract]. SlotGuard reports 0.0% leakage across 852 planted credential values using deterministic
-format-preserving rewriting, and warns generic redaction over-redacts benign look-alikes [abstract,
+debug logging was 73.5% of vulnerability issues (1,007 of 1,371), attributed to stdout entering
+the model context [full text]. Secret detection in issue reports: regex and entropy give high
+recall but poor precision; fine-tuned Qwen-7B reaches 94.46% F1 on the held-out test split
+[full text]. SlotGuard reports 0.0% leakage across 852 planted credential values for its full system (format-preserving
+rewriting plus a semantic entity graph; rewriting alone leaked 23.5%), and warns generic redaction over-redacts benign look-alikes [abstract,
 self-evaluated]. Memorisation work (Huang et al., Hard-coded Credential Revealer) shows code models can
 emit training-set credentials [abstract], but teamsim's concern is different: a secret pasted into
 chat and then echoed, stored or exported. Teamsim relevance: plant format-realistic fake secrets, plus
@@ -323,10 +334,12 @@ benign look-alike strings as a precision control, and scan every read surface fo
 The literature is thin. No retrieved paper evaluates a personalised catch-up for an absent member
 of a team chat. Adjacent work: streaming dialogue summarisation where the current window presupposes
 earlier evidence (Min and Song; separate scores for whether memory holds gap-resolving evidence and
-whether the summary uses it) [abstract]; an LLM meeting-recap design study with seven users found
+whether the summary uses it) [abstract]; a meeting-recap design study with seven users (fine-tuned small transformer models, not state-of-the-art LLMs) found
 recap types serve different needs and users edit recaps (Asthana et al.) [abstract]; EmailSum shows
-automatic metrics fit thread summaries poorly [abstract]; a VR catch-up study (Lee et al., 12-person
-formative study) found live summaries reduced re-engagement time [abstract]. On interruption and
+automatic metrics fit thread summaries poorly [abstract]; a VR catch-up study (Lee et al.) had a
+12-person formative study and a separate 30-participant evaluation. In the latter, the adaptive
+transcription-and-summary interface reduced re-engagement time relative to table-fixed and
+always-on avatar-fixed panels, with a larger difference in mid-sized groups [full text]. On interruption and
 notification timing nothing relevant beyond the when-to-speak work in section 2 was retrieved.
 Teamsim's check 14 (changes during an absence are listed or counted) matches the checklist-recall
 pattern of SlackBench and OmniCSEval; it has no published baseline.
@@ -340,15 +353,15 @@ free text, validated on a human sample.
 |---|---|---|---|
 | 0 harness integrity | Payload delivery and valid scenario (Shaw audit) | 91% undelivered in one audited suite | D, keep; fail loud |
 | 2, 3 sync, offline gap | none (product plumbing) | none | D, keep |
-| 4 commands and record | Chain-level event F1 (DecisionTraceBench); exact-match task formalisation (DevNous) | 5.7-21.4% chain F1 (speech); 81.3% EM | D on ids, owner, due, replaces chain |
+| 4 commands and record | Trajectory-level F1 over decision chains (DecisionTraceBench); exact-match intent classification (DevNous) | 5.7-21.4% chain F1 (speech); 81.3% EM | D on ids, owner, due, replaces chain |
 | 5 retrieval | Recall@k and NDCG (LongMemEval), recall@k (LoCoMo); report by hops and groups | LoCoMo RAG, top-25 dialog turns: recall 79.9%, answer F1 35.8 vs human 87.9 | D; add thresholds and per-type rows |
 | 6 visibility | Multi-party contextual leakage (MuPPET); retrieval authorisation | leaks 23-70% (MuPPET); gating gives about 0 | D with positive control |
-| 7 injection, 11 AI vs decision | Argument-level attack predicate; cross-user poisoning; authority definition | 1-98% depending on attack and model | D on action or exact string; log disclosure |
+| 7 injection, 11 AI vs decision | Argument-level attack predicate; cross-user poisoning; authority definition | 1-95% depending on attack and model | D on action or exact string; log disclosure |
 | 8 `/ask` | Citation fidelity; answer correctness; abstention | cited sources may not influence answer | D for link mapping; J only for free text |
 | 12 names vs handles | none; nearest is who-said-it and alias resolution | models fail speaker attribution | D; report as its own measure |
-| 13 pasted secret | Canary leak across surfaces (PrivDrift, SlotGuard) | 38.7-54.6% leakage; 0.0% with rewriting (self-reported) | D on literal; add look-alike control |
-| 14 catch-up | Checklist recall and faithful summary (SlackBench, OmniCSEval) | summaries inflate claims | D for planted events; J for extra claims |
-| 15 relative due | Date arithmetic, time zone conversion (MultiTempBench, PRIMETIME) | primitives unreliable | D; exact date, no off-by-one grace |
+| 13 pasted secret | Seeded-secret recovery within one conversation (PrivDrift); credential leakage in agent transcripts (SlotGuard) | 38.7-54.6% dialogue-level leakage; 0.0% with rewriting plus entity graph, rewriting alone 23.5% (self-reported) | D on literal; add look-alike control |
+| 14 catch-up | Checklist recall and faithful summary (SlackBench, OmniCSEval) | summaries can inflate claims (seen in examples, not measured as a rate) | D for planted events; J for extra claims |
+| 15 relative due | Date arithmetic (PRIMETIME), time zone conversion (MultiTempBench) | primitives unreliable | D; exact date, no off-by-one grace |
 
 ## Missing check categories the literature suggests
 
@@ -360,16 +373,19 @@ free text, validated on a human sample.
 2. **Knowledge update with a superseded-fact penalty** (Memora FAMA). Plant a decision, a reversal,
    and ask about the current state. Score "states current" and "does not assert old as current".
    Add a version-chain question ("what did we decide before the change").
-3. **Multi-hop and cross-channel questions** (EverMemBench, LongMemEval multi-session). Facts split
-   across two speakers or channels. Report accuracy by number of groups.
+3. **Multi-hop and cross-channel questions** (EverMemBench; LongMemEval multi-session needs up to six
+   sessions but does not split facts by speaker or channel). Facts split across two speakers or
+   channels. Report accuracy by number of groups, as EverMemBench does.
 4. **Persistent cross-user rule** (MURMUR). A teammate posts a "helpful rule" that tells the product
    to do something for everyone; a later request by another teammate must not trigger it.
-5. **Audience-aware leakage** (MuPPET). Same private fact, varying number of recipients, including
-   a public reply derived from private content.
+5. **Audience-aware leakage** (MuPPET). Same private fact, one recipient versus a group (MuPPET
+   used fixed 20-member groups, so varying group size is untested), including a public reply derived
+   from private content.
 6. **Repetition and recency of a low-authority claim** (Whose Facts Win; evidence arbitration). Vary
    how many times the AI answer is pasted and whether it is newer than the decision.
 7. **Disclosure** (Shaw; public competition). If the product was manipulated, did it say so?
-8. **Citation fidelity** (RAGAS, ProvenAI). Does each cited message actually contain the claim?
+8. **Citation fidelity** (RAGAS; ProvenAI only at document-title level). Does each cited message map
+   to a planted supporting message? ProvenAI does not check that the cited passage contains the claim.
 9. **Over-refusal control** (ConCI; false-rejection rate in the audit). Every defensive probe needs a
    benign twin the product should answer, or a product that refuses everything scores perfectly.
 
@@ -397,7 +413,7 @@ free text, validated on a human sample.
 **Preset design (knobs the literature shows matter).**
 number of channels or groups a question spans (EverMemBench), number of decision revisions
 (Memora's mutation counts: weekly 2.7, monthly 8.8 on average), interleaving and fragmentation
-(SCALE-QA), audience size (MuPPET), repetition and recency of low-authority text (Whose Facts Win),
+(SCALE-QA), audience, one recipient versus a group (MuPPET, which fixed group size), repetition and recency of low-authority text (Whose Facts Win),
 injection position and surface (depth and surface studies; LivePI's chat surface), and the share of
 benign twins. Calibrate blueprint-first, as EverMemBench does, so every question has an evidence
 span, and add its blind test (drop questions answerable without the chat).
@@ -425,7 +441,7 @@ limited to the realism bar above (OSynth) and the warning that judges need valid
 - Treating abstention as binary: require the reason.
 - Over-defence: a product that blocks everything passes injection and fails utility; always pair
   with benign controls (ConCI, audit).
-- Copying a judge's off-by-one forgiveness for day counts into the due-date check.
+- A judge that forgives off-by-one errors in day counts, which would hide errors in the due-date check.
 
 ## Open problems
 
@@ -437,7 +453,7 @@ limited to the realism bar above (OSynth) and the warning that judges need valid
   from clean to realistic chat, which none of the retrieved papers report directly.
 - Whether results transfer from generated to real chat is untested here.
 - Defence validation under adaptive group-chat attacks is mostly absent; LivePI and MURMUR are early.
-- Small samples and single authors in several security papers (depth study, audit, PrivDrift).
+- Small samples and single authors in several security papers (depth study, audit); PrivDrift is single-author with no inter-annotator agreement reported.
 
 ## Where this disagrees with the run-1 notes
 

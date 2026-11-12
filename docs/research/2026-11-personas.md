@@ -1,5 +1,9 @@
 # Personas, realism and local models (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Research for ADR 0003: how to make simulated teammates distinct, honest and measurable, cheaply
 and locally. All pages were read on 2026-11-11. Where a number comes from a search excerpt or a
 secondary page and not from the paper itself, it says so. Reddit was seen only as search
@@ -8,7 +12,7 @@ excerpts through a mirror site, so it is used for leads, never as evidence.
 ## Summary and recommendation
 
 1. **Do not let the model invent the teammates' opinions.** Persona collapse, sycophancy and
-   drift are measured, universal and not fixed by more personas. The script should own who each
+   drift are measured, found in most or all models tested, and persona collapse is not fixed by more personas. The script should own who each
    teammate is, what stance they hold and when they speak. The model only writes the words.
 2. **Use a hybrid when generation is on.** Scripted timeline for ground truth and reproducibility
    (what the prototype does today), a model for wording and for replies to the product, with
@@ -51,7 +55,7 @@ excerpts through a mirror site, so it is used for leads, never as evidence.
 | Re-inject the persona every turn | Both models tested drifted from their instructions within eight rounds (Li et al., COLM 2024, arXiv 2402.10962). The paper's fix, split-softmax, needs model internals | Stateless calls with a short history cost nothing extra | Never carry a long chat history; send persona + the last few messages each time |
 | Truthfulness guard on agreeable personas | Recommended by Shah et al. (ACL 2026, arXiv 2604.10733, 13 small open models, 275 personas): agreeableness predicted sycophancy in 9 of 13 models (r up to 0.87) | Free | Add "be supportive but prioritise accuracy" to warm personas; measure first, effects differ per model |
 | Third-person framing | Cut sycophancy by up to 63.8% in one debate scenario of SYCON-Bench (17 models, Findings of EMNLP 2025) | Free | Ask the model to write what the persona would say, not to be the persona. Check on small models |
-| Script-assigned stance | Not a published technique; follows from the above. Persona collapse is universal and sampling more personas does not reduce it (Xiao et al., arXiv 2604.24698, 2026-10-16) | Free | The script decides "Dana thinks the import flow is confusing"; the model words it |
+| Script-assigned stance | Not a published technique; follows from the above. Persona collapse appeared in all eight models tested, varying by task, and sampling more personas does not reduce it (Xiao et al., arXiv 2604.24698, 2026-10-16) | Free | The script decides "Dana thinks the import flow is confusing"; the model words it |
 
 Two warnings from the same papers. Models with the best per-persona fidelity produced the most
 polarised populations, so fidelity and diversity trade off (Xiao et al.). And a 0.6B model was
@@ -60,7 +64,7 @@ cannot play a critical teammate.
 
 Caveats on the evidence: Shah et al. judge sycophancy by keyword stance detection on a forced
 AGREE/DISAGREE format, not by an LLM or human judge, and its abstract (d up to 2.33) disagrees
-with its tables (maximum 1.28). Read as direction, not size. PersonaGym (EMNLP Findings 2025,
+with its tables (maximum 1.28). Read as direction, not size. PersonaGym (Findings of EMNLP 2025,
 arXiv 2407.18416) found GPT-4.1 and LLaMA-3-8b with the same PersonaScore, so a small model is
 not automatically a worse persona; it also reports model size does not guarantee better persona
 behaviour.
@@ -79,7 +83,8 @@ Lexical metrics and the planted-flaw check need no stance label (see below).
 
 **Diversity**
 1. *Lexical:* distinct-n and Self-BLEU over the teammates' lines for the same prompt. Cheap, but
-   fooled by random words, so never use alone (precision/recall paper, arXiv 2402.10693).
+   Self-BLEU gives a perfect score to a model that generates random words (precision/recall paper,
+   arXiv 2402.10693), so never use either alone.
 2. *Stance spread:* label the stance each line expresses (see above), then compare with the
    assigned distribution. Use concentration, entropy and total variation distance, the
    collapse measures in Ozkan (concentration 0.36 to 0.69, entropy 1.46 to 0.77 when collapsed).
@@ -103,7 +108,7 @@ Lexical metrics and the planted-flaw check need no stance label (see below).
    praises a product it was handed evidence against. Ground truth makes this a number.
 3. *Validation rate:* ELEPHANT (arXiv 2505.13995, ICLR 2026) measures validation, indirectness,
    framing and moral sycophancy with human-validated LLM scorers; across 11 models users' face
-   was preserved about 45 points more than humans did. Heavier: needs a judge model.
+   was preserved about 45 points more than humans did on general advice queries. Heavier: needs a judge model.
 
 **Cost.** Lexical metrics, the spread ratio over labelled answers and the planted-flaw match are
 arithmetic on text the run already has. Stance metrics add either a schema tag on each generated
@@ -112,8 +117,9 @@ line (no extra call, needs a validation sample) or one judge call per scored lin
 assigned one by construction, so these metrics only become informative once a model writes or
 reacts.
 
-**Judges are not neutral.** PersonaEval reports that role-play studies often lean on unvalidated
-LLM judges (via search excerpt; not opened). Prefer rule-based and ground-truth checks, and
+**Judges are not reliable.** PersonaEval states that role-play studies often lean on unvalidated
+LLM judges, and finds the best LLM judges identify the role in only about 69% of cases, against
+90.8% for humans. Prefer rule-based and ground-truth checks, and
 calibrate any judge on a few hand-labelled lines.
 
 ## 3. Scoring simulated feedback (ADR 0003)
@@ -132,7 +138,7 @@ could be a baseline. What exists is opinion data, usable to calibrate the engine
 | Dataset | What | Licence | Fit |
 |---|---|---|---|
 | Stack Overflow Developer Survey, 2011-2026 | Developer attitudes and tool use, ~49,000 respondents in 2025 | ODbL 1.0 (survey page) | Best topical fit: developers' trust in AI tools (2025: 46% distrust accuracy per the press release; secondary reports quote different prior-year baselines, so use the raw data). Whether row-level fields allow persona building is unverified |
-| Twin-2K-500 (arXiv 2505.17479) | 2,058 US adults, ~500 questions over four waves, wave 4 repeats earlier items for test-retest | CC BY 4.0 | Individual-level calibration with a retest ceiling, as in Park et al. Not software feedback |
+| Twin-2K-500 (arXiv 2505.17479) | 2,058 US adults, ~500 questions over four waves, wave 4 repeats earlier items for test-retest | CC BY 4.0 (not stated in the paper; confirm on the dataset page) | Individual-level calibration with a retest ceiling, as in Park et al. Not software feedback |
 | OpinionQA (arXiv 2303.17548, ICML 2023) | 1,498 Pew American Trends Panel questions, 60 demographic groups | Not stated in the repo; check Pew terms | Group-level opinion distributions; mostly social and political topics |
 | GlobalOpinionQA | 2,556 questions from Pew Global Attitudes and World Values Survey, per country | CC BY-NC-SA 4.0 | Non-commercial: fetch on demand, never bundle |
 
@@ -189,8 +195,9 @@ reading the prompts. Hence: local for a minority of lines, or on better hardware
 **Quality for role-play at small sizes.** Thin evidence; decide by teamsim's own metrics.
 - Shah et al.: sycophancy varies widely across 13 models from 0.6B to 20B with no clear
   size trend; mid-sized 2B-8B models showed the strongest agreeableness effects.
-- RPA-Check (arXiv 2604.11655, search excerpt): in one game, adequately tuned small models matched
-  larger ones on behavioural consistency. A single setting.
+- RPA-Check (arXiv 2604.11655, search excerpt): in one game, instruction-tuned models of 8 to 9 billion
+  parameters beat larger ones on role fidelity and procedural stability; the authors call five
+  scenarios per model a limited sample. A single setting.
 - Structured output is the practical risk. In TinyTroupe issue 41 a user running a 1B Gemma model
   hit JSON extraction errors, and the library's maintainer wrote that non-OpenAI models "remain very much
   unstable" in that library (2026). Constrain output with a JSON schema and keep replies to one

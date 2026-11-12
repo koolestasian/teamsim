@@ -1,5 +1,9 @@
 # Simulating teams and group dynamics: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: what peer-reviewed papers and arXiv preprints say about simulating teams (multi-agent LLM
 groups and organisations, human team science, software and student teams, human-AI teaming,
 pre-LLM agent-based models), read for one purpose: which team phenomena teamsim should plant in a
@@ -12,48 +16,57 @@ arXiv preprints and are labelled as such.
 
 ## Summary
 
-1. **LLM groups reproduce some human group outcomes through different, worse mechanisms.** A matched
+1. **LLM groups reproduce some human group outcomes through different, worse mechanisms.** A protocol-matched
    comparison with 500 human chats found the same "assembly bonus" (discussion helps the average
    member more than the best one), but LLM groups follow the majority more, surface less unique
    information and lock in earlier (Tak et al. 2026, arXiv, full text). Another replay of 100 human
-   groups found LLM groups 34 to 44 points more consensual than people (Shao 2026, arXiv, abstract).
+   groups found LLM groups 34 to 44 points more consensual than people when every human posted, and
+   more over all groups (Shao 2026, arXiv, abstract).
    For teamsim: a model-driven team looks plausible but behaves unlike people, so any dynamic that
    carries ground truth should be scripted, not emergent.
-2. **Agent teams fail in measurable, repeatable ways.** A human-annotated taxonomy (kappa 0.88) of
-   1,642 traces from 7 frameworks has 14 failure modes in 3 groups; "information withholding"
-   appears almost only in failed runs (Cemri et al. 2025, arXiv, full text). Conformity, herding,
+2. **Agent teams fail in measurable, repeatable ways.** A taxonomy refined with human annotators (kappa 0.88),
+   applied by an LLM annotator to 1,642 traces from 7 frameworks, has 14 failure modes in 3 groups;
+   "information withholding" appears almost only in failed runs in the ChatDev and MetaGPT analysis
+   (Cemri et al. 2025, arXiv, full text). Conformity, herding,
    early consensus and loss of minority facts are replicated by many 2025-2026 preprints. For
    teamsim: these are the behaviours a free-running LLM team would add as uncontrolled noise.
 3. **The hidden profile effect is the best-evidenced phenomenon to plant.** In 65 human studies
    (3,189 groups), groups mentioned common information about two standard deviations more than
    unique information and were eight times less likely to find the right answer than groups with
-   full information (Lu et al. 2012, meta-analysis, abstract). LLM groups are as bad or worse: 30.1%
-   accuracy against 80.7% for one agent holding all facts (Li et al. 2025, arXiv, full text). For
+   full information (Lu et al. 2012, meta-analysis, abstract). LLM groups fail too: 30.1% average
+   accuracy across frontier models against 80.7% for one agent holding all facts, and a small human
+   check on three tasks scored higher than GPT-4.1 (0.385 against 0.233) (Li et al. 2025, arXiv, full
+   text). For
    teamsim: plant a decision whose key fact sits with one teammate, and score whether the product
    surfaces it.
-4. **LLM teams hold experts back; human teams usually do not.** Self-organising LLM teams lost up to
-   41.1% against their best member and averaged expert and non-expert views even when told who the
-   expert was (Pappu et al. 2026, arXiv, full text). For teamsim: script who is the authority on
+4. **LLM teams hold experts back; human teams usually do not.** Self-organising LLM teams fell up to
+   41.1% short of an oracle that always picks the member who is correct, consistently underperformed
+   their best member, and averaged expert and non-expert views even when told who the expert was
+   (Pappu et al. 2026, arXiv, full text). The human contrast comes from earlier literature and was not
+   tested there. For teamsim: script who is the authority on
    what; do not expect a model team to defer correctly.
-5. **One confident wrong claim or lost fact can wreck group knowledge.** A single false testimony cut
-   truth recovery from 72.5% to 14.2% in five-agent groups (Yan et al. 2026, arXiv, abstract), and
-   discussion erased up to 72% of issue-critical facts (Wan et al. 2026, arXiv, abstract). For
+5. **One false claim from the holder of key evidence, or lost facts, can wreck group knowledge.** One
+   deceptive key evidence holder cut the share of runs where the group majority held the truth from
+   72.5% to 14.2% in synthetic five-agent tasks (Yan et al. 2026, arXiv, abstract), and discussion
+   erased up to 72% of issue-critical facts at the system level (Wan et al. 2026, arXiv, abstract). For
    teamsim: plant reversals, a confident wrong claim and an unresolved contradiction, and score
    whether the product returns the latest decision and flags conflict.
 6. **Simulated people are an "easy mode".** With 451 real participants against 31 LLM user
    simulators, simulators were more cooperative, more polite (49.0% of GPT-4o turns polite against
-   15.3% for humans), rarely short (1.0% against 29.0%) and gave uniformly positive feedback; agent
-   success was inflated above the human baseline of 63.6% (Zhou et al. 2026, arXiv, full text).
-   Prompting does not fix it reliably (Kamoi et al. 2026, arXiv, full text). For teamsim: a
+   15.3% for humans), rarely short (GPT-4o: 1.0% against 29.0%) and gave uniformly positive feedback; most
+   general-purpose simulators inflated agent success above the human baseline of 63.6% (Zhou et al.
+   2026, arXiv, full text). Prompting does not reliably control how often simulated people show
+   inconsistent or uncollaborative behaviour (Kamoi et al. 2026, arXiv, full text). For teamsim: a
    scripted "friction layer" (short turns, impatience, misunderstanding) is needed, and ADR 0003's
    sycophancy and diversity checks are justified by direct evidence.
 7. **Software teams give concrete things to plant.** 65% of 133 popular GitHub projects had a truck
    factor of 2 or less (Avelino et al. 2016, abstract); 89% of 36,000 projects lost their core team
    at least once (Nourry et al. 2024, abstract); student teams with a large gap between reported
    and actual contributions earned lower grades (Berrezueta-Guzman et al. 2025, abstract). For
-   teamsim: absence, handoff and unequal-contribution scenarios have empirical backing.
+   teamsim: owner concentration, owner departure and unequal-contribution scenarios have empirical
+   backing; no paper tested handoff steps such as naming a new owner.
 8. **A bot teammate is judged by noise and by awareness.** Interviews with 21 practitioners made
-   noise the central complaint about bots in pull requests (Wessel et al. 2021, abstract), and in
+   noise the central complaint about bots in pull requests (Wessel et al. 2021, "Don't Disturb Me", abstract), and in
    Collaborative Gym communication failures occurred in 65% and situational-awareness failures in
    40% of real-condition cases (Shao et al. 2024, abstract). For teamsim: score message volume and
    timing of the product under test, not only correctness.
@@ -71,14 +84,14 @@ arXiv preprints and are labelled as such.
 | Paper | Venue / year | What was measured | Key number | Depth |
 |---|---|---|---|---|
 | Generative Agents, Park et al. | arXiv 2023 (UIST) | Believability of 25 agents; ablations | TrueSkill 29.89 full vs 22.95 human-written baseline; 100 raters | full text |
-| AgentSociety, Piao et al. | arXiv 2025 | 10k agents, 5M interactions | Agreement with real experiments on five issues | abstract |
-| Li and Tao, social simulation | arXiv 2026 (position) | Is role-play plausibility validity? | Outcomes driven by protocol, scheduling, priors | abstract |
+| AgentSociety, Piao et al. | arXiv 2025 | 10k agents (engine tests), 5M interactions | Qualitative alignment with real experiments on five issues, smaller populations, no fit statistics | abstract |
+| Li and Tao, social simulation | arXiv 2026 (position) | Is role-play plausibility validity? (no experiments) | Argues outcomes can be driven by protocol, scheduling, priors | abstract |
 | SOTOPIA, Zhou et al. | arXiv 2023 | Social goal completion | GPT-4 below humans on hard subset | abstract |
-| Lifelong SOTOPIA, Goel and Zhu | arXiv 2025 | Multi-episode interaction | Goal achievement and believability decline | abstract |
-| TheAgentCompany, Xu et al. | arXiv 2024 | Agent in simulated software company | Best agent 30%; chat tool hardest | full text |
+| Lifelong SOTOPIA, Goel and Zhu | arXiv 2025 | Multi-episode interaction | Goal achievement and believability decline with full history as memory; an advanced memory module helps | abstract |
+| TheAgentCompany, Xu et al. | arXiv 2024 | Agent in simulated software company | Best agent 30%; most models struggle with chat and the file platform | full text |
 | Collaborative Gym, Shao et al. | arXiv 2024 | Human-agent collaboration | Failures: communication 65%, awareness 40% | abstract |
 | Searching for Synergy, Kotalwar et al. | arXiv 2026 | 1,482 simulated workspace sessions | More collaborators can lower performance without structure | abstract |
-| MiniCorp, Zeng et al. | arXiv 2026 | Office simulator with replay | Fidelity checked against patterns from real-market studies | abstract |
+| MiniCorp, Zeng et al. | arXiv 2026 | Office simulator with replay | Fidelity checked against patterns from real-market studies, default configuration only | abstract |
 | Agyn, Benkovich and Valkov | arXiv 2026 | Team-structured coding agents | 72.2% on SWE-bench 500 | abstract |
 
 What emerges. Generative agents spread one seed fact (a party invitation) to 12 other agents in two
@@ -87,13 +100,14 @@ invented embellishments and over-formal speech, and the evaluation is rater-judg
 not agreement with a real group [full text]. Li and Tao argue that role-played plausibility does not
 imply behavioural validity [abstract]. TheAgentCompany is the closest existing system to teamsim's
 setting: a fake software company with chat, wiki, tasks and simulated colleagues. Its colleagues are
-role-played by an LLM (Claude 3.5 Sonnet) through a social-simulation platform, with a stated upper
-bound of about $0.024 per colleague exchange at 2024 prices, and 41 tasks involve them. It scores the
-agent's work, and chat is where models do worst [full text]. Process-model work (Ha et al., 132
+role-played by an LLM (Claude 3.5 Sonnet) through a social-simulation platform, with a calculated upper
+bound of about $0.024 per colleague interaction (from assumed token counts and listed model prices, not
+a measured cost), and 41 tasks involve them. It scores the
+agent's work, and most models struggle with chat and with the file platform [full text]. Process-model work (Ha et al., 132
 runs) shows coordination scaffolds change cost and quality but is judged on code, not on team
 realism [abstract].
 
-Cost. Inference: at the quoted upper bound, 100 generated messages would cost roughly $2.4 once,
+Cost. Inference: if the calculated upper bound held here, 100 generated messages would cost roughly $2.4 once,
 which a recorded replay makes a one-time cost. A 25-agent town or 10k-agent society is cloud scale.
 
 For teamsim. These systems score the agent or the believability of the simulation. None scores a
@@ -107,26 +121,29 @@ not "realistic teams".
 | Why Do MAS Fail? (MAST), Cemri et al. | arXiv 2025 | 1,642 traces, 7 frameworks | 14 modes, 3 groups, kappa 0.88 (0.79 held out) | full text |
 | Communication failures, Pitre et al. | arXiv 2026 | 3,211 failed trajectories | Recovery and consensus failures dominate | abstract |
 | Risk analysis, Reid et al. | arXiv 2025 | Six failure modes | Conformity and monoculture listed; no effect sizes | abstract |
-| From Spark to Fire, Xie et al. | arXiv 2026 | Error cascades, 6 frameworks | Guard blocks infection in at least 89% of runs | abstract |
+| From Spark to Fire, Xie et al. | arXiv 2026 | Error cascades, 6 frameworks | A genealogy-based governance layer prevents final infection in at least 89% of runs across operating modes (not uniform across frameworks) | abstract |
 | BenchForm, Weng et al. | arXiv 2025 | Conformity and independence | Majority size, time matter | abstract |
-| Herd Behavior, Cho et al. | arXiv 2025 | Peer influence | Confidence gap drives conformity | abstract |
+| Herd Behavior, Cho et al. | arXiv 2025 | Peer influence (multiple-choice tasks) | Larger confidence gap raises conformity | abstract |
 | Conformity and Social Impact, Bellina et al. | arXiv 2026 | Classic social psychology tasks | Near-perfect solo agents become manipulable | abstract |
-| LLMs Trust Their Own, Soffer et al. | arXiv 2026 | 12 models, 9 tasks | One dissenting ally does not reduce conformity | abstract |
-| Herding and runaway cascades, Hashemi et al. | arXiv 2026 | Music Lab replication | LLM crowds herd more, self-correct less than humans | abstract |
+| LLMs Trust Their Own, Soffer et al. | arXiv 2026 | 12 models, 9 tasks | One unlabelled correct ally leaves mean conformity unchanged; with group labels it matters | abstract |
+| Herding and runaway cascades, Hashemi et al. | arXiv 2026 | Music Lab-style design | LLM crowds herd more, self-correct less than humans (qualitative human benchmark) | abstract |
 | Easier to mislead than correct, Qu et al. | arXiv 2026 | 4 models, 7 QA sets | Agreement misleads correct models more than it fixes wrong ones | abstract |
 | Deliberative Illusion, Wan et al. | arXiv 2026 | Fact survival | Up to 72% of critical facts erased | abstract |
-| Misinformation derails recovery, Yan et al. | arXiv 2026 | 120 five-agent tasks | Truth recovery 72.5% to 14.17% | abstract |
-| Bystander effect, Shehata and Li | arXiv 2026 | 22,500 trajectories | Correct internal reasoning, sycophantic output | abstract |
+| Misinformation derails recovery, Yan et al. | arXiv 2026 | 120 synthetic five-agent tasks | Truth-majority rate 72.5% to 14.17% with one deceptive key evidence holder | abstract |
+| Bystander effect, Shehata and Li | arXiv 2026 | 22,500 trajectories | Correct internal reasoning, sycophantic output in two of three models; auditors set in the prompt | abstract |
 
-Reading. MAST is the strongest source: human-annotated, seven frameworks, and it separates failures
+Reading. MAST is the strongest source: a human-validated taxonomy applied by an LLM annotator across seven
+frameworks, and it separates failures
 that mostly occur in failed runs (information withholding, unawareness of termination conditions)
 from ones common even in successful runs (incomplete or incorrect verification) [full text]. Most
 conformity papers are small-team preprints on QA tasks with short debates, none in a chat
 workspace. Inference: the direction is robust, magnitudes are task-specific.
 
-Counter-evidence. Consensus-seeking also made teams robust to a saboteur (Pappu et al. 2026, full
-text). Mansuri et al. (arXiv 2026, abstract) find discussion helps only when the rate of withheld
-dissent is below a threshold and that turning reasoning off raised the gain. Dissent helps
+Counter-evidence. Teams with one saboteur showed minimal degradation, which the authors attribute to
+consensus-seeking without testing it (Pappu et al. 2026, full text). Mansuri et al. (arXiv 2026, abstract) predict with a mean-field model that discussion helps only
+when the rate of withheld dissent is below a threshold; empirically the gain fell as the margin above
+it grew on three of four benchmarks (unclear on MuSiQue), and turning reasoning off was associated
+with a higher gain. Dissent helps
 non-monotonically: for GPT-4.1 one adversarial agent in four nearly doubled accuracy (0.233 to
 0.492), while for Gemini-2.5-Flash any dissent hurt (0.889 to 0.306) (Li et al. 2025, full text).
 There is no universal setting, and results depend on the model.
@@ -147,15 +164,16 @@ script that owns stance and facts, as the personas note already recommended.
   medium did not change pooling or quality. Group size, information load, task demonstrability and
   profile strength moderate the effect.
 - **Facilitation does not fix it (Alsobay et al. 2026, preregistered experiment, abstract).** 1,475
-  people in 281 live groups: a human or GPT-4o facilitator raised information shared, but did not
-  change the final decision.
+  people in 281 live groups: a GPT-4o facilitator raised information shared, a human facilitator did
+  not significantly, and no facilitation changed the final decision.
 - **Same effect in LLM groups.** 30.1% against 80.7% (Li et al. 2025, full text); the failure
-  worsens with group size (gain from talking +0.348 at 3 agents, +0.006 at 7); forcing every agent
+  worsens with group size for GPT-4.1 (gain from talking +0.348 at 3 agents, +0.006 at 7, not falling
+  steadily in between, with few tasks at most sizes); forcing every agent
   to disclose all facts lifted GPT-4.1 to 92.6% and Gemini-2.5-Flash to 98.2%, so the problem is
   surfacing, not reasoning; a two-round "share 1-2 facts and say why the front-runner may be wrong"
-  protocol lifted GPT-4.1 from 0.037 to 0.800 on 18 tasks. Memory compression for a group's decision
-  maker also fails: the full transcript gave lower accuracy than no notes at all (Imel et al. 2026,
-  arXiv, abstract).
+  protocol lifted GPT-4.1 from 0.037 to 0.800 on 18 tasks. Memory also fails a group's decision
+  maker: in natural discussions the full transcript gave lower accuracy than no notes at all (Imel et
+  al. 2026, arXiv, abstract).
 
 For teamsim. The hidden profile maps directly onto planted facts: some facts are held by one
 teammate and mentioned once. A product that summarises "what the team discussed" will mostly
@@ -172,8 +190,8 @@ reproduce the common facts. Scoring: coverage of planted unique facts, not only 
 
 The classic taxonomy of transition, action and interpersonal processes is used by these sources
 (for example by Courtright et al. and by Hagemann and Kluge 2017, abstract), but the original
-taxonomy paper was not retrieved here. Transactive memory (knowing who knows what) predicts
-performance, and the "who knows what" structure is exactly what a team knowledge tool must
+taxonomy paper was not retrieved here. Transactive memory (knowing who knows what) is
+linked to team performance, with the link depending on context (Bachrach et al. 2019, abstract), and the "who knows what" structure is exactly what a team knowledge tool must
 reconstruct. Inference: plant "ask Wren, she owns sync" type facts and score whether the product
 routes a question to the right person.
 
@@ -186,8 +204,8 @@ and task conflict less harmful when it was weakly tied to relationship conflict.
 task and relationship conflict co-occur. An updated meta-analysis (Yuan et al. 2026, abstract only,
 numbers not read) revisits the "paradox". The two main meta-analyses disagree on task conflict;
 the later one and its update are the better guide, and the practical message is that conflict is
-harmful when it turns personal. Student-team and code-review interview studies describe
-conflict as common and manageable (Gonçalves et al. 2022, 22 developers, abstract).
+harmful when it turns personal. An interview study of 22 developers found code-review
+conflict common, anticipated and seen as normal (Gonçalves et al. 2022, abstract).
 
 For teamsim. A contradicting-deadline scenario ("the sheet says Tue, the team assumes Wed", row 11
 of the realism note) is task conflict. Score: the product flags both claims and who made them, and
@@ -199,16 +217,18 @@ does not silently pick one.
   effort losses and gains depend on moderators. Do not assume loafing is universal.
 - Student project teams: loafing occurred naturally over 3-4 month projects and related to
   composition and evaluation structure (Price et al. 2006, abstract); a survey of 169 software
-  engineering students linked task visibility to less loafing (Recario et al. 2015, abstract);
+  engineering students linked task visibility to less perceived group loafing (r = -0.20; not to
+  self-reported loafing) (Recario et al. 2015, abstract);
   teams with small gaps between self-reported and actual contributions got better grades
   (Berrezueta-Guzman et al. 2025, 6 phases of commit logs, abstract).
 - Participation is uneven: about one fifth of human participants never posted in a Wason-task chat,
-  while agents almost always posted (Shao 2026, abstract). Open-source coordination follows
+  while agents almost always posted (Shao 2026, abstract). In open-source projects with many developers, mainly during growth, coordination follows
   scale-free networks, with most coordination around very few developers (Joblin et al. 2015, 18
   projects, abstract).
-- LLM side: reasoning models free-ride in public goods games (Piedrahita et al. 2025, abstract),
-  and managers in same-family groups kept power indefinitely (Seyedin et al. 2026, abstract), but
-  these are game settings and model-specific.
+- LLM side: in one public goods game with sanctioning, reasoning models cooperated less than
+  traditional ones and o1-mini free-rode (Piedrahita et al. 2025, abstract), and in same-family groups
+  the first elected manager kept power in every short game (Seyedin et al. 2026, abstract), but these
+  are game settings and model-specific.
 
 For teamsim. A quiet member (8% of messages in the demo set) and one dominant author (about a quarter)
 are supported. Score: the product should not infer that a silent member has no knowledge, and
@@ -216,9 +236,11 @@ should not equate message count with contribution (Inference).
 
 ### 3.5 Leadership and authority
 
-Contingency findings: in LLM teams, leadership styles as controllers gave no dependable accuracy
-gain; only where the first-round majority was unreliable (Kwak 2026, arXiv, abstract). Flat teams
-beat hierarchical ones on QA tasks (Muralidharan et al. 2025, abstract). Assigned coordinators and
+Contingency findings: in LLM teams, leadership styles as controllers gave no accuracy gain on most
+model and task combinations; gains appeared only in two combinations where the first-round majority
+was unreliable and the model could recover (Kwak 2026, arXiv, abstract). Flat teams scored higher
+than hierarchical ones on average over four reasoning and classification tasks, with significant
+gaps on two (Muralidharan et al. 2025, abstract). Assigned coordinators and
 votes did not produce the intended process in a controlled study of agent software teams: 21 of 35
 proposals never received a vote (Granitzer et al. 2026, technical report, full text). Human
 leadership emergence was not retrieved. Inference: authority is best scripted ("Wren decides
@@ -226,44 +248,48 @@ fonts").
 
 ### 3.6 Virtual and distributed teams
 
-Little hard evidence was retrieved. A grounded theory of remote software teams found coordination
-undermined by distrust and communication workarounds (de Souza Santos and Ralph 2022, abstract); a
+Little hard evidence was retrieved. A single-company grounded theory of software teams working from
+home during COVID-19 found coordination undermined by distrust, parenting and communication
+workarounds (de Souza Santos and Ralph 2022, abstract); a
 mixed-methods study of global teams found barriers in low availability of key people and unbalanced
 Slack activity (Stray and Moe 2020, abstract); a quantitative study of 117 research teams found
 little statistical evidence that geographic or time differences related to productivity, while
 organisational and functional distance did (Wang et al. 2021, abstract). A review of hybrid
 teamwork says the field lacks work on dynamic configurations (Handke et al. 2024, abstract). Trust
-and virtuality were tested in a meta-analysis (Breuer et al. 2016, abstract only). Inference: time
-zones matter through availability and handoff, not through location itself.
+and virtuality were tested in a meta-analysis (Breuer et al. 2016, abstract only). Inference, thinly
+supported: time zones may matter through availability (Stray and Moe saw it in one far-shore case)
+rather than through location itself, since Wang found no direct effect.
 
 ## 4. Software and student teams
 
 | Paper | Venue / year | What was measured | Key number | Depth |
 |---|---|---|---|---|
 | Truck factors, Avelino et al. | arXiv 2016 | Truck factor, 133 GitHub projects | 65% have TF 2 or less | abstract |
-| Core developer loss, Nourry et al. | arXiv 2024 | 36,000 OSS projects | 89% lost core team once; 27% of abandoned attracted a new core dev | abstract |
-| Abandonment and survival, Avelino et al. | arXiv 2019 | 1,932 projects | 16% abandoned; 41% of those survived | abstract |
+| Core developer loss, Nourry et al. | arXiv 2024 | 36,000 OSS projects | 89% lost core team at least once; 27% of abandoned attracted a new core dev | abstract |
+| Abandonment and survival, Avelino et al. | arXiv 2019 | 1,932 projects | 16% "abandoned" (all truck-factor developers stopped committing); 41% of those survived | abstract |
 | Bus factor in practice, Jabrayilzade et al. | arXiv 2022 | Survey of 269 engineers | Reviews and meetings carry knowledge, not just commits | abstract |
-| ConceptRealm, Shafiq et al. | arXiv 2022 | 518 projects, 300k issues | Abrupt departures harm concept familiarity | abstract |
+| ConceptRealm, Shafiq et al. | arXiv 2022 | 518 projects, 300k issues | After an abrupt drop in a person's comments, their strongest concept falls more than the team median | abstract |
 | Rationale in chat, Alkadhi et al. | arXiv 2017 | 8,700 dev chat messages | Chat is a rich source of rationale | abstract |
 | Student Slack roles, Song et al. | arXiv 2026 | 6,307 messages, 55 students, 18 teams | Roles peak at different project stages | abstract |
 | Student gender and Slack, Garcia and Treude | arXiv 2025 | 39 students, 8 teams | Communication did not change grades | abstract |
 | Student commits near deadlines, Smith et al. | arXiv 2024 | Capstone commit timing | 24% of commits on due dates (2022/23) | abstract |
 | Dev bots, Wessel et al. | arXiv 2021 | 21 interviews | Noise is the central problem | abstract |
-| Code review bots, Wessel et al. | arXiv 2021 | 1,194 projects | More merged PRs, less developer communication | abstract |
+| Code review bots, Wessel et al. | arXiv 2021 | 1,194 projects | More merged PRs; less communication on merged PRs only | abstract |
 
-Knowledge loss when people leave is well documented and measured through truck factor, with
-caveats: estimates differ by method, and the best evidence is survey-validated (84% of surveyed
-developers agreed or partly agreed on main authors, 53% positive on the estimated value in
-Avelino et al. 2016). Chat itself holds decision rationale (Alkadhi et al. 2017), which supports
-planting decisions and reversals in chat and also warns that extraction is hard. The student
+Knowledge concentration and loss when people leave are measured through truck factor, but few
+studies explore it and there is no agreed way to calculate it, so estimates differ by method. The
+best evidence is survey-validated (84% of valid answers agreed or partly agreed on main authors,
+53% were positive or partly positive on the estimated value in Avelino et al. 2016). Chat itself
+holds decision rationale (Alkadhi et al. 2017), which supports planting decisions in chat (reversals
+were not studied) and also warns that extraction is hard. The student
 literature is small-sample and mostly observational; it supports unequal contribution, deadline
 bursts and communication-role differences, but gives no reliable base rate for decision reversal
 or lost decisions in student chats. Inference: teamsim must set those rates by choice and say so.
 
-For teamsim. Time realism (REALISM row 1) is backed by deadline-driven commit timing and
-student semester constraints (Damianova and Berrezueta-Guzman 2026, abstract). Absence/handoff is
-backed by truck-factor evidence. Bot noise is a scoring dimension.
+For teamsim. Time realism (REALISM row 1) is backed by deadline-driven commit timing (Smith et al. 2024) and
+student semester constraints (Damianova and Berrezueta-Guzman 2026: task surges near deadlines, gaps
+in exam periods, abstract). Absence is backed by truck-factor evidence; handoff handling is
+teamsim's design. Bot noise is a scoring dimension.
 
 ## 5. Human-AI teaming and benchmarks with simulated humans
 
@@ -274,13 +300,13 @@ backed by truck-factor evidence. Bot noise is a scoring dimension.
 | HUMA, Jacniacki and Carmona Serrat | arXiv 2025 | 97 participants, 4-person chats | AI facilitator classified human at near chance | abstract |
 | Bot adoption, Shi and Gong | arXiv 2026 | 2,991 GitHub projects | More repeated collaboration, fewer conflict cascades (association) | abstract |
 | Kolab, Hayati et al. | arXiv 2026 | 50 professionals, 115 hours | Models overestimate collaboration quality | abstract |
-| Yoars, Granitzer et al. | tech report 2026 | 926 agent-team runs; 4-week field study | Requests acted on within 4 h after at least 97%, informs 84-88% | full text |
-| Sim2Real user simulation, Zhou et al. | arXiv 2026 | 451 humans, 31 simulators | Best simulator USI 76.0 vs human 92.9 | full text |
+| Yoars, Granitzer et al. | tech report 2026 | 926 agent-team runs; 4-week field study | Recipient sent an act within 4 h after at least 97% of requests, 84-88% of informs | full text |
+| Sim2Real user simulation, Zhou et al. | arXiv 2026 | 451 humans, 31 simulators | Best simulator USI 76.0 vs human 92.7 | full text |
 
 Findings. People cannot reliably tell AI teammates from humans in short chats, which is an ethics
 and labelling issue for teamsim (simulated teammates must be labelled) and a warning that bots in
 real teams can pass as people. Existing AI teammates are evaluated on noise, awareness and
-whether requests reach the right person. In agent-team operation, plain "informs" were acted on
+whether requests reach the right person. In agent-team operation, plain "informs" were followed by an act
 less often than "requests", and a failure report sent as an inform sat for 11.5 hours; in the
 field study, human attention was the bottleneck [full text, one team, technical report]. LLM user
 simulators are too cooperative, front-load complete information (4.8 identifier-like tokens per
@@ -299,14 +325,14 @@ the realistic tax should be measured, as REALISM already proposes.
 |---|---|---|---|
 | Dynamics of team cognition, Grand et al. | J Appl Psychol 2016 | Computational model of knowledge emergence in teams, run as an agent simulation | abstract |
 | Dynamic team composition and coordination, Blanco-Fernandez et al. | arXiv 2024 | NK-model agents; coordination modes by task complexity | abstract |
-| Trust in human-robot teams, Kalluri | arXiv 2026 | Validated against a meta-analysis: interval validity for 4 of 8 trust categories, Spearman .833 | abstract |
-| R&D alliance model, Tomasello et al. | arXiv 2017 | Calibrated and compared with a 15,000-firm size distribution | abstract |
-| Organisational behaviour of agentic AI, Liu | arXiv 2026 | Computational theory plus LLM agent traces | abstract |
-| Recursive organisation improvement, Wang | arXiv 2026 | Executable specification, checker, simulations | abstract |
+| Trust in human-robot teams, Kalluri | arXiv 2026 | Compared with a meta-analysis, some parameters calibrated to it: interval validity for 4 of 8 predictors, Spearman .833 | abstract |
+| R&D alliance model, Tomasello et al. | arXiv 2017 | Calibrated and compared with the size distribution of about 14,800 R&D alliances | abstract |
+| Organisational behaviour of agentic AI, Liu | arXiv 2026 | Computational theory, a synthetic simulation and LLM agent traces (post-LLM; no field validation) | abstract |
+| Recursive organisation improvement, Wang | arXiv 2026 | Specification with a partial executable checker and synthetic simulations (post-LLM) | abstract |
 
 Pattern. Rule-based team models are validated against aggregates (size distributions, meta-analytic
 effect directions), and even the best-reported example reached interval validity for half of the
-categories it tested. None is validated at message level. Inference: they are a good fit for what
+predictors it tested, with some parameters calibrated to the same meta-analysis. None is validated at message level. Inference: they are a good fit for what
 teamsim needs from a scripted team (known structure, seedable, explainable) and no evidence for
 simulating individual opinions or wording. Searches for classic computational-organisation-theory
 validation papers returned little; the claim "rule-based models are good enough" rests on the
@@ -320,26 +346,27 @@ C = do not attempt with current models.
 | Phenomenon | Literature | Product should | Score | Class |
 |---|---|---|---|---|
 | Hidden profile: key fact held by one person, said once | Lu 2012; Li 2025; Alsobay 2026 | Surface the unshared fact or ask who knows more | Coverage of planted unique facts; answer uses it | A |
-| Decision reversal | Plausible from chat rationale (Alkadhi 2017); no base rate found | Return the latest decision, link the earlier one | Latest id returned; superseded one labelled | A |
-| Confident wrong claim (peer or pasted AI text) | Yan 2026; Qu 2026 | Not adopt it over the team decision | Rank of team decision above claim | A |
+| Decision reversal | Decisions occur in chat rationale (Alkadhi 2017); reversals not studied, no base rate found | Return the latest decision, link the earlier one | Latest id returned; superseded one labelled | A |
+| Confident wrong claim (peer or pasted AI text) | Yan 2026 (deceptive evidence holder); Qu 2026 (wrong peer answers); pasted text not tested | Not adopt it over the team decision | Rank of team decision above claim | A |
 | Contradicting deadlines, never resolved | De Dreu 2003; de Wit 2012 | Show both and who said what | Both values and authors present | A |
-| Silent member, then catch-up | Shao 2026; Joblin 2015 | Catch-up covering the gap; no inference from silence | Missed-items count in recap | A |
-| Departure and handoff of an owner | Avelino 2016; Nourry 2024 | Name the new owner and open items | Owner correct; open tasks listed | A |
+| Silent member, then catch-up | Shao 2026 (silent members); Joblin 2015 (irregular peripheral participation); catch-up is teamsim's design | Catch-up covering the gap; no inference from silence | Missed-items count in recap | A |
+| Departure and handoff of an owner | Avelino 2016; Nourry 2024 (departure only; handoff steps are teamsim's design) | Name the new owner and open items | Owner correct; open tasks listed | A |
 | Expertise location ("who knows X") | Bachrach 2019 | Route to the owner | Correct person in top 1 | A |
-| Unequal contribution | Berrezueta-Guzman 2025; Price 2006 | Not rank people by message count | No false "inactive" claim | B |
-| Deadline bursts, late-night activity | Smith 2024; REALISM row 1 | Handle relative dates across the date line | Date correctness | A |
+| Unequal contribution | Berrezueta-Guzman 2025 (commit shares, not messages); Price 2006 | Not rank people by message count | No false "inactive" claim | B |
+| Deadline bursts, late-night activity | Smith 2024 (deadline bursts only); REALISM row 1 | Handle relative dates across the date line | Date correctness | A |
 | Fragmented thoughts, acks, reactions, chatter | REALISM; Zhou 2026 (short turns) | Capture decision from fragments | Recall with and without transform | B |
-| Bot noise and off-topic trolling | Wessel 2021 | Stay quiet unless useful | Messages per hour; precision | A |
+| Bot noise and off-topic trolling | Wessel 2021 (noise only; trolling is teamsim's addition) | Stay quiet unless useful | Messages per hour; precision | A |
 | Pasted secret | Prior notes | Not index or echo it | Secret absent from outputs | A |
 | Prompt injection in chat data | Fixture design | Treat as data | No action taken | A |
 | Request versus inform handoff | Granitzer 2026 | Act on requests, flag unanswered ones | Time to action | B |
-| Spontaneous consensus, dissent, conformity | Tak 2026; Pappu 2026 | n/a | n/a | C |
-| Calibrated conflict, frustration, humour | Kamoi 2026; Zhou 2026 | n/a | n/a | C |
-| Leadership emergence, free riding from agents | Kwak 2026; Seyedin 2026 | n/a | n/a | C |
+| Spontaneous consensus, dissent, conformity | Tak 2026; Pappu 2026 (compromise, not dissent) | n/a | n/a | C |
+| Calibrated conflict, frustration, humour | Kamoi 2026 (inconsistent, uncollaborative behaviour); Zhou 2026 | n/a | n/a | C |
+| Leadership emergence, free riding from agents | Seyedin 2026; Piedrahita 2025; Kwak 2026 (assigned styles, not emergence) | n/a | n/a | C |
 
 Too unreliable to simulate with current models (class C): consensus and dissent dynamics (LLM
 groups conform more, lock in earlier, and over-agree by 34 to 44 points); the amount of conflict
-or frustration (prompts under- or over-produce it, Kamoi); deference to experts (Pappu); who leads
+or uncollaborative behaviour (prompts do not control it reliably and often over-produce some
+behaviours, Kamoi); deference to experts (Pappu); who leads
 or free-rides (model-specific game results). These can still be scripted as events; they should not
 be left to a model.
 
@@ -349,8 +376,9 @@ Scripted versus agent-driven. Evidence supports a scripted, seeded team as the d
 model only as an optional layer:
 
 - For scripted: LLM teams conform, lock in early, lose minority facts and withhold information
-  (Tak, Cemri, Li, Wan, Yan); roles and votes did not act when only instructed (Granitzer);
-  simulated users give an easy mode (Zhou); frequencies of messy behaviour cannot be controlled by
+  (conformity and early lock-in: Tak; withholding: Cemri; lost minority facts: Li, Wan; false claims:
+  Yan); roles and votes did not act when only instructed (Granitzer);
+  simulated users give an easy mode (Zhou); frequencies of messy behaviour are not reliably controlled by
   prompts (Kamoi).
 - For model help: reactive teammates that reply to a product need generated text, and
   generative-agent work shows models can carry and spread a seed fact (Park, abstract and full
@@ -365,26 +393,28 @@ Decisions it touches.
 
 - **Model-free default (yes).** Everything in class A needs no model. Meets the run-1 direction.
 - **Stack/runtime.** The literature is neutral. A scripted core needs a scheduler, a fact ledger
-  and a scorer; a model endpoint only for the optional layer. Per-exchange cost near $0.024 (2024
-  upper bound) makes recorded generation affordable.
+  and a scorer; a model endpoint only for the optional layer. A calculated upper bound near $0.024 per
+  interaction (TheAgentCompany; assumed token counts, not a measured cost) suggests recorded
+  generation is affordable; teamsim should measure its own.
 - **v0.1 actions.** Chat-only already supports class A rows. Tasks and PR threads add request-versus-
   inform handoffs and bot noise, where evidence exists (Wessel); put them second.
 - **First user.** Builders of team-facing software are served by hidden profile, reversal, owner
   loss and bot noise scenarios; students are served by unequal contribution and deadline bursts.
 - **Preset design.** Presets as lists of phenomena with parameters: number of hidden-profile
   decisions, reversals, silent members, handoffs, bot noise level. Use 4-6 people: hidden-profile
-  failures grow with group size (Li) and the demo has 6.
+  failures grew with group size in one model's results (Li, not steady across sizes) and the demo has 6.
 - **Scoring.** Planted-fact coverage (Lu: coverage matters more than focus), latest-decision
   correctness, flag-on-conflict, noise rate, and a "realism tax" (recall with and without the
   messiness transform).
 - **ADR 0003 gate for simulated feedback.** The evidence supports the gate. Simulated feedback tends
-  to be uniformly positive, LLM judges overstate human-likeness (55%), and prompts do not control
+  to be uniformly positive, LLM judges overstate human-likeness (55%), and prompts do not reliably control
   diversity or friction. Keep the "hypotheses only" label. Candidate additions: report a
   Sim2Real-style table of behaviour rates (short-turn share, politeness share, pivot share)
   against a public human reference; require the sycophancy test to include a confident wrong claim.
   Thresholds should be chosen by teamsim and justified; the literature gives none.
-- **Labelling.** People did not distinguish undisclosed AI teammates (Yan 2026), so simulated
-  teammates must always be labelled as simulated in the workspace and in reports.
+- **Labelling.** People did not distinguish undisclosed AI teammates (Yan 2026), so, as a design choice (the paper
+  gives no such advice), simulated teammates must always be labelled as simulated in the workspace
+  and in reports.
 
 Candidate numeric references (ranges to compare against, not pass/fail):
 
@@ -392,10 +422,10 @@ Candidate numeric references (ranges to compare against, not pass/fail):
 |---|---|---|
 | Hidden-profile solve rate vs full information | about 8 times lower | Lu 2012 |
 | Multi-agent accuracy vs full-information single agent | 30.1% vs 80.7% | Li 2025 |
-| Facts lost in discussion (upper) | 72% | Wan 2026 |
-| Truth recovery with one false testimony | 72.5% to 14.2% | Yan 2026 |
+| Facts lost in discussion (upper, system level) | 72% (85% per agent) | Wan 2026 |
+| Truth-majority rate with one deceptive key evidence holder | 72.5% to 14.2% | Yan 2026 |
 | Projects with truck factor 2 or less | 65% | Avelino 2016 |
-| Human short turns vs LLM short turns | 29.0% vs 1.0% | Zhou 2026 |
+| Human short turns vs GPT-4o short turns | 29.0% vs 1.0% | Zhou 2026 |
 | Human participants who never post | about one fifth (Wason chat) | Shao 2026 |
 
 Avoid: claiming simulated teams are "realistic"; using conformity or consensus papers as targets;

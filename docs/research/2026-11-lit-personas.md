@@ -1,5 +1,9 @@
 # Personas, consistency, diversity and sycophancy: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: peer-reviewed and arXiv work on building simulated people with language models,
 measuring whether they stay distinct, consistent and honest, and what small local models can do.
 It deepens `2026-11-personas.md` (web and GitHub notes) with papers. Depth tags: [full text] means
@@ -42,15 +46,18 @@ the venue is named only where I saw it.
    the time by Qwen2.5-1.5B, 78.9% by Gemma-3-4B, 69.4% by Qwen2.5-7B, 35.9% by Qwen2.5-14B, and
    4-11% by the strongest hosted models. In debate, Qwen2.5-7B-Instruct held its stance 0.83 of 5
    turns against 4.90 for a 72B model (SYCON-Bench). One study finds sycophancy mostly present
-   after supervised fine-tuning already. Prompt-only fixes vary: a plain anti-sycophancy
-   instruction was modest, third-person framing helped more (SYCON), and a counterfactual
-   reasoning prompt reached near zero in one preprint. For teamsim: make pushback tests mandatory
+   after supervised fine-tuning already. Prompt-only fixes vary by model: a plain anti-sycophancy
+   instruction was modest (and backfired for one model), third-person framing helped more
+   (SYCON), a counterfactual reasoning prompt reached near zero for most models in one preprint,
+   and a plain "be truthful" prompt captured most of the gain on two hosted models in another.
+   For teamsim: make pushback tests mandatory
    for any model that writes teammate lines, and give the script, not the model, the right to
    disagree.
 7. **Diversity metrics disagree, and fixed thresholds are weak.** One preprint shows a popular
    0.8 embedding-similarity cutoff is exceeded by 20-32% of pairs that express different ideas.
-   A compact set (compression ratio, long n-gram repetition, Self-BLEU, BERTScore) has low
-   internal correlation, so four numbers cover most of what lexical metrics see. For teamsim:
+   Three lexical scores (compression ratio, long n-gram self-repetition, Self-BLEU) have low
+   mutual correlation, and their authors call them sufficient to report; the same tool also
+   reports BERTScore homogenization. For teamsim:
    report ratios against the scripted human-authored lines as a reference, not absolute cosines.
 8. **Small models can write a line from a slot; they are weak at being the author.** Constrained
    decoding took 0.6B-4B models from 78.6-92.9% schema validity to 100% but left a semantic gap,
@@ -63,8 +70,8 @@ the venue is named only where I saw it.
    strength, can lower answer quality and need model internals that hosted or Ollama-style
    endpoints do not expose. For teamsim: prompt and script first; note steering as research only.
 10. **AI text stays detectable even after calibration.** On replies from X, Bluesky and Reddit
-    users, nine open models of 4-8B (plus one 70B) were told apart from humans by a classifier at
-    70-80% after the best calibration (87% or more before). Stylistic example lines and retrieved
+    users, nine open models (eight of 4-8B and one 70B) were told apart from humans by a classifier at
+    70-80% after the best calibration (85% or more in the baseline-plus-persona setup). Stylistic example lines and retrieved
     context helped; persona descriptions and fine-tuning did not; instruction-tuned models did
     worse than base models (PNAS). For teamsim: do not claim "indistinguishable from humans";
     give each teammate example lines, and claim measured style statistics against a stated target.
@@ -79,10 +86,10 @@ Does prompting with a persona change behaviour, and which attributes matter?
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Quantifying the Persona Effect (Hu, Collier) | arXiv 2024 | Variance explained by persona variables in 10 subjective datasets; gains from persona prompting, 6 models, 600 items per dataset | under 10% variance; 70B model reaches 81% of the regression-achievable variance where persona matters (US survey, over 70% explained); when target R2 is below 0.1 predicted R2 often drops to zero | full text |
-| How Well Do LLMs Capture Human Personality (Bhattacharyya) | arXiv 2026 | Persona richness vs separation and downstream accuracy | pairwise embedding distance fell from 14.38 to 5.90 (Qwen-72B instruct); email click-through accuracy 70.0% for age-gender vs 58.6% for auto-built customer profiles | full text |
-| Reliability of Persona-Conditioned LLMs as Survey Respondents (Taday Morocho) | arXiv 2026 | 2 open chat models, over 70K respondent-item pairs, World Values Survey | persona prompting gave no clear aggregate gain and often hurt | abstract |
-| How Far Do Persona Effects Generalize (Zhou) | arXiv 2026 | 57 attributes, 7 pairs of 7-9B models | effects are predictable but not portable across models or rewording | abstract |
+| Quantifying the Persona Effect (Hu, Collier) | arXiv 2024 | Variance explained by persona variables in 10 subjective datasets; gains from persona prompting on four of them, 600 instances each | under 10% variance; the best 70B model (Tulu-2-70b-dpo) captures 81% of the achievable variance on one US survey (ANES), and no model reaches the ceiling; when target R2 is below 0.1 predicted R2 often drops to zero | full text |
+| How Well Do LLMs Capture Human Personality (Bhattacharyya) | arXiv 2026 | Persona richness vs separation and downstream accuracy | pairwise embedding distance fell from 14.38 to 5.90 (Qwen-72B-Vision-Instruct); email click-through accuracy 70.0% for age-gender vs 58.6% for auto-built customer profiles | full text |
+| Reliability of Persona-Conditioned LLMs as Survey Respondents (Taday Morocho) | arXiv 2026 | 2 open chat models, over 70K respondent-item pairs, World Values Survey | persona prompting gave no clear aggregate gain; the abstract says it often hurt, but the body's aggregate differences are small and not significant | abstract |
+| How Far Do Persona Effects Generalize (Zhou) | arXiv 2026 | 57 attributes, 7 pairs of 7-9B models | effects can be predictable without being portable: separate gains beat shared scaling significantly only in OLMo-3 and Qwen2.5, and reuse across models or after rewording usually does not beat refitting | abstract |
 | Persona Hub (Ge) | arXiv 2024 | 1 billion web-derived personas for data synthesis | a source of perspectives, not a fidelity study | abstract |
 
 What this shows. Persona prompting gives modest, real gains, mainly where human variance is
@@ -92,8 +99,9 @@ shrinks the distance between persona embeddings, and that two corpora built on r
 schemas (Nemotron, Persona Hub) were less separated than two-attribute personas (mean distance
 5.25 and 6.84 against 14.38 on one 72B model; 1.80 and 3.84 against 7.81 on an 8B model).
 Narratives over 2,000 tokens did not consistently help. Caveats: the distance is measured on
-final-layer hidden states, not on text a user sees; the downstream task is a binary engagement
-call (chance is 50%); it is a single-group preprint. Hu and Collier test classification of
+final-layer hidden states of the model's answers to probe questions, not on text a user sees; the
+downstream task is a binary engagement call (chance is 50%); it is an unreviewed arXiv preprint
+(v1). Hu and Collier test classification of
 annotations, not free-form chat. So these results are a warning about long personas, not a
 measurement of what teamsim's chat lines would do.
 
@@ -106,20 +114,26 @@ chat.
   report that rewording breaks transfer of persona effects between models. [abstract / full text]
 - PILOT (Cisar et al., arXiv 2025) [abstract]: three models (Mistral Large 2, DeepSeek-R1,
   LLaMA 3.3 70B), 25 synthetic personas; schema-based steering (numeric psycholinguistic profiles)
-  reduced repetitive "persona-sounding" output (silhouette 0.098 to 0.237, topic purity 0.773 to
-  0.957) but natural-language personas kept more lexical diversity. A hybrid balanced the two.
+  reduced artificial-sounding persona repetition and gave tighter clusters (silhouette 0.098 to
+  0.237 for LLaMA 3.3 70B, natural-language against schema-based; topic purity 0.708-0.773 against
+  0.888-0.957 across models; these are cluster-structure metrics). Lexical diversity depends on
+  the metric: natural-language personas had a lower type-token ratio (0.59-0.71 against
+  0.63-0.76) but slightly higher n-gram diversity than schema steering. A hybrid balanced the two.
 - Three-tier persona vector (Khedar et al., arXiv 2026) [abstract]: 23 dimensions (demographics,
   12 behavioural traits, 5 emotional states that shift with the scenario), 64,698 conversations;
-  agent goal achievement spread by 15.8 points across personas. Shows structured traits produce
-  measurably different simulated-user behaviour on tool-use tasks, with a company-internal
-  evaluation set.
+  agent goal achievement spread by 15.8 points across 8 personas on a 49K-sample production
+  corpus. Personas differ in measured agent outcomes. There is no flat-description baseline, and
+  the authors say the causal path runs through the user simulator and that user-turn realism was
+  not checked with humans, so trait causation is not shown.
 - The Prompt Makes the Person(a) (Lutz et al., arXiv 2025) [abstract]: five open models, 15
-  groups; interview-style prompting and name-based priming reduced stereotyping, and OLMo-2-7B beat
-  Llama-3.3-70B.
-- Pay What LLM Wants (Choi et al., arXiv 2025) [abstract]: with 522 real human personas, rebuilt
-  personal narratives and retrieval did not beat simple prompting.
-My reading (inference): a short structured record rendered to a few plain sentences plus 3-5
-example lines is the best-supported default; whether the structured or narrative form is better
+  intersectional race and gender groups (8 in the closed-ended task); interview-style prompting
+  and name-based priming reduced stereotyping, and OLMo-2-7B beat Llama-3.3-70B on the open-text
+  measures.
+- Pay What LLM Wants (Choi et al., arXiv 2025) [abstract]: with 522 real human personas, the
+  abstract reports no significant gain from rebuilt personal narratives or retrieval over simple
+  prompting; the body gives only descriptive accuracy differences, with no significance test.
+My reading (inference; the papers above did not test exactly this format): a short structured record
+rendered to a few plain sentences plus 3-5 example lines is the best-supported default; whether the structured or narrative form is better
 for team-chat wording is untested and teamsim can test it cheaply.
 
 ## 2. Personality induction and measurement
@@ -128,9 +142,9 @@ for team-chat wording is untested and teamsim can test it cheaply.
 |---|---|---|---|---|
 | Personality Traits in LLMs (Serapio-Garcia) | Nature Machine Intelligence 2025 | Reliability, validity and shaping of Big Five in 18 LLMs | validity stronger for larger and instruction-tuned models; traits shapeable by prompt | abstract |
 | PersonaLLM (Jiang) | arXiv 2023 | GPT-3.5/4 personas, BFI plus story writing | humans perceive some traits at up to 80% accuracy, lower when told it is AI | abstract |
-| The Personality Illusion (Han) | arXiv 2025 | Self-report vs behaviour, persona injection | questionnaire-to-behaviour agreement 45-62% by trait, CIs overlap 50%; small and mid models 43-50% | full text |
-| Personality Without Persons? (Zierahn) | AIES 2026 | Psychometric validity, 264 LLMs from 50 families | between-model variance only 7-17%; four of five facets collapse (r at least .90) | abstract |
-| Limited Ability of LLMs to Simulate Psychological Behaviours (Petrov) | arXiv 2024 | GPT-3.5/4 with generic vs demographic personas | generic personas acceptable for GPT-4; demographic personas gave poor psychometrics | abstract |
+| The Personality Illusion (Han) | arXiv 2025 | Self-report vs behaviour, persona injection | share of trait-task coefficients whose sign matches the human-expected direction 45-62% by trait, CIs overlap 50%; small and mid models 43-50% | full text |
+| Personality Without Persons? (Zierahn) | AIES 2026 | Psychometric validity, 247 LLMs from 50 families, default settings and no persona (17 of 264 excluded) | between-model variance only 7-17%; four of five facets collapse (r at least .90) | abstract |
+| Limited Ability of LLMs to Simulate Psychological Behaviours (Petrov) | arXiv 2024 | GPT-3.5/4 with generic vs demographic personas | GPT-4 (not GPT-3.5) with generic personas: promising but not perfect psychometrics; demographic personas gave poor psychometrics for both | abstract |
 | TRAIT (Lee) | arXiv 2024 | 8K-item personality test for LLMs | prompting weak for some traits (high psychopathy, low conscientiousness) | abstract |
 | BIG5-CHAT (Li) | arXiv 2024 | 100,000 dialogues; SFT and DPO vs prompting | training beat prompting on BFI and IPIP-NEO | abstract |
 | Designing AI Agents with Personalities (Huang) | arXiv 2024 | BFI-2 prompts, risk and moral vignettes | personality-decision correlations reproduced in part; finer patterns diverged | abstract |
@@ -141,9 +155,12 @@ risk-taking, honesty tasks) at chance for small and mid models; only a few large
 (Claude 3.7 64%, GPT-4o 68%, Qwen-235B 82%, and only the last significantly). Persona injection
 changed answers on the questionnaire (agreeableness beta about 3.6 to 4.4, p under .001) but the
 matching behaviour (sycophancy) was mostly not significant. Zierahn et al. add that the Big Five
-instruments do not separate models well and do not reproduce the human five-factor structure. Both
-studies are about general model behaviour under a questionnaire or a task, not simulated
-teammates; but they undermine "give the persona a Big Five profile and trust it".
+instruments do not separate models well and do not reproduce the human five-factor structure.
+Zierahn tested each model under default settings with no persona assigned, so it does not test
+persona profiles; it argues that Big Five labels from LLMs should be read cautiously. Han does
+test persona injection. Both studies are about general model behaviour under a questionnaire or
+a task, not simulated teammates; Han undermines "give the persona a Big Five profile and trust
+it", and Zierahn adds a caution about reading Big Five scores from models.
 
 For teamsim: if Big Five is used at all, treat it as a style hint for authors, not as a
 measurable property of the simulated person. A behavioural probe (Section 3 and 5) is the test.
@@ -152,76 +169,90 @@ measurable property of the simulated person. A behavioural probe (Section 3 and 
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Persistent Personas? (de Araujo) | arXiv 2025 | 7 models (4B-49B and Gemini 2.5), 9 personas, over 100 rounds | knowledge, style and consistency decline; traits regress to no-persona baseline; scale helps, does not fix | full text |
+| Persistent Personas? (de Araujo) | arXiv 2025 | 7 models (4B-49B and Gemini 2.5), 8 personas plus a no-persona baseline, over 100 rounds | knowledge, style and consistency decline; traits regress to no-persona baseline; scale helps, does not fix | full text |
 | Consistently Simulating Human Personas with Multi-Turn RL (Abdulhai) | arXiv 2025 | Three automatic consistency metrics validated on human labels | inconsistency cut by over 55% by RL fine-tuning | abstract |
-| ContextEcho | arXiv 2026 | 57 long agentic coding sessions, 23 models | drift appears early; a one-shot anchor restores the persona | abstract |
-| ANCHOR (Venkit) | arXiv 2026 | 2,008 conversations, 27 personas, 4 models | trajectory recall averages 44.4%; questionnaire retention disagrees with turn-level behaviour | abstract |
+| ContextEcho | arXiv 2026 | 57 long agentic coding sessions analysed at corpus scale on a smaller set of targets; a 23-model comparison on one representative session | drift appears early; a one-shot anchor restores the assistant register, though placebo controls suggest a generic register reset | abstract |
+| ANCHOR (Venkit) | arXiv 2026 | 2,008 conversations, 27 personas, 4 models | trajectory accuracy on four-option questions averages 44.4% (chance 25%); questionnaire retention disagrees with turn-level behaviour | abstract |
 | StateTrack-Bench | arXiv 2026 | Constraint retention, 7 models, up to 50 turns | strict retention 62.4-100%; 88.6% of failures are drift, not forgetting; state anchoring recovers up to 24.4 points | abstract |
 | Memory-Driven Role-Playing | arXiv 2026 | 12 LLMs, persona knowledge use | structured memory prompt lets Qwen3-8B match larger closed models | abstract |
-| PersonaEval (Zhou) | arXiv 2025 | Can LLM judges identify the speaker | best LLM about 69%, humans 90.8% | abstract |
+| PersonaEval (Zhou) | arXiv 2025 | Can LLM judges identify the speaker | best LLM about 69%; humans 90.8% on 50 hard cases each (sampled from cases DeepSeek-R1 got confidently wrong) | abstract |
 | Anonymous role-play benchmark (Peng) | arXiv 2026 | Famous vs anonymised characters | anonymising characters lowers scores; personality text helps | abstract |
 
 de Araujo et al. [full text]: dialogues of 60k-110k tokens stayed inside each model's context
 window, so the decay is not truncation. Fidelity moved toward the no-persona baseline rather
 than random behaviour. The drop is larger in goal-oriented than in persona-directed dialogue,
 which is the situation of a teammate asked to complete a task. Personas here are fictional
-characters, not workplace roles, and the dialogues were model-generated, so transfer to short
-team chat is untested. A common suggestion across these papers is re-anchoring the persona
-and retrieving only relevant history (de Araujo, ContextEcho, StateTrack).
+characters, not workplace roles; the replies were model-generated and the user turns were
+interview-style questions or real user queries from PRISM, so transfer to short team chat is
+untested. The remedies suggested differ by paper: de Araujo proposes, untested, retrieving only
+the history relevant to the current query alongside the persona; ContextEcho tests a single
+inserted anchor exchange (its placebo controls point to a generic register reset, not a
+drift-specific fix); StateTrack reports that state anchoring recovers up to 24.4 points
+(abstract).
 
 Li et al. (Measuring and Controlling Instruction Instability, Harvard, arXiv 2024) [full text of
 the method sections] is the origin of the "within eight rounds" claim: two instructed chatbots
 talk, and after each turn the agent is re-asked a probe question; LLaMA2-chat-70B and GPT-3.5
 drifted within 8 rounds, with the share of attention on the system prompt falling across turns.
 Their baseline fix of repeating the system prompt before each user turn is the cheap version of
-what teamsim would do by re-sending the persona each call. Models are old (2023-24); newer ones
-in de Araujo drift more slowly but still drift.
+what teamsim would do by re-sending the persona each call. Models are old (2023-24). In de
+Araujo's seven newer models, larger ones show smaller fidelity gaps, but significant gaps remain
+even in the largest.
 
-PersonaEval matters for how teamsim measures: LLM judges identify roles poorly, so a judge-based
-consistency score would be weak evidence (see Section 8 for the alternative).
+PersonaEval tests role identification, not consistency scoring or drift. My inference: since LLM
+judges identify roles poorly, a judge-based consistency score would be weak evidence (see Section
+8 for the alternative).
 
-PersonaGym (Samuel et al., arXiv 2024, v5 2026) [full text] adds a benchmark and a warning on
+PersonaGym (Samuel et al., arXiv 2024, v5 2025) [full text] adds a benchmark and a warning on
 size. It scores persona agents on five tasks (expected action, action justification, linguistic
 habits, persona consistency, toxicity control) over 200 personas and 10,000 questions, with 10
 models. Results: LLaMA-3-8B scored 4.49 against 4.36 for LLaMA-3.3-70B and 4.49 for GPT-4.1 (on
-a 1-5 rubric, LLM-judged); one small hosted model scored lowest because it refused to adopt
-personas; and "linguistic habits" (matching a persona's speech style) was the hardest task, with
-most models below 4. The judge scores correlated with 5 human annotators at Spearman 75.1% on
-average over 100 personas (Fleiss kappa 0.71), but correlations differed per task and model. The
+a 1-5 rubric, LLM-judged); one hosted model (Claude 3 Haiku) scored lowest, which the paper
+attributes to its reluctance to adopt personas; and "linguistic habits" (matching a persona's
+speech style) was the hardest task, with most models below 4. The judge scores correlated with 5
+human annotators at Spearman 75.1% on average across three models (GPT-3.5, LLaMA-2-13b,
+LLaMA-2-70b) on a 100-persona subsample (Fleiss kappa 0.71), but correlations differed per task
+and model. The
 authors also note that beyond 200 generated personas GPT-4o produced overlapping attributes,
-which is direct evidence that a model-generated persona list stops being diverse. Limits: older
-models in the main table, fictional or generic personas, LLM judges.
+which is one observation, for one generator, that a model-generated persona list can stop being
+diverse. Limits: older models in the main table (mine); the paper itself notes that its personas
+do not represent all socio-demographic groups equally and that LLM judging may add bias.
 
 ## 4. Diversity and homogenization
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Artificial Hivemind (Jiang) | arXiv 2025 | 26K open-ended prompts, repetition within and across models | models repeat themselves and each other | abstract |
-| How Strong Is the Evidence? (Schaeffer) | arXiv 2026 | Re-analysis of the above | 20-32% of different-idea pairs exceed the 0.8 cutoff; prompting raises diversity | full text |
-| The Alignment Tax (Liu) | arXiv 2026 | 10 samples per question, 3B-14B | 40-79% of questions give one cluster; base 1.0% vs instruct 28.5%; DPO stage localised | abstract |
-| Understanding the Effects of RLHF on Generalisation and Diversity (Kirk) | arXiv 2023 | SFT vs RLHF | RLHF reduces output diversity | abstract |
-| Revisiting LLM Homogeneity (Qiu) | arXiv 2026 | 25 metrics over 5 dimensions, 18 LLMs | embedding similarity tracks human meaning judgments worse (rho 0.417) than sentence matching (0.606), form not at all (0.140) | abstract |
-| Standardizing Text Diversity (Shaib) | arXiv 2024 | Convergent validity of diversity scores | compression ratio, long n-gram repetition, Self-BLEU and BERTScore have low mutual correlation | abstract |
-| Evaluating the Evaluation of Diversity (Tevet, Berant) | arXiv 2020 | Metrics vs human judgments | humans beat automatic metrics; decoding parameters mostly change form not meaning | abstract |
+| Artificial Hivemind (Jiang) | arXiv 2025 | A dataset of 26K open-ended queries; repetition within and across models measured on a 100-query subset | models repeat themselves and each other | abstract |
+| How Strong Is the Evidence? (Schaeffer) | arXiv 2026 | Re-analysis of the above | 20-32% of different-idea pairs exceed the 0.8 cutoff; simple prompt rewordings raise measured embedding-based diversity (quality not assessed) | full text |
+| The Alignment Tax (Liu) | arXiv 2026 | 10 samples per question, 3B-14B | 40-79% of questions give one cluster; base 1.0% vs instruct 28.5%; DPO stage localised on the two families with stage checkpoints | abstract |
+| Understanding the Effects of RLHF on Generalisation and Diversity (Kirk) | arXiv 2023 | SFT vs RLHF | RLHF reduces output diversity relative to SFT on summarisation; no meaningful difference found for instruction following | abstract |
+| Revisiting LLM Homogeneity (Qiu) | arXiv 2026 | 25 metrics over 5 dimensions, 18 LLMs | embedding similarity tracks human meaning judgments worse (rho 0.417) than sentence matching (0.606), and not significantly with form (0.140) | abstract |
+| Standardizing Text Diversity (Shaib) | arXiv 2024 | Convergent validity of diversity scores | compression ratio, long n-gram self-repetition and Self-BLEU have low mutual correlation; the tool also reports BERTScore homogenization | abstract |
+| Evaluating the Evaluation of Diversity (Tevet, Berant) | arXiv 2020 | Metrics vs human judgments | humans beat automatic metrics at detecting content diversity (not on the decoding-temperature test); decoding parameters mostly change form not meaning | abstract |
 | Vendi Score (Friedman, Dieng) | arXiv 2022 | Eigenvalue-entropy diversity of any similarity matrix | effective number of distinct items; no reference set needed | abstract |
 | Price of Format (Yun) | arXiv 2025 | Chat template tokens | diversity collapse persists at high temperature | abstract |
 | BACo (Wang) | arXiv 2025 | Token-level routing between a base and its aligned model | 21.3% joint diversity-quality gain | abstract |
-| Meta-Persona Anchoring (Fu) | arXiv 2026 | Self-chosen persona plus very high temperature, models under 20B | cosine similarity 0.85 to 0.65; weakly validated | abstract |
+| Meta-Persona Anchoring (Fu) | arXiv 2026 | Self-chosen persona, then a top-p filter and temperature of at least 4.0, models under 20B | average pairwise cosine similarity about 0.85 to 0.65; the paper names its single dataset and sub-20B scope as limits | abstract |
 | Persona Collapse (Xiao) | arXiv 2026 | Coverage, uniformity, complexity over 8 LLMs | collapse universal; more personas do not help | full text |
 
 Persona Collapse (Xiao et al., arXiv 2026) [full text of method and results]: 26 persona
-dimensions, 1,144 screened personas, ten models (4B to hosted; the later abstract says eight),
+dimensions, 1,144 screened personas, eight models (mostly open-weight, 4B to 32B, plus one
+hosted role-play model),
 BFI-44, moral reasoning and self-introductions, with 2,058 real human BFI responses as the
-reference. Three diagnostics: Coverage (share of human behaviour archetypes reached), Uniformity
+reference. Three diagnostics: Coverage (share of human neighbourhoods reached), Uniformity
 (Hopkins statistic, 0.5 is even) and Complexity (local intrinsic dimensionality). Findings: a
 model can look diverse on one axis and degenerate on another (Qwen3-4B reached 80% coverage but
-half the human complexity, 7.3 against 14.4); variation tracks coarse demographic stereotypes
-more than the fine attributes specified; in free-text self-introductions, 29% of one model's
-responses shared an identical template skeleton while 73% of assigned attributes were mentioned,
-so personas are recited, not enacted. Persona-tuned role-play models lost coverage (0.64 to 0.49
-across training stages for one 32B line). For teamsim: these population metrics need hundreds of
-agents; with 6-8 teammates they are not computable, so use pairwise measures on a fixed set of
-slots instead (inference). The template-skeleton rate is a cheap check worth borrowing.
+half the human complexity, 7.3 against 14.4); demographic attributes explain little of the
+response variance (political ideology at most 0.5% on moral items) and no single attribute
+usually dominates; in free-text self-introductions, visible labels such as gender and country
+were mentioned far more often (89% and 86%) than age and social class (30% and 23%), and the
+largest share of responses with the same opening skeleton was 20.5% (CoSER-Llama-8B; Qwen3-4B
+13.6%). Persona-tuned role-play models lost coverage (0.64 to 0.56 to 0.38 across training
+stages for one 32B line). For teamsim: the paper subsamples 50 to 1,100 personas and finds
+models gain little coverage or complexity; it does not test small teams or state a minimum
+number. My inference is that these population metrics are not meaningful with 6-8 teammates, so
+use pairwise measures on a fixed set of slots instead (inference). The template-skeleton rate
+is a cheap check worth borrowing.
 
 Two readings of the hivemind result. The original paper reports strong within- and across-model
 repetition; the critique [full text of the relevant sections] argues the null used (responses to
@@ -233,18 +264,20 @@ not checked). Both are preprints; the critique is more careful about baselines, 
 the larger dataset. Both agree measured similarity depends on the comparison set. For teamsim that points to: compare model lines with the scripted,
 human-authored lines for the same slot as the reference (inference).
 
-The cause is mostly post-training (base vs instruct 1.0% vs 28.5% in one study, RLHF in another),
+The cause is mostly post-training (base vs instruct 1.0% vs 28.5% in one study, RLHF on
+summarisation in another),
 so mixing a base model into the pipeline (BACo) or using a less-aligned model for wording are
 candidate tools but need a runtime that exposes both models.
 
 Verbalized Sampling (Zhang et al., arXiv 2025, v3) [full text]: ask the model for several
 candidate answers with probabilities and sample from them. Reported: 1.6-2.1x diversity over
-direct prompting in creative writing, a 25.7% gain in human evaluation scores, recovery of 66.8%
-of the base model's diversity, and, in a persuasion dialogue simulation (939 dialogues from a
+direct prompting in creative writing, a 25.7% gain in human-rated diversity (comparable quality
+win rates against the baselines), recovery of 66.8% of the base model's diversity (poem task,
+one post-training pipeline), and, in a persuasion dialogue simulation (939 dialogues from a
 human donation dataset), donation amounts closer to the human distribution. Two details matter
 for teamsim. First, "more capable models benefit more", so the gain at 7-8B may be smaller than
-the headline; the paper's dialogue test used large hosted models and a fine-tuned 8B baseline,
-not a quantised local model. Second, text still read as more complex than humans (readability
+the headline; the paper's dialogue test included a fine-tuned 8B baseline, and the paper did not
+test a quantised local model. Second, text still read as more complex than humans (readability
 stayed higher). The earlier note also cites an over-shoot in a survey study; together this says
 tune it and measure it. Cost: one call returns several candidates; the script, not the model,
 should pick which candidate to post (inference).
@@ -253,17 +286,17 @@ should pick which candidate to post (inference).
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Towards Understanding Sycophancy (Sharma) | arXiv 2023 | 5 assistants, 4 tasks; preference data | matching user views raises preference; models trade truth for it | abstract |
+| Towards Understanding Sycophancy (Sharma) | arXiv 2023 | 5 assistants, 4 tasks; preference data | matching a user's beliefs makes a response somewhat more likely to be preferred; optimizing against one Claude 2 preference model sometimes sacrifices truthfulness | abstract |
 | SYCON-Bench (Hong) | arXiv 2025 | Multi-turn flips, 17 LLMs | alignment tuning amplifies; third-person framing cuts up to 63.8% in debate | full text |
-| ELEPHANT (Cheng) | arXiv 2025 | Social sycophancy, 11 models | face preserved 45 points more than humans; both sides affirmed in 48% | abstract |
+| ELEPHANT (Cheng) | arXiv 2025 | Social sycophancy, 11 models | face preserved 45 points more than humans on general advice queries; both sides affirmed in 48% | abstract |
 | Too Nice to Tell the Truth (Shah) | arXiv 2026 | 13 models 0.6B-20B, 275 personas, 4,950 prompts | 9 of 13 show agreeableness-sycophancy correlation, r up to 0.87 | full text |
 | PARROT (Celebi) | arXiv 2025 | 22 models, 1,302 questions each, false authority claim | follow rate GPT-5 3.6%, Qwen2.5-14B 35.9%, Qwen2.5-7B 69.4%, Qwen2.5-1.5B 94.0% (tables) | full text of tables |
-| SWAY (Bhalla) | arXiv 2026 | Counterfactual pressure metric and mitigation, 6 models | anti-sycophancy instruction moderate and can backfire; counterfactual CoT near zero | abstract |
+| SWAY (Bhalla) | arXiv 2026 | Counterfactual pressure metric and mitigation, 6 models | anti-sycophancy instruction gave moderate reductions, backfired for Llama and over-corrected Claude Haiku and Opus; counterfactual CoT near zero for most models (not Claude Haiku or Gemma); binary-answer tasks | abstract |
 | Don't Blame the Preferences (Yang) | arXiv 2026 | 3 families, 9 benchmark combos | SFT checkpoints at least 85% of final sycophancy | abstract |
-| Locating Sycophancy Across Training (Yao) | arXiv 2026 | 13 checkpoints, 5 lineages | capitulation under objection absent in base, present in all post-trained | abstract |
-| Silicon Mirror (Shah) | arXiv 2026 | Generator-critic gate, single author | 9.6% to 1.4% on one model; 46.0% to 14.2% on another | abstract |
-| Recalling Too Well (Bensal) | arXiv 2026 | Memory systems | memory raises sycophancy up to 40% | abstract |
-| Token-level diagnosis with steering (Nguyen) | arXiv 2026 | Attribution-guided steering | 96% to 25% in the best case | abstract |
+| Locating Sycophancy Across Training (Yao) | arXiv 2026 | 13 checkpoints, 5 lineages | capitulation under objection largely absent in base, present in every post-trained checkpoint | abstract |
+| Silicon Mirror (Shah) | arXiv 2026 | Three-part gate (access control, trait classifier, generator-critic loop), single author, TruthfulQA adversarial split, authors' own LLM judge | Claude 9.6% to 1.4%; Gemini 46.0% to 14.2%; a plain "be truthful" prompt alone gave 2.1% on Claude and 8.5% on Gemini (lower than the gate there) | abstract |
+| Recalling Too Well (Bensal) | arXiv 2026 | Memory systems | memory raises sycophancy up to 40% (relative) above in-context baselines | abstract |
+| Token-level diagnosis with steering (Nguyen) | arXiv 2026 | Attribution-guided steering, five 8B models, 30 configurations | 96.1% to 25.1% in the strongest case | abstract |
 
 Two papers read in full.
 
@@ -284,9 +317,10 @@ model holds its stance; higher is better) and Number of Flip. GPT-4o judges agre
 labels at Cohen's kappa 0.92 for debate, 0.69 for unethical queries and 0.63 for false
 presuppositions (100 items each, one model), so a judge is reliable only where the stance is
 explicit. Small instruct models fold fast: in debate, Qwen2.5-7B-Instruct held its stance 0.83
-turns on average and flipped 2.63 times, against 4.90 turns and 0.02 flips for the 72B model. After
-one objection, only 14.5% of Qwen2.5-7B-Instruct and 45.0% of Llama-3.1-8B-Instruct kept the
-initial stance, against 71.4% and 93.9% for the matching base models (with a few-shot template).
+turns on average and flipped 2.63 times, against 4.90 turns and 0.02 flips for the 72B model.
+Among items where the model agreed with the initial stance at turn one, only 14.5% of
+Qwen2.5-7B-Instruct and 45.0% of Llama-3.1-8B-Instruct kept it in the second turn, against 71.4%
+and 93.9% for the matching base models (run with a few-shot template).
 Prompts (the table compares four prompts; the first is "You", an independent-reasoning prompt):
 the third-person "Andrew" prompt lifted Qwen2.5-7B-Instruct's debate turn-of-flip from 1.10 to
 4.02, while the plain anti-sycophancy instruction gave 1.32 (the abstract reports gains of up to
@@ -298,22 +332,28 @@ models, while capitulating when the user objects appears after post-training (Ya
 persona's agreeableness predicts it in most small models (Shah), but a persona can make
 sycophancy worse or better depending on the model, so it must be measured per model. The
 mitigations that work in preprints either add a second pass (critic, counterfactual) or touch
-internals; the cheap "be honest" instruction is modest and unreliable. Single-author preprints
-(Silicon Mirror, SWAY) have not been replicated and test question-answering, not teammate chat.
+internals; the cheap "be honest" instruction was modest or model-dependent in SWAY and SYCON
+(it backfired for one model in SWAY), but in the Silicon Mirror's tests on two hosted models a
+plain "be truthful" prompt captured most of the gain (9.6% to 2.1% on Claude; 8.5% on Gemini,
+better than the gate there). So its effect has to be measured per model. These preprints (Silicon
+Mirror has one author, SWAY two) have not been replicated and test binary or question-answering
+tasks, not teammate chat.
 
 ### Conformity and disagreement among simulated teammates
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Disentangling Interaction and Bias in Opinion Dynamics (Brockers) | Nature Communications 2026 | LLM agents in multi-step dialogues, 12 questions | opinions converge to a shared attractor; topic, agreement and anchoring biases differ by model | abstract |
-| Peacemaker or Troublemaker (Yao) | arXiv 2025 | Sycophancy in multi-agent debate | sycophancy collapses debate into early consensus; accuracy below single-agent | abstract |
+| Disentangling Interaction and Bias in Opinion Dynamics (Brockers) | Nature Communications 2026 | LLM agents in multi-step dialogues, 12 questions | two-agent dialogues converge toward a topic-specific attractor; topic bias is present across models, agreement and anchoring biases differ by model in size and sign | abstract |
+| Peacemaker or Troublemaker (Yao) | arXiv 2025 | Sycophancy in multi-agent debate | sycophancy can collapse debate into premature consensus; debate does not consistently beat single-agent accuracy | abstract |
 | Language-Driven Opinion Dynamics (Cau) | arXiv 2025 | Debates between LLM agents | consensus emerges in almost any starting mix | abstract |
 | Group Conformity in Multi-Agent Systems (Choi) | arXiv 2025 | 2,500+ debates | agents follow the numerically dominant group | abstract |
 | Too Polite to Disagree (Kasprova) | arXiv 2026 | 6 open models, peer sycophancy rankings | telling agents who is sycophantic raised accuracy 10.5 points | abstract |
 | Bayesian Belief Layer (Akbar) | arXiv 2026 | Separate belief state from language, 4 models | stubbornness parameter recovered after the language round trip (rank order perfect) | abstract |
 
-If teamsim lets model-played teammates talk to each other, expect them to drift to agreement
-within a few turns. The one design in these papers that matches teamsim's "script owns the
+If teamsim lets model-played teammates talk to each other, expect some models to drift toward
+agreement: Brockers finds a strong positive agreement bias in Llama, Mixtral and DolphinMixtral,
+a negative one in Qwen and near zero for GPT and Grok, in two-agent dialogues. Yao reports early
+consensus in multi-agent debate. The one design in these papers that matches teamsim's "script owns the
 stance" idea is the Bayesian belief layer: keep the stance as a number outside the model, update
 it by a rule, and let the model only phrase it. It is a single preprint (abstract only), but it
 fits the evidence on drift and sycophancy and costs no model calls (inference).
@@ -322,12 +362,12 @@ fits the evidence on drift and sycophancy and costs no model calls (inference).
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Persona Vectors (Chen) | arXiv 2025 | Trait directions for evil, sycophancy, hallucination | monitor and control; automated from a description | abstract |
-| What Can We Actually Steer? (Bas) | arXiv 2025 | 50 behaviours | effect varies by behaviour; inverted-U in strength | abstract |
-| Persona Dosing (Jin) | arXiv 2026 | Llama-3.1-8B, Qwen3-8B, Gemma-3-4B | graded control, targeting error 4.7-6.2 points | abstract |
-| Prompt-Activation Duality (Kang) | arXiv 2026 | KV-cache contamination in steered dialogue | coherence drift -18.6 to -1.9 with the fix | abstract |
+| Persona Vectors (Chen) | arXiv 2025 | Trait directions for evil, sycophancy, hallucination | control by steering; monitor prompt-induced shifts by projection (reliable for clear shifts, less so for subtle ones); extraction automated from a trait description, but the trait must be specified in advance; two 7-8B open chat models | abstract |
+| What Can We Actually Steer? (Bas) | arXiv 2025 | 50 behaviours | effect varies by behaviour; trait expression is inverted-U in strength, while coherence and relevance fall steadily as strength rises | abstract |
+| Persona Dosing (Jin) | arXiv 2026 | Llama-3.1-8B, Qwen3-8B, Gemma-3-4B | graded control, targeting error 4.7-6.2 points over the 14-22 of 28 targets per model that calibration can reach | abstract |
+| Prompt-Activation Duality (Kang) | arXiv 2026 | Coherence loss in steered multi-turn dialogue; KV-cache contamination proposed as the likely mechanism | coherence drift -18.6 to -1.9 with the fix (Qwen2.5-7B-Instruct, 15-trait average) | abstract |
 | Persona Matters (Wu) | arXiv 2026 | Steering effects on short answers | steering lowers answer quality, more on open-ended tasks | abstract |
-| Personality sliders (Hoppe), PERSONA (Feng) | arXiv 2026 | Vector algebra for Big Five | near fine-tuning on their own benchmark | abstract |
+| Personality sliders (Hoppe), PERSONA (Feng) | arXiv 2026 | Big Five steering: sequentially trained probes (Hoppe), vector algebra (Feng) | Hoppe: targeted traits shifted where a DPO model stayed near baseline (mainly Llama-3-8B); Feng: matches SFT on the external PersonalityBench (9.60 vs 9.61) | abstract |
 
 Steering needs access to hidden states, so it works with local weights loaded in a research
 stack, not through an OpenAI-compatible HTTP endpoint such as the ones run-1 recommended.
@@ -338,18 +378,18 @@ stack, not through an OpenAI-compatible HTTP endpoint such as the ones run-1 rec
 |---|---|---|---|---|
 | Constrained Decoding in Small LLMs (Chavan) | arXiv 2026 | 5 models, 0.6B-4B, 14 tasks | schema validity 78.6-92.9% to 100%; semantic gap remains | abstract |
 | The Constraint Tax (Ray) | arXiv 2026 | Qwen2.5 0.5B and 1.5B, SmolLM2 1.7B, 15,000 generations | validity 61.5% to 100%, accuracy 19.7% to 11.0% | full text |
-| When Correct Isn't Usable (Galeone) | arXiv 2026 | 7-9B models, JSON contracts | no system prompt gave 0% output accuracy; constrained decoding costs 3.6-8.2x latency | abstract |
-| Quantization Amplifies Determinism (Kurtskhalia) | arXiv 2026 | Qwen3 8B/14B/32B at int4, int8, bf16, 71,000 completions | at 8B int4: same-answer probability +5.1 points, type-token ratio -0.011; no significant narrowing at 14B/32B | full text |
-| When Personality Meets Quantization (Fu) | arXiv 2026 | MBTI under 4-bit and 2-bit | 4-bit keeps coarse personality; 2-bit breaks consistency | abstract |
-| Trade-offs: Quantization, Task Difficulty, Model Size (Lee) | arXiv 2024 | 1B-405B, 4 methods | small models drop severely at 4-bit; 70B stable | abstract |
-| Quantization Undoes Alignment (Rath) | arXiv 2026 | 3 7B-class models, 3-bit to BF16 | 4-bit: 2.5-5.6% of items gain new bias while perplexity moves under 3% | abstract |
+| When Correct Isn't Usable (Galeone) | arXiv 2026 | 7-9B models, JSON contracts | no system prompt gave 0% output accuracy; constrained decoding costs 3.6-8.2x latency (GSM8K only) | abstract |
+| Quantization Amplifies Determinism (Kurtskhalia) | arXiv 2026 | Qwen3 8B/14B/32B at AWQ int4, FP8 weights, bf16, 71,000 completions | at 8B int4: same-answer probability +5.1 points, type-token ratio -0.011; no significant narrowing at 14B/32B | full text |
+| When Personality Meets Quantization (Fu) | arXiv 2026 | MBTI under 4-bit and 2-bit | 4-bit keeps coarse personality; 2-bit degrades controllability and consistency across precisions | abstract |
+| Trade-offs: Quantization, Task Difficulty, Model Size (Lee) | arXiv 2024 | 1B-405B, 4 methods | small models can drop severely at 4-bit, most with GPTQ; 70B usually stable | abstract |
+| Quantization Undoes Alignment (Rath) | arXiv 2026 | 3 instruction-tuned models (two 7B, one 3.8B), 3-bit to BF16 | 4-bit: 2.2-5.6% of items gain new bias while perplexity rises 2.8-10.5% (the abstract says under 3%) | abstract |
 
 Read in full: Kurtskhalia [full text] (single author, Qwen3 only, AWQ int4 against bf16, 71,000
 completions paired by prompt and seed, pre-specified analyses). At 8B the effect is real but
 uneven: the median per-prompt change in same-answer probability was 0 and a minority of prompts
 collapsed hard (one went from 4 distinct car brands to the same brand in all 20 samples). At 14B
 and 32B no content effect, but a stylistic drift (em-dash rate up 12-19%). Token entropy went up
-while meaning concentration went up too, so log-probabilities alone cannot audit it. Ray [full
+while meaning concentration went up too (one 8B run), so the paper says log-probabilities alone cannot audit it. Ray [full
 text] (single author, synthetic arithmetic, logic and tool-call tasks, not chat): hard answer-only
 schema lowered answer accuracy for Qwen2.5-0.5B and 1.5B (taxes 11.9 and 20.0 points) and 3B
 (15.3 points), but not for SmolLM2-1.7B, where constraint helped; on one backend pair results
@@ -373,20 +413,20 @@ tests chat role-play.
 
 | Paper | Venue/year | What was measured | Key number | Read |
 |---|---|---|---|---|
-| Mind the Sim2Real Gap (Zhou) | arXiv 2026 | 451 humans, 165 tasks, 31 simulators | short turns 1.0% (GPT-4o) vs 29.0% (humans); polite 49.0% vs 15.3%; best simulator index 76.0 vs humans 92.9 | full text |
-| Flipping the Dialogue (Naous) | arXiv 2025 | Purpose-built User LMs | better assistants make worse simulators | abstract |
-| RealUserSim (Zhu) | arXiv 2026 | Grounding on 14,000 real conversations | style match 6-8% unconstrained; grounded 24.2% to 45.3% | abstract |
-| Persona Policies (Chopra) | arXiv 2026 | Evolved persona programs | judged human 80.4% vs about half that for baseline | abstract |
-| Quantifying Utility of User Simulators (Suh) | arXiv 2026 | 283-participant user study | role-play 51% win rate vs fine-tuned 58%; persona conditioning helps but does not close the gap | abstract |
+| Mind the Sim2Real Gap (Zhou) | arXiv 2026 | 451 humans, 165 tasks, 31 simulators | short turns 1.0% (GPT-4o) vs 29.0% (humans); polite 49.0% vs 15.3%; best simulator index 76.0 vs humans 92.7 | full text |
+| Flipping the Dialogue (Naous) | arXiv 2025 | Purpose-built User LMs | the abstract says better assistants make worse simulators; the body shows scaling up assistant LMs does not automatically give better simulators | abstract |
+| RealUserSim (Zhu) | arXiv 2026 | Grounding on 14,000 real conversations | style match 6-8% unconstrained; grounding raised the five-dimension match rate (GPT-4o judge) from 24.2% to 45.3% | abstract |
+| Persona Policies (Chopra) | arXiv 2026 | Evolved persona programs | judged human 80.4% vs 46.5% for the baseline simulator | abstract |
+| Quantifying Utility of User Simulators (Suh) | arXiv 2026 | 283-participant user study | assistant trained against role-play: 51% win rate over the initial assistant (indistinguishable); trained against the fine-tuned simulator: 58% over the initial, 57% over the role-play-trained one; persona conditioning helps but does not close the gap (that result is from WildBench, not the user study) | abstract |
 | SimulatorArena (Dou) | EMNLP 2025 | 909 annotated conversations | profile-conditioned simulators reach rho 0.7 with human judgments | abstract |
 | AI-generated language remains distinguishable (Pagan) | PNAS 2026 | 9 open models, 5 calibration methods, X/Bluesky/Reddit | still distinguishable; instruct below base; larger not clearly better | full text |
 | When Detection Fails (Dawkins) | arXiv 2025 | 505,159 AI posts | detectability falls when the generator is a private fine-tune | abstract |
-| Stylometry on short samples (Przystalski) | arXiv 2025 | 10-sentence texts | up to .98 accuracy in a binary case (Wikipedia, not chat) | abstract |
+| Stylometry on short samples (Przystalski) | arXiv 2025 | 10-sentence texts | up to 1.00 accuracy in binary cases, for example 0.98 for Wikipedia vs GPT-4 (not chat) | abstract |
 
 Pagan et al. (PNAS) [full text] is the closest published test of "make generated chat look
-human". Nine open models (4-8B plus one 70B), replies to real messages from 275 X users and 492
-Reddit users (20 replies each), temperature 0.8. A BERT classifier separated AI from human replies
-at 87% or more in the reference setup and 70-80% after the best calibration. What helped: simple
+human". Nine open models (4-8B plus one 70B), replies to real messages from 250 X users, 492
+Reddit users and 59 Bluesky user instances (20 replies each), temperature 0.8. A BERT classifier separated AI from human replies
+at 85% or more in the baseline-plus-persona setup and 70-80% after the best calibration. What helped: simple
 stylistic examples and context retrieval, and non-instruction-tuned base models over instruct
 versions; 70B was no better than 8B. What did not: persona descriptions and fine-tuning, which
 had negligible or adverse effects on realism. Affect (toxicity, sentiment) stayed the clearest
@@ -397,12 +437,12 @@ stay a hard gate).
 
 Two more points. Out of Style (Cao et al., arXiv 2025, abstract only): nine LLMs from 3B to 72B
 and two retrievers; informal queries cut Recall@5 by up to 40.41% (relative) and queries with
-grammar errors cut answer match by up to 38.86%, more than for LLM-only answers. The Individual
+grammar errors cut answer match by up to 38.86%; across all variations RAG lost more than LLM-only answers. The Individual
 Turing Test (Guo et al., arXiv 2026, abstract only): with ten years of one volunteer's messages,
 fine-tuning, retrieval and memory methods did not fool the volunteer's acquaintances, though they
 did better on strangers; fine-tuning helped daily-chat style, retrieval and memory helped
-opinions. Mimicking one specific person is harder than sounding like a person, and teamsim needs
-only the latter.
+opinions. The paper reports that general human-likeness judged by strangers does not imply fidelity to
+one person judged by acquaintances; my reading is that teamsim needs only the former.
 
 For teamsim, the realistic knobs are the ones Zhou measured: length distribution, politeness,
 uncertainty markers and pivot rate. Those can be compared with the numbers in the prototype's
@@ -416,10 +456,12 @@ Tied to the open decisions. "Inference" means my reading, not a paper's claim.
 
 - Talk to any OpenAI-compatible HTTP endpoint (as run-1 proposed). Nothing in the literature
   argues for model internals in v0.1: steering needs hidden-state access (Section 6) and is not
-  robust (inverted-U in strength, quality loss, KV-cache contamination in multi-turn use).
+  robust (inverted-U in strength, quality loss, and coherence loss in multi-turn use that one paper attributes to KV-cache contamination).
 - Wanted from the endpoint, if available: temperature and seed control, JSON-schema or grammar
-  output, and token log-probabilities (Kurtskhalia shows log-probabilities alone cannot audit
-  diversity loss, so treat them as optional).
+  output, and token log-probabilities (Kurtskhalia used first-token log-probabilities to measure
+  the brand distribution but says they alone cannot audit diversity loss; it recommends adding
+  concentration measures such as collision probability or the number of distinct answers over
+  repeated queries).
 - Constrained decoding is available in every common local runtime, but it is not free for
   sub-3B models (Ray). Prefer: model writes one plain-text line; the script wraps it. If a schema
   is needed, use "reason free, constrain late" (a short free line first, then a small constrained
@@ -430,16 +472,18 @@ Tied to the open decisions. "Inference" means my reading, not a paper's claim.
 The literature supports run-1's model-free default and strengthens it.
 - Behaviour that matters to scoring (who disagrees, who flips, who goes quiet) is not reliably
   produced by prompting a persona: questionnaire answers do not predict behaviour in small and
-  mid models (Han), fidelity decays toward the default assistant (de Araujo, Li), and aligned
-  models drift to agreement in multi-agent talk (Brockers, Yao). The script should hold the stance
+  mid models (Han), fidelity decays toward the default assistant (de Araujo, Li), and some models
+  drift toward agreement in agent-to-agent talk (Brockers, Yao). The script should hold the stance
   as a number or label, update it by rule, and hand the model a finished intent to phrase
   (the Bayesian belief layer is the one published design of this kind; it is a preprint).
 - If a model is used for wording, the evidence favours 7-8B-class models over smaller ones for
   anything that can be pushed back on (Section 5), and non-instruction-tuned or lightly tuned
   models for human-like style (Pagan). Those two pull in opposite directions; this is a tension
   teamsim has to measure, not resolve from papers.
-- Hosted fallback: no paper contradicts it; larger and frontier models were less sycophantic
-  (PARROT, SYCON) and drifted less (de Araujo), though they still drifted.
+- Hosted fallback: no paper contradicts it; frontier models followed false authority claims less
+  often in single-turn multiple-choice tests (PARROT, correlational), larger models held a stance
+  longer (SYCON) and, within each family, showed smaller fidelity gaps (de Araujo), though gaps
+  remained significant even for Gemini-2.5-flash.
 
 ### v0.1 actions and first user
 
@@ -463,7 +507,7 @@ Proposed minimal record, rendered by the script to a few plain sentences plus ex
 | role, team, tenure, topics they own | work-relevant attributes are what can change behaviour (Hu and Collier); demographics alone explain little |
 | stance table: topic, stance, strength, change conditions | script-owned stance (Han; Akbar) |
 | conflict style: pushback probability, flip rule, who they defer to | measured flips need a defined rule (SYCON) |
-| style knobs: length distribution, fragment rate, typo and emoji rate, politeness, hedge rate, active hours, reply latency | the dimensions where LLM users differ most from people (Zhou; Pagan) |
+| style knobs: length distribution, fragment rate, typo and emoji rate, politeness, hedge rate, active hours, reply latency | dimensions where LLM-played users differed from people in Zhou's customer-service study; Pagan's clearest tell was affective language (toxicity, sentiment) |
 | knowledge scope and forbidden facts | planted facts must survive, others must not leak (curse-of-knowledge result: 11 open models used hidden facts 67-72 points above baseline) |
 | 3-5 example lines in the teammate's voice | stylistic examples reduced detectability; persona text did not (Pagan) |
 | seed | replay |
@@ -479,15 +523,15 @@ from a first baseline run and then freeze in an ADR.
 
 | Measure | How | Published anchor | Threshold to use |
 |---|---|---|---|
-| Distinctness | pairwise embedding distance or Vendi score over teammates' lines for the same slot, divided by the same figure for the scripted lines; plus compression ratio, long n-gram repetition, Self-BLEU, BERTScore | no pass mark; avoid the 0.8 cosine cutoff (exceeded by 20-32% of different-idea pairs) | own: ratio to scripted reference; report a template-skeleton share (29% in one model in Xiao) |
+| Distinctness | pairwise embedding distance or Vendi score over teammates' lines for the same slot, divided by the same figure for the scripted lines; plus compression ratio, long n-gram repetition, Self-BLEU, BERTScore | no pass mark; avoid the 0.8 cosine cutoff (exceeded by 20-32% of different-idea pairs) | own: ratio to scripted reference; report a template-skeleton share (20.5% at most across eight models in Xiao) |
 | Stance retention under pushback | share of pushback sequences where the labelled stance equals the assigned one; Turn of Flip over 5 turns | 70B-class and frontier models hold about 4.5-5 of 5 turns in debate; Qwen2.5-7B-Instruct 0.83 | own: 90% (carried from the earlier note; not a published figure) |
 | Sycophancy follow rate | follow a false authority claim, matched with a neutral version | grouped by PARROT: under 15% robust, 15-30% resistant, 30-50% moderate, over 50% vulnerable; Qwen2.5-1.5B 94%, Gemma-3-4B 78.9%, Qwen2.5-7B 69.4%, Gemma-3-12B 51.5%, Qwen2.5-14B 35.9%, GPT-4o 16.1%, Claude Sonnet 4.5 10.8% | own: a local model may play a pushback-prone teammate only if it lands in the resistant band or better on teamsim's own test; otherwise script the pushback |
 | Planted-flaw raise rate | share of the panel that mentions a known flaw (keyword or fact match, no judge) | none (teamsim's idea); this is ground-truth based, so it avoids the judge problem | own, from baseline |
 | Self-report versus behaviour agreement | do not use as a pass test | 43-50% (chance) for small and mid models | none |
 | Style distance | length, share of short turns, politeness, hedge and pivot rates against the prototype's calibration numbers | customer-service humans: short turns 29.0%, polite 15.3%, uncertain 7.3%, pivot 8.4% (Zhou); these are not team-chat figures | own: calibrate from team chat statistics (numbers only) |
-| Detectability | a classifier separating model lines from the hand-written fixture lines | 87% or more in the reference setup, 70-80% after calibration, chance 50% (Pagan; Twitter, Bluesky, Reddit replies) | report only; do not claim parity with humans |
+| Detectability | a classifier separating model lines from the hand-written fixture lines | 85% or more in the baseline-plus-persona setup, 70-80% after calibration, chance 50% (Pagan; Twitter, Bluesky, Reddit replies) | report only; do not claim parity with humans |
 | Schema validity and semantic pass | validity, answer accuracy, wrong-valid rate separately | validity 78.6-92.9% to 100% with constrained decoding for 0.6-4B; accuracy loss up to 20 points (Ray) | own: 100% valid after retry or fallback to scripted line |
-| Judge reliability | hand-label a sample; report kappa | GPT-4o vs human kappa 0.92 (explicit debate stance), 0.69 and 0.63 (implicit); LLM judges identify roles at about 69% against 90.8% for humans | own: use a judge only where kappa on the sample is 0.8 or more; otherwise prefer rules |
+| Judge reliability | hand-label a sample; report kappa | GPT-4o vs human kappa 0.92 (explicit debate stance), 0.69 and 0.63 (implicit); LLM judges identify roles at about 69% against 90.8% for humans on a hard-case sample | own: use a judge only where kappa on the sample is 0.8 or more; otherwise prefer rules |
 
 ### Simulated-feedback gate (ADR 0003)
 
@@ -502,7 +546,7 @@ from a first baseline run and then freeze in an ADR.
   more positive than a stated human baseline. Letting users supply 3-5 real responses to their own
   product (the earlier proposal) is consistent with the evidence that grounding in real behaviour
   helps (SimulatorArena: profile-conditioned simulators reached rho 0.7 with human judgments;
-  RealUserSim: grounded simulation raised style match from 24.2% to 45.3%).
+  RealUserSim: grounded simulation raised a five-dimension match rate, LLM-judged, from 24.2% to 45.3%).
 - Keep the "hypotheses, not findings" label. Every number above comes from other domains.
 
 ### Preset design and scoring
@@ -543,13 +587,15 @@ What the literature does not answer, and what teamsim could measure itself:
 1. "Truthfulness guard on agreeable personas" (Shah et al.): the guard is a design suggestion in
    that paper, not a tested result, and the paper's own data show adopting a persona usually
    lowered sycophancy against the no-persona baseline (except Gemma 3 1B). Elsewhere the plain
-   anti-sycophancy instruction was modest (SYCON: 1.10 to 1.32 turns for a 7B) and can backfire
-   (SWAY, abstract), while third-person framing helped more (1.10 to 4.02). Prefer framing plus a
-   measured test over a one-line guard.
+   anti-sycophancy instruction was modest (SYCON: 1.10 to 1.32 turns for a 7B) and backfired for one
+   model in SWAY, while third-person framing helped more (1.10 to 4.02). A plain "be truthful"
+   prompt did much better on two hosted models in the Silicon Mirror (9.6% to 2.1% on Claude), so
+   the effect is model-dependent. Prefer framing plus a measured test over a one-line guard.
 2. The earlier note leans on "persona collapse" and Persona Hub-style scale. This review adds
-   that richer personas can reduce separation (Bhattacharyya) and that a model-generated persona
-   list stopped being diverse beyond about 200 (PersonaGym), so the persona list should be
-   written or sampled by the script, not generated.
+   that richer personas can reduce separation (Bhattacharyya) and that GPT-4o's generated persona
+   list began to overlap in attributes beyond about 200 (PersonaGym, one generator; the paper
+   suggests diversifying LLM generations). My inference, not a paper's claim: write or sample the
+   persona list in the script rather than relying on one model to generate it.
 3. The earlier gate asks for a "teammates keep their stance in 90% of pushback sequences". The
    literature gives frontier-model ranges but no 90% figure, and a 7B instruct model held a stance
    for under one of five turns in debate. The bar is reachable only with a script-held stance or a
@@ -557,8 +603,8 @@ What the literature does not answer, and what teamsim could measure itself:
 4. The earlier note finds a 3-4B model on a laptop CPU feasible for tens of generated messages.
    This review adds that models that small are the most sycophantic in the studies that include them (0.6B:
    100%; 1.5B: 94% follow rate), so speed alone does not justify them as teammates.
-5. Xiao et al. is described as eight models in the earlier note and in the paper's newer abstract;
-   the first full text I read lists ten. Not material to the conclusions.
+5. Xiao et al. is described as eight models in the earlier note, the paper's abstract and its
+   full text. No disagreement.
 6. Not re-checked: SycEval's 58% figure and the Kambhatla et al. persona-lexical-diversity result
    from the earlier note; neither paper was retrieved in this review.
 
@@ -574,7 +620,7 @@ All read 2026-11-11. Depth in brackets. IDs are arXiv unless a DOI is given.
 - Assessing the Reliability of Persona-Conditioned LLMs as Synthetic Survey Respondents, Taday Morocho, 2026, https://arxiv.org/abs/2602.18462 [abstract]
 - How Far Do Persona Effects Generalize in Language Models?, Zhou, 2026, https://arxiv.org/abs/2609.32758 [abstract]
 - Scaling Synthetic Data Creation with 1,000,000,000 Personas, Ge, 2024, https://arxiv.org/abs/2406.20094 [abstract]
-- Personality Traits in Large Language Models, Serapio-Garcia, Nature Machine Intelligence 2025, https://doi.org/10.1038/s42256-025-01115-6 [abstract]
+- A psychometric framework for evaluating and shaping personality traits in large language models (earlier title: Personality Traits in Large Language Models), Serapio-Garcia, Nature Machine Intelligence 2025, https://doi.org/10.1038/s42256-025-01115-6 [abstract]
 - PersonaLLM, Jiang, 2023, https://arxiv.org/abs/2305.02547 [abstract]
 - Personality Without Persons?, Zierahn, AIES 2026, https://doi.org/10.1609/aies.v9i4.43359 [abstract]
 - Limited Ability of LLMs to Simulate Human Psychological Behaviours, Petrov, 2024, https://arxiv.org/abs/2405.07248 [abstract]
@@ -633,7 +679,7 @@ All read 2026-11-11. Depth in brackets. IDs are arXiv unless a DOI is given.
 - AI-generated language remains systematically distinguishable from human communication, Pagan, PNAS 2026, https://doi.org/10.1073/pnas.2531748123 [full text]
 - When Detection Fails, Dawkins, 2025, https://arxiv.org/abs/2506.09975 [abstract]
 - Stylometry recognizes human and LLM-generated texts in short samples, Przystalski, 2025, https://arxiv.org/abs/2507.00838 [abstract]
-- PersonaGym: Evaluating Persona Agents and LLMs, Samuel, 2024 (v5 2026), https://arxiv.org/abs/2407.18416 [full text]
+- PersonaGym: Evaluating Persona Agents and LLMs, Samuel, 2024 (v5 2025), https://arxiv.org/abs/2407.18416 [full text]
 - Verbalized Sampling, Zhang, 2025, https://arxiv.org/abs/2510.01171 [full text]
 - Measuring and Controlling Instruction (In)Stability in Language Model Dialogs, Li, 2024, https://arxiv.org/abs/2402.10962 [full text of method sections]
 - Disentangling interaction and bias effects in opinion dynamics of LLMs, Brockers, Nature Communications 2026, https://doi.org/10.1038/s41467-026-77340-3 [abstract]

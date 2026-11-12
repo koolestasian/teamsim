@@ -1,5 +1,9 @@
 # Prior art (first pass 2026-11-10, deep pass 2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 The first pass came from search results and a few primary pages. The deep pass (2026-11-11)
 read the source of the projects below with the GitHub API (README, code layout, issues, recent
 merged pull requests) and added papers found through paper search. Dates are the day a source
@@ -133,16 +137,18 @@ Abstracts only (full texts not read). Preprints unless noted.
   than real people reported (43%). Source: its benchmarks/bench/RESULTS.md. "What Would GPT
   Click" (2605.18302; 12 first-click tests, n = 3,431): distributions differed significantly from
   real data in 53% of tasks, and personas or reasoning only inflated believability.
-- **Modest signal at best.** Bojic et al. (Scientific Reports, 2026, arXiv 2604.19787): persona
-  agents predicted individual social-media reactions above chance (MCC 0.29) but a TF-IDF
-  classifier did better (0.36), and the choice of LLM moved accuracy by 13 points. A paper
+- **Modest signal at best.** Bojic et al. (Scientific Reports, 2026, journal title "Persona-prompted LLM agents achieve
+  modest but genuine prediction of human social media reactions"; arXiv 2604.19787): persona
+  agents predicted individual social-media likes and dislikes above chance (MCC 0.29) but a TF-IDF
+  classifier did better (0.36), and the choice of LLM moved accuracy by about 13 points in the
+  multi-label task. A paper
   titled "Digital twins are funhouse mirrors" (preregistered, 19 studies, 164 outcomes) reports
   an average correlation of 0.20 with humans and five distortions, including stereotyping and
   hyper-rationality (venue and link not verified; seen through paper search 2026-09-04).
   "Silicon Sampling via Cross-Survey Transfer" (2607.03091): 52% on unseen survey items, within
   6 points of a supervised random forest.
 - **Sycophancy and kindness.** ELEPHANT (2505.13995): across 11 models, LLMs preserve the user's
-  "face" 45 points more than humans. "Too Nice to Tell the Truth" (2604.10733): the more
+  "face" 45 points more than humans on general advice queries. "Too Nice to Tell the Truth" (2604.10733): the more
   agreeable the persona, the more sycophantic, with correlations up to 0.87 in 9 of 13 small
   models. That matters here because teammates should vary in agreeableness.
 - **Simulated users are easier than real ones.** "Mind the Sim2Real Gap" (2603.11245; 451
@@ -150,10 +156,10 @@ Abstracts only (full texts not read). Preprints unless noted.
   creating an "easy mode", and give uniformly more positive feedback than humans. "Simulated
   Customers Never Walk Away" (2606.20708; 793 conversations with verified payments): simulators
   halve the resistance real non-buyers express (25.1% to 13.5%). Both fit the NN/g finding.
-- **What does help.** Grounding behaviour in real data, not demographics: RealUserSim
+- **What does help.** Grounding behaviour in real data, with demographics only as background: RealUserSim
   (2605.20204) raised style match with real users from 24.2% to 45.3%; Persona Policies
   (2605.12894) made simulated users look human to annotators 80.4% of the time, about twice the
-  baseline. Both change how people behave (impatient, vague, reluctant), not who they are.
+  baseline. Both focus on how people behave (impatient, vague, reluctant) and still keep a short background profile per person.
   "When Can You Trust Your Synthetic Users?" (2609.13148) says correcting a synthetic panel needs
   real human outcomes, and its intervals covered only 88 to 94% in some regimes.
 
@@ -168,7 +174,7 @@ Abstracts only (full texts not read). Preprints unless noted.
 | Human match | Same task as an open human dataset, with intervals and a no-persona baseline: Twin-2K-500 and the Upworthy archive (both CC BY 4.0 per MarketMirror-Bench) | MarketMirror-Bench RESULTS.md |
 | Human match | Statistical tests of simulation vs real survey data (t-test, KS-test) | TinyTroupe `SimulationExperimentEmpiricalValidator` |
 | Human match | A User-Sim Index scoring how a simulator resembles real users | 2603.11245 |
-| Test-retest | Normalise accuracy by the humans' own test-retest agreement (0.838 in Twin-2K-500) | MarketMirror-Bench RESULTS.md |
+| Test-retest | Normalise accuracy by the humans' own test-retest agreement (0.838 in Twin-2K-500 per MarketMirror-Bench; the dataset paper's own average over its 17 tasks is 81.72%, so check which subset the 0.838 uses) | MarketMirror-Bench RESULTS.md |
 
 ### What an honest, measurable feedback feature needs
 
@@ -183,7 +189,7 @@ Abstracts only (full texts not read). Preprints unless noted.
    many the teammates raise unprompted, and how many invented ones they add. This needs no
    human data, uses the ground truth teamsim already has, and measures the part simulation does
    well (finding defects) instead of the part it does badly (predicting preference).
-5. **Behaviour, not demographics.** Vary patience, vagueness and reluctance (RealUserSim,
+5. **Behaviour first, demographics as background.** Vary patience, vagueness and reluctance (RealUserSim,
    Persona Policies), and give each teammate a stated agreeableness that is measured, not
    assumed.
 6. **Human comparison only where open data exist,** on proxy tasks (headline choice, price
@@ -233,7 +239,8 @@ showing a recorded run to real builders, which is outward-facing and needs the m
 
 Evidence points to **chat only** first: the prototype's checks are chat checks, scripted and
 seeded teammates need no model, and tasks and issues are a separate emulator problem (emulate
-already covers GitHub and Linear; TheAgentCompany shows the cost of building a full tracker).
+already covers GitHub and Linear; TheAgentCompany self-hosts an open-source tracker, Plane, instead of building one, and its authors
+report about 3,000 person-hours over 2 months to create the tasks).
 Tasks and issues next, through an adapter to an existing emulator rather than a new one. A code
 repository last. Moderate confidence: this comes from what exists and what is cheap, not from
 asking users.
@@ -281,7 +288,8 @@ asking users.
 
 - Reddit was seen only through search excerpts (r/Discord_Bots, r/AI_Agents, r/SideProject,
   r/LLMDevs); X gave nothing useful. Social posts are leads.
-- Papers were read as abstracts. Most are preprints; Bojic et al. is in Scientific Reports.
+- Papers were first read as abstracts and later checked in full text (see
+  2026-11-lit-fulltext-check.md). Most are preprints; Bojic et al. is in Scientific Reports.
   The "digital twins" paper has no link or venue confirmed.
 - NN/g's 2026 follow-up, Pew and SSDataBench are second-hand or excerpt-only.
 - MarketMirror-Bench is its authors' own small run and may be affected by the model having seen

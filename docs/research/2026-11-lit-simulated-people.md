@@ -1,5 +1,9 @@
 # Validity of LLM simulations of people and of simulated feedback: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: peer-reviewed papers and arXiv preprints on whether LLM-simulated people (survey
 respondents, experiment participants, digital twins, synthetic users) match real people, and what
 that means for teamsim's simulated feedback (ADR 0003). Read depth is marked per paper:
@@ -10,23 +14,25 @@ that means for teamsim's simulated feedback (ADR 0003). Read depth is marked per
 
 1. **Aggregates on well-documented topics are often close; individuals, subgroups and spread are
    not.** LLM samples reproduce average views, then lose variance, rare views and the links between
-   answers. Across several 2026 audits, non-LLM baselines (a demographic lookup, a Gaussian copula,
+   answers. In several 2026 audits, non-LLM baselines (a question-level lookup, a Gaussian copula,
    a random forest) match or beat LLM respondents (Chen 2026 [full text], Lukauskas 2026 [full
-   text], Kumagae 2026 [abstract]). *For teamsim:* never present a panel of simulated teammates as
+   text], Kumagae 2026 [abstract], Ku 2026 [abstract]). Most of the copulas were fitted to the
+   same respondents they are compared with; a copula fitted only on other respondents tied the
+   best LLM (Lukauskas). *For teamsim:* never present a panel of simulated teammates as
    a sample of any population, and always show a no-LLM baseline next to the result.
 2. **Experiments: direction is often right, size is wrong.** In 156 vignette experiments, three
    LLMs replicated 73-81% of main effects but produced effects 2-3x larger, and found significant
    effects in 68-83% of cases where the human result was null (Cui 2025 [full text]). A large
    preregistered archive is more positive (Ashokkumar/Hewitt, Nature 2026 [abstract]; r = 0.85
-   reported in secondary sources, not verified). Realistic-looking response distributions did
-   not predict accurate effect estimates (Li and Ji 2026 [full text]). *For teamsim:* simulated
-   feedback may rank or flag, never size an effect or a percentage.
+   reported in secondary sources, not verified). Statistical realism of the responses was only
+   weakly related to accurate effect estimates (Li and Ji 2026 [full text]). *For teamsim:*
+   simulated feedback may rank or flag, never size an effect or a percentage.
 3. **Individual-level twins are weak.** Interview-grounded agents reach 83-86% of human two-week
    test-retest on General Social Survey items (Park 2024 [full text]), but a construct-level
-   table in the same paper lists per-game correlations of 0.03 to 0.11 (one negative), and a
+   table in the same paper lists per-game correlations of -0.05 to 0.11, and a
    19-study preregistered test found mean r = 0.20 with five distortions (Peng, Science Advances
    2026 [full text]). In product concept tests, interview-based agents matched 67% of human
-   self-consistency on individual answers, and an agent with no information scored almost the same
+   self-consistency on individual answers, and an agent with no information reached 57%
    (Wang and Siu 2026 [full text]). *For teamsim:* do not claim a teammate "is like" a real
    person.
 4. **The distortions are consistent across studies:** collapse to the modal answer,
@@ -36,22 +42,27 @@ that means for teamsim's simulated feedback (ADR 0003). Read depth is marked per
 5. **Simulated users are easier and kinder than real ones.** In a 451-human, 31-simulator study,
    simulators were too cooperative and polite and gave uniformly more positive feedback
    (Zhou 2026 [full text]); simulated non-buyers showed half the resistance of real ones (Liang
-   Chen 2026, 793 real conversations, [abstract]). *For teamsim:* sycophancy is the default, so the sycophancy check must be a
+   Chen 2026, 2,790 real sales conversations of which 793 ended in payment, [abstract]). *For teamsim:* sycophancy is the default, so the sycophancy check must be a
    gate with a planted bad case, not a report line.
 6. **Evidence for product and UX use is thin.** UX-agent papers mostly report heuristic evaluations
    with a few researchers. The best human comparison found LLM walkthroughs completed more tasks
    (97-100% vs 88%) and raised far fewer issues than humans (0.5-0.6 vs 7.5 per run), and needed
-   explicit failure-point prompting to match the human-found problems (Zhong 2025 [full text]).
-   *For teamsim:* defect-finding is the one capability with supporting evidence, and it is
-   measurable against planted ground truth.
+   explicit failure-point prompting, with the walkthrough history, to predict which screens humans
+   flagged (Zhong 2025 [full text]).
+   *For teamsim:* predicting human-flagged failure points is the one capability with supporting
+   evidence (10 humans, 2 apps), and it is measurable against planted ground truth.
 7. **Elicitation method matters as much as the model.** Asking for a number gives narrow,
    skewed answers; asking for text and mapping it, or asking the model to describe the
-   distribution, fixes much of it. One industry preprint on 57 personal-care concept tests reports
+   distribution, fixes much of it in the studies that tested it (one model for the describe
+   result). One industry preprint on 57 personal-care concept tests reports
    90% of the human test-retest ranking correlation, with caveats (Maier 2025 [full text]).
    *For teamsim:* no direct numeric ratings from simulated teammates.
 8. **Fidelity improvements need human data.** Fine-tuning on human responses, retrieval over
-   real histories and post-hoc calibration help, but each requires real human responses; and
-   calibration guarantees need assumptions that are hard to meet (Tigre 2026, Hullman 2026).
+   real histories and post-hoc calibration help, but by construction each uses real human
+   responses, and prompt-based or fine-tuning repairs give no valid inference guarantee (Tigre
+   2026, Hullman 2026). Calibration guarantees rest on explicit assumptions that must be defended
+   (a complete invitation frame, missing at random, positivity; Tigre 2026, Hullman 2026). That
+   a solo builder cannot meet them is my inference, not a finding of either paper.
    *For teamsim:* offer an optional "bring a few real answers" check, never a built-in fidelity
    claim.
 9. **I found no study showing simulated users separate a good product from a bad one against real
@@ -68,21 +79,21 @@ that means for teamsim's simulated feedback (ADR 0003). Read depth is marked per
 | Paper | Venue, year | What | Key number | Read |
 |---|---|---|---|---|
 | Argyle, Out of One, Many (2209.06899) | arXiv 2022 | GPT-3 conditioned on survey backstories | Subgroup distributions emulated ("algorithmic fidelity") | abstract |
-| Santurkar, Whose Opinions (2303.17548) | arXiv 2023 | OpinionQA, 60 US groups | Misalignment on par with the Democrat-Republican gap on climate; persists after steering | abstract |
-| Durmus, GlobalOpinionQA (2306.16388) | arXiv 2023 | Cross-national surveys | Default answers resemble USA, Europe, S. America; country prompts can yield stereotypes | abstract |
-| Dominguez-Olmedo (2306.07951) | arXiv 2023 | 43 LLMs, US Census survey | After removing ordering bias, answers trend to uniform random | abstract |
-| Tjuatja (2311.04076) | arXiv 2023 | 9 models, response biases | RLHF models least human-like; sensitive to changes that do not move humans | abstract |
+| Santurkar, Whose Opinions (2303.17548) | arXiv 2023 | OpinionQA, 60 US groups | On most topics, misalignment on par with the Democrat-Republican gap on climate; persists after steering | abstract |
+| Durmus, GlobalOpinionQA (2306.16388) | arXiv 2023 | Cross-national surveys | Default answers resemble the USA, Canada, Australia and some European and South American countries; country prompts can yield stereotypes | abstract |
+| Dominguez-Olmedo (2306.07951) | arXiv 2023 | 43 LLMs, US Census survey | After removing ordering bias, base-model answers are close to uniform; instruction-tuned models deviate more | abstract |
+| Tjuatja (2311.04076) | arXiv 2023 | 9 models, response biases | Models generally not human-like, RLHF-tuned ones in particular; sensitive to changes that do not move humans | abstract |
 | Rupprecht (2507.07188) | arXiv 2025 | 9 LLMs, WVS, 167k interviews | All show recency bias; paraphrase-sensitive | abstract |
 | Li, Das Man (2507.02919) | arXiv 2025 | GPT-4, Llama 3.1, ANES 2020 | Severe homogenization | abstract |
 | Taday Morocho (2602.18462) | arXiv 2026 | 70k respondent-item cases, WVS | Persona prompting often degrades alignment | abstract |
 | Chen, Zhu, Zheng (2607.26348) | arXiv 2026 | 4 models, GSS and WVS | No LLM beats best baseline per individual; see below | full text |
 | Rennard (2608.23005) | arXiv 2026 | 21M distributions, Pew ATP, 8 models | One identity feature carries the persona; a third adds almost nothing | abstract |
 | Ozkan (2607.18310) | arXiv 2026 | WVS Turkey, 2,414 respondents | Concentration 0.36 to 0.69, entropy 1.46 to 0.77; fix overshoots (SD ratio 0.4-0.56 to 1.26-1.37) | abstract |
-| Jang (2607.25292) | arXiv 2026 | Instruction-tuned models | Same persona gives same answer on over half of items; describing the distribution more than halves the error | abstract |
-| Kumagae (2610.30900) | arXiv 2026 | Respondent coverage gap, 6 LLMs | Every LLM worse than a Gaussian copula at covering real respondents | abstract |
+| Jang (2607.25292) | arXiv 2026 | Instruction-tuned models | Over 50 repeated calls, 57% of persona-item pairs give the same answer every time; one call asking for the distribution cut the gap to Pew roughly in half (TV 0.22 vs 0.46, gpt-4o, Likert items) | abstract |
+| Kumagae (2610.30900) | arXiv 2026 | Respondent coverage gap, 6 LLMs | In the settings tested, every LLM worse than a Gaussian copula fitted to the same human respondents at covering them | abstract |
 | Lukauskas (2608.14606) | arXiv 2026 | 37 LLMs, n = 263 employees | Best LLM level with a copula that has no LLM; see below | full text |
-| Chen, Wang, Bhatia (NHB 2026) | Nature Human Behaviour | 67,201 people, 74 countries, 20 LLMs | Title: "weak proxies" for economic preferences | abstract |
-| Ku (2607.03091) | arXiv 2026 | TEDS 2024, open models | 52% on unseen items, within 6 points of a random forest | abstract |
+| Chen, Wang, Bhatia (NHB 2026) | Nature Human Behaviour | 67,201 people, 74 countries, 20 LLM configurations | Title: "weak proxies" for economic preferences | abstract |
+| Ku (2607.03091) | arXiv 2026 | TEDS 2024, open models | 52% on unseen items for the best of three zero-shot open models, within 6 points of a random forest trained on same-population data | abstract |
 
 **Chen, Zhu, Zheng (full text).** Individual accuracy on GSS: best LLM 0.589 against 0.568 for
 the question marginal and 0.622 for a logistic model; on WVS the best LLM scored 0.277 against
@@ -111,22 +122,22 @@ simulated individuals and that systematic bias is not reduced by more coverage (
 
 Counter-evidence worth stating: some work is more positive. Persona agents grounded in retrieved
 real histories improve distribution alignment for stable attitudes (Jia 2605.10659 [abstract]); a
-Chilean survey study found F1 above 0.90 on trust items with large item-to-item variation
-(Gonzalez-Bustamante 2509.09871 [abstract]). Both are single-topic or single-country results with
-real survey data behind the personas.
+Chilean survey study found F1 and accuracy above 0.90 for some trust items, with large
+item-to-item variation (Gonzalez-Bustamante 2509.09871 [abstract]). Both come from a single
+panel or country, with real survey data behind the personas.
 
 ## 2. Replicating human-subject experiments
 
 | Paper | Venue, year | What | Key number | Read |
 |---|---|---|---|---|
-| Aher, Turing Experiments (2208.10264) | arXiv 2022 | Ultimatum Game, Garden Path, Milgram, Wisdom of Crowds | First three replicated; "hyper-accuracy distortion" in the fourth | abstract |
+| Aher, Turing Experiments (2208.10264) | arXiv 2022 | Ultimatum Game, Garden Path, Milgram, Wisdom of Crowds | First three replicated, in two of them only by the largest model; "hyper-accuracy distortion" in the fourth | abstract |
 | Horton, Homo silicus (2301.07543) | arXiv 2023 | Classic economic experiments | Qualitatively similar; differences "generative" | abstract |
 | Cui (2409.00128) | Nature Comput. Sci. 2025 | 156 experiments, 3 LLMs | Main effects 73-81%, interactions 46-63%; effects 2-3x | full text |
 | Ashokkumar, Hewitt (Nature 2026) | Nature 2026 | 70 preregistered survey experiments, 469 effects, 119,330 people | Authors report accurate predictions; sizes overestimated (secondary sources) | abstract |
 | Lippert (RSOS 2024) | Royal Soc. Open Sci. 2024 | GPT-4 forecasts of one study | r = 0.89 vs 0.87 for 119 experts | abstract |
 | Li and Ji (2604.02458) | arXiv 2026 | 59,508 people, 62 countries, 3 replications | Realism and effect accuracy weakly related | full text |
-| Kolluri, Socrates (2509.05830) | arXiv 2025 | Fine-tuning on 210 experiments | 26% better distributional alignment on unseen studies | abstract |
-| Chen, Hu, Lu (2504.01167) | arXiv 2025 | 276 field experiments | 78% accuracy; weaker on ethnicity, norms, ethics | abstract |
+| Kolluri, Socrates (2509.05830) | arXiv 2025 | Fine-tuning on 170 of 210 experiments, tested on 40 held-out | 26% (Qwen2.5-14B) and 30% (LLaMA3-8B) better distributional alignment than the base models on unseen studies | abstract |
+| Chen, Hu, Lu (2504.01167) | arXiv 2025 | 276 field experiments | 78% accuracy at best (GPT-4o, chain-of-thought prompt); weaker on ethnicity, norms, ethics | abstract |
 
 **Cui (full text).** Replication dropped where race or gender were varied (GPT-4 main effects 41.5%
 with race variables against 76.8% without). Effects were larger because between-condition
@@ -135,7 +146,7 @@ with humans for 79.7% of main effects. Exposure to the original papers (pre/post
 did not explain results. Cautions: scenario-based vignette studies only; 1:1 sample matching.
 
 **Li and Ji (full text).** Models reproduced attitudinal outcomes reasonably, but descriptive
-fit did not predict causal accuracy; the divergence was larger for behavioural outcomes, where the
+fit was only weakly related to causal accuracy; the divergence was larger for behavioural outcomes, where the
 models imposed a tighter attitude-to-action link than people show, and an instruction to
 decouple them did not fix it.
 
@@ -151,12 +162,12 @@ weakest.
 |---|---|---|---|
 | Park, Self-Report Agents (2411.10109) | arXiv 2024 | 1,052 people. GSS normalized accuracy 0.83 (interview), 0.82 (survey), 0.86 (both), 0.74 (demographics) | full text |
 | Toubia, Twin-2K-500 (2505.17479) | arXiv 2025 | 2,058 people, about 500 questions, retest wave | abstract |
-| Peng, Funhouse Mirrors (2509.19088) | Science Advances 2026 | 19 studies, 164 outcomes. Mean r = 0.197; accuracy 0.748 | full text |
+| Peng, Funhouse Mirrors (2509.19088) | Science Advances 2026 | 19 studies, 164 outcomes. Mean r = 0.197; full-persona accuracy 0.748 (empty persona 0.734) | full text |
 | Wang and Siu (2603.29890) | arXiv 2026 | 51 knowledge workers, 4 AI concepts, 3,060 responses. Accuracy 0.300 vs 0.446 human-human | full text |
 | Jia (2605.10659) | arXiv 2026 | LISS panel; fails to recover multivariate structure | abstract |
-| Wang, substitutability (2609.07987) | arXiv 2026 | Twins reproduce average effects, say little about who differs | abstract |
-| Deng (2609.29143) | arXiv 2026 | Twins from AI interviews beat demographics-only, not static interviews | abstract |
-| Ye, BDE profiles (2611.08730) | arXiv 2026 | Better structure gives about 1-1.4 points | abstract |
+| Wang, substitutability (2609.07987) | arXiv 2026 | Twins reproduce some average effects but not all, and say little about who differs | abstract |
+| Deng (2609.29143) | arXiv 2026 | Twins from AI interviews beat demographics-only on open-ended similarity; gains on ratings accuracy and claim ranking were not significant; no more accurate than static-interview twins | abstract |
+| Ye, BDE profiles (2611.08730) | arXiv 2026 | Adding evaluative content to a profile gives about 1.2-1.4 points; the paper credits content, not structure alone | abstract |
 
 **Park (full text).** Normalising by each person's own retest consistency (79.5% on GSS) is the
 right idea and teamsim should copy it. The same paper shows limits: Big Five normalized
@@ -183,18 +194,26 @@ kappa 0.53.
 ## 4. Known distortions
 
 - **Homogenization and misportrayal.** Wang, Morgenstern, Dickerson 2402.01908 [abstract]:
-  3,200 participants, 16 identities, four LLMs; models both misportray and flatten groups. Li
-  2507.02919; Rennard 2608.23005.
-- **Caricature.** CoMPosT, Cheng 2310.11501 [abstract]: GPT-4 simulations of political and
-  marginalised groups are most susceptible to caricature (individuation and exaggeration).
+  3,200 participants, 16 identities, four LLMs; on identity-relevant questions (not subjective
+  annotation tasks) models both misportray and flatten groups. Li 2507.02919. Rennard 2608.23005
+  shows a related but different effect: between-group compression and misportrayed
+  steering strength, not within-group homogenization.
+- **Caricature.** CoMPosT, Cheng 2310.11501 [abstract]: GPT-4 simulations of some political and
+  marginalised groups, and of general topics, are more susceptible to caricature, scored by
+  exaggeration (almost all simulations can be individuated).
   Chen, Zhu, Zheng's over-determination finding is the same effect measured on survey data.
 - **Positivity.** Salecha (PNAS Nexus 2024, 2405.06058) [abstract]: when LLMs infer they are being
   assessed they shift Big Five answers by about 1 human SD toward the desirable end. Li 2608.24912
-  [abstract]: 18 models lean to the kinder answer, bias grows with size, and aligned models cannot
-  play less kind people. Weeber 2610.22409 [abstract]: vignettes reduce social desirability in
-  humans but not in LLMs.
-- **Acquiescence.** Lukauskas 2608.14606 [full text, v1]: +0.84 SD acquiescence shift; fabricated
-  mediation effects on 3 of 10 null paths (the latest abstract says 4 of 7).
+  [abstract]: 18 models lean to the kinder answer, the bias grows with size within the Qwen
+  family, and aligned models struggle to play less kind personas. Weeber 2610.22409 [abstract]:
+  vignettes reduce social desirability in humans (taken from prior work) but, the authors
+  suggest, not in LLMs, where they attribute the effect to alignment; they did not test that
+  mechanism.
+- **Acquiescence.** Lukauskas 2608.14606 [full text, v2]: the acquiescence shift is small (mean
+  +0.24 human SD, range -0.54 to +1.26 across 37 models); the larger distortion is range
+  restriction (fewer endpoint answers, within-person SD 0.79 vs 1.19 Likert points). Fabricated
+  mediation effects on 4 of 7 null paths. The figures I recorded earlier from v1 (+0.84 SD; 3 of
+  10 null paths) do not appear in v2, so cite the version.
 - **WEIRD skew.** Durmus 2306.16388; Sen 2511.01864 [abstract]: a review of 211 papers found 29%
   report positive conclusions, over a third define no target population, and of those that do,
   most study only the US.
@@ -204,9 +223,11 @@ kappa 0.53.
   consent and agency and to lack contextual depth. Anthis 2504.02234 [abstract], a position paper
   by 8 authors, argues simulations can already serve pilot and exploratory studies, and names
   context-rich prompting and fine-tuning as promising.
-- **Miklian 2603.00059 [abstract]:** five LLMs against a human survey of 420 Silicon Valley
-  developers: plausible, harmonised results, none captured the counterintuitive findings, and the
-  deviations clustered so that the human data was the outlier. Nearest study to teamsim's users.
+- **Miklian 2603.00059 [abstract]:** LLM platforms against a human survey of Silicon Valley
+  developers (400 complete responses in the authors' recomputed benchmark): plausible,
+  harmonised results, but none consistently captured the full set of counterintuitive findings.
+  The authors raise, as a rival explanation, that the human data may be the outlier since the
+  LLM outputs cluster; they do not establish it. Nearest study to teamsim's users.
 
 ## 5. Synthetic users for product, UX and market research
 
@@ -214,14 +235,14 @@ kappa 0.53.
 |---|---|---|---|---|
 | UXAgent 2504.09407 | 2025 | No; 16 UX researchers judged it | Praised, with concerns | abstract |
 | Zhong, Synthetic CW 2512.03568 | 2025 | Yes, 10 humans, 2 apps | See below | full text |
-| Sun 2509.21501 | 2025 | Yes, 40 humans, a shopping assistant | Action patterns aligned; similar design feedback; agents explored more | abstract |
-| AgentA/B 2504.09723 | 2025 | Real shopping behaviour, 1,000 agents | "Can emulate human-like patterns" | abstract |
+| Sun 2509.21501 | 2025 | Yes, 40 humans, a shopping assistant | Abstract: action patterns aligned, similar design feedback. Full text: turn counts and framing aligned, but trajectories had low overlap (similarity 0.11), about 1.3% of pairs chose the same product, and agents underrated satisfaction and wrote little about frustration | abstract |
+| AgentA/B 2504.09723 | 2025 | A parallel A/B test with 2M humans, 1,000 agents | Purchase rates and filter use comparable; humans had longer sessions and more searches, agents fewer actions | abstract |
 | Maier, SSR 2510.08338 | 2025 | Yes, 57 concept tests, 9,300 people | 90% of retest ranking correlation | full text |
 | Wang and Siu 2603.29890 | 2026 | Yes, 51 people, 4 concepts | Population calibrated, individually imprecise | full text |
 | Pandey 2607.24649 | 2026 | Yes, 94 people, 3 concepts | Simulated reasons often echo the concept board | abstract |
-| Tsai 2609.25677 | 2026 | Six human visual-marketing effects | No setting reproduced more than 2 of 6 | abstract |
+| Tsai 2609.25677 | 2026 | Six human visual-marketing effects | Zero-shot, no setting reproduced more than 2 of 6; given empirical evidence in context, GPT-5.4-mini reproduced the human effect in 6 of 7 cells | abstract |
 | Moon 2606.09013 | 2026 | Yes, a non-public 2010 noodle choice experiment | For purchase quantity no model beat a baseline that matches the pooled human distribution | abstract |
-| Maiorano 2608.13563 | 2026 | Proxy corpora only | Estimates unstable under resampling | abstract |
+| Maiorano 2608.13563 | 2026 | Proxy corpora only | Embedding-based estimate unstable under resampling; lexical intervals stable | abstract |
 
 Lead, not cited as evidence: the Brand, Israeli and Ngwe working paper on willingness to pay
 (first "Using GPT for Market Research", later "Using LLMs for Market Research"). I could not
@@ -237,32 +258,34 @@ predicted the human-found ones; without history it was less consistent. The auth
 own prompt may have made the model more rational.
 
 **Maier, SSR (full text).** 57 surveys of personal-care concepts, 150-400 people each. Mean human
-purchase intent was 4.0 with SD 0.2 across concepts, so the concepts barely differed. Direct
+purchase intent was 4.0 with a narrow spread across concepts (SD 0.1 in Section 3.1, 0.2 in a
+later passage), so the concepts barely differed. Direct
 Likert ratings gave unrealistic distributions; textual answers mapped by embedding similarity
 reached KS similarity 0.88 and 88-90% of the retest correlation ceiling, beating a LightGBM
 trained on half the surveys (65%). Limits stated by the authors: reference statements were hand
-tuned on these 57 surveys, gender, region and ethnicity patterns were not replicated, and the
-authors are from a company that sells synthetic research (inference: conflict of interest;
-preprint).
+tuned on these 57 surveys, gender, region and ethnicity patterns were not consistently
+replicated, and the authors are affiliated with PyMC Labs and Colgate-Palmolive (the surveys
+came from an unnamed personal-care corporation). The paper declares no conflict of interest;
+treat the commercial tie as context, not as a finding. Preprint.
 
 **Reading.** The favourable results are for concept ranking among similar concepts and for
 population-level distribution; the unfavourable ones are for individual prediction, stimulus
 reasoning, and novel or sensitive stimuli. For defects, there is one signal worth building on:
-models walking an interface raised few issues unprompted, but prompted for failure points they
-matched the human-found ones.
+models walking an interface raised few issues unprompted, but prompted for failure points, with
+the walkthrough history, they predicted which screens humans flagged.
 
 ## 6. Methods that improve fidelity, and by how much
 
 | Method | Evidence | Gain | Needs human data? |
 |---|---|---|---|
-| Rich grounding (interviews, histories) | Park 2024 [full text] | 74% to 83-86% of retest on GSS | Yes, per person |
-| Same, product concepts | Wang and Siu [full text] | Only the low-score tail improved; no-info agent close on accuracy | Yes |
-| Fine-tune on human responses | Kolluri 2509.05830; Choi 2606.28963 [abstract] | +26% alignment on unseen studies; small pilot samples help | Yes |
-| Elicit text then map, or ask for the distribution | Maier [full text]; Jang; Meister 2411.05403 [abstract] | KS 0.88; error halved | No (SSR needs reference statements) |
-| Post-hoc calibration | Fan 2604.07513 [abstract]; Persson 2606.17165 [abstract] | 46-57% lower distribution error; raw LLM recovered 39% of a real A/B effect | Yes |
+| Rich grounding (interviews, survey answers) | Park 2024 [full text] | 74% (demographics only) to 82-86% of retest on GSS | Yes, per person |
+| Same, product concepts | Wang and Siu [full text] | Only the low-score tail improved; no-info agent at 57% of human-human accuracy vs 67% for interview agents | Yes |
+| Fine-tune on human responses | Kolluri 2509.05830; Choi 2606.28963 [abstract] | +26% (Qwen2.5-14B) and +30% (LLaMA3-8B) alignment on unseen studies; in Kolluri, learning saturated at about 10% of participant data. Choi: one pilot size (5%, n = 74), not varied | Yes |
+| Elicit text then map, or ask for the distribution | Maier [full text]; Jang; Meister 2411.05403 [abstract] | Maier: KS 0.88. Jang: TV 0.22 vs 0.46 (gpt-4o). Meister: verbalised distributions beat sampling | No training data (SSR reference statements were hand-tuned on the same 57 surveys; Meister's best results used few-shot survey distributions) |
+| Post-hoc calibration | Fan 2604.07513 [abstract]; Persson 2606.17165 [abstract] | Fan: 46-57% lower distribution error on two datasets. Persson: raw LLM recovered 39% of a real A/B effect in one headline-test application | Yes |
 | Ensembles and mixtures | Lukauskas [full text]; Terwiesch 2607.27553 [abstract] | Averaging responses hurt (PSS 0.305); pooling vendors raised idea diversity | No |
-| Temperature | Pavlovic 2411.10080 [abstract]; Peng [full text] | Small, model-dependent; best twin setting was temperature 0 | No |
-| Persona variables | Hu and Collier 2402.10811 [abstract] | Persona variables explain under 10% of annotation variance | No |
+| Temperature | Pavlovic 2411.10080 [abstract]; Peng [full text] | Pavlovic: higher temperature (T = 2) gave gpt-3.5-turbo distributions closer to human opinion and fewer overconfident predictions. Peng: best twin setting was temperature 0 (GPT-4.1), with modest gains overall. No consistent direction | No |
+| Persona variables | Hu and Collier 2402.10811 [abstract] | Persona variables explain 1.4-10.6% of annotation variance across the datasets they test | No |
 
 Two points on ensembles. Averaging many simulated respondents removes the individual signal
 (Lukauskas); but combining models or prompts to generate *ideas* raises diversity (Terwiesch,
@@ -285,16 +308,17 @@ What the literature uses, and what each costs:
 | Self-correlation distance | Libovicky 2602.04033 [abstract] | Whether answer structure is human-like |
 | Decision impact (gap inflation, wrong-segment rate) | Chen, Zhu, Zheng [full text] | Whether a decision would flip |
 | Realism vs causal accuracy, separately | Li and Ji [full text] | Realism does not certify effects |
-| Surrogacy falsification test | Persson 2606.17165 [abstract] | Whether LLM effect can stand in for human effect |
+| Surrogacy falsification test | Persson 2606.17165 [abstract] | Rejection refutes that the LLM effect can stand in for the human effect; non-rejection does not show it does |
 | Detectability (classifier AUC) | Lukauskas [full text] | Whether text is separable from human |
 | User-Sim Index | Zhou 2026 [full text] | Behaviour, calibration and feedback alignment |
-| Downstream utility | Suh 2605.09808 [abstract] | Training against a role-play simulator gave 51% win rate against the base, a fine-tuned simulator 58% (283 participants) |
+| Downstream utility | Suh 2605.09808 [abstract] | Training against a role-play simulator gave a 51% win rate against the base (statistically indistinguishable from it), a fine-tuned simulator 58% (283 participants) |
 
 On counterfactual validation (does the simulator tell good from bad?): the relevant evidence is
 indirect. The SSR concept-ranking result is the closest (ranking among concepts that differ by
-about 0.2 points), the visual marketing study shows effects not reproduced (Tsai [abstract]),
-and the A/B surrogacy paper says an LLM A/B test "is correct only by assumption" and recovered
-39% of the human effect when uncalibrated (Persson [abstract]). I searched for studies that
+about 0.2 points), the visual marketing study shows effects not reproduced at zero-shot (Tsai
+[abstract]; they were largely reproduced once empirical evidence was given in context), and the
+A/B surrogacy paper says an LLM A/B test "is correct only by assumption" and recovered 39% of
+the human effect in one uncalibrated headline-test application (Persson [abstract]). I searched for studies that
 compare simulated verdicts on deliberately good and bad products with real outcomes and found
 none; treat this as a gap, not as evidence of failure.
 
@@ -309,22 +333,29 @@ It cannot meet a bar of predicting real team reactions, and should not claim to.
 
 1. **Planted-defect recall first.** Plant known defects or confusions in the product description
    or workspace. Score how many teammates raise them unprompted and when prompted, plus invented
-   ones (false alarms). Support: Zhong shows the capability exists (prompted recall of human
-   failure points) and the gap without prompting (0.5-0.6 vs 7.5 issues). Prompt with history
+   ones (false alarms). Support: Zhong shows the capability exists (prompted prediction of
+   human-flagged failure points) and the gap without prompting (0.5-0.6 vs 7.5 issues). Prompt with history
    (the "with context" variant in Zhong). This is teamsim's own contribution, not from the
    literature.
 2. **A bad-product control and a known-worse variant in every feedback run.** A product with a
    deliberate, obvious flaw; or two versions where one is planted as worse. Pass if the panel
    rejects the bad one and ranks the worse one lower. This is the sycophancy gate and the only
-   available discrimination test. Support: Zhou 2026 (uniform positivity), Chen 2026 (halved
-   resistance), Salecha, Li 2608.24912.
+   available discrimination test. None of these papers tests a bad-product control or a ranking of
+   worse variants; they show the need for one: Zhou 2026 (uniform positivity), Chen 2026 (halved
+   resistance among non-buyers), Salecha (desirable-end skew when assessed) and Li 2608.24912
+   (a small, consistent lean to the kinder answer).
 3. **Behaviour personas, not demographic ones.** Vary patience, vagueness, reluctance, role and
-   expertise. Do not condition on gender, race, age or nationality. Support: Taday Morocho, Rennard,
-   Chen, Zhu, Zheng (2-4x over-determination), Wang, Morgenstern, Dickerson, and the Sim2Real "easy
-   mode" results.
+   expertise. Do not condition on gender, race, age or nationality. This is a design choice built
+   on evidence against demographic conditioning: Taday Morocho (no consistent aggregate gain,
+   errors redistributed across subgroups), Rennard (intersectional personas collapse to one or two
+   features), Chen, Zhu, Zheng (2-4x over-determination), Wang, Morgenstern, Dickerson, and the
+   Sim2Real "easy mode" results. None of them tests behaviour personas, and none recommends
+   dropping demographic conditioning outright; Taday Morocho advises matched baselines and
+   subgroup audits.
 4. **Text first, never a number from the model.** Collect free text and, where a score is needed,
-   map it with a fixed rubric or reference statements (Maier). Do not report means of model-given
-   ratings.
+   map it with a fixed rubric or reference statements (Maier; its reference statements were
+   hand-tuned on the same 57 surveys and a fixed rubric was not tested separately). Do not report
+   means of model-given ratings.
 5. **No aggregate claims.** A panel of 5-30 teammates is below the 50-100 where population-level
    results stabilise (Wang, ReliMap, abstract). Report counts of teammates, never percentages
    of "teams".
@@ -335,9 +366,10 @@ It cannot meet a bar of predicting real team reactions, and should not claim to.
    baseline against which any model-written feedback must show added information (Chen, Zhu,
    Zheng; Lukauskas).
 8. **Optional human check.** Let the user paste 3-20 real responses and report rank agreement and
-   spread ratio as a check on the panel. Do not apply a statistical correction, because the
-   assumptions (missing at random, a full invitation frame) are not met by a solo builder
-   (Tigre, Hullman).
+   spread ratio as a check on the panel. Do not apply a statistical correction, because its
+   assumptions (missing at random, a full invitation frame) are unlikely to hold for a solo
+   builder. That last step is my inference: Tigre and Hullman state the assumptions and ask for
+   them to be justified, but do not discuss solo builders.
 9. **Use only text-scale metrics that stdlib code can compute:** JS divergence, KS, SD ratio,
    entropy, Spearman or Kendall rank correlation, bootstrap intervals. No heavy dependency is
    needed, which keeps the stack decision independent of the feedback feature.
@@ -364,8 +396,9 @@ Rates are hidden when fewer than 10 events back them (the run-1 rule).
   kappa 0.53).
 - Averaging many simulated answers into a "consensus" (Lukauskas ensemble result).
 - Treating a good distribution match as proof of a good conclusion (Li and Ji).
-- Evaluating a bot only against cooperative scripted or LLM users: Zhou 2026 and Chen 2026 show
-  this inflates success.
+- Evaluating a bot only against cooperative scripted or LLM users: Zhou 2026 shows most
+  general-purpose LLM simulators inflate agent success (four specialised ones fell below the human
+  rate), and Chen 2026 shows simulators overstate funnel progress for sales agents.
 
 **Claims that must never be made.**
 
@@ -373,8 +406,9 @@ Rates are hidden when fewer than 10 events back them (the run-1 rule).
 2. "X% of teams would adopt or like this."
 3. "The simulated feedback is validated" without naming the proxy task, the data and the baseline.
 4. "This teammate represents a real person, role-holder or demographic group."
-5. "A bigger or newer model makes the feedback more reliable" (not supported by Zhou, Chen, Zhu,
-   Zheng, Lukauskas 2610.14912).
+5. "A bigger or newer model makes the feedback more reliable" (not supported: Chen, Zhu, Zheng
+   found a bigger model did not help, and Lukauskas 2610.14912 found newer releases do not score
+   higher on survey fidelity; neither tested feedback quality).
 6. Any ranking of products as a verdict. Rankings are hypotheses to check with real people.
 7. That simulated praise is evidence of quality (sycophancy is the default).
 
@@ -386,14 +420,16 @@ model id and baseline.
 - *Model-free default vs local model:* The literature supports keeping the scored tests model-free
   (scripted adversarial behaviour avoids the easy-mode problem if the scripts include impatience,
   vagueness and reluctance, per Zhou). A model is needed only for free-text feedback and
-  defect-finding. Capability does not buy fidelity (Zhou, Chen, Zhu, Zheng, Lukauskas 2610.14912),
-  so a small local model is not obviously worse for this; inference, to be tested with the
-  planted-defect recall.
+  defect-finding. On survey fidelity, a bigger model did not help (Chen, Zhu, Zheng) and newer
+  releases did not score higher (Lukauskas 2610.14912), so a small local model is not obviously
+  worse for this; inference, since neither paper tested feedback or defect-finding, to be tested
+  with the planted-defect recall.
 - *v0.1 actions:* Chat-only is enough for planted-defect recall. Task and issue handling add
   behaviour the literature does not cover; no source here argues for repo actions.
 - *First user:* A builder of team-facing software uses simulated feedback for defect-finding; the
-  closest human study is the developer survey of Miklian (agree on harmonised, conventional
-  answers).
+  closest human study is the developer survey of Miklian, where the LLMs gave harmonised,
+  conventional answers that did not match the humans (agreement among LLMs is not validity). That
+  paper does not study defect-finding or product feedback.
 - *Scoring:* Add a feedback block with the six measures above; keep it separate from the scored
   tests so a weak feedback result cannot change the ground-truth score.
 - *Presets:* Presets vary behaviour and role, not demographics; ship with the planted-defect and

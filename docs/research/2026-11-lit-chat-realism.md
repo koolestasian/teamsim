@@ -1,5 +1,9 @@
 # Real team chat, judging synthetic chat, and learning from real teams: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: what real developer and team chat looks like in numbers, how remote work changes communication, how
 synthetic multi-party dialogue is made and judged, how to define realism targets, and how to learn patterns
 from a real team without leaking it. 49 papers are cited; 9 were read in full text (marked [full text],
@@ -18,8 +22,8 @@ are my own arithmetic on reported numbers. Statements marked "inference" are min
    words and 4.1 messages per thread; social channels had about 18% of messages with reactions, project channels
    about 5.5% (derived) [full text]. For teamsim: calibrate per channel type (project, social, support, bot).
 3. **Conversations interleave and links between messages are mostly implicit.** In Ubuntu IRC only about 48% of
-   messages name the person they answer, 83.4% of conversations have fewer than 10 messages, and 37.7% of
-   conversation starters get more than one reply [full text]. For teamsim: scripted threads should interleave and
+   messages name the person they answer, 83.4% of conversations have fewer than 10 messages, and of the
+   conversation starters that get a reply, 37.7% get more than one [full text]. For teamsim: scripted threads should interleave and
    use implicit replies, and scoring must not assume one tidy thread per topic.
 4. **Timing is bursty with heavy tails; the day and week cycle explains part of it, not all.** Cycles plus a
    tendency to continue an activity reproduce the email heavy tail; other work finds a residual tail that cycles do
@@ -35,9 +39,9 @@ are my own arithmetic on reported numbers. Statements marked "inference" are min
    misunderstandings, repetition and off-topic turns than human ones; prompting for them overshot, and fine-tuning
    made the model repeat itself [full text]. For teamsim: "reads well" is not a realism test. Test frequencies of
    specific behaviours.
-7. **Remote work changes who talks to whom.** Large email studies found more modular (siloed) networks in 2020 and the
-   loss of more than 4,800 weak ties over 18 months at one university, only partly regained under hybrid work
-   [abstracts]. For teamsim: a "remote team" preset should lower cross-group ties, not only shift hours.
+7. **Remote work changes who talks to whom.** Large email studies found more modular (siloed) networks in 2020 and an
+   estimated loss of more than 4,800 weak ties over 18 months at one university, with only a slight recovery under
+   hybrid work, which the authors call an initial finding [abstracts]. For teamsim: a "remote team" preset should lower cross-group ties, not only shift hours.
 8. **Validating against several patterns at once is the established method, with a known trap.** Pattern-oriented
    modelling uses several observed patterns to choose among models; a worked tropical-forest case matched up to
    five of six patterns together but not two specific ones at once, and a field-vole case warns of over-fitting to
@@ -63,10 +67,10 @@ are my own arithmetic on reported numbers. Statements marked "inference" are min
 | Aquino et al., Discord Unveiled | arXiv preprint 2025 | 2.05B messages, 4.74M users, 3,167 public servers | 17% of messages from bots | full text (partial) |
 | Subash et al., DISCO | MSR 2022 data showcase | 28,712 conversations, 1,508,093 messages, 323,562 users, 4 developer communities, 1 year | disentangled by a model | web page only |
 | Song et al., Who plays which role when | arXiv preprint 2026 | 6,307 Slack messages, 55 students, 18 teams, one semester | median 9 messages per student per window | full text |
-| Garcia and Treude, gender and student teams | arXiv preprint 2025 | 39 students, 8 teams, 8 weeks of Slack | men responded more slowly | abstract |
+| Garcia and Treude, gender and student teams | arXiv preprint 2025 | 39 students, 8 teams, 8 weeks of Slack | men wrote most replies coded as delayed (80.77%, n=21); response times were not compared by gender | abstract |
 | Damianova and Berrezueta-Guzman, student Scrum team | arXiv preprint 2026 | one 8-person student team, Discord, Notion, GitHub, one year | tool-mediated coordination | abstract |
-| Fathollahzadeh et al., SENIR | arXiv preprint 2025 | LLM labels on DISCO, resolution by intent | resolution AUC 0.7 to 0.8 | abstract |
-| Perera et al., team collaborative dialogue | arXiv preprint 2023 | Slack from one organisation, dialogue acts | method paper | abstract |
+| Fathollahzadeh et al., SENIR | arXiv preprint 2025 | LLM labels on DISCO, resolution by intent | resolution AUC 0.7 to 0.8, on resolution labels the same LLM pipeline assigned (validated at 89% F-score on 400 hand-labelled conversations) | abstract |
+| Perera et al., team collaborative dialogue | arXiv preprint 2023 | Slack chat of one 8-person team in one shared channel, dialogue acts | method paper | abstract |
 | Stray and Moe, meetings and Slack | arXiv preprint 2020 | longitudinal case study | 7 h 45 min scheduled plus 8 h 54 min unscheduled meetings a week | abstract |
 | Li et al., SlackBench | arXiv preprint 2026 | 140 queries over privacy-preserving reenactments of real research projects | best agent about 80% | abstract |
 
@@ -107,10 +111,10 @@ the hand-labelled sample excluded code-heavy, non-English and low-quality dialog
 and answer, not a closed team's chat.
 
 IRC (Kummerfeld et al.): see item 3 and section 2.3. Caveats: one technical support channel plus one other channel;
-adjudicated link agreement kappa was 0.71 to 0.74, so interleaving counts carry label noise.
+link agreement kappa between annotators (before adjudication) was 0.71 to 0.74, so interleaving counts carry label noise.
 
 Discord: the large public dataset (Aquino et al.) is a sample of servers listed in Discord's discovery feature (about
-10% of those listed); gaming dominates (keyword in 15.28% of descriptions), programming is about 1.17%. It suits
+10% of those listed); gaming is the top description keyword (15.28% of descriptions), programming is about 1.17%. It suits
 platform-level numbers (bots wrote 17% of messages) but not a small student team server. DISCO is closer to the
 target, but I could read only its listing, so I cannot report distributions from it.
 
@@ -140,11 +144,11 @@ All [abstract] unless noted.
 | Jo et al., circadian pattern and burstiness | arXiv 2011 | After removing circadian and weekly patterns from phone data, heavy tails remain. |
 | Ross and Jones, heavy-tailed dynamics | Phys. Rev. E 2015 | On a large social-media set, cycles and burstiness explain part but not all of the tail. |
 | Wu et al., bimodal distribution | PNAS 2010 | Events split into bursts of frequent mutual exchange in short times and random initiations after long gaps. |
-| Cui et al., QQ and WeChat | PLOS ONE 2018 | Inter-visit times are piecewise: exponential at short scales, power law at long ones; exponent differs between two cities. |
-| Aoki et al., spike-train analysis | arXiv 2016 | Short messages show a quick response to incoming ones and a refractory effect after outgoing ones. |
-| Martin et al., response times in WhatsApp and Instagram | arXiv 2026 | 3.4M messages, 889 chats from 97 donations: about 70% of WhatsApp and 44% of Instagram messages answered within 5 min; partners' response speeds are close (regression slope about 0.79). |
+| Cui et al., QQ and WeChat | PLOS ONE 2018 | Inter-event times are piecewise: exponential at short scales, power law at long ones, but only at a 0.001 s time resolution; exponent differs between two cities. |
+| Aoki et al., spike-train analysis | arXiv 2016 | In SMS data, people answer incoming messages much faster than phone or email users do; a Hawkes-type model needs a negative self-excitation term (a refractory effect after sending) to fit the data. |
+| Martin et al., response times in WhatsApp and Instagram | arXiv 2026 | 3.4M messages, 889 chats from 97 participants: about 70% of WhatsApp and 44% of Instagram messages answered within 5 min; partners' response speeds are close (regression slope about 0.79). |
 
-Which side is stronger? Malmgren (cycles explain the tail) and Barabasi (priority queueing) disagree on cause. Jo et
+Which side is stronger? Malmgren (cycles coupled to cascading activity explain the tail) and Barabasi (priority queueing) give different causes. Jo et
 al. and Ross and Jones tested on large data and found a residual that cycles do not explain, so a pure cycle account
 is too simple. For teamsim the cause does not matter, the shape does: a mixture of in-burst gaps (seconds),
 within-conversation gaps (minutes) and between-conversation gaps (hours to days) modulated by time of week
@@ -176,11 +180,13 @@ varies; the Slack figure is the closest anchor.
   of messages under 5 words belong to conversations with more than one author, so short messages are not outliers.
 - Gaps within a conversation: 94.9% of consecutive messages are within 2 minutes (98% in a second channel, so it is
   channel dependent); 88.3% are 8 messages or fewer apart; 99.4% are within 100 messages. First response within 3
-  minutes in 94.8% of conversations; 37.7% of conversation starters get several replies; 6.8% of conversations start
-  with a directed message.
-- Disentangling is hard: models reach F1 around 50 on Ubuntu and 28 on a second channel, varying from 11 to 40
-  across samples; the heuristic behind a widely used corpus gives only 10.8% fully correct conversations; five popular
-  methods "do not perform well" on software chat (Jiang et al., arXiv 2021, abstract).
+  minutes in 94.8% of conversations; of the conversation starters that get a reply, 37.7% get several; 6.8% of
+  conversations start with a directed message.
+- Disentangling is hard: Kummerfeld et al.'s annotators agree on exactly matching conversations at F1 about 50 on
+  Ubuntu and 28 on a second channel (inter-annotator agreement, not model scores); their model's F-score varies from
+  11 to 40 across samples; the heuristic behind a widely used corpus gives only 10.8% fully correct conversations
+  (precision). Five popular methods "do not perform well" on software chat; the best reaches an average F1 of only
+  0.47 (Jiang et al., arXiv 2021, abstract).
 - Unanswered: 24% of Gitter dialogs; self-answered monologues 1%. In DISCO, resolution varies by question intent
   (API usage higher; "discrepancy" and "review" lower; SENIR abstract).
 - Slack threads: 2.0 messages per thread in project channels, 4.1 in IT support.
@@ -195,9 +201,9 @@ action items per 100 messages. Those would have to be measured by teamsim (open 
 
 | Paper | Venue/year | Population | Finding | Read |
 |---|---|---|---|---|
-| Yang et al., effects of remote work on collaboration | Nature Human Behaviour 2022 | information workers at one large firm | firm-wide remote work led to more static, siloed collaboration networks (as cited by a later paper; my retrieval of the abstract was cut short) | abstract (partial) |
+| Yang et al., effects of remote work on collaboration | 2022 (venue not verified) | information workers at one large firm | after a shift to remote work, employees talked less often with a smaller number of weak ties (as cited by Zuzul et al.; the text I retrieved was an early preprint without this result) | abstract (partial) |
 | Zuzul et al., Dynamic silos | arXiv preprint 2021 | 360 billion emails, 4,361 organisations, plus one organisation's IM and calls | modularity up in 2020; people move between groups more but talk within their group | abstract |
-| Carmody et al., co-location and communication networks | Nature Computational Science 2022 | email network of one North American university | more than 4,800 weak ties lost over 18 months; hybrid work partly regenerated them | abstract |
+| Carmody et al., co-location and communication networks | arXiv preprint 2022 (journal version not verified) | email network of one North American university | an estimated loss of more than 4,800 weak ties over 18 months (model-based counterfactual); a slight recovery under hybrid work, reported as an initial finding | abstract |
 | Soda et al., generative AI and collaboration | arXiv preprint 2026 | 12,000+ knowledge workers, 13 months | Copilot rollout raised collaboration time and broadened networks | abstract |
 | Stray and Moe | arXiv 2020 | global software teams | unbalanced activity on Slack across sites was a barrier | abstract |
 
@@ -210,12 +216,12 @@ profile is the only hour-of-day anchor I read. The studies are email-based or ab
 
 | Paper | Venue/year | Method | Realism evaluation | Key result | Read |
 |---|---|---|---|---|---|
-| Bouleimen et al., Collective Turing test | Sci. Rep. 2026 (arXiv 2025) | Llama 3 70B and GPT-4o write threads on Reddit topics | 251 participants, 1,205 valid pair judgments | mistaken for human 39%; Llama 3 spotted 56%, GPT-4o 66% | full text |
+| Bouleimen et al., Collective Turing test | Scientific Reports 2026 (arXiv 2025) | Llama 3 70B and GPT-4o write threads on Reddit topics | 251 participants; 1,205 valid pair judgments from 203 of them after exclusions | mistaken for human 39%; Llama 3 spotted 56%, GPT-4o 66% | full text |
 | Kamoi et al., CoCoEval | arXiv preprint 2026 | turn-level detection of 10 inconsistent or uncollaborative behaviours; GPT-4.1, GPT-5.1, Claude Opus 4 | frequency comparison with 300 human conversations from 6 meeting and debate sets | LLM output has far fewer such behaviours; prompting overshoots; SFT repeats | full text |
 | Penzo et al., multi-party with constraints | arXiv preprint 2025 | whole-chat generator vs turn-by-turn party | structure, compliance, human and LLM judge | turn-by-turn conforms better, more variety | abstract |
-| Kazemi et al., social patterns in synthetic data | arXiv preprint 2026 | cyberbullying chats from GPT, Grok, Llama | structure, style, affect, escalation, human eval | structure kept; magnitudes and timing distorted | abstract |
-| Zhang et al., MPCEval | arXiv preprint 2026 | reference-free metrics: participation balance, progression, speaker consistency | human and model chats | single scores hide differences | abstract |
-| Nama et al., When2Speak | arXiv preprint 2026 | synthetic transcripts with speak or stay silent labels | downstream task transfer | models stay over-conservative (missed interventions 0.50) | abstract |
+| Kazemi et al., social patterns in synthetic data | arXiv preprint 2026 | cyberbullying chats from GPT-4o, Grok-2, Llama-3.3-70B, compared with 10 authentic teen role-play conversations | structure, style, affect, escalation, human eval | structure kept; magnitudes and timing distorted | abstract |
+| Zhang et al., MPCEval | arXiv preprint 2026 | reference-free metrics: participation balance, progression, speaker consistency | metrics applied to human-written and model-generated chats; no human judgments (listed as future work) | single scores hide differences | abstract |
+| Nama et al., When2Speak | arXiv preprint 2026 | synthetic transcripts with speak or stay silent labels | none against real chat; accuracy on a held-out split of its own synthetic data | SFT models stay over-conservative (missed interventions 0.50 on average); RL with asymmetric reward cut them to 0.19 to 0.22 | abstract |
 | Ge et al., EMSDialog | arXiv preprint 2026 | multi-LLM pipeline from real reports, rule checks | human and LLM eval, downstream training | 4,414 dialogues; training on them helped | abstract |
 | Li et al., SlackBench | arXiv preprint 2026 | privacy-preserving reenactments of real projects | task accuracy of agents | best about 80%, most under 66% | abstract |
 
@@ -231,8 +237,8 @@ What the evidence says:
   frequencies made it overshoot (for example two speakers locked in persistent disagreement).
 - Per-turn generation (one turn per call) gives better constraint conformance and variety (Penzo, abstract; CoCoEval
   [full text] agrees on the direction of the effect).
-- Downstream-task transfer is used when synthetic data trains a model (EMSDialog, When2Speak). It does not tell you
-  whether the chat looks like a team's.
+- Downstream training gains (EMSDialog) and held-out accuracy on the same synthetic data (When2Speak) are used when
+  synthetic data trains a model. Neither tells you whether the chat looks like a team's.
 - Evidence is thin for software-team chat. Nothing I found evaluates synthetic developer or student-team chat against a
   real team with distributions.
 
@@ -260,19 +266,21 @@ from a fixed percentage.
 | Tari and Iamnitchi, Privacy vs fidelity in synthetic social media | arXiv preprint 2026 | authorship attribution (RoBERTa-large) 81% on real Dutch Instagram posts, 16.5% to 29.7% on LLM-generated ones; higher fidelity gives more leakage; metadata and reply graphs not tested | full text |
 | Aquino et al., Discord Unveiled | arXiv preprint 2025 | names replaced by pseudonyms, IDs hashed with SHA-256 truncated to 12 characters; authors state no method guarantees anonymity | full text |
 | Bobicev et al., Can anonymous posters on medical forums be reidentified | J. Med. Internet Res. 2013 | author attribution F-score 75% to 80% for messages of 100 to 150 words and 97.9% for 300+ words, among 30 to 50 candidates | abstract |
-| Khan et al., I Am No One | arXiv preprint 2026 | LLM rewriting cut attribution F1 by 60% to 70% and beat DP baselines on blog and review data | abstract |
+| Khan et al., I Am No One | arXiv preprint 2026 | style-guided LLM rewriting cut attribution F1 by 60% to 70% on blog and review data and, per the authors, outperformed DP baselines (strict DP gave lower F1 on one blog set, but with far worse perplexity) | abstract |
 | Cano and Habernal, DP text generation degrades quality | arXiv preprint 2025 | under strong DP, text was at least 77% shorter, 9% less grammatical, 10% less diverse | abstract |
-| Sun et al., SynBench | arXiv preprint 2026 | DP synthetic text "remains an unsolved challenge"; membership signals remain under tight budgets | abstract |
+| Sun et al., SynBench | arXiv preprint 2026 | DP synthetic text "remains an unsolved challenge"; for one method (AUG-PE) at a tight budget (epsilon 0.5) the audit found measurable membership signal on three datasets, though overall AUC was low | abstract |
 | Zhang et al., scoping review of ethics reporting | J. Med. Internet Res. 2024 | of 108 social-media text studies, 59.3% sought ethical approval, 12.9% explicitly obtained consent, 18.5% used aggregate analysis | abstract |
 | Hemphill et al., Comparative sensitivity of social media data | Scientific Data 2022 | 1,018 people rate social media data moderately sensitive; prefer explicit consent and clear benefits | abstract |
 | Song et al. (student Slack) | arXiv preprint 2026 | IRB approval; 94 of 186 students consented; analysis at individual level; raw messages not released | full text |
-| Martin et al., WhatsApp and Instagram | arXiv preprint 2026 | donated chats from 97 donations; only response timing analysed | abstract |
+| Martin et al., WhatsApp and Instagram | arXiv preprint 2026 | donated chats from 97 participants; only response timing analysed | abstract |
 | Li et al., SlackBench | arXiv preprint 2026 | "privacy-preserving reenactments" of real projects instead of real logs | abstract |
 
 What follows from this (mix of evidence and inference):
 
-- Removing names does not anonymise text. Attribution works on short messages, and LLM pipelines make it cheap
-  (Lermen: the novelty is lower cost, not new signals). A small team is a small candidate pool, so risk is higher
+- Removing names does not anonymise text. Attribution works on short messages within a closed candidate set (Bobicev:
+  25-word texts reached F above 0.60, rising with length), and LLM pipelines make it cheap for whole post histories
+  (Lermen: the novelty is lower cost, not new signals; their profiles are built from many posts, and they did not
+  test single short messages). A small team is a small candidate pool, so risk is higher
   there than in the 89K-candidate test (inference).
 - Hashing identifiers is weak when the identifier space is small or structured (inference; Aquino hashed Discord IDs,
   which are structured numbers, and truncated the hash).
@@ -299,7 +307,7 @@ Values are what the cited source reports; "derived" is my division. Use them as 
 | Consecutive messages of one conversation within 2 min | 94.9% (Kummerfeld); 98% in a second channel | Ubuntu IRC, another IRC channel | IRC support channels |
 | Messages that name an addressee | about 48% (Kummerfeld) | Ubuntu IRC | IRC convention |
 | Conversations under 10 messages | 83.4% (Kummerfeld) | Ubuntu IRC | one channel |
-| Conversation starters with more than one reply | 37.7% (Kummerfeld) | Ubuntu IRC | one channel |
+| Conversation starters with more than one reply, among those with at least one reply | 37.7% (Kummerfeld) | Ubuntu IRC | one channel |
 | Words per message | 16.4 project, 23.0 IT support, 12.8 social (Wang); about 14.8 (derived, Song) | one company's Slack; one course | channel means |
 | Messages per thread | 2.0 project, 4.1 IT support (Wang) | one company's Slack | means |
 | Messages with an @mention, project | about 22% (derived, Wang) | same | ratio of means |
@@ -322,7 +330,8 @@ Values are what the cited source reports; "derived" is my division. Use them as 
    presets, messages per person).
 2. **Tolerance from real-versus-real spread.** Use the range between real communities or samples (examples above)
    where it exists; otherwise start wide, mark the target soft, and tighten when a second real source exists
-   (inference, following Topping et al. and the sample variation in Kummerfeld and Shi).
+   (inference, based on the sample variation in Kummerfeld and Shi; Topping et al. set their pass marks by hand,
+   for example an arbitrary 10.0 on a summed log-scale deviation, so this is not their method).
 3. **Joint check.** All hard targets must pass in the same run. Report each failing pair (May et al.).
 4. **Behaviour-frequency check.** Count planted and incidental behaviours (unanswered questions, off-topic,
    repetition, misunderstandings, conflicting statements, fragments, attachment-only posts) per 100 messages. Because
@@ -383,7 +392,8 @@ After: a person reviews the numbers file before it leaves the machine; keep only
 (which can be public); record team size, period, and consent date, not the team's identity.
 
 Evidence behind this: LLM-based re-identification needs only text (Lermen), short messages are attributable
-(Bobicev; Tari), synthetic text leaks style (Tari), and hashing IDs is not a guarantee (Aquino). I did not retrieve a
+(Bobicev, closed candidate sets; Tari), synthetic text leaks style (Tari), and no anonymisation method is a guarantee,
+even with pseudonyms and hashed IDs (Aquino). I did not retrieve a
 paper on differential privacy for chat histograms; adding noise to counts is the standard tool for aggregates and
 worth considering if numbers from a very small team are ever published (inference).
 

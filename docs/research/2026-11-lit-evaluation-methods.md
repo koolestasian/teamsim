@@ -1,5 +1,9 @@
 # User simulators and credible agent evaluation: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: peer-reviewed papers and arXiv preprints on simulated users for evaluating interactive
 systems, simulated environments for agents, benchmark validity, LLM judges, statistics for
 evals, and reproducibility. The aim is to decide how teamsim's scored reports should be built
@@ -13,25 +17,28 @@ rests on an abstract-only number, treat it as a lead.
 
 ## Summary
 
-1. **Simulated users make evaluation easier than real life.** The only study that ran a whole
-   agent benchmark (tau-bench) with real people (451 participants, 165 tasks) compared them
-   with 31 LLM simulators. Simulators were too cooperative, too uniform, front-loaded all the
-   information, and gave uniformly positive feedback. The best simulator scored 76.0 on the
-   User-Sim Index against 92.9 for humans (Zhou et al., 2026, preprint) [full text].
+1. **Simulated users make evaluation easier than real life.** One study ran a whole agent
+   benchmark (tau-bench) with real people (451 participants, 165 tasks) and compared them
+   with 31 LLM simulators; it is the only such study I found. Simulators were more
+   cooperative and uniform, front-loaded information, and gave more positive feedback. The
+   best simulator scored 76.0 on the User-Sim Index against 92.7 for humans (Zhou et al.,
+   2026, preprint) [full text].
    Meaning for teamsim: a simulated teammate generates pressure and planted facts; it does
    not stand in for a human opinion. Say so in every report.
-2. **Which LLM plays the user can move the score, but less than headlines suggest.** With
-   the agent fixed, success on 115 retail tasks was 67.8, 67.0, 71.3 and 75.9 percent for four
-   user models (3 runs each, SD 1.2 to 3.5); the "9 points" is the largest pair. Against 40
-   people per group, simulators misjudged hard tasks (under) and moderate ones (over), and
-   fitted African American English and Indian English speakers worst (Seshadri et al., 2026,
-   preprint) [full text]. Meaning: a scripted, seeded team removes this variable from the
+2. **Which LLM plays the user can move the score.** With the agent fixed, success on 115
+   retail tasks was 67.8, 67.0, 71.3 and 75.9 percent for four user models (3 runs each, SD
+   1.2 to 3.5); the "9 points" is the largest pair, and the authors read it as a reliability
+   concern for single-model simulation. Against about 40 people per group, simulators
+   misjudged hard tasks (under) and moderate ones (over), and were worst calibrated for
+   African American English and Indian English speakers (Seshadri et al., 2026, preprint)
+   [full text]. Meaning: a scripted, seeded team removes this variable from the
    core score; if a model plays a teammate, record which one and report it.
 3. **Score from world state; judges miss what state shows.** tau-bench grades the final
    database against one expected state (Yao et al., 2024) [full text]; AppWorld uses
    state-based tests that also catch collateral damage (Trivedi et al., 2024) [abstract].
-   On 9,876 tau2 trajectories no judge setup passed AUROC 0.65 at spotting a false "done"
-   claim, while a TF-IDF classifier reached 0.83 (Advani, 2026, preprint) [full text].
+   On tau2, no judge setup passed AUROC 0.65 at spotting a false "done" claim (scored on a
+   295-trajectory set drawn from 9,876 trajectories), while a TF-IDF classifier reached a
+   task-disjoint AUROC of 0.83 (Advani, 2026, preprint) [full text].
    Meaning: deterministic checks against planted facts are the core. Judges only where a
    check cannot be written, and labelled.
 4. **Checkers are the weak point, not only products.** An audit of 10 agent benchmarks found
@@ -49,18 +56,21 @@ rests on an abstract-only number, treat it as a lead.
 7. **Small samples need interval methods that work at small n.** At N = 100, nominal 95
    percent normal-approximation intervals covered 92.5 percent; Wilson and simple Bayesian
    intervals held coverage down to very small N (Bowyer et al., 2025, preprint) [full text].
-   Averaging repeated runs and paired comparison add power because run-to-run noise exceeds
-   question-sampling noise (Wang, 2026, preprint) [full text]. Meaning: Wilson intervals on
+   Averaging predictions per question and using paired comparisons can add power: paired
+   prediction noise typically exceeded data-sampling noise at temperatures around 0.7 to 1,
+   with exceptions at low temperature (Wang, 2026, preprint) [full text]. Meaning: Wilson intervals on
    every rate; paired comparisons between product versions.
 8. **Judge scores can be corrected with a human-labelled sample.** With judge sensitivity
    0.9 and specificity 0.7, about 200 labelled examples give an interval shorter than 0.1
-   in one worked example (Lee et al., 2025, preprint) [full text]. Judges also flip: 13.6
-   percent of pairwise verdicts changed across identical repeats (Yagubyan, 2026, preprint)
-   [abstract]. Meaning: if a judge ever enters a score, ship a calibration set and show the
+   in one worked example (Lee et al., 2025, preprint) [full text]. Judges also flip: pairwise
+   verdicts fell off the per-question majority in 13.6 percent of repeated trials (Yagubyan,
+   2026, preprint) [abstract]. Meaning: if a judge ever enters a score, ship a calibration set and show the
    corrected interval.
-9. **Temperature 0 does not make runs identical.** Nondeterminism persists at temperature 0
-   across providers and hardware (Yuan et al., 2025; Coqueret et al., 2026; Tamba, 2026, all
-   preprints) [abstract]. Meaning: record and replay model calls for any LLM part, and treat
+9. **Temperature 0 does not make runs identical.** Greedy decoding varied across GPU setups
+   in local runs (Yuan et al., 2025); pinning temperature 0 reduced but did not remove flips
+   on borderline items across two API providers (Tamba, 2026); and temperature zero removes
+   deliberate sampling but not other randomness (Coqueret et al., 2026) (all preprints)
+   [abstract]. Meaning: record and replay model calls for any LLM part, and treat
    outputs as draws from a distribution.
 10. **Reports need a record, not only a score.** Changing only the reporting rule changed
     scores by up to 20.9 points and inverted rankings in one study; none of 50 repositories
@@ -82,15 +92,18 @@ controlled, reproducible way (arXiv 2501.04410) [abstract].
 The classic design for task-oriented dialogue is the agenda-based simulator: the user has a
 goal and an agenda of acts, and a stack of pending acts is updated each turn (Schatzmann et
 al., 2007, NAACL short paper; bibliographic record only, I did not read the paper).
-Agenda-based simulators are hand-built, so they are cheap and controlled but have limited
-diversity. A neural simulator trained on a corpus produced better dialogue policies than the
-agenda-based one when both were tested on real users (Kreyssig et al., 2018, preprint)
-[abstract]. Inference: this is the closest published parallel to teamsim's scripted team.
+Kreyssig et al. describe the agenda-based simulator as based on hand-crafted rules with
+limited diversity (2018, preprint) [abstract]. Inference: hand-built rules also make it cheap
+and easy to control; the paper does not say so. A neural simulator trained on a corpus
+produced better dialogue policies than the agenda-based one when both were tested on real
+users, in one restaurant-recommendation domain (same paper). Inference: this is the closest
+published parallel to teamsim's scripted team.
 It is a sound basis for repeatable checks and a weak model of how people really write.
 
 Validation in IR has a literature of its own. Query simulations were checked against real
-TREC queries on retrieval effectiveness, score distributions and effort, with the finding
-that term-level fidelity is still hard (Breuer et al., 2022, preprint) [abstract]. A 2026
+user query variants for TREC topics on retrieval effectiveness, score distributions and
+effort, with the finding that term-level fidelity is still hard (Breuer et al., 2022,
+preprint) [abstract]. A 2026
 review builds a taxonomy of validation measures and gives advice on which to combine
 (Kruff et al., 2026, preprint) [abstract].
 
@@ -98,15 +111,15 @@ review builds a taxonomy of validation measures and gives advice on which to com
 
 | Paper | Venue and year | What was measured | Key number | Depth |
 |---|---|---|---|---|
-| Zhou et al., Sim2Real gap | arXiv 2603.11245, 2026 | 31 simulators vs 451 humans on tau-bench | Best USI 76.0 vs 92.9 human | full text |
+| Zhou et al., Sim2Real gap | arXiv 2603.11245, 2026 | 31 simulators vs 451 humans on tau-bench | Best USI 76.0 vs 92.7 human | full text |
 | Seshadri et al., Lost in Simulation | arXiv 2601.17087, 2026 | Retail tasks, human groups in 4 countries | 45.2% success with US humans; calibration error 15.1 points | full text |
 | Dou et al., SimulatorArena | arXiv 2510.05444, 2025 | 909 annotated conversations, 2 tasks | Profile-conditioned simulators reach Spearman about 0.7 with human ratings | full text |
-| Zhu et al., RealUserSim | arXiv 2605.20204, 2026 | Style match to real users | 24.2% to 45.3% with grounding | abstract |
-| Chopra et al., Persona Policies | arXiv 2605.12894, 2026 | Blind human-vs-sim judgement | Judged human 80.4% of the time, about 2x baseline | abstract |
-| Chen, Simulated Customers | arXiv 2606.20708, 2026 | 793 conversations with verified payments | Resistance halved: 25.1% to 13.5% | abstract |
+| Zhu et al., RealUserSim | arXiv 2605.20204, 2026 | Match to real users on five behavioural dimensions | Match rate 24.2% to 45.3% with grounding | abstract |
+| Chopra et al., Persona Policies | arXiv 2605.12894, 2026 | Blind human-vs-sim judgement | Judged human 80.4% of the time vs 46.5% for the base simulator | abstract |
+| Chen, Simulated Customers | arXiv 2606.20708, 2026 | 2,790 production conversations, 793 ending in a verified payment | Non-buyers' resistance halved: 25.1% to 13.5% | abstract |
 | Mehri et al., distributional gap | arXiv 2605.07847, 2026 | 24 simulators vs 5,000 real conversations per task | Large gap for all; method checked by 15 annotators, 86.7% | full text |
 | Meshi et al., ConvApparel | arXiv 2602.16938, 2026 | Validation framework, good and bad recommenders | Realism gap in all simulators | abstract |
-| Zhou et al., OdysSim | arXiv 2606.14199, 2026 | Trained 8B behaviour model | Reaction alignment 93.2 vs 93.5 real on tau-bench | abstract |
+| Zhou et al., OdysSim | arXiv 2606.14199, 2026 | Trained 8B behaviour model | Reaction alignment 93.2 vs 93.5 real on tau-bench (React dimension only; composite USI below humans) | abstract |
 
 Details from the full texts:
 
@@ -137,8 +150,8 @@ Details from the full texts:
   conversations). Significance tests favoured the profile versions in all four comparisons.
   Real users wrote about 15.5 words per message in math tutoring; a plain simulator wrote
   87.6. Richer profiles made some interaction-style attributes less well followed. Humans
-  themselves varied: in 186 pairs of people who used the same assistant on the same topic,
-  78.5 percent gave different interaction ratings. A simulation costs about 0.09 dollars per
+  themselves varied: in document creation, in 186 pairs of people who used the same
+  assistant on the same topic, 78.5 percent gave different interaction ratings. A simulation costs about 0.09 dollars per
   conversation against about 5.33 for a human [full text]. Inference: a simulator can be good
   enough to rank assistants while still wrong about absolute success rates, and the human
   reference itself is noisy, so "matches humans" needs a human-to-human ceiling (GAUGE uses
@@ -158,13 +171,15 @@ Details from the full texts:
   The method needs a capable model to describe behaviours and a real log; for teamsim it is a
   later, optional validation, not a core dependency.
 - **Disengagement.** In production sales chats simulators inflated eventual non-buyers
-  toward buying and halved their expressed resistance, and telling the simulator it may
-  disengage barely helped (Chen, 2026) [abstract]. Real non-buyers stop; simulated ones ask
+  toward buying and halved their expressed resistance (25.1 to 13.5 percent), and telling
+  the simulator it may disengage cut overall bias five-fold but barely moved the gap
+  between non-buyers and buyers (Chen, 2026) [abstract]. Real non-buyers stop; simulated ones ask
   about price. For teamsim this matters for teammates who ignore, go quiet or disagree.
 
 Where studies disagree: SimulatorArena (reasonable rank agreement) and OdysSim (near-real
-reaction alignment after training a purpose-built model) are more optimistic than Sim2Real
-and Lost in Simulation. The pessimistic studies used real humans on a full agent benchmark
+reaction alignment on one dimension after training a purpose-built model; its composite
+score stays below the human upper bound) are more optimistic than Sim2Real and Lost in
+Simulation. OdysSim does not itself compare against them; the contrast is mine. The pessimistic studies used real humans on a full agent benchmark
 and measured outcome calibration, so I weight them higher for the question "are absolute
 scores right". The optimistic ones use narrower targets (ratings, reaction alignment).
 Weighing: peer-review status is the same (all preprints in my reading); human-sample size
@@ -182,20 +197,25 @@ The papers converge on three layers. Each needs a different kind of evidence.
    with real ones, across difficulty levels? (Sim2Real, Lost in Simulation.)
 3. **Counterfactual sensitivity.** Do scores move the right way when the system under test
    gets better or worse? ConvApparel collects conversations with deliberately good and bad
-   recommenders for this and reports data-driven simulators adapt more realistically to
-   unseen behaviours than prompted ones, though all have a gap [abstract]. A related
+   recommenders for this and reports that data-driven simulators (in-context and fine-tuned)
+   adapt more realistically to an unseen bad agent than prompted ones, though all have a
+   gap; this tests one counterfactual condition only [abstract]. A related
    theoretical paper argues that simulators trained on labels coupled to a past policy
    inject look-ahead bias and that evaluation variance can grow quickly under policy shift
    (Tennenholtz et al., 2026, preprint) [abstract].
 
-What helps, from the abstracts: ground behaviour in real data, not demographics (RealUserSim,
-Persona Policies); combine complementary simulators (Mehri et al.); report results across
-several simulator models (Lost in Simulation's own recommendation).
+What helps, from the abstracts: ground behaviour in real user data (RealUserSim, Persona
+Policies; RealUserSim's profiles combine linguistic style and demographics, and the paper
+does not separate their effects); combining behaviourally complementary simulators may
+reduce the gap (Mehri et al.; a few pairs, intrinsic metrics only, and combining similar
+simulators did not help); report results across several simulator models (Lost in
+Simulation's own recommendation).
 
 ### 1.4 Other uses of simulated people for software testing
 
-A practitioner paper reports a goal-directed "NPC" simulator for a production chat agent, 108
-scenarios over about three months, 77 percent goal achievement at 0.17 dollars per run, with
+A practitioner paper reports a goal-directed "NPC" simulator for a production chat agent, in a
+three-month case study of 257 runs of a 108-scenario suite (the simulator itself was in
+intensive iteration for about two weeks), 77 percent goal achievement at 0.17 dollars per run, with
 weak correlation between canonical-question quality and goal-directed success (Spearman rho
 between -0.15 and 0.14 in one run) (Maiorano, 2026, preprint, single author) [abstract].
 Inference: low cross-layer correlation means different test layers catch different things,
@@ -208,11 +228,11 @@ so teamsim should not collapse them into one score.
 | tau-bench (Yao 2024) | Retail and airline databases, LLM user | Final database equals one expected state, plus required strings in replies; pass^k | full text |
 | tau2-bench (Barres 2025) | Adds dual-control telecom; user also acts on shared state | Programmatic state checks; user simulator tied to tools and state | abstract |
 | AppWorld (Trivedi 2024) | 9 apps, 457 APIs, 100 fictional users | State-based unit tests; allow different solution paths; catch collateral damage | abstract |
-| ToolEmu (Ruan 2023) | LM emulates tool output | LM-based safety evaluator; 68.8% of flagged failures judged valid by humans | abstract |
+| ToolEmu (Ruan 2023) | LM emulates tool output | LM-based safety evaluator; on 100 validation cases, 68.8% of identified failures were true failures with the adversarial emulator (72.5% with the standard one) | abstract |
 | Collaborative Gym (Shao 2024) | Task environments with simulated or real partner | Outcome and process evaluation; win rates judged by real users | abstract |
-| tau-Rec (Narasimhan 2026) | Conversational recommendation | Verifiable catalogue predicates; pass^k; best model 57% at pass^1 and 35% at pass^4 | abstract |
+| tau-Rec (Narasimhan 2026) | Conversational movie recommendation (released benchmark covers movies only) | Verifiable catalogue predicates; pass^k; best model 57% at pass^1 and 35% at pass^4 | abstract |
 | AutoBuddy-Bench (Chen 2026) | Generated company: 44 employees, 6 months, mail, chat, calendar, files, business systems | Expected outcomes computed from world records and rules; no LLM in matching or grading; 120 tasks, 3 runs, 17 models | full text |
-| ClawsBench (Li 2026) | Mock Gmail, Slack, Calendar, Docs, Drive with deterministic snapshot and restore | 44 tasks; task success 39-64% but unsafe-action rates 7-33% | abstract |
+| ClawsBench (Li 2026) | Mock Gmail, Slack, Calendar, Docs, Drive with deterministic snapshot and restore | 44 tasks; with full scaffolding, task success 39-64% but unsafe-action rates 7-33% | abstract |
 | TheAgentCompany (Xu 2024) | Self-hosted fake software company with colleagues to talk to | Best agent completed 30% of tasks | abstract |
 
 Points that matter for teamsim:
@@ -235,35 +255,38 @@ Points that matter for teamsim:
   acceptance check on the generated world runs before any agent is scored (enough tasks,
   every task has a required output, every request states what its answer depends on). One
   world, 120 tasks, 17 backbone models, mean of three runs [full text]. Limit: it renders a
-  static workspace snapshot per employee and day; colleagues do not talk back during the run,
-  and it is a preprint dated within the week. Inference: this is the design pattern teamsim
+  static workspace snapshot per employee and day (my reading is that colleagues do not talk
+  back during the run; the paper does not say), and it is a preprint dated within the week. Inference: this is the design pattern teamsim
   can copy (hidden labels on records, state diff, acceptance check on the world), and it
   shows the "planted facts, state-based score" idea has a published form for single-agent
   workplace tasks, though not for live simulated teammates.
 - **Safety is a separate axis from success.** In mock workspace services with deterministic
   snapshot and restore, task success of 39 to 64 percent came with unsafe-action rates of 7 to
-  33 percent, and the order of models by success and by safety did not agree (Li et al.,
-  2026, preprint) [abstract]. Inference: teamsim should keep "did it do the right thing" and
+  33 percent (full-scaffolding conditions), and higher success did not coincide with lower
+  unsafe-action rates in the sample (Li et al., 2026, preprint) [abstract]. Inference: teamsim should keep "did it do the right thing" and
   "did it do something it should not" as separate columns (secret echoed, injected request
   obeyed).
 - **LM-emulated tools trade realism for coverage.** ToolEmu lets a model invent tool
   results so many tools can be tested cheaply, at the price that about a third of flagged
   failures were not valid [abstract]. teamsim's emulator is state-based, which avoids this.
-- **Replay fidelity is not free even with a real state.** In AppWorld, replaying 71 failed
-  runs gave identical printed output and verdict in 42 cases, rising to 68 after resetting
-  the random-number generator, and four cases still hid materialised-state differences
-  (Liu and Lu, 2026, preprint) [abstract]. Inference: seed every random source in the fake
-  workspace, not just the model.
+- **Replay fidelity is not free even with a real state.** In AppWorld, 42 of 71 failed runs
+  replayed with matching printed output, database changes and verdict in two fresh
+  processes; resetting the random-number generator before each interaction raised that to
+  68, and four cases that matched on output and verdict still differed in database state
+  (Liu and Lu, 2026, preprint) [abstract]. The paper does not make per-interaction reseeding
+  a general fix. Inference: seed every random source in the fake workspace, not just the
+  model.
 - **Judge-free checks can still be unreliable.** tau-bench airline counts a do-nothing agent
   as successful on tasks that should be refused; those tasks are 38 percent of the airline
   set and 6 percent of retail (Zhu et al., 2025) [full text].
 - **Multi-party and team settings.** Collaborative Gym reports communication failures in 65
   percent and situational-awareness failures in 40 percent of real-condition cases [abstract].
-  In a shared-workspace study with 1,482 sessions, adding collaborators lowered performance
-  when coordination structure was absent (Kotalwar et al., 2026, preprint) [abstract]. A
+  In a study of LLM-simulated shared-workspace teams (Collaborative Gym, 1,482 sessions, no
+  real human participants), adding collaborators lowered performance when coordination
+  structure was absent (Kotalwar et al., 2026, preprint) [abstract]. A
   role-separation benchmark found verifiers approve 49 percent of submissions that fail the
   deterministic grader (Kim et al., 2026, preprint) [abstract]. Inference: team behaviour is
-  measurable. The nearest published work (AutoBuddy-Bench above) scores state against facts
+  measurable, though the shared-workspace study above used simulated teams. The nearest published work (AutoBuddy-Bench above) scores state against facts
   derived from a simulated organisation, but I found no paper in which simulated teammates
   talk during the run, plant facts in a live team chat and score a bot against them. That is
   teamsim's niche; it also means there is no validated precedent for the teammate part.
@@ -289,16 +312,18 @@ construct validity and gives eight recommendations (Bean et al., 2025, preprint)
 "AI agents that matter" argues for cost-controlled comparison, separate needs of model and
 downstream developers, proper holdout sets, and standard reporting (Kapoor et al., 2024,
 preprint) [abstract]. A compounding model argues total validity is bounded by the product of
-task, simulator and judge validity, finds the judge layer unmeasurable in four of five
-benchmark setups, and that 26 of 55 agent evaluation papers reported no chance-corrected
-agreement statistic (Caban, 2026, preprint, single author) [abstract]. Inference: treat that
+task, simulator and judge validity (a conceptual bound that assumes independent layer
+failures), does not compute the judge layer for any of the benchmarks in its table, and
+finds that 26 of 55 agent evaluation papers, in a purposive and non-random sample, reported
+no chance-corrected agreement statistic (Caban, 2026, preprint, single author) [abstract]. Inference: treat that
 last paper as an argument, not a measurement.
 
 **Shortcuts and reward hacking.** Verifier hardening studies find 16 percent of 1,968
 terminal tasks hackable from the description alone, and show an iterative hacker-fixer loop
-cut attack success on KernelBench from 62 to 0 percent (Zhong et al., 2026) [abstract]. An
-automated audit tool surfaced 219 flaws across 10 popular benchmarks and fully patched
-WebArena and OSWorld within three iterations (Wang et al., 2026, preprint) [abstract]. On
+cut attack success on KernelBench from 62 to 0 percent on a held-out set of publicly
+reported exploits (Zhong et al., 2026) [abstract]. An automated audit tool surfaced 219 flaws
+across 10 popular benchmarks and, by its own re-audit, patched WebArena and OSWorld to
+unhackable within three patching attempts (Wang et al., 2026, preprint) [abstract]. On
 security tasks, cheating was found in 37.1 percent of baseline passes, and anti-cheat
 prompts cut propensity from 33.0 to 8.5 percent but did not remove it (Kouremetis et al.,
 2026) [abstract]. A maintenance study stresses that audit of passing runs must be repeated as
@@ -312,7 +337,9 @@ domains 45 to 48 percent of failures were, against 3 percent in the dual-control
 domain where the user side could verify state. That contrast is observational (one
 dual-control domain, 15 cases) and the paper flags it as a hypothesis [full text, Advani
 2026]. Inference: a simulated teammate that independently checks the world (for example,
-looks for the promised task) works as a built-in verifier.
+looks for the promised task) might work as a built-in verifier. The paper calls independent
+verification a promising structural defense but says more dual-control environments are
+needed, and it does not test simulated teammates.
 
 **Contamination.** I did not find a paper in this pass that measures contamination of
 simulation-based benchmarks specifically. The ABC and "AI agents that matter" papers argue
@@ -323,14 +350,14 @@ seeds, and to avoid publishing every seed's answer key.
 
 | Paper | Venue and year | Finding | Depth |
 |---|---|---|---|
-| Zheng et al., MT-Bench | arXiv 2306.05685, 2023 | GPT-4 judge over 80% agreement with humans; documents position, verbosity, self-enhancement bias | abstract |
-| Norman et al. | arXiv 2606.19544, 2026 | 21 judges, about 541,000 judgments: kappa deflates exact-match agreement by 33-41 points; test-retest above 0.95 coexists with position bias above 0.10 | abstract |
-| Yagubyan, Coin Flip Judge | arXiv 2606.13685, 2026 | 13.6% of pairwise verdicts flip on identical repeats; 11 repeats needed for a majority to match a 50-trial verdict at 95% | abstract |
+| Zheng et al., MT-Bench | arXiv 2306.05685, 2023 | GPT-4 judge over 80% agreement with humans; examines position, verbosity and self-enhancement bias (says it cannot settle self-enhancement) | abstract |
+| Norman et al. | arXiv 2606.19544, 2026 | 21 judges, about 541,000 judgments: on MT-Bench kappa deflates exact-match agreement by 33.8-41.3 points; in two judges, test-retest above 0.95 coexists with position bias above 0.10 | abstract |
+| Yagubyan, Coin Flip Judge | arXiv 2606.13685, 2026 | Mean flip rate 13.6% (trials off the per-question majority); on average 11 repeats needed for a majority to match a 50-trial verdict at 95% in this dataset | abstract |
 | Mukherjee et al. | arXiv 2606.03043, 2026 | Judges agree with each other as much as humans do but reach 58-66% of human agreement on subjective rubrics; gap mostly closes on a verifiable one | abstract |
-| Advani | arXiv 2606.09863, 2026 | No judge setup above AUROC 0.65 on false success | full text |
+| Advani | arXiv 2606.09863, 2026 | No judge setup above AUROC 0.65 on false success on tau2 (0.54 on AppWorld) | full text |
 | Bodhwani et al., GAUGE | arXiv 2609.12191, 2026 | 57.5% of conversations rated satisfied failed the task; decision disagreement 31% on close pairs | full text |
-| Owiredu-Ashley | arXiv 2607.07474, 2026 | Three-judge panel matched a deterministic oracle at Krippendorff alpha 0.91 but shared blind spots | abstract |
-| Lee et al. | arXiv 2511.21140, 2025 | Bias-corrected judge estimate with human calibration set; can beat human-only in some regimes | full text |
+| Owiredu-Ashley | arXiv 2607.07474, 2026 | Three-judge panel reproduced a deterministic oracle at ordinal Krippendorff alpha 0.91 but shared blind spots | abstract |
+| Lee et al. | arXiv 2511.21140, 2025 | Bias-corrected judge estimate with human calibration set; can beat human-only in some regimes, though no judge tested on Chatbot Arena fell in them | full text |
 
 Reading across them:
 
@@ -348,12 +375,13 @@ Reading across them:
   pairs, averaging four judges did not help (their errors were correlated at 0.67 to 0.98),
   and same-family self-preference added 0.75 points on a 7-point scale. A free "did the
   conversation finish" bit tracked severe regressions (rho 0.87) but caught only 3.5 percent
-  of failures overall because 96.5 percent end normally. Limits: three annotators, simulator
-  plus judge from one study family, preprint [full text]. Inference: evidence access, not
+  of failures overall because 96.5 percent end normally. Limits the
+  authors state: a small panel of three annotators, budget-style degradation coverage and
+  synthetic task substrates; preprint [full text]. Inference: evidence access, not
   model strength, is what separates a useful judge from a useless one, so any teamsim judge
   must be given the planted-fact record and the emulator state, never the transcript alone.
-- **Consistency is not validity.** High test-retest reliability coexisted with strong
-  position bias (Norman et al.), and local judges with 92 to 97 percent self-consistency
+- **Consistency is not validity.** In two of 21 judges, high test-retest reliability
+  coexisted with position bias (Norman et al.), and local judges with 92 to 97 percent self-consistency
   correlated 0.28 to 0.34 with humans (Tiwari, 2026, preprint, small study) [abstract].
 - **Judge agreement can mislead.** Inter-judge agreement was not evidence of human alignment
   until a geometric check passed (Mukherjee et al.).
@@ -366,11 +394,12 @@ Reading across them:
   example needs about 200 labelled items for an interval under 0.1 (sensitivity 0.9,
   specificity 0.7, judged-correct share 0.3). Their framework also states regimes in which the
   corrected judge estimate has lower variance than a human-only estimate with the same
-  annotation budget. Prediction-powered inference gives a related, assumption-light route to
-  valid intervals from a small labelled set plus many model predictions (Angelopoulos et al.,
-  Science 2023, arXiv 2301.09633) [abstract]. A 2026 practitioner guide warns that reusing
-  training data for inference makes intervals too narrow (Song et al., 2026, preprint)
-  [abstract].
+  annotation budget. Prediction-powered inference gives a related route to valid intervals
+  from a small labelled set plus many model predictions, with no assumptions on the
+  prediction model but with sampling and CLT conditions (Angelopoulos et al., 2023, arXiv
+  2301.09633) [abstract]. A 2026 practitioner guide says two of its three assumptions are
+  largely untestable in practice and warns that reusing training data for inference makes
+  intervals too narrow (Song et al., 2026, preprint) [abstract].
 - **Bias mitigation helps unevenly.** A nine-strategy comparison found style bias (0.10 to
   0.76) far larger than position bias (at most 0.04), and that debiasing gains differ by
   model (Soumik, 2026, preprint, single author) [abstract].
@@ -392,7 +421,8 @@ observed in n runs, the 95 percent Wilson lower bound on the success rate is n/(
 
 **Noise sources.** Total noise has a prediction part (different answers to the same item) and
 a data part (which items were sampled). Across many evals, paired prediction noise typically
-exceeded paired data noise, so averaging repeated runs raises power; fixing a seed or
+exceeded paired data noise at temperatures around 0.7 to 1, so averaging predictions per
+question can raise power; at low temperature the balance can reverse. Fixing a seed or
 temperature is brittle and only works for the exact same model (Wang, 2026) [full text]. Two
 models at 60 and 61 percent can differ "significantly" with enough samples per item, or not at
 all with one sample; the conclusion depends on which metric you report [full text].
@@ -400,8 +430,8 @@ all with one sample; the conclusion depends on which metric you report [full tex
 **Paired comparisons and power.** Comparing two versions on the same items is more powerful
 than comparing separate rates. A 2026 diagnostic found that 11 of 40 Open LLM Leaderboard v1
 pairwise comparisons and 4 of 9 top-10 neighbour pairs on MMLU-Pro were unresolved at 5
-percent significance and 80 percent power, and that a popular power shortcut is off by about
-a factor of two near small effects (Kotawala, 2026, preprint) [abstract]. Multiple
+percent significance and 80 percent power, and that a widely used unpaired power shortcut is off by about
+a factor of two in the close-comparison regime (Kotawala, 2026, preprint) [abstract]. Multiple
 comparisons: the judge-debiasing study applied Holm-Bonferroni correction [abstract]; I did
 not find an agent-evaluation paper that treats multiple comparisons across many check types
 in depth. Inference: teamsim runs 15 or more checks per report, so it should not read a
@@ -412,57 +442,64 @@ k (Yao et al., 2024) [full text]. Their unbiased estimators use n trials and c s
 pass^k = E[C(c,k)/C(n,k)]. A broader proposal lists twelve metrics along consistency,
 robustness, predictability and safety and finds that over 24 months of model releases
 overall reliability improved only slightly across 15 models. Its protocol is directly
-reusable: each task is run K = 5 times with different seeds at temperature zero (so remaining
-variance is non-sampling noise); outcome consistency per task is (2p - 1)^2 where p is the
+reusable: each task is run K = 5 times with different seeds at temperature zero for
+non-reasoning models (reasoning models keep provider defaults), so the authors attribute
+remaining variance to non-sampling noise; outcome consistency per task is (2p - 1)^2 where p is the
 success rate over the K runs; robustness is tested with 5 paraphrases of each instruction, a
 fixed 0.2 probability of injected API and tool faults, and renamed or reformatted tool
 interfaces. It also reports that 24 of the 50 original tau-bench airline tasks contain
 grading errors (flawed labels, ambiguous specs) as found by earlier work, so it used the
 26 verified tasks (Rabanser et al., 2026, preprint) [full text]. The authors recommend
-generative, parameterised benchmarks (rename fields, reorder responses, inject faults) which
-also limit lookup shortcuts. A Markov-chain
+generative, parameterised benchmarks (rename fields, reorder responses, inject faults) and
+say these could also mitigate shortcuts such as looking up answers online. A Markov-chain
 treatment shows pass@k, pass^k and reliability-decay curves are projections of one
 success-time distribution and gives credible and bootstrap intervals (Tran-Truong and Le, 2026,
 preprint) [abstract].
 
-**Nondeterminism.** Greedy decoding still varied: up to 9 percent accuracy variation from GPU
-count, type and batch size for a reasoning model (Yuan et al., 2025) [abstract]; a grader
+**Nondeterminism.** Greedy decoding still varied: under bfloat16, up to 9 percent accuracy
+variation from GPU count, type and batch size for a reasoning model (DeepSeek-R1-Distill-
+Qwen-7B in local runs; Yuan et al., 2025) [abstract]; a grader
 flipped pass/fail on borderline items at default temperature with up to 50 percent
 per-item disagreement over 20 runs, and 1 to 2 of 7 borderline items still flipped at
-temperature 0 (Tamba, 2026) [abstract]; one provider family has removed the temperature
-setting (same paper). An economics-methods paper treats outputs as draws and proposes a
+temperature 0 (Tamba, 2026) [abstract]; the same paper reports that Claude Opus 4.7 and 4.8
+have deprecated the temperature setting. An economics-methods paper treats outputs as draws and proposes a
 reporting standard (Coqueret et al., 2026) [abstract].
 
 **Flaky tests from software engineering.** Flakiness is tests that pass and fail on the same
 code. In 876,186 Python test cases from 22,352 projects, 59 percent of flaky tests were
-order-dependent, 28 percent were infrastructure, and the authors estimate a passing test needs
-about 170 reruns for 95 percent confidence that it is not flaky (Gruber et al., 2021,
-preprint) [abstract]. LLM-generated tests were slightly flakier than existing ones, mostly
-from unordered collections (63 percent of 115 flaky tests) (Berndt et al., 2026, preprint)
-[abstract]. Inference: the same sources of flakiness apply to simulation-based tests
-(ordering of messages, timing, shared state between scenarios, network), and the cheapest
-cure is the one SE uses: isolate state, remove time and random dependence, and report
-"flaky" as its own verdict rather than a failure.
+order-dependent, 28 percent were infrastructure, and the authors estimate about 170 reruns
+for 95 percent confidence that a test is not flaky for non-order-dependent reasons (31
+random-order executions for order dependence) (Gruber et al., 2021, preprint) [abstract].
+LLM-generated database tests had a slightly higher proportion of flaky tests than existing
+ones, though this varied by project and model; unordered collections caused 72 of 115 flaky
+generated tests (63 percent), all of them in tests generated for DuckDB (Berndt et al.,
+2026, preprint) [abstract]. Inference (ours, not from the papers): similar flakiness sources
+(ordering of messages, timing, shared state between scenarios, network, randomness) may
+affect simulation-based tests. The Python study warns that rerunning flaky tests might
+mask actual bugs. The cure I propose is to isolate state, remove time and random
+dependence, and report "flaky" as its own verdict rather than a failure.
 
 ## 6. Reproducibility and reporting
 
 - **Model and eval documentation.** Eval Factsheets propose a questionnaire across Context,
   Scope, Structure, Method and Alignment (reliability, validity, robustness) (Bordes et al.,
   2025, preprint) [abstract]. Evaluation Cards derive a reporting schema from 52 papers and
-  10 stakeholder interviews and measure documentation completeness across 635 benchmarks
+  stakeholder interviews (12 in the body, 10 in the abstract) and measure documentation completeness across 635 benchmarks
   (Ghosh et al., 2026, preprint) [abstract]. A pilot audit of 12 benchmark papers scored 0.38
   on a 5-field disclosure schema for the agent ones, with none reporting inference cost
   (Moghadasi and Ghaderi, 2026, preprint, single auditor) [abstract].
 - **Rollout records as the unit of reproducibility.** Rollout Cards bundle the run record and
   state the reporting rules and a manifest of dropped runs; in one re-grading, only the
   reporting rule changed scores by up to 20.9 points (Masters et al., 2026) [abstract].
-- **Seeds and replay.** A fixed seed does not reproduce a hosted model. Replaying a recorded
-  trace is the practical answer, and AppWorld shows state replay also needs the random
-  number generator reset (Liu and Lu, 2026) [abstract].
+- **Seeds and replay.** Inference: a fixed seed does not reproduce a hosted model (Tamba
+  found flips at temperature 0), so replaying a recorded trace is the practical answer. In
+  AppWorld, resetting the random-number generator changed which failed runs replayed
+  faithfully, but the paper says per-interaction reseeding is not a generally correct
+  restoration policy (Liu and Lu, 2026) [abstract].
 - **Cost.** Enterprise-oriented work argues for cost-controlled reporting; one preprint
-  (single author) reports a drop from 60 percent at one run to 25 percent at eight-run
-  consistency (Mehta, 2025) [abstract]. Treat the number with care; the direction agrees with
-  tau-bench's own results.
+  (single author) cites a drop from 60 percent at one run to 25 percent at eight-run
+  consistency (Mehta, 2025) [abstract]. The paper attributes that figure to tau-bench, so it
+  is not a new measurement.
 
 ## Implications for teamsim
 
@@ -488,19 +525,27 @@ extrapolating from agent benchmarks to a team-chat simulator.
    specificity from the calibration set and show the widened interval (Lee et al.). Use at
    least 200 human labels for a usable interval, or none and say so (Lee et al.'s worked
    example; Inference for teamsim's case).
-5. **Never use a judge to certify that the product did a thing.** Verify the thing in the
-   emulator's state instead (Advani; Zhou et al. found rule-based rewards miss quality but
-   also that simulated feedback is inflated).
+5. **Do not use a judge to certify that the product did a thing.** Verify the thing in the
+   emulator's state instead. Advani found judges poor monitors for false success and
+   recommends lightweight detectors only as triage signals, with direct
+   trajectory-environment checks for higher-stakes use; the blanket rule is my
+   recommendation. Zhou et al. found rule-based rewards miss quality but also that simulated
+   feedback is inflated.
 6. **Hidden labels on the world's records.** Label every planted and background message in
    the fake workspace (open request, answered request, decoy, injected text, secret) and
-   score mistakes against those labels, as AutoBuddy-Bench does, so that "invented work" and
-   "treated an answered request as open" count as errors, not only misses. Run an
-   acceptance check on each generated scenario before any product is scored (every check has
-   an expected outcome, every planted fact is reachable by a reasonable reader). Source:
-   AutoBuddy-Bench (full text); ABC items on verifying ground truth.
+   score mistakes against those labels, so that "invented work" and "treated an answered
+   request as open" count as errors, not only misses. AutoBuddy-Bench hides labels on every
+   rendered record and scores answered or colleague-owned requests treated as open as
+   mistakes; the decoy, injected-text and secret labels are my extension. Run an acceptance
+   check on each generated scenario before any product is scored (every check has an
+   expected outcome; every planted fact is reachable by a reasonable reader, which is my
+   addition: AutoBuddy-Bench's check covers task-set size, a required output per task and
+   what each request's ground truth depends on). Source: AutoBuddy-Bench (full text); ABC
+   items on verifying ground truth.
 7. **Separate columns for "did the right thing" and "did something it should not"**
-   (ClawsBench's unsafe-action rate moved independently of success). Inference for teamsim's
-   checks on secrets, injection and visibility.
+   (in ClawsBench's sample, unsafe-action rate did not track task success across models; a
+   cross-model observation, not a within-model test). Inference for teamsim's checks on
+   secrets, injection and visibility.
 8. **Perturb, do not only repeat.** Rabanser et al. combine repeats (K = 5) with paraphrased
    instructions, injected faults and renamed or reordered interfaces. For teamsim: reorder
    and re-time messages, paraphrase planted facts, drop or delay events, rename users.
@@ -509,16 +554,20 @@ extrapolating from agent benchmarks to a team-chat simulator.
 ### B. Simulator design (model-free default vs a model)
 
 - **Default: a scripted, seeded team with no model.** It removes the user-LLM variable (Lost
-  in Simulation), is replayable (Liu and Lu on RNG; Tamba, Yuan on model nondeterminism), and
-  costs nothing. The literature's warning is that scripted or agenda-based simulators have
-  limited diversity (Kreyssig et al.), so make the script generator vary behaviour facets
-  deliberately: terseness, vagueness, late corrections, interruption, silence,
+  in Simulation), is replayable by construction (Inference; model calls are not, even at
+  temperature 0 per Tamba and Yuan, and RNG state affected AppWorld replay per Liu and Lu),
+  and costs nothing. The literature's warning is that the hand-crafted agenda-based
+  simulator has limited diversity (Kreyssig et al.); a scripted team may share this, so make
+  the script generator vary behaviour facets deliberately: terseness, vagueness, late corrections, interruption, silence,
   disagreement, and reaction to bot errors (Sim2Real's D1 to D4). Inference.
 - **Model-played teammates are optional, recorded and labelled.** Record every model call so
-  a run can be replayed; state the model and version; report results across at least two
-  simulator models when a model plays a teammate (Seshadri et al.). Do not claim small local
-  models are valid simulators without measuring (OdysSim trains a dedicated 8B model, which
-  suggests off-the-shelf small models are not enough, an Inference).
+  a run can be replayed and state the model and version (Inference; Coqueret et al. advise
+  recording the model identifier, call time and raw outputs). Report results across at
+  least two simulator models when a model plays a teammate (Seshadri et al. recommend
+  reporting across multiple user models). Do not claim small local models are valid
+  simulators without measuring (OdysSim trains a dedicated 8B model and finds raw Qwen3
+  checkpoints weak on its probe; it did not test small local models as simulators, so "not
+  enough" is an Inference).
 - **Do not ship simulated feedback as opinion or forecast** without the gate: planted-issue
   recall, diversity report, flip-on-pushback sycophancy probe, no-persona baseline. The
   literature supports labelling it "hypotheses": simulated feedback is uniformly more
@@ -536,14 +585,19 @@ extrapolating from agent benchmarks to a team-chat simulator.
   the "hide under 10" rule with "show, but never without the interval and the count"; the
   interval itself shows the problem at small n (Bowyer et al.). Inference from the Wilson
   arithmetic above.
-- **Version comparisons are paired.** Same scenarios and seeds, report the difference in
-  paired success with an interval, or a sign test (Wang; Kotawala). Compare to a pre-declared
-  primary check to limit multiple comparisons (Inference).
+- **Version comparisons are paired.** Same scenarios and seeds (Inference), report the
+  difference in paired success with an interval (Kotawala recommends a McNemar-based
+  required sample size for binary outcomes and a paired bootstrap for graded metrics; Wang
+  shows the power gain), or a sign test (Inference). Compare to a pre-declared primary check
+  to limit multiple comparisons (Inference).
 - **Show noise, not just means.** Split "variation across seeds" from "variation across
-  scenarios" (Wang's prediction vs data noise); use clustered intervals when several checks
-  come from one scenario (Miller; Bowyer et al.).
-- **Report cost and time**, since agent benchmarks that omit them are not comparable
-  (Kapoor et al.; Moghadasi and Ghaderi).
+  scenarios" (my application of Wang's prediction vs data noise); use clustered intervals
+  when several checks come from one scenario (Miller recommends clustered standard errors for
+  grouped questions; Bowyer et al. found clustered CLT intervals also fail at small n and
+  support clustered Bayesian intervals).
+- **Report cost and time**, since the same accuracy can come at very different cost
+  (Moghadasi and Ghaderi); Kapoor et al. argue for cost-controlled comparison with dollar
+  costs and token counts.
 
 ### D. Reporting uncertainty
 
@@ -562,11 +616,14 @@ labels "simulated, not human" and "planted facts are fictional".
    pass the oracle bot, and the cheating bot must not reach the key. Inference: this is
    cheap and, in my reading, nobody has published it for team chat.
 2. **Counterfactual sensitivity.** Run a deliberately weak and a deliberately strong
-   product and confirm scores separate (ConvApparel's good-and-bad-system idea).
+   product and confirm scores separate (borrowed from ConvApparel's good and bad
+   recommenders, which it uses to test whether simulated users shift behaviour as real ones
+   do; applying the idea to a product's scores is Inference).
 3. **Behaviour fidelity against a small real log.** Compare the scripted team's message
    statistics (length, politeness markers, questions per turn, correction rate, response
    delay) with an anonymised real team chat on the four facets Sim2Real uses, using Dice
-   overlap or clustered distribution divergence (Mehri et al.). Publish the gap, do not hide
+   overlap (Sim2Real) or clustered distribution divergence (Mehri et al., who use six facets
+   of their own on WildChat, not a team chat). Publish the gap, do not hide
    it. Real data must be anonymised and consented to; ADR rules on real data still apply.
 4. **Outcome calibration against humans (optional, later).** Ask a small number of people to
    play teammates for a few scenarios and compare success with the scripted team's, binned by
@@ -581,7 +638,8 @@ labels "simulated, not human" and "planted facts are fictional".
 
 - Freeze and version the scenario set and the emulator image; never depend on live external
   services (ABC T.6).
-- Seed all random sources in the fake workspace; record the seed in the report (Liu and Lu).
+- Seed all random sources in the fake workspace; record the seed in the report (Inference,
+  motivated by Liu and Lu, who do not endorse per-interaction reseeding as a general fix).
 - Record and replay any model call; accept that hosted models change silently (Coqueret et
   al.).
 - Keep held-out seeds unpublished so a product cannot overfit the published answer keys
@@ -596,7 +654,8 @@ labels "simulated, not human" and "planted facts are fictional".
   need a small, well-controlled world (tau-bench's 115 and 50 tasks; AppWorld's 750 tasks
   took heavy engineering). Tasks and issues next.
 - **First user:** unchanged; the review adds a selling point for builders: results come with
-  intervals and controls, which most agent benchmarks lack (BetterBench; ABC).
+  intervals and controls, which many benchmarks lack (BetterBench: 14 of 24 assessed
+  benchmarks did not report significance or uncertainty; ABC on agent benchmarks).
 - **ADR 0003 gate:** add "outcome of each control bot" and "human-comparison on proxy
   tasks" to the measures, and require that simulated-feedback output show baselines (see
   section B). Thresholds are my proposals, see below.
@@ -605,10 +664,10 @@ labels "simulated, not human" and "planted facts are fictional".
 
 | Threshold | Value | Source |
 |---|---|---|
-| Interval method | Wilson, 95% | Bowyer et al. (full text) |
+| Interval method | Wilson (or Beta-Bernoulli Bayesian), 95% | Bowyer et al. (full text) |
 | Repeats per scenario if a model is in the product loop | at least 5, report pass^k | Yao et al. (3+ trials used); Inference |
 | Judge calibration labels | at least 200 for a CI under 0.1 in the worked example | Lee et al. (full text) |
-| Judge repeats for any judge verdict kept | 11 or more majority-vote repeats | Yagubyan (abstract; small study) |
+| Judge repeats for any judge verdict kept | at least 10 majority-vote repeats (11 reached 95% fidelity on average; high-flip questions need more) | Yagubyan (abstract; small study) |
 | Control bots | do-nothing must fail every check; oracle must pass | Zhu et al. (full text); Inference |
 | Chance-corrected agreement for any human-labelled set | Cohen or Krippendorff, not raw agreement | Norman et al.; Caban |
 | Judge validation status | Show "validated n=..." or "unvalidated" | tau2 labels (run-1 note); Eval Factsheets |
@@ -645,17 +704,24 @@ labels "simulated, not human" and "planted facts are fictional".
   documentation. The literature does not give 10 as a threshold; it says use intervals that
   stay valid at small n. Recommendation: always show count and Wilson interval; do not hide
   rates. This refines, rather than contradicts, the note.
-- **"Agent success varies by up to 9 points depending on the user LLM."** True as the
-  largest pair, but on 115 tasks with 3 runs three of four user models overlapped
-  (67 to 71 percent) and one differed by about 9 points (Seshadri et al., full text). The
-  effect is real but smaller and noisier than the headline. It supports the model-free
-  default; it does not support "simulator LLMs are generally unreliable".
+- **"Agent success varies by up to 9 points depending on the user LLM."** Confirmed. On 115
+  tasks with 3 runs, three of four user models overlapped (67 to 71 percent) and one was
+  about 9 points higher (Seshadri et al., full text). The authors read this as a reliability
+  concern for single-model user simulation and recommend reporting across several user
+  models, and their wider findings (miscalibration against humans, dialect disparities)
+  argue that LLM-simulated users are unreliable proxies. It supports the model-free default
+  and reporting across user models.
 - **The note treats a scripted team as the safe default without a caveat.** The literature
-  says scripted simulators are repeatable but low in diversity (Kreyssig et al.) and that
-  validity then rests on the checks, not on the realism of the people. Teamsim should still
-  validate behaviour against real logs.
-- **The note says "avoid LLM judges in the core".** Supported and strengthened (Advani:
-  AUROC at most 0.65; GAUGE: 57.5 percent of satisfied conversations failed). Not in conflict.
+  says the hand-crafted agenda-based simulator has limited diversity (Kreyssig et al.). That
+  a scripted team is repeatable, and that validity then rests on the checks more than on the
+  realism of the people, is my inference. Teamsim should still validate behaviour against
+  real logs.
+- **The note says "avoid LLM judges in the core".** Supported for transcript-only and
+  satisfaction-style judges (Advani: no tested configuration above AUROC 0.65 on tau2;
+  GAUGE: 57.5 percent of satisfied conversations failed). Not a blanket ban: GAUGE's judge
+  with access to the tool calls and task carried signal, so the rule is judges only with
+  evidence access and never as the primary detector, which matches section A. Not in
+  conflict.
 - **ADR 0003** asks for diversity, sycophancy and human-comparison measures. The literature
   adds two it does not mention: control bots (do-nothing, oracle, cheat) for the checker, and
   outcome calibration against humans on the same scenarios. No contradiction; both are
@@ -714,7 +780,7 @@ peer-reviewed versions except where a venue is named.
 - Judging the Judges: bias mitigation strategies, Soumik, 2026, https://arxiv.org/abs/2604.23178 [abstract]
 - Beyond Attack-Success Rate: Action-Graded Severity Scale, Owiredu-Ashley, 2026, https://arxiv.org/abs/2607.07474 [abstract]
 - How to Correctly Report LLM-as-a-Judge Evaluations, Lee et al., 2025, https://arxiv.org/abs/2511.21140 [full text]
-- Prediction-Powered Inference, Angelopoulos et al., Science 2023, https://arxiv.org/abs/2301.09633 [abstract]
+- Prediction-Powered Inference, Angelopoulos et al., 2023, https://arxiv.org/abs/2301.09633 [abstract]
 - Demystifying Prediction Powered Inference, Song et al., 2026, https://arxiv.org/abs/2601.20819 [abstract]
 - Adding Error Bars to Evals, Miller, 2024, https://arxiv.org/abs/2411.00640 [abstract]
 - Position: Don't Use the CLT in LLM Evals With Fewer Than a Few Hundred Datapoints, Bowyer et al., 2025, https://arxiv.org/abs/2503.01747 [full text]

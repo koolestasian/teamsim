@@ -1,5 +1,9 @@
 # Ground truth, test oracles and scenario-based simulation testing: literature review (2026-11-11)
 
+Full-text check updated 2026-11-12: [method and limits](2026-11-lit-fulltext-check.md).
+Depth tags retain the initial reading pass unless updated; current source access is
+recorded per paper in the [bibliography](bibliography/).
+
 Scope: how to design teamsim's planted facts, scenarios, presets and checks so that the scores
 mean something. Covers the oracle problem, metamorphic testing, scenario-based testing in
 driving and robotics, mutation analysis of check suites, combinatorial coverage, chatbot
@@ -15,7 +19,8 @@ mine, not the papers'.
 1. **A planted fact is a specified oracle, the strongest kind.** The oracle survey (Barr et al.)
    separates specified oracles (from a specification), derived oracles (from other versions,
    properties or past runs), implicit oracles (crashes) and human oracles. One 2026 preprint
-   shows that an oracle whose expected value flows from the system under test cannot fail.
+   shows that an oracle whose expected value flows from the system under test cannot detect
+   faults that move that value (one system, one author).
    teamsim plants the facts itself, so its expected values come from outside the product.
    *For teamsim: keep every expected value in the preset; never derive it from the product's
    output, and never let a model's reading of the product's output set the expected value.*
@@ -31,11 +36,14 @@ mine, not the papers'.
    10 reruns (others flipped). The best multi-turn dialogue method reached 75.8% precision on
    120 sampled bugs. *For teamsim: a relation ships only with a measured false-positive rate
    on a known-good product, and its failures are advisory until that rate is known.*
-4. **Multi-turn relations beat single-turn ones for dialogue.** MORTAR found 164% more bugs
-   and 51% more bugs per test case than the best single-turn baseline (8 systems). *For
-   teamsim: relations over the whole chat (reorder, split, paraphrase earlier messages,
-   rename handles) fit a team chat better than per-question relations.*
-5. **Scenario description is a solved design problem in driving; copy the layering.** Scenic
+4. **Multi-turn relations beat single-turn ones on question-answer dialogues.** MORTAR found
+   164% more bugs and 51% more bugs per test case than the best of two single-turn methods
+   (METAL and QAAsker) adapted to multi-turn use, on CoQA dialogues and 8 systems. It has no
+   multi-turn baseline and was not tested on team chat. *For teamsim (inference): relations
+   over the whole chat (reorder, split, paraphrase earlier messages, rename handles) may fit
+   a team chat better than per-question relations; MORTAR's own perturbations are round
+   shuffle, reduction and duplication, and the fit of the others is untested.*
+5. **Driving offers useful scenario layers, with validation still open.** Scenic
    treats a scenario as a distribution and a test as a sample; the driving literature separates
    logical scenarios (parameter ranges) from concrete ones and ties coverage to an Operational
    Design Domain. A 2026 survey names the absence of standard evaluation metrics as a gap.
@@ -44,11 +52,12 @@ mine, not the papers'.
 6. **Measure check quality with mutants, not with coverage.** In a 2026 study of multi-agent
    workflows (29,601 agent runs, 1,084 mutants) the best baseline test suite killed 0.717 of
    structural mutants and 0.559 of safety mutants; removing a restriction was the least
-   detected fault (0.19 to 0.28) because it is silent unless a test probes it directly.
+   detected fault (0.19 to 0.28 under the outcome criterion) because it is silent unless a test probes it directly.
    *For teamsim: ship a small library of deliberately broken reference products and report the
-   share of them the checks catch, plus a negative probe for every "must not happen" check.*
+   share of them the checks catch, plus a negative probe for every "must not happen" check
+   (inference: the paper shows the need for restriction faults only).*
 7. **Simulation tests are flaky and the field has measured it.** In driving simulators the
-   upper bound of hard flaky rates across five test setups ranged from 1% to 66%; setups with
+   upper bound of hard flaky rates across five test setups ranged from 1% to 74%; setups with
    more moving actors or an end-to-end model were flakier than a bare lane-keeping setup. *For teamsim: the
    scripted, seeded team removes the simulator's share of flakiness; what remains comes from
    the product, timing and any model, so rerun failures and report a pass rate.*
@@ -59,15 +68,15 @@ mine, not the papers'.
    1.00, 20 seeds). It is a single-coder, single-case study. *For teamsim: document every
    preset in ODD order, and add the LLM blocks only for presets where a model plays teammates.*
 9. **Validate against several patterns and for a stated purpose.** Pattern-oriented modelling
-   (Grimm et al., 2005) and a 2026 adaptation for LLM social simulation check intermediate
-   patterns, not only the end state. Sargent's validation tutorial: a model is valid for a set
+   (Grimm et al., 2005) and a 2026 proposal for LLM social simulation (shown only on three
+   hypothetical traces) check intermediate patterns, not only the end state. Sargent's validation tutorial: a model is valid for a set
    of experimental conditions within an accuracy range fixed before building; passing many
    conditions does not make it valid everywhere. *For teamsim: simulated feedback (ADR 0003)
-   needs a stated purpose, an accuracy range set in advance and several independent patterns.*
-10. **LLM judges are reliable more than they are valid.** One study finds judges unchanged
-    under irrelevant edits (S = 0.945) but changing under real construct edits only 31.9% of
-    the time (R = 0.319); another finds LLMs accept 96% of valid outputs but reject under 25%
-    of invalid ones. *For teamsim: any model-judged check must report both invariance and
+   needs a stated purpose, an accuracy range set in advance and several patterns at different scales.*
+10. **Judge reliability does not establish construct sensitivity.** One study reports mean
+    invariance S = 0.945 and sensitivity R = 0.319 across judges at matched invariance, using
+    human-directed edits to claim scope and strength; another finds most LLM validators accept over 96% of valid outputs
+    but typically reject under 25% of invalid ones. *For teamsim: any model-judged check must report both invariance and
     sensitivity measured on planted known-bad answers.*
 
 ## 1. Test oracles and fuzzy outputs
@@ -85,11 +94,11 @@ When no oracle is available, partial oracles and reducing the human cost are the
 | Paper | Venue, year | Finding | Depth |
 |---|---|---|---|
 | Mughal and Bilal, LLM-based test oracles | IEEE Access, 2026 | 2,436 records, 54 studies, 83 with snowballing. Just over half reach a verdict with no specification. Oracle quality mostly judged by resemblance to a known oracle, rarely by whether injected faults are caught. | abstract |
-| Canedo, Oracles that cannot fail | arXiv preprint, 2026 | An expectation that flows from the code under mutation cannot detect the fault. 366 mutants, 4 modules, one system, one author. Re-anchoring one oracle on published procedure recovered 8 of 46 mutants. | abstract |
+| Canedo, Oracles that cannot fail | arXiv preprint, 2026 | An expectation that flows from the code under mutation cannot detect a fault that moves it together with the measurement, when the anchored value sizes the comparison; where it only places a scenario or feeds a loose bound the paper calls the self-reference latent, with no measured loss. 366 mutants, 4 modules, one system, one author. Re-anchoring one oracle on published procedure recovered 8 of 46 mutants. | abstract |
 | Jain et al., Mind the gap | arXiv preprint, 2023 | The "oracle gap" (coverage minus mutation score) flags weak oracles; observational study over Maven projects. | abstract |
-| Hossain and Dwyer, oracle-based adequacy | arXiv preprint, 2022 | Code coverage ignores oracle quality; oracle-based coverage metrics detect faults better. | abstract |
+| Hossain and Dwyer, oracle-based adequacy | arXiv preprint, 2022 | Survey of 7 publications. Code coverage says nothing about oracle quality; the reviewed studies report that oracle-based coverage metrics detect more faults. One user study of state coverage could not confirm a significant link to fault detection. No new experiments. | abstract |
 | Balli, Test oracle problem in LLM-as-judge corpora | arXiv preprint, 2026 | Corpora built by deterministic perturbation of a gold answer carry an item-level oracle; LLM-generated negatives do not. A silent generation fault produced a fake 32-point effect that replicated from N=50 to N=500. | abstract |
-| Kim et al., Metamorphic testing of RAG under corpus change | arXiv preprint, 2026 | 11 mutation operators on index and retrieved context, 28k mutants, violation rates 4.9% to 10.2%. The metamorphic oracle scored F1 0.927 to 1.000 against their ground truth; the best RAGAS metric 0.570. | abstract |
+| Kim et al., Metamorphic testing of RAG under corpus change | arXiv preprint, 2026 | 11 mutation operators on index and retrieved context, 28k mutants, violation rates 4.9% to 10.2%. Oracle F1 was 0.927 on RepLiQA and 1.000 on financial datasets, where exact numeric matching coincides with ground truth; best RAGAS F1 was 0.570 on RepLiQA. | full |
 
 Inference: teamsim's planted facts are the "perturbation of a gold answer" case, the safe one.
 The Canedo and Balli results are single-author preprints; treat them as warning patterns, not
@@ -101,7 +110,7 @@ effect sizes. The Kim result is self-reported on their own mutants.
 |---|---|---|---|---|
 | Cho et al., Metamorphic testing of LLMs for NLP | ICSME 2025 | 191 relations from 44 papers (24 tasks); 36 run on 3 LLMs, 4 tasks | 561,267 groups; mean violation 18% (QA 12%, NLI 17%, sentiment 25%, relation extraction 32%); true-positive rate 62% of 967; 28% of 99,099 failing groups failed in all 10 reruns | full |
 | Guo et al., MORTAR | IEEE TSE, 2026 | Multi-turn, 7 dialogue-level perturbations, 4 relations, no LLM judge, 8 systems, 500 seed dialogues | +164% bugs, +51% bugs per test case vs best single-turn; precision 75.8% vs 60.8% and 49.2% (120 sampled each); dropping any relation costs over 11% of bugs | full |
-| Zheng et al., MT and LLMs survey | arXiv preprint, 2026 | 93 primary studies, incl. dialogue, RAG, agents | taxonomy only | abstract |
+| Zheng et al., MT and LLMs survey | arXiv preprint, 2026 | 93 primary studies, incl. dialogue, RAG, agents | taxonomy, challenges and future directions | full |
 | Manino et al., Systematicity and transitivity | arXiv preprint, 2022 | Relations over several source inputs raise the number of test cases polynomially | n/a | abstract |
 
 **Fault-detection power.** Cho et al. compared relation-based testing with label-based testing
@@ -133,14 +142,14 @@ Each needs a stated expected relation, a measured false-positive rate and a reru
 
 | Paper | Venue, year | What it shows | Depth |
 |---|---|---|---|
-| Fremont et al., Scenic | arXiv preprint (journal version of PLDI 2019), 2020 | A scenario is a distribution over scenes and agent behaviours, with hard and soft constraints; sampling gives concrete tests | abstract |
+| Fremont et al., Scenic | arXiv preprint (submitted journal extension of PLDI 2019), 2020 | A scenario is a distribution over scenes and agent behaviours, with hard and soft constraints; sampling gives concrete tests | abstract |
 | Feng et al., Scenario library generation | IEEE T-ITS, 2020 | Scenario criticality = maneuver challenge x exposure frequency; a library is a critical set for a given ODD | abstract |
 | Birkemeyer et al., Is scenario generation ready for SOTIF? | arXiv preprint, 2023 | Existing generators do not meet SOTIF requirements; asks what real-world detail a scenario covers | abstract |
 | Zhou et al., GenAI for ADS scenario generation | arXiv preprint, 2026 | 31 studies, 10 surveys; gaps: no standard evaluation metrics, weak ODD-specific coverage | abstract |
 | Majumdar et al., Paracosm | arXiv preprint, 2019 | Coverage defined with combinatorial testing and low-dispersion sequences | abstract |
 | Min et al., Full coverage in logical scenario space | Sensors, 2025 | 100% parameter-space coverage vs combinatorial 86.5%, Monte Carlo 84.3% | abstract |
 | Saha et al., STADA | arXiv preprint, 2026 | Specification-based scenario generation; matches best baseline coverage with 6x fewer simulations | abstract |
-| Alshahwan et al., Rich-state simulated populations at Meta | arXiv preprint, 2024 | Simulated users with accumulated state: +38% code coverage, +115% faults found | abstract |
+| Alshahwan et al., Rich-state simulated populations at Meta | arXiv preprint, 2024 | Simulated users with accumulated state at Meta (Facebook, Messenger, Instagram): +38% average code coverage, +115% average faults found, the latter measured through crash counts over Alpha builds | abstract |
 
 **What transfers (inference).**
 
@@ -165,27 +174,31 @@ metric (collision, time-to-collision). A team chat has neither; correctness is c
 
 | Paper | Venue, year | What it shows | Depth |
 |---|---|---|---|
-| Kahani and Bagherzadeh, Mutation testing for multi-agent workflows | arXiv preprint, 2026 | 14 operators in 4 families; 3 kill criteria; k=3 repeats with majority vote; 10 workflows, 29,601 runs. Baselines: developer smoke suite 0.717, random 10% sample 0.488, end-to-end task suite 0.560, all vs a coverage-driven suite at 1.000. Safety criterion: baselines 0.401 to 0.559. Restriction removal 0.19 to 0.28. | full |
+| Kahani and Bagherzadeh, Mutation testing for multi-agent workflows | arXiv preprint, 2026 | 14 operators in 4 families; 3 kill criteria; k=3 repeats with majority vote; 10 workflows, 29,601 runs. Structural criterion: developer smoke suite 0.717, random 10% sample 0.488, end-to-end task suite 0.560, all vs a coverage-driven suite at 1.000. Safety criterion: baselines 0.401 to 0.559. Restriction removal was the least detected fault (0.19 to 0.28 under the outcome criterion). | full |
 | Clerissi et al., MUTABOT multi-platform | arXiv preprint, 2025 | Fault injection into chatbot conversations exposes weak suites generated by Botium | abstract |
-| Rehan, TDAD | arXiv preprint, 2026 | Agent prompts compiled against tests; semantic mutation of prompts; hidden test split; mutation scores 86 to 100% on evolved specs | abstract |
-| Petrovic et al., Does mutation testing improve testing practices? | arXiv preprint, 2021 | About 15 million mutants; mutants are coupled with real faults; developers using it write more tests | abstract |
-| Allamanis et al., Tailored mutants | arXiv preprint, 2016 | Project-specific operators couple to 14% more real faults than generic ones | abstract |
+| Rehan, TDAD | arXiv preprint, 2026 | Agent prompts compiled against tests; semantic mutation of prompts; hidden test split; mutation scores 86 to 100% (the body gives this range for the original v1 specs, all v2 runs 100%; the abstract says evolved specs) | abstract |
+| Petrovic et al., Does mutation testing improve testing practices? | arXiv preprint, 2021 | Data from one company, non-randomised: almost 15 million mutants; coupling to real faults analysed on 1,502 bugs; developers shown mutants wrote more tests | abstract |
+| Allamanis et al., Tailored mutants | arXiv preprint, 2016 | Tailored identifier and literal operators detect 8% more Defects4J defects at class scope and 14% more at line scope than traditional operators | abstract |
 | Ojdanic et al., Syntactic vs semantic similarity | arXiv preprint, 2021 | Syntactic similarity to real faults does not imply semantic similarity | abstract |
-| Zhao et al., Coverage and mutation of LLM-generated tests | arXiv preprint, 2026 | Metrics are informative when the code is assumed bug-free, not when hunting a bug | abstract |
+| Zhao et al., Coverage and mutation of LLM-generated tests | arXiv preprint, 2026 | Metrics give useful signals across models when code is assumed bug-free; within-model correlations are weak, and the metrics are unreliable for finding existing bugs | full |
 | Owotogbe et al., Chaos engineering MLR | arXiv preprint, 2024 | 96 sources; chaos engineering is controlled fault injection into running systems | abstract |
 
 **Reading the evidence.**
 
-- Mutation score is the established measure of whether tests catch faults, and mutants are
-  coupled to real faults in a dataset of about 15 million mutants (Petrovic et al.). But realism
-  is not guaranteed (Ojdanic et al.), so generic mutants are a floor and real faults from the
-  product's bug history are better (Allamanis et al.: tailored operators).
+- Mutation score is the established measure of whether tests catch faults. In one company's
+  data of about 15 million mutants, a coupling analysis of 1,502 bugs found mutants coupled to
+  real faults (Petrovic et al.). Realism is still not guaranteed: syntactic similarity to real
+  faults does not reflect semantic similarity (Ojdanic et al.), so it cannot be judged by how a
+  mutant looks. Mutants tailored to a project's own code coupled to more real faults than
+  traditional operators (Allamanis et al.). Inference: generic mutants are a floor and faults
+  taken from the product's bug history are probably better; neither paper tests that.
 - Kahani et al. is the closest analogue: it mutates the structure of an LLM system, scores
   test suites with several kill criteria, and uses repeats and majority voting against
-  nondeterminism. Its main lesson for teamsim: a check that only asks "did the task succeed"
-  misses silent permission and leak faults, so "must not happen" checks need explicit probes
-  (negative polarity). The prototype's private-channel check already has a positive control;
-  the same pattern should apply to secrets, injections and visibility. Limits: one model
+  nondeterminism. Its main lesson for teamsim: task-success-style suites caught only about half
+  of permission violations, so checks for restrictions need explicit probes (negative
+  polarity). The prototype's private-channel check already has a positive control; applying the
+  same pattern to secrets, injections and visibility is my inference, which the paper does not
+  test. Limits: one model
   (gpt-4.1-mini), workflows from one SDK, preprint.
 - Chaos engineering is the same idea at system level (inject a fault, watch the behaviour).
   teamsim already injects gateway disconnects and offline gaps; those are fault-injection
@@ -221,10 +234,10 @@ Prioritise by diversity first (ART or clustering), then by which mutants a scena
 
 | Paper | Venue, year | What it shows | Depth |
 |---|---|---|---|
-| Clerissi et al., Task-based chatbots: how far are we? | arXiv, registered report, 2026 | Plans a study on 193 Rasa and 185 Dialogflow bots. Hypothesis from earlier pilots: Botium-style tools explore mostly single request-response pairs and rely on exact-match or intent oracles; flakiness is one of 5 research questions. No results yet. | full (partial) |
+| Clerissi et al., Task-based chatbots: how far are we? | arXiv, registered report, 2026 | Plans a study on chatbots selected from curated datasets of 193 Rasa and 185 Dialogflow bots, plus Amazon Lex. Hypothesis from earlier pilots: Botium-style tools explore mostly single request-response pairs and rely on exact-match or intent oracles; flakiness is one of 5 research questions. No results yet. | full (partial) |
 | Clerissi et al., LexTester | arXiv preprint, 2026 | Dialog-graph model-based testing; 83% to 95% coverage of conversational elements; up to 4x fault detection vs Botium | abstract |
 | Mao et al., MUCA | arXiv preprint, 2024 | Group chat bots must decide what, when and who to answer (3W) | abstract |
-| Wang et al., Neo | arXiv preprint, 2025 | Probabilistic state model for test inputs; 3.3% break rate vs 5.8% for human red-teamers; 180 questions in about 45 min vs 16 h | abstract |
+| Wang et al., Neo | arXiv preprint, 2025 | Probabilistic state model for test inputs; 4 of 120 malicious questions broke the target (3.3%) vs 7 of 120 (5.8%) for six human testers, no significance test; 180 questions in about 45 min vs 16 h | abstract |
 | Houde et al., Controlling AI agent participation in groups | arXiv preprint, 2025 | Users disliked an agent that dominated a group conversation | abstract |
 
 What this means (inference). The chatbot-testing literature is mostly single-user and
@@ -239,10 +252,10 @@ dialog-graph elements) are covered by the plain idea of "fact type x check x par
 | Paper | Venue, year | What it shows | Depth |
 |---|---|---|---|
 | Grimm et al., ODD protocol, second update | JASSS, 2020 | 7 elements; "describe what the program does, not what you think the model does"; optional rationale per element; link ODD names to code; 5 to 10 pages typical, 30 to 40 complex | full (almost all) |
-| Downes et al., ODD+LLM | arXiv, SocialAgent workshop, 2026 | 5 extra blocks (architecture, identity, inference config, call-site binding and resolution, validation); 28 papers coded; 77% of 306 binding and resolution item-scores below fully determined; system fingerprint unreported in all 28; one instruction flips a result in 20 of 20 seeds | full |
+| Downes et al., ODD+LLM | arXiv, SocialAgent workshop, 2026 | 5 extra blocks (architecture, identity, inference config, call-site binding and resolution, validation); 28 papers coded; 77% of 306 binding and resolution item-scores below fully determined; system fingerprint unreported in all 28; one overlooked instruction (answer as an outside observer) moved convergence from 0.35 to 1.00 across 20 seeds, in a single reimplementation with a different model | full |
 | Grimm et al., Pattern-oriented modeling | Science, 2005 | Use several patterns at different scales to design, test and calibrate | abstract |
 | Topping et al., Post-hoc pattern-oriented testing | PLOS ONE, 2012 | Works on an existing large model; warns of over-fitting to patterns lacking explanatory detail | abstract |
-| Lee and Seering, SLALOM | arXiv preprint, 2026 | Validate the path through waypoints ("gates") not only the end state, using time-series alignment | abstract |
+| Lee and Seering, SLALOM | arXiv preprint, 2026 | Proposes validating the path through waypoints ("gates") not only the end state, using time-series alignment; demonstrated only on three hypothetical traces scored against AMI meeting data, no statistics | abstract |
 | Sargent, Intro tutorial on V&V of simulation models | WSC, 2015 | Valid for a set of experimental conditions within an accuracy range fixed up front; 8-step procedure; a failed condition makes the model invalid | full |
 
 **ODD elements (Grimm 2020).** 1 Purpose and patterns; 2 Entities, state variables, scales;
@@ -264,9 +277,9 @@ The direction (write down prompt assembly, parsing, retry) is plausible and chea
 
 | Paper | Venue, year | What it shows | Depth |
 |---|---|---|---|
-| Amini et al., Flaky simulators in ADS testing | arXiv preprint, 2023 | Hard flaky rates (upper end per setup) 16%, 6%, 40%, 66% and 1% across five setups on two simulators; 44% to 68% of generated tests had noticeable fitness variation; the bare lane-keeping setup was least flaky; ML flagged flaky tests from one run (F1 85%, 82%, 96%) | full |
-| Sorokin et al., MultiSim | Empirical Software Engineering, 2026 | Run scenarios on several simulators; prefer ones that fail consistently; 66% more simulator-agnostic failures | abstract |
-| Chance et al., Determinism of game engines | arXiv preprint, 2021 | Catalogues causes of nondeterminism and an operating domain with negligible variance | abstract |
+| Amini et al., Flaky simulators in ADS testing | arXiv preprint, 2023 | Hard flaky rates (upper end per setup) 16%, 6%, 40%, 74% and 1% across five setups on two simulators; 4% to 68% of generated tests had noticeable fitness variation (one passage of the paper says 98%); the bare lane-keeping setup was least flaky; ML flagged flaky tests from one run (F1 85%, 82%, 96%) with a separate classifier per simulator and ADS pair, which may not generalise | full |
+| Sorokin et al., MultiSim | Empirical Software Engineering, 2026 | Run each scenario on several simulators during the search and prioritise scenarios whose results agree across them; on average 66% higher rate of simulator-agnostic failures than single-simulator testing | abstract |
+| Chance et al., Determinism of game engines | arXiv preprint, 2021 | Catalogues causes of nondeterminism. On one CARLA setup, variance stayed within tolerance only with restrictions (load at 75% or less, pre-collision data, or pedestrian-only scenarios); the authors say it may not transfer to other systems | abstract |
 | Valle et al., Delta debugging with flaky executions | arXiv preprint, 2026 | Minimising a failing input often raised reproducibility | abstract |
 | Cho et al. (section 2) | ICSME 2025 | 28% of failing groups failed on all 10 reruns; some models have no seed | full |
 
@@ -326,20 +339,22 @@ preset's ranges, with value-combination coverage as the single summary (Qin et a
 explicitly.
 
 **Flakiness policy.** Record seed, preset version, event log and any model outputs. Rerun
-failing checks k=3 and take the majority (as in Kahani et al.). Report three states, not two:
-pass, fail, flaky. A model-free default removes simulator variation; product and timing
+failing checks k=3 and take the majority (Kahani et al. repeat every test k=3 and take a
+majority vote). Report three states, not two: pass, fail, flaky (my inference; they report
+only a residual flaky-kill rate). A model-free default removes simulator variation; product and timing
 variation remain.
 
 **Simulated feedback gate (ADR 0003; I did not re-read the ADR text, only the brief).**
 Evidence points to a gate with: a written purpose and accuracy range fixed in advance
-(Sargent); validation against several independent patterns (Grimm 2005, Topping 2012) and
-process fidelity, not only a final opinion (Lee and Seering); a judge profile with both
-invariance and sensitivity on planted known-bad inputs (Chen et al.); an agreeableness check
-(Jain, Ahmed et al. 2025: valid outputs accepted 96% of the time, invalid ones rejected under
-25%, on one code-feedback task); agreement corrected for chance, since exact-match agreement
-overstated judge quality by 33 to 41 points on MT-Bench (Norman et al.); and an ODD+LLM
+(Sargent); validation against several patterns at different scales (Grimm 2005, Topping 2012; Topping et al. say their patterns were not independent) and
+process fidelity, not only a final opinion (Lee and Seering, a proposal shown only on three hypothetical traces); a judge profile with both
+invariance and sensitivity on human-directed construct-changing edits (Chen et al.; planted
+known-bad inputs would be teamsim's adaptation); an agreeableness check
+(Jain, Ahmed et al. 2025: most validators accepted over 96% of valid outputs and typically
+rejected under 25% of invalid ones, on one code-feedback task); agreement corrected for chance, since exact-match agreement
+overstated chance-corrected agreement by 33.8 to 41.3 points on MT-Bench across 21 judges (Norman et al.); and an ODD+LLM
 description.
-None of these has a published pass threshold for this use; teamsim must set and state its own.
+I found no published pass threshold for this use in these papers; teamsim must set and state its own.
 
 **Stack and runtime.** The ideas above need no heavy stack: a scripted generator, a ledger,
 a reference product and a report. That supports the run-1 lean toward a model-free default.
@@ -374,8 +389,8 @@ Suggested text for the report footer (inference; wording is mine):
   to measure them.
 - No standard coverage metric for scenario suites in driving (the 2026 survey says so), and
   none for team chat.
-- Whether ODD or ODD+LLM improves reconstruction or costs authors much is untested (the
-  authors say so).
+- Whether ODD+LLM improves reconstruction or costs authors much is untested (the authors say
+  so); plain ODD is not covered by that paper.
 - Group-chat bot testing, silence as correct behaviour, and multi-user oracles are thin.
 - Exposure data (how often real teams produce each fact type) is missing; teamsim can only
   take patterns from real teams, not text.
@@ -387,10 +402,10 @@ Suggested text for the report footer (inference; wording is mine):
 
 I read the prototype audit and the demo fixtures, not every run-1 note. I found no
 contradiction with the audit. Two refinements: (1) the audit proposes thresholds and exact
-expectations for weak checks; the literature adds that "must not happen" checks need explicit
-negative probes, not just thresholds (Kahani et al.). (2) The audit's "model fixed per run,
-effect not measured" point matches the evidence that results depend strongly on the model
-and on prompt form (ODD+LLM), so model id and decoding settings belong in the run record.
+expectations for weak checks; the literature adds that checks for restrictions need explicit
+negative probes (Kahani et al.; extending this to every "must not happen" check is my inference). (2) The audit's "model fixed per run,
+effect not measured" point matches the evidence that results depend on prompt form (ODD+LLM's one-model
+multiverse; it cites other work for model dependence), so model id and decoding settings belong in the run record.
 
 ## Sources
 
@@ -404,7 +419,7 @@ All read 2026-11-11. Depth is given in the tables above.
 - Balli. The Test Oracle Problem in Synthetic LLM-as-Judge Corpora. arXiv preprint 2026. https://arxiv.org/abs/2607.13707
 - Kim, Pasini, Tonella. When Knowledge Changes: Metamorphic Testing of RAG Systems with Mutations. arXiv preprint 2026. https://arxiv.org/abs/2607.26843
 - Cho, Ruberto, Terragni. Metamorphic Testing of Large Language Models for Natural Language Processing. ICSME 2025. https://arxiv.org/abs/2511.02108
-- Guo et al. MORTAR: Multi-turn Metamorphic Testing for LLM-based Dialogue Systems. IEEE TSE 2026. https://arxiv.org/abs/2412.15557
+- Guo et al. MORTAR: Multi-turn Metamorphic Testing for LLM-based Dialogue Systems. IEEE Transactions on Software Engineering, 2026. https://arxiv.org/abs/2412.15557
 - Zheng et al. Bidirectional Empowerment of Metamorphic Testing and LLMs: A Systematic Survey. arXiv preprint 2026. https://arxiv.org/abs/2605.13898
 - Manino et al. Systematicity, Compositionality and Transitivity of Deep NLP Models: a Metamorphic Testing Perspective. arXiv preprint 2022. https://arxiv.org/abs/2204.12316
 - Fremont et al. Scenic: A Language for Scenario Specification and Data Generation. arXiv preprint 2020. https://arxiv.org/abs/2010.06580
