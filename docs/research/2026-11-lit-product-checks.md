@@ -242,6 +242,11 @@ normalisation task and its metrics are not covered here.
 
 ## 5. Indirect prompt injection
 
+![Proposed injection-check sequence: confirm delivery, observe actual actions or exact output, run a benign twin, and report capability, unsafe actions and over-refusal separately.](figures/injection-check.png)
+
+This is a proposed check design based on the evaluation failures discussed below, not a
+measured pass rate or a claim that an attack has succeeded.
+
 | Paper | Year, venue | Setup | Key number | Depth |
 |---|---|---|---|---|
 | Greshake et al. | 2023, arXiv | taxonomy, real apps | demos on Bing Chat (local pages) and synthetic apps; no success rate | abstract |

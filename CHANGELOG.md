@@ -25,6 +25,10 @@ All notable changes to this project are documented here. The format follows
   the bibliography; 431 available texts processed, including three partial or protocol-only
   texts, and 24 papers still abstract-only.
 
+- Added a visual research guide and 12 reproducible figures for evidence strength, source
+  coverage, reader agreement and cost, review outcomes, the testing loop and proposed checks.
+  Figures include captions, alternative text, reviewed data and editable SVG versions.
+
 ### Changed
 
 - Corrected literature and earlier research notes against available full text, with a
