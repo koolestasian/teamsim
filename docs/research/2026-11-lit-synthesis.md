@@ -17,7 +17,7 @@ open decisions, and lists what to build first.
 
 ## How much to trust this
 
-- **Size.** 451 distinct papers cited by arXiv ID or DOI, plus a few journal and web pages without
+- **Size.** 455 distinct papers cited by arXiv ID or DOI (the full list is in [bibliography/](bibliography/)), plus a few journal and web pages without
   one. 77 were read in full text; the rest are cited from their abstracts and marked as such in
   each note. Numbers that drive a recommendation come from full-text reads where possible.
 - **Citations checked.** Every arXiv ID and DOI in the seven notes was looked up against arXiv and

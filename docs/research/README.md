@@ -18,3 +18,4 @@ leads to verify, not facts.
 | [2026-11-lit-chat-realism.md](2026-11-lit-chat-realism.md) | Literature: real team and developer chat in numbers, realism validation, and learning patterns safely |
 | [2026-11-lit-scenario-testing.md](2026-11-lit-scenario-testing.md) | Literature: test oracles, metamorphic and scenario-based testing, mutation analysis, simulation validation |
 | [2026-11-lit-product-checks.md](2026-11-lit-product-checks.md) | Literature: how memory, decisions, injection, privacy and catch-up are scored in research, mapped to teamsim checks |
+| [bibliography/](bibliography/) | The 455 papers cited in the literature notes as a searchable table (`papers.csv`) and BibTeX, with links to open-access PDFs |
