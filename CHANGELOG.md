@@ -21,3 +21,12 @@ All notable changes to this project are documented here. The format follows
 - Research: a literature review of 455 papers in seven notes (simulated people, evaluation
   methods, personas, team dynamics, chat realism, scenario testing, product checks) and a
   synthesis that ties them to the open decisions (`docs/research/2026-11-lit-*.md`), with a bibliography of every cited paper (`docs/research/bibliography/`).
+- Research: a full-text checking method and benchmark report, with per-paper read depth in
+  the bibliography; 431 available texts processed, including three partial or protocol-only
+  texts, and 24 papers still abstract-only.
+
+### Changed
+
+- Corrected literature and earlier research notes against available full text, with a
+  supplementary check of missed citations. Rewrote the synthesis with evidence grades,
+  transfer limits and narrower recommendations for model eligibility and simulated feedback.
