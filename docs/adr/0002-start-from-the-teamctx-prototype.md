@@ -1,6 +1,7 @@
 # 0002. Start from the teamctx simulation prototype; decide the stack after research
 
-- Status: Accepted
+- Status: Accepted; the goal "testing rather than opinion prediction" is replaced by
+  [ADR 0003](0003-scope-tests-and-simulated-feedback.md)
 - Date: 2026-11-10
 - Deciders: maintainer
 - Plan reference: none
