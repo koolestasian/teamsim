@@ -18,6 +18,6 @@ All notable changes to this project are documented here. The format follows
   once it can be measured.
 - Research: a deep prior-art pass, an audit of the prototype, a survey of workspace emulators,
   a note on personas, measurement and local models, and stack options (`docs/research/`).
-- Research: a literature review of 451 papers in seven notes (simulated people, evaluation
+- Research: a literature review of 455 papers in seven notes (simulated people, evaluation
   methods, personas, team dynamics, chat realism, scenario testing, product checks) and a
-  synthesis that ties them to the open decisions (`docs/research/2026-11-lit-*.md`).
+  synthesis that ties them to the open decisions (`docs/research/2026-11-lit-*.md`), with a bibliography of every cited paper (`docs/research/bibliography/`).
