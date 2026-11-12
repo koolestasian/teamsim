@@ -154,9 +154,10 @@ script that owns stance and facts, as the personas note already recommended.
 
 ## 3. Human team science to reproduce or plant
 
-![Two teammates say Thursday; a third knows only Friday works. The product uses that decisive fact and answers Friday.](figures/one-key-fact.png)
+![Fictional hidden-profile example: two teammates prefer Thursday, but only one knows Thursday approval is unavailable and Friday approval is available. Expected answer: Friday, citing the decisive fact.](figures/hidden-profile.png)
 
-Fictional example of a fact held by one teammate.
+Illustrative scenario, not a study result or an implemented fixture. The check would measure
+use of the decisive minority-held fact, rather than agreement with the majority.
 
 ### 3.1 Information sharing: hidden profiles and common knowledge
 

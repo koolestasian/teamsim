@@ -8,11 +8,12 @@ particular model size is sufficient, or that simulated feedback predicts real te
 This revision follows the full-text check. It narrows the first synthesis's model-size rule,
 UX claims, chat-rate denominators and claims that benchmarks do not exist. It changes no ADR.
 
-[Start with the picture guide](2026-11-visual-guide.md).
+The [visual guide](2026-11-visual-guide.md) offers a shorter route through these findings.
 
-![A teammate changes the launch to Friday. The product answers Friday and matches the expected date.](figures/plant-and-check.png)
+![A fictional scenario feeds a fake workspace and an isolated answer key; independent checks compare the product's observed answers and actions against expected outcomes.](figures/testing-loop.png)
 
-Fictional example.
+Conceptual testing loop. Proposed boundaries still require implementation checks; this is
+not a claim that every current prototype boundary is already enforced.
 
 | Note | Question |
 |---|---|
@@ -45,6 +46,11 @@ Fictional example.
   observes them. Published percentages are examples, not teamsim pass marks.
 
 ## What the literature agrees on
+
+![Editorial evidence map: stronger results within hidden-profile and statistical settings, moderate simulator and grader evidence, and weak transfer evidence for feedback prediction and exact chat rates.](figures/evidence-map.png)
+
+The grades describe the findings in their measured settings. Transfer to simulated teammates
+is a separate question, addressed under each finding below.
 
 ### 1. Simulated users can change difficulty and apparent product quality
 
@@ -200,6 +206,11 @@ Do not convert model ratings into adoption rates. Measure gates on a pilot and f
 before the held-out evaluation. This protocol is proposed, not an approved ADR.
 
 ## What to build: the shape the literature points to
+
+![Proposed feedback pilot: compare matched good and bad variants, measure defect recall and false alarms, then evaluate held-out cases before shipping.](figures/feedback-gate.png)
+
+The feedback gate above is a proposal. Its output would remain hypotheses for human checks;
+it has no validated pass threshold yet.
 
 These are design inputs after the stack decision, not work to build ahead.
 
