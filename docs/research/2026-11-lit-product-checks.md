@@ -242,11 +242,6 @@ normalisation task and its metrics are not covered here.
 
 ## 5. Indirect prompt injection
 
-![Proposed injection-check sequence: confirm delivery, observe actual actions or exact output, run a benign twin, and report capability, unsafe actions and over-refusal separately.](figures/injection-check.png)
-
-This is a proposed check design based on the evaluation failures discussed below, not a
-measured pass rate or a claim that an attack has succeeded.
-
 | Paper | Year, venue | Setup | Key number | Depth |
 |---|---|---|---|---|
 | Greshake et al. | 2023, arXiv | taxonomy, real apps | demos on Bing Chat (local pages) and synthetic apps; no success rate | abstract |
@@ -295,6 +290,10 @@ Also tested on two deployed multi-user agents (Continua and ElizaOS) in private 
 cell, strings adapted from AgentDojo, preprint.
 
 ## 6. Privacy, secrets, access control
+
+![A locked private message is blocked from reaching a group chat.](figures/private-stays-private.png)
+
+Illustration: keep private information out of the group reply.
 
 **Contextual integrity.** ConfAIde (Mireshghallah et al.): GPT-4 and ChatGPT revealed private
 information in contexts humans would not 39% and 57% of the time in its meeting-style Tier 4 tasks, even when told to preserve privacy [abstract]. ConCI scores a triplet
