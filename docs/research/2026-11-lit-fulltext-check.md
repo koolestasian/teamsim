@@ -22,9 +22,15 @@ trusted, and what changed.
   matched the extracted text after normalisation. It cost about
   $0.04 per paper instead of about $0.25.
 
-![455 papers: 428 full text, 3 partial or protocol-only, 24 abstract-only.](figures/paper-coverage.png)
-
 ## Method
+
+![Source access among 455 papers: 428 full text, 3 partial or protocol-only, and 24 abstract-only.](figures/source-depth.png)
+
+Source access is a reader classification and does not establish that every conclusion is correct.
+
+![Main review flow: 431 available texts, Haiku with quote checks, Sonnet on 167 flags in 110 cards, 1,555 final verdicts, and editorial review of 710 candidates.](figures/review-flow.png)
+
+Only flagged claims reach Sonnet. Supplementary source checks are described separately below.
 
 Fetching, passage extraction, aggregation and quote matching are scripted. Model readers
 process one paper at a time; editors and the synthesis author also read whole notes.
@@ -67,6 +73,19 @@ notes, with 105 items:
   the paper (controls), 16 with a number changed, 16 with a direction word flipped
   ("increased" to "decreased"), and 16 true sentences from a different paper.
 
+![Reference-reader agreement with Wilson 95% item intervals: Opus repeat 23/23; Sonnet 38/41; Haiku v2 35/41; Haiku plus Haiku judge 36/41; Haiku plus Sonnet judge 38/41. Different samples and paper clustering limit interpretation.](figures/benchmark-agreement.png)
+
+The blue row is the selected pipeline. All Haiku configurations shown here use the v2
+reader. Pass includes partly supported; agreement does not demonstrate parity.
+
+![Benchmark API-equivalent USD per paper: Opus repeat 0.232, Sonnet 0.106, Haiku v2 0.017, Haiku plus Haiku judge 0.024, and Haiku plus Sonnet judge 0.088, rounded to three decimals.](figures/benchmark-cost.png)
+
+Costs describe the benchmark, where planted flags send every paper to the judge. The
+figures are CLI-reported API equivalents, not billed charges. Exact inputs are in
+[the figure data](figures/data.json). The Opus repeat uses 8 papers, while the other plotted
+configurations use 16, so the paper sets and cost averages are not matched. The table below
+preserves the other benchmark measures.
+
 | Configuration | Real claims: pass/flag agreement with Opus | Exact verdict | Planted errors caught | False alarms on controls | Reference-finding quote proximity | Reader quotes matched | USD per paper (benchmark) |
 |---|---|---|---|---|---|---|---|
 | Opus, second run | 100% (n=23) | 83% | 100% | 0% | 94-98% | 100% | 0.23-0.26 |
@@ -103,6 +122,11 @@ read passage labels written in a different format as missing (it made the Haiku 
 it caught 38% of planted errors), the other ranked `about_other_paper` as `supported`.
 
 ## Production run
+
+![Final main-run claim verdicts: 624 partly supported, 498 supported, 347 about another paper, 59 not in paper, 20 not supported and 7 contradicted.](figures/verdicts.png)
+
+The 624 partly supported verdicts and 86 flags produced 710 editorial candidates. A model's
+label is not proof that the note contains an error; editorial decisions are shown below.
 
 | | |
 |---|---|
@@ -164,6 +188,11 @@ proof against publication.
 | Prototype audit | 0 | 0 | 1 |
 | **Total** | **464** | **193** | **53** |
 
+![Editorial decisions: main review applied 464, skipped 193 and rejected 53 of 710 candidates; supplementary review applied 13, skipped 6 and rejected 26 of 45 candidates. Each bar uses its own denominator.](figures/review-decisions.png)
+
+Each bar is normalised within its own review set. These counts describe decisions about
+candidate corrections; multiple candidates can lead to one edit.
+
 The 53 rejected entries include misattributed passages and corrections contradicted by
 source evidence; they are not 53 errors in the notes. The supplementary decisions above
 are separate from this table. Changes that affect decisions include:
@@ -194,6 +223,11 @@ Depth tags in the older notes record their initial reading pass unless explicitl
 The bibliography's `read_depth` column and this note describe the subsequent source access.
 
 ## Limits
+
+![Four separate validation questions: source access, quote matching, claim support, and transfer to the team setting. Each level needs a separate check.](figures/validation-layers.png)
+
+Matching text establishes quotation presence. It does not establish interpretation, the
+right denominator, or validity for simulated teammates.
 
 - The reference is a model, not a human expert. Opus agreed with itself on pass/flag for every
   real passage but gave the same exact verdict only 83% of the time, so the finer verdict labels

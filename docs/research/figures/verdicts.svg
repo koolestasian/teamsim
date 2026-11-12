@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="460.8pt" viewBox="0 0 576 460.8" xmlns="http://www.w3.org/2000/svg" version="1.1" role="img" aria-labelledby="figure-title"><title id="figure-title">Final verdict counts, separating candidate corrections from demonstrated errors.</title>
+ <title>Final verdict counts, separating candidate corrections from demonstrated errors.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Final verdict counts, separating candidate corrections from demonstrated errors.</dc:title>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 460.8
+L 576 460.8
+L 576 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 230.4 368.64
+L 501.12 368.64
+L 501.12 101.376
+L 230.4 101.376
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 230.4 368.64
+L 230.4 101.376
+" clip-path="url(#p6770a75999)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="230.4" y="391.556016" transform="rotate(-0 230.4 391.556016)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 343.2 368.64
+L 343.2 101.376
+" clip-path="url(#p6770a75999)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="343.2" y="391.556016" transform="rotate(-0 343.2 391.556016)">300</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 456 368.64
+L 456 101.376
+" clip-path="url(#p6770a75999)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="456" y="391.556016" transform="rotate(-0 456 391.556016)">600</text>
+     </g>
+    </g>
+    <g id="text_4">
+     <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="365.76" y="412.557344" transform="rotate(-0 365.76 412.557344)">Claim verdicts</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7"/>
+     <g id="text_5">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="133.319008" transform="rotate(-0 220.4 133.319008)">Partly supported</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8"/>
+     <g id="text_6">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="176.426105" transform="rotate(-0 220.4 176.426105)">Supported</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9"/>
+     <g id="text_7">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="219.533202" transform="rotate(-0 220.4 219.533202)">About another paper</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_10"/>
+     <g id="text_8">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="262.640298" transform="rotate(-0 220.4 262.640298)">Not in paper</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_11"/>
+     <g id="text_9">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="305.747395" transform="rotate(-0 220.4 305.747395)">Not supported</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_12"/>
+     <g id="text_10">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="220.4" y="348.854492" transform="rotate(-0 220.4 348.854492)">Contradicted</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 230.4 115.385806
+L 465.024 115.385806
+L 465.024 139.09471
+L 230.4 139.09471
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 230.4 158.492903
+L 417.648 158.492903
+L 417.648 182.201806
+L 230.4 182.201806
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 230.4 201.6
+L 360.872 201.6
+L 360.872 225.308903
+L 230.4 225.308903
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 230.4 244.707097
+L 252.584 244.707097
+L 252.584 268.416
+L 230.4 268.416
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 230.4 287.814194
+L 237.92 287.814194
+L 237.92 311.523097
+L 230.4 311.523097
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 230.4 330.92129
+L 233.032 330.92129
+L 233.032 354.630194
+L 230.4 354.630194
+z
+" clip-path="url(#p6770a75999)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 230.4 368.64
+L 501.12 368.64
+" style="fill: none; stroke: #dbe2e9; stroke-width: 1.2; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="470.664" y="131.916039" transform="rotate(-0 470.664 131.916039)">624</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="423.288" y="175.023136" transform="rotate(-0 423.288 175.023136)">498</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="366.512" y="218.130233" transform="rotate(-0 366.512 218.130233)">347</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="258.224" y="261.23733" transform="rotate(-0 258.224 261.23733)">59</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="243.56" y="304.344426" transform="rotate(-0 243.56 304.344426)">20</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="238.672" y="347.451523" transform="rotate(-0 238.672 347.451523)">7</text>
+   </g>
+  </g>
+  <g id="text_17">
+   <text style="font-weight: 700; font-size: 23px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="31.68" y="40.516406" transform="rotate(-0 31.68 40.516406)">What the reader and judge labelled</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="62.208" transform="rotate(-0 31.68 62.208)">1,555 final main-run verdicts; labels are not proven errors</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="428.544" transform="rotate(-0 31.68 428.544)">624 partly supported + 86 flagged = 710 editorial candidates.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p6770a75999">
+   <rect x="230.4" y="101.376" width="270.72" height="267.264"/>
+  </clipPath>
+ </defs>
+</svg>

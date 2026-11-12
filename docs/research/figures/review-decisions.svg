@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="453.6pt" viewBox="0 0 576 453.6" xmlns="http://www.w3.org/2000/svg" version="1.1" role="img" aria-labelledby="figure-title"><title id="figure-title">Main review: 464 applied, 193 skipped, 53 rejected; supplementary: 13, 6, 26.</title>
+ <title>Main review: 464 applied, 193 skipped, 53 rejected; supplementary: 13, 6, 26.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Main review: 464 applied, 193 skipped, 53 rejected; supplementary: 13, 6, 26.</dc:title>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 453.6
+L 576 453.6
+L 576 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 41.6448 163.62
+L 360.215959 163.62
+L 360.215959 135.108
+L 41.6448 135.108
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 360.215959 163.62
+L 492.725084 163.62
+L 492.725084 135.108
+L 360.215959 135.108
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #b16b27"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 492.725084 163.62
+L 529.1136 163.62
+L 529.1136 135.108
+L 492.725084 135.108
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 41.6448 192.132
+L 50.03136 192.132
+L 50.03136 181.44
+L 41.6448 181.44
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 208.32768 192.132
+L 216.71424 192.132
+L 216.71424 181.44
+L 208.32768 181.44
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #b16b27"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 375.01056 192.132
+L 383.39712 192.132
+L 383.39712 181.44
+L 375.01056 181.44
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 41.6448 295.488
+L 182.46912 295.488
+L 182.46912 266.976
+L 41.6448 266.976
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 182.46912 295.488
+L 247.46496 295.488
+L 247.46496 266.976
+L 182.46912 266.976
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #b16b27"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 247.46496 295.488
+L 529.1136 295.488
+L 529.1136 266.976
+L 247.46496 266.976
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 41.6448 324
+L 50.03136 324
+L 50.03136 313.308
+L 41.6448 313.308
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 208.32768 324
+L 216.71424 324
+L 216.71424 313.308
+L 208.32768 313.308
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #b16b27"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 375.01056 324
+L 383.39712 324
+L 383.39712 313.308
+L 375.01056 313.308
+z
+" clip-path="url(#p0f10a8feaa)" style="fill: #737d8a"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="41.6448" y="124.416" transform="rotate(-0 41.6448 124.416)">Main review · 710 decisions</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="56.32128" y="190.942875" transform="rotate(-0 56.32128 190.942875)">Applied: 464</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="223.00416" y="190.942875" transform="rotate(-0 223.00416 190.942875)">Skipped: 193</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="389.68704" y="190.942875" transform="rotate(-0 389.68704 190.942875)">Rejected: 53</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="41.6448" y="256.284" transform="rotate(-0 41.6448 256.284)">Supplementary review · 45 decisions</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="56.32128" y="322.810875" transform="rotate(-0 56.32128 322.810875)">Applied: 13</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="223.00416" y="322.810875" transform="rotate(-0 223.00416 322.810875)">Skipped: 6</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="389.68704" y="322.810875" transform="rotate(-0 389.68704 322.810875)">Rejected: 26</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="41.6448" y="388.152" transform="rotate(-0 41.6448 388.152)">Each bar is 100% of its own review set.</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="41.6448" y="414.882" transform="rotate(-0 41.6448 414.882)">Several entries can lead to one edit; some fixes are rejected.</text>
+   </g>
+  </g>
+  <g id="text_11">
+   <text style="font-weight: 700; font-size: 24px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="31.68" y="38.64825" transform="rotate(-0 31.68 38.64825)">What editors did with candidate fixes</text>
+  </g>
+  <g id="text_12">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="62.8095" transform="rotate(-0 31.68 62.8095)">Decision counts, not counts of distinct factual errors</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p0f10a8feaa">
+   <rect x="25.92" y="74.52" width="524.16" height="356.4"/>
+  </clipPath>
+ </defs>
+</svg>

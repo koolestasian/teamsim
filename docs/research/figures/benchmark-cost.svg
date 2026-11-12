@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="482.4pt" viewBox="0 0 576 482.4" xmlns="http://www.w3.org/2000/svg" version="1.1" role="img" aria-labelledby="figure-title"><title id="figure-title">API-equivalent cost per benchmark paper; Haiku plus Sonnet costs 0.0881 USD.</title>
+ <title>API-equivalent cost per benchmark paper; Haiku plus Sonnet costs 0.0881 USD.</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>API-equivalent cost per benchmark paper; Haiku plus Sonnet costs 0.0881 USD.</dc:title>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 482.4
+L 576 482.4
+L 576 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 247.68 352.152
+L 506.88 352.152
+L 506.88 101.304
+L 247.68 101.304
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 247.68 352.152
+L 247.68 101.304
+" clip-path="url(#p562d0b5db2)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="247.68" y="375.068016" transform="rotate(-0 247.68 375.068016)">0.0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 334.08 352.152
+L 334.08 101.304
+" clip-path="url(#p562d0b5db2)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="334.08" y="375.068016" transform="rotate(-0 334.08 375.068016)">0.1</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 420.48 352.152
+L 420.48 101.304
+" clip-path="url(#p562d0b5db2)" style="fill: none; stroke: #dbe2e9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="420.48" y="375.068016" transform="rotate(-0 420.48 375.068016)">0.2</text>
+     </g>
+    </g>
+    <g id="text_4">
+     <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="377.28" y="396.068016" transform="rotate(-0 377.28 396.068016)">USD / paper</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7"/>
+     <g id="text_5">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="237.68" y="136.326125" transform="rotate(-0 237.68 136.326125)">Opus repeat</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8"/>
+     <g id="text_6">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="237.68" y="184.56675" transform="rotate(-0 237.68 184.56675)">Sonnet reader</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9"/>
+     <g id="text_7">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #223247" x="237.68" y="232.80675" transform="rotate(-0 237.68 232.80675)">Haiku reader</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_10"/>
+     <g id="text_8">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #223247" transform="translate(173.9925 272.245344)">Haiku +</text>
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #223247" transform="translate(142.655 291.449719)">Haiku judge</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_11"/>
+     <g id="text_9">
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #223247" transform="translate(173.9925 320.485344)">Haiku +</text>
+      <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #223247" transform="translate(131.505 339.689719)">Sonnet judge</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 247.68 118.188
+L 448.0416 118.188
+L 448.0416 142.308
+L 247.68 142.308
+z
+" clip-path="url(#p562d0b5db2)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 247.68 166.428
+L 339.5232 166.428
+L 339.5232 190.548
+L 247.68 190.548
+z
+" clip-path="url(#p562d0b5db2)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 247.68 214.668
+L 262.4544 214.668
+L 262.4544 238.788
+L 247.68 238.788
+z
+" clip-path="url(#p562d0b5db2)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 247.68 262.908
+L 268.5024 262.908
+L 268.5024 287.028
+L 247.68 287.028
+z
+" clip-path="url(#p562d0b5db2)" style="fill: #737d8a"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 247.68 311.148
+L 323.7984 311.148
+L 323.7984 335.268
+L 247.68 335.268
+z
+" clip-path="url(#p562d0b5db2)" style="fill: #2864a7"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 247.68 352.152
+L 506.88 352.152
+" style="fill: none; stroke: #dbe2e9; stroke-width: 1.2; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="454.9536" y="134.66468" transform="rotate(-0 454.9536 134.66468)">$0.232</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="346.4352" y="182.90468" transform="rotate(-0 346.4352 182.90468)">$0.106</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="269.3664" y="231.14468" transform="rotate(-0 269.3664 231.14468)">$0.017</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="275.4144" y="279.38468" transform="rotate(-0 275.4144 279.38468)">$0.024</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="330.7104" y="327.62468" transform="rotate(-0 330.7104 327.62468)">$0.088</text>
+   </g>
+  </g>
+  <g id="text_15">
+   <text style="font-weight: 700; font-size: 24px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="31.68" y="42.35625" transform="rotate(-0 31.68 42.35625)">Reader cost on the benchmark</text>
+  </g>
+  <g id="text_16">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="62.712" transform="rotate(-0 31.68 62.712)">CLI-reported API-equivalent USD per paper</text>
+  </g>
+  <g id="text_17">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="424.512" transform="rotate(-0 31.68 424.512)">Opus repeat: 8 papers; other configurations: 16.</text>
+  </g>
+  <g id="text_18">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="451.044" transform="rotate(-0 31.68 451.044)">API equivalents; cost does not measure reading quality.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p562d0b5db2">
+   <rect x="247.68" y="101.304" width="259.2" height="250.848"/>
+  </clipPath>
+ </defs>
+</svg>
