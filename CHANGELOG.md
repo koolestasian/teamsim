@@ -39,6 +39,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Standard testing terms across the README, designs and the testing-loop figure: synthetic
+  workspace, system under test, test oracle, verifiers, control agents and mutants. The README
+  gains a glossary.
 - README rewritten for outside readers: the problem, how the engine works, its guarantees, status
   and roadmap. CONTRIBUTING updated to the decided design.
 - Corrected literature and earlier research notes against available full text, with a

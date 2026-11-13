@@ -274,7 +274,7 @@ Points that matter for teamsim:
   processes; resetting the random-number generator before each interaction raised that to
   68, and four cases that matched on output and verdict still differed in database state
   (Liu and Lu, 2026, preprint) [abstract]. The paper does not make per-interaction reseeding
-  a general fix. Inference: seed every random source in the fake workspace, not just the
+  a general fix. Inference: seed every random source in the synthetic workspace, not just the
   model.
 - **Judge-free checks can still be unreliable.** tau-bench airline counts a do-nothing agent
   as successful on tasks that should be refused; those tasks are 38 percent of the airline
@@ -532,7 +532,7 @@ extrapolating from agent benchmarks to a team-chat simulator.
    recommendation. Zhou et al. found rule-based rewards miss quality but also that simulated
    feedback is inflated.
 6. **Hidden labels on the world's records.** Label every planted and background message in
-   the fake workspace (open request, answered request, decoy, injected text, secret) and
+   the synthetic workspace (open request, answered request, decoy, injected text, secret) and
    score mistakes against those labels, so that "invented work" and "treated an answered
    request as open" count as errors, not only misses. AutoBuddy-Bench hides labels on every
    rendered record and scores answered or colleague-owned requests treated as open as
@@ -638,7 +638,7 @@ labels "simulated, not human" and "planted facts are fictional".
 
 - Freeze and version the scenario set and the emulator image; never depend on live external
   services (ABC T.6).
-- Seed all random sources in the fake workspace; record the seed in the report (Inference,
+- Seed all random sources in the synthetic workspace; record the seed in the report (Inference,
   motivated by Liu and Lu, who do not endorse per-interaction reseeding as a general fix).
 - Record and replay any model call; accept that hosted models change silently (Coqueret et
   al.).

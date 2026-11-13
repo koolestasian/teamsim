@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="518.4pt" viewBox="0 0 576 518.4" xmlns="http://www.w3.org/2000/svg" version="1.1" role="img" aria-labelledby="figure-title"><title id="figure-title">Scenario and private answer key feed independent checks of a product in a fake workspace.</title>
- <title>Scenario and private answer key feed independent checks of a product in a fake workspace.</title>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="518.4pt" viewBox="0 0 576 518.4" xmlns="http://www.w3.org/2000/svg" version="1.1" role="img" aria-labelledby="figure-title"><title id="figure-title">A scenario pack and an isolated test oracle feed state-based verifiers of a system under test in a synthetic workspace.</title>
+ <title>A scenario pack and an isolated test oracle feed state-based verifiers of a system under test in a synthetic workspace.</title>
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:title>Scenario and private answer key feed independent checks of a product in a fake workspace.</dc:title>
+    <dc:title>A scenario pack and an isolated test oracle feed state-based verifiers of a system under test in a synthetic workspace.</dc:title>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -146,52 +146,52 @@ z
 " clip-path="url(#pfde8a5ddf5)" style="fill: #b16b27; stroke: #b16b27; stroke-width: 1.5; stroke-linecap: round"/>
    </g>
    <g id="text_1">
-    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="130.640625" transform="rotate(-0 149.0976 130.640625)">Fictional scenario</text>
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="128.896875" transform="rotate(-0 149.0976 128.896875)">Scenario pack</text>
    </g>
    <g id="text_2">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(82.37885 153.747)">People, timeline,</text>
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(100.92385 176.097)">known facts</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(87.81385 154.48075)">Team, timeline,</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(96.7226 174.547)">planted facts</text>
    </g>
    <g id="text_3">
-    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="426.9024" y="128.826562" transform="rotate(-0 426.9024 128.826562)">Private answer key</text>
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="426.9024" y="130.640625" transform="rotate(-0 426.9024 130.640625)">Test oracle</text>
    </g>
    <g id="text_4">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(367.61115 153.747)">Expected facts</text>
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(370.03115 176.097)">and outcomes</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(372.53865 155.297)">Ground truth:</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(348.0274 174.547)">expected outcomes</text>
    </g>
    <g id="text_5">
-    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="253.993275" transform="rotate(-0 149.0976 253.993275)">Fake workspace</text>
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="253.922962" transform="rotate(-0 149.0976 253.922962)">Synthetic workspace</text>
    </g>
    <g id="text_6">
     <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #536277" x="149.0976" y="280.3982" transform="rotate(-0 149.0976 280.3982)">Messages and events</text>
    </g>
    <g id="text_7">
-    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="366.512625" transform="rotate(-0 149.0976 366.512625)">Product under test</text>
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="149.0976" y="364.698562" transform="rotate(-0 149.0976 364.698562)">System under test</text>
    </g>
    <g id="text_8">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(75.0026 391.169)">Observed answers</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(115.46635 390.92275)">Answers</text>
     <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(102.71135 411.969)">and actions</text>
    </g>
    <g id="text_9">
-    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="426.9024" y="364.768875" transform="rotate(-0 426.9024 364.768875)">Independent checks</text>
+    <text style="font-weight: 700; font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="426.9024" y="366.512625" transform="rotate(-0 426.9024 366.512625)">Verifiers</text>
    </g>
    <g id="text_10">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(371.09865 389.619)">Compare with</text>
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(365.7899 410.419)">the answer key</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(361.6724 390.35275)">Read final state,</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #536277" transform="translate(345.11365 410.419)">compare with oracle</text>
    </g>
    <g id="text_11">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #b16b27" transform="translate(333.12395 240.526)">Key stays outside</text>
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #b16b27" transform="translate(325.55895 262.926)">the product's reach</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #b16b27" transform="translate(322.03395 242.076)">Oracle isolated from</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; fill: #b16b27" transform="translate(314.8452 262.926)">the system under test</text>
    </g>
    <g id="text_12">
-    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="288" y="469.314" transform="rotate(-0 288 469.314)">A score describes this scenario and these checks.</text>
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #223247" x="288" y="469.314" transform="rotate(-0 288 469.314)">A score describes this scenario and these verifiers.</text>
    </g>
   </g>
   <g id="text_13">
    <text style="font-weight: 700; font-size: 24px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #223247" x="31.68" y="41.56425" transform="rotate(-0 31.68 41.56425)">What teamsim is testing</text>
   </g>
   <g id="text_14">
-   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="65.7255" transform="rotate(-0 31.68 65.7255)">Conceptual loop; future boundaries are proposals</text>
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #536277" x="31.68" y="65.7255" transform="rotate(-0 31.68 65.7255)">One run, end to end</text>
   </g>
  </g>
  <defs>

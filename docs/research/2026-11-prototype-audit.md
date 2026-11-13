@@ -402,7 +402,7 @@ Issues for a general teamsim, where the product under test is arbitrary and less
   read its state, how to call its read surfaces, how to map its ids and links back to ledger
   keys. Today these are spread across `host.py`, `checker.py`, `driver.py` and `story.py`.
 - Put a workspace adapter boundary between the core and Discord (post, edit, delete, react,
-  interact, disconnect, list), so a second platform or a native fake workspace is possible.
+  interact, disconnect, list), so a second platform or a native synthetic workspace is possible.
 - Make presets data, not code: the cast, actors, captures, probes, queries and the ids the
   checks need should come from the preset file, not constants in `script.py`, `driver.py` and
   `checker.py`.

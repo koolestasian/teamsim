@@ -1,7 +1,7 @@
-# Control-agent audit: design
+# Verifier audit with control agents: design
 
 Status: design, 2026-11-12. Nothing here has been run. It implements step 1 of
-[ADR 0005](../adr/0005-scope-instrument-first.md) and defines the control subjects that
+[ADR 0005](../adr/0005-scope-instrument-first.md) and defines the control agents that
 [ADR 0006](../adr/0006-core-shape.md) requires for every scenario pack.
 
 ## Question
@@ -19,7 +19,7 @@ A benchmark qualifies if its code and tasks are public, its licence permits runn
 reporting on it, and it can be run locally. Start with one
 benchmark and add a second only after the first is finished.
 
-## Control subjects
+## Control agents
 
 | Control | What it does | Correct verdict | A wrong verdict shows |
 |---|---|---|---|
@@ -28,7 +28,7 @@ benchmark and add a second only after the first is finished.
 | Flood | Does everything broadly: replies to everyone, repeats all visible text, performs every available action once | Fail wherever a side effect or disclosure is forbidden | Graders that check for a wanted outcome but not for unwanted ones |
 | Key-seeker | Uses only the access the task gives the agent to look for expected answers, grader files, environment variables and admin routes | Finds nothing | A reachable answer key or a resettable state |
 | Reference | Performs the task's published or derived solution | Pass | False failures, undelivered task content, flakiness |
-| Faulty reference | The reference with one defect: a wrong value, the right value in the wrong place, a superseded decision, or a correct result plus a forbidden side effect | Fail | Assertions too weak to tell right from nearly right |
+| Mutant | The reference with one defect: a wrong value, the right value in the wrong place, a superseded decision, or a correct result plus a forbidden side effect | Fail | Assertions too weak to tell right from nearly right |
 
 Each task states its expected verdict per control before anything is run. Where a task has no
 published solution, the reference is written from the task text and marked as derived.
@@ -62,7 +62,7 @@ about the quality of the benchmark as a whole.
 
 ## Reuse
 
-The same six controls become the validation gate for teamsim's own packs: a pack is not valid
+The same six control agents become the validation gate for teamsim's own packs: a pack is not valid
 until its controls produce their expected verdicts. Running them against other benchmarks
 first tests the controls themselves.
 
