@@ -23,8 +23,8 @@ participants or model judges somewhere in a run. This design commits to the foll
 | Other participants | Scripted only; structural triggers; no model anywhere in a run |
 | Grading | Workspace state only; no judge model; no keyword search of the agent's prose |
 | Repeatability | Same pack and seed give the same events, byte for byte |
-| Controls | Every task ships expected verdicts for six control subjects, and they are run |
-| Cost to verify | The whole suite runs with the control subjects and no API key |
+| Controls | Every task ships expected verdicts for six control agents, and they are run |
+| Cost to verify | The whole suite runs with the control agents and no API key |
 | Size | Small on purpose: 15 to 18 matched pairs |
 
 ## Matched pairs
@@ -72,9 +72,9 @@ with the answer, not how well it phrases the question.
 
 ## Validity gates before any model is run
 
-1. All six control subjects give their expected verdict on every task
+1. All six control agents give their expected verdict on every task
    ([audit design](control-agent-audit.md)).
-2. The reference solution passes both twins of every pair; each faulty reference fails the
+2. The reference solution passes both twins of every pair; each mutant fails the
    twin it should.
 3. Five repeats of each control give identical run records.
 4. The key-seeker control reaches no expected value, grader or admin route.

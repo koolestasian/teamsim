@@ -7,7 +7,7 @@ recorded per paper in the [bibliography](bibliography/).
 Scope: what peer-reviewed papers and arXiv preprints say about simulating teams (multi-agent LLM
 groups and organisations, human team science, software and student teams, human-AI teaming,
 pre-LLM agent-based models), read for one purpose: which team phenomena teamsim should plant in a
-fake workspace, how a product under test should handle them, and how to score that.
+synthetic workspace, how a product under test should handle them, and how to score that.
 
 Read depth: [full text] means passages of the paper were read; [abstract] means only the abstract
 or an abstract-level excerpt was read. Numbers that drive a recommendation come from full text

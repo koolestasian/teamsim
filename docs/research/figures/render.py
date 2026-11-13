@@ -98,21 +98,22 @@ def clean_axes(ax):
 
 
 def testing_loop():
-    fig, ax = canvas("What teamsim is testing", "Conceptual loop; future boundaries are proposals", 7.2)
-    box(ax, .3, 7.4, 4.1, 1.8, "Fictional scenario", "People, timeline,\nknown facts")
-    box(ax, 5.6, 7.4, 4.1, 1.8, "Private answer key", "Expected facts\nand outcomes", WARM)
-    box(ax, .3, 4.6, 4.1, 1.8, "Fake workspace", "Messages and events")
-    box(ax, .3, 1.8, 4.1, 1.8, "Product under test", "Observed answers\nand actions")
-    box(ax, 5.6, 1.8, 4.1, 1.8, "Independent checks", "Compare with\nthe answer key")
+    fig, ax = canvas("What teamsim is testing", "One run, end to end", 7.2)
+    box(ax, .3, 7.4, 4.1, 1.8, "Scenario pack", "Team, timeline,\nplanted facts")
+    box(ax, 5.6, 7.4, 4.1, 1.8, "Test oracle", "Ground truth:\nexpected outcomes", WARM)
+    box(ax, .3, 4.6, 4.1, 1.8, "Synthetic workspace", "Messages and events")
+    box(ax, .3, 1.8, 4.1, 1.8, "System under test", "Answers\nand actions")
+    box(ax, 5.6, 1.8, 4.1, 1.8, "Verifiers", "Read final state,\ncompare with oracle")
     arrow(ax, (2.35, 7.3), (2.35, 6.5))
     arrow(ax, (2.35, 4.5), (2.35, 3.7))
     arrow(ax, (4.5, 2.7), (5.5, 2.7))
     arrow(ax, (4.5, 8.3), (5.5, 8.3))
     arrow(ax, (9.2, 7.3), (9.2, 3.7), ORANGE)
-    ax.text(7.2, 5.45, "Key stays outside\nthe product's reach", ha="center", fontsize=16,
+    ax.text(7.2, 5.45, "Oracle isolated from\nthe system under test", ha="center", fontsize=16,
             color=ORANGE, linespacing=1.4)
-    ax.text(5, .55, "A score describes this scenario and these checks.", ha="center", fontsize=16)
-    save(fig, "testing-loop", "Scenario and private answer key feed independent checks of a product in a fake workspace.")
+    ax.text(5, .55, "A score describes this scenario and these verifiers.", ha="center", fontsize=16)
+    save(fig, "testing-loop", "A scenario pack and an isolated test oracle feed state-based verifiers "
+         "of a system under test in a synthetic workspace.")
 
 
 def evidence_map():

@@ -10,7 +10,7 @@ UX claims, chat-rate denominators and claims that benchmarks do not exist. It ch
 
 The [visual guide](2026-11-visual-guide.md) offers a shorter route through these findings.
 
-![A fictional scenario feeds a fake workspace and an isolated answer key; independent checks compare the product's observed answers and actions against expected outcomes.](figures/testing-loop.png)
+![A scenario pack and an isolated test oracle feed state-based verifiers of a system under test in a synthetic workspace.](figures/testing-loop.png)
 
 Conceptual testing loop. Proposed boundaries still require implementation checks; this is
 not a claim that every current prototype boundary is already enforced.
