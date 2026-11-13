@@ -28,6 +28,8 @@ All notable changes to this project are documented here. The format follows
 - Added a visual research guide and 12 reproducible figures for evidence strength, source
   coverage, reader agreement and cost, review outcomes, the testing loop and proposed checks.
   Figures include captions, alternative text, reviewed data and editable SVG versions.
+- Research: a gap check on the run-1 notes covering the simulated-workplace market, the
+  working name and emulator facts (`docs/research/2026-11-gap-check.md`).
 
 ### Changed
 
