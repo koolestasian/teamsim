@@ -23,4 +23,5 @@ reader benchmark and concrete examples. The detailed notes retain the sources an
 | [2026-11-lit-chat-realism.md](2026-11-lit-chat-realism.md) | Literature: real team and developer chat in numbers, realism validation, and learning patterns safely |
 | [2026-11-lit-scenario-testing.md](2026-11-lit-scenario-testing.md) | Literature: test oracles, metamorphic and scenario-based testing, mutation analysis, simulation validation |
 | [2026-11-lit-product-checks.md](2026-11-lit-product-checks.md) | Literature: how memory, decisions, injection, privacy and catch-up are scored in research, mapped to teamsim checks |
+| [2026-11-gap-check.md](2026-11-gap-check.md) | Gap check: the simulated-workplace market, the working name, two emulator facts and the demand evidence |
 | [bibliography/](bibliography/) | The 455 papers cited in the literature notes as a searchable table (`papers.csv`) and BibTeX, with links to open-access PDFs |
