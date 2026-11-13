@@ -1,6 +1,6 @@
 # 0003. Scope: scored tests and simulated feedback
 
-- Status: Accepted
+- Status: Superseded by 0005
 - Date: 2026-11-11
 - Deciders: maintainer
 - Plan reference: none
