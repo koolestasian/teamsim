@@ -27,4 +27,7 @@ Statuses: `Proposed`, `Accepted`, `Superseded by NNNN`, `Deprecated`.
 |---|---|---|
 | [0001](0001-dual-licence.md) | Dual licence: MIT OR Apache-2.0 | Accepted |
 | [0002](0002-start-from-the-teamctx-prototype.md) | Start from the teamctx simulation prototype; decide the stack after research | Accepted (goals amended by 0003) |
-| [0003](0003-scope-tests-and-simulated-feedback.md) | Scope: scored tests and simulated feedback | Accepted |
+| [0003](0003-scope-tests-and-simulated-feedback.md) | Scope: scored tests and simulated feedback | Superseded by 0005 |
+| [0004](0004-python-standard-library-core.md) | Stack: Python core on the standard library, shipped with uv | Accepted |
+| [0005](0005-scope-instrument-first.md) | Scope: a deterministic test instrument first; audit, then a small benchmark | Accepted |
+| [0006](0006-core-shape.md) | Core shape: a deterministic event engine, a knowledge ledger and scenario packs | Accepted |

@@ -31,6 +31,12 @@ All notable changes to this project are documented here. The format follows
 - Research: a gap check on the run-1 notes covering the simulated-workplace market, the
   working name and emulator facts (`docs/research/2026-11-gap-check.md`).
 
+- ADR 0004 (stack: Python core on the standard library, shipped with uv), ADR 0005 (scope: a
+  deterministic test instrument first; an audit, then a small benchmark) and ADR 0006 (core
+  shape: deterministic event engine, keyed randomness, knowledge ledger, scenario packs).
+- Design for a control-agent audit of public multi-user agent benchmarks
+  (`docs/design/control-agent-audit.md`).
+
 ### Changed
 
 - Corrected literature and earlier research notes against available full text, with a

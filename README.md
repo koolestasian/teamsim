@@ -9,7 +9,8 @@ task handed over with a reaction, a key pasted where it should not be). Your pro
 the workspace, and teamsim scores it against what it planted.
 
 **Status: pre-alpha, research phase.** There is no release and no stable interface. The
-language and architecture are open and will be decided after the research in
+stack and core design are decided ([ADR 0004](docs/adr/0004-python-standard-library-core.md),
+[ADR 0006](docs/adr/0006-core-shape.md)); the research behind them is in
 [docs/research/](docs/research/).
 
 ## What exists today
@@ -37,17 +38,20 @@ A live run needs the Discord emulator and a teamctx build; see the
 
 ## Direction
 
-See [ADR 0003](docs/adr/0003-scope-tests-and-simulated-feedback.md) for the scope.
+See [ADR 0005](docs/adr/0005-scope-instrument-first.md) for the scope and
+[ADR 0006](docs/adr/0006-core-shape.md) for the core design.
 
-- **Ground truth first.** The simulator knows what it planted, so test results are scores, not
-  impressions. A test team does not need to be an accurate human; it needs to be varied,
-  messy, reproducible and checkable.
-- **Simulated feedback, measured or not shipped.** Teammates will also give opinions on the
-  product. Simulated people are poor stand-ins for real opinions (see the research), so this
-  feedback is a set of hypotheses to check with real people, and it ships only once its
-  diversity and bias can be measured.
-- **Easy to run.** One command, a local model by default, presets instead of code. It should
-  work without a professional test setup.
+- **A test instrument, not a realistic person.** The simulated team is scripted and seeded, so
+  every run can be repeated exactly. The project does not claim its teammates behave like
+  people; it claims to know what it planted.
+- **Ground truth first.** Results are scores against planted facts, graded from workspace
+  state, by graders that are themselves tested with control subjects.
+- **No model at run time.** Any model-written text is produced beforehand and recorded in the
+  scenario.
+- **Order of work.** First an [audit of public benchmarks](docs/design/control-agent-audit.md)
+  with control subjects, then a small benchmark, then the same engine as a tool for testing
+  your own team-facing product.
+- **Easy to run.** One command, scenario packs instead of code.
 
 ## Licence
 
