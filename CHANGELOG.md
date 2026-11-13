@@ -39,6 +39,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- README rewritten for outside readers: the problem, how the engine works, its guarantees, status
+  and roadmap. CONTRIBUTING updated to the decided design.
 - Corrected literature and earlier research notes against available full text, with a
   supplementary check of missed citations. Rewrote the synthesis with evidence grades,
   transfer limits and narrower recommendations for model eligibility and simulated feedback.
