@@ -16,9 +16,8 @@ with scripts, without a model.
 ## Targets
 
 A benchmark qualifies if its code and tasks are public, its licence permits running and
-reporting on it, and it can be run locally. Candidates are listed in the benchmark design
-once the closest ones have been read in full. Start with one; add a second only after the
-first is finished.
+reporting on it, and it can be run locally. Start with one
+benchmark and add a second only after the first is finished.
 
 ## Control subjects
 

@@ -91,7 +91,7 @@ bridge for bringing agents into team chat [D1]), but no request. The prior-art n
 stands: demand is inferred, not observed. The market in section 1 shows that simulated
 environments are bought, by a different buyer, for a different purpose.
 
-## What I could not verify
+## Not verified
 
 - Any vendor's product beyond its public home page; funding amounts and dates.
 - Whether any closed product plants facts across several simulated coworkers.

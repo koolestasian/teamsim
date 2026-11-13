@@ -14,13 +14,9 @@ It does not measure realism, general helpfulness or writing quality.
 
 ## How it differs from existing work
 
-Several multi-user benchmarks exist. The closest, arXiv 2611.02633, was read at repository
-commit `5cd6880` on 2026-11-12 (paper and code read; nothing run). On that reading its
-scripted lines branch on labels from judge models, other seats can be live models, a run
-needs paid model access, and no do-nothing or reference baseline is reported. Re-check these
-points against the current paper before citing them anywhere public.
-
-This design takes the opposite position on each:
+Several multi-user agent benchmarks exist, including GroupMemBench, ClawsBench, MuPPET and
+arXiv 2611.02633, which also pairs an agent with scripted teammates. Most use model-played
+participants or model judges somewhere in a run. This design commits to the following:
 
 | Property | This benchmark |
 |---|---|

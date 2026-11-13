@@ -18,8 +18,7 @@ research has since answered parts of this:
   ([prior art](../research/2026-11-prior-art.md), [gap check](../research/2026-11-gap-check.md)).
 - Funded companies sell model-driven simulated workplaces, and several multi-user agent
   benchmarks exist (GroupMemBench, ClawsBench and MuPPET are in the literature notes; a closer
-  one, arXiv 2611.02633, appeared in November 2026 and is being read before the benchmark is
-  designed). Competing on realism or on size is not a contest a small project wins.
+  one, arXiv 2611.02633, appeared in November 2026). Competing on realism or on size is not a contest a small project wins.
 - Audits cited in [the product-checks note](../research/2026-11-lit-product-checks.md) show
   that graders themselves fail: reachable answer keys, weak assertions, payloads that never
   arrive.
@@ -82,7 +81,7 @@ This supersedes ADR 0003. The rest of ADR 0002 stands.
 
 ### Follow-ups
 
-- Read arXiv 2611.02633 and its code; write the benchmark design against it.
+- Benchmark design: [docs/design/benchmark.md](../design/benchmark.md).
 - Update the README "Direction" section (done with this ADR).
 - Choose a final name before the repository is public: the working name collides with
   existing products ([gap check](../research/2026-11-gap-check.md)).
