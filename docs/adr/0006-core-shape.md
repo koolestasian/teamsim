@@ -1,6 +1,7 @@
 # 0006. Core shape: a deterministic event engine, a knowledge ledger and scenario packs
 
-- Status: Accepted
+- Status: Accepted; amended by [0007](0007-scope-simulated-teammates-sandbox.md)
+  (optional model-driven teammates, control subjects)
 - Date: 2026-11-12
 - Deciders: maintainer
 - Plan reference: none
@@ -94,7 +95,7 @@ and a scenario cannot contradict its own answer key.
 - Every check states its expected verdict for each control subject: one that does nothing, one
   that performs the reference solution, and at least one faulty variant of that solution. A
   pack whose controls do not produce their expected verdicts does not validate. The control
-  subjects are the ones in [the audit design](../design/control-agent-audit.md).
+  subjects are listed in [ADR 0007](0007-scope-simulated-teammates-sandbox.md).
 - The ledger, the checks and the expected values are never reachable from the subject: not
   mounted, not served, not in its environment. Grading happens outside the subject's process
   and network.
