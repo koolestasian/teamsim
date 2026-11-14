@@ -64,15 +64,6 @@ The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine
 [ADR 0007](docs/adr/0007-scope-simulated-teammates-sandbox.md) and
 [ADR 0008](docs/adr/0008-scope-synthetic-users-any-software.md) (scope).
 
-## What teamsim is not
-
-- **Not a claim about real people.** The synthetic users exist to exercise your software;
-  teamsim makes no claim that they behave like humans.
-- **Not user research.** Synthetic users give no opinions, ratings or adoption predictions.
-  Simulated opinions are weakly supported by current evidence
-  ([literature synthesis](docs/research/2026-11-lit-synthesis.md)); that idea is parked until
-  it can be measured.
-- **Not for real servers.** Runs happen in local sandboxes, against your own software.
 
 ## Status
 
