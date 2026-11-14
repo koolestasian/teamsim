@@ -4,8 +4,8 @@ Thanks for looking at this. Read this page before you open a pull request.
 
 ## Project status
 
-teamsim is **pre-alpha**. The stack, scope and core design are decided (ADRs 0004, 0006 and
-0007 in `docs/adr/`) but the engine is not built yet. What exists is a working prototype in
+teamsim is **pre-alpha**. The stack, scope and core design are decided (ADRs 0004, 0006,
+0007 and 0008 in `docs/adr/`) but the engine is not built yet. What exists is a working prototype in
 `prototypes/teamctx-sim/` and research notes in `docs/research/`. Decisions are recorded as
 ADRs in `docs/adr/`; changing one needs a maintainer decision and a new ADR. For anything bigger than a small fix, open an issue first.
 

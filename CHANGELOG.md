@@ -39,6 +39,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Scope: ADR 0008 widens teamsim to synthetic users for any software, from one person to an
+  organisation, with a configurable number of users and per-user roles, habits and traits.
+  Scoring against planted facts is unchanged. It amends ADRs 0006 and 0007. README,
+  CONTRIBUTING and the feature request template updated to match.
 - Scope: ADR 0007 makes teamsim a sandbox of simulated teammates for testing your own
   team-facing software, with optional model-driven teammates recorded for replay. It
   supersedes ADR 0005 and amends ADR 0006. The README is rewritten for the sandbox in plain

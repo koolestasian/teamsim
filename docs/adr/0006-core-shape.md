@@ -1,7 +1,8 @@
 # 0006. Core shape: a deterministic event engine, a knowledge ledger and scenario packs
 
 - Status: Accepted; amended by [0007](0007-scope-simulated-teammates-sandbox.md)
-  (optional model-driven teammates, control subjects)
+  (optional model-driven teammates, control subjects) and
+  [0008](0008-scope-synthetic-users-any-software.md) (actors and surfaces defined more widely)
 - Date: 2026-11-12
 - Deciders: maintainer
 - Plan reference: none

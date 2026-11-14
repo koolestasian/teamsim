@@ -1,6 +1,7 @@
 # 0007. Scope: a sandbox of simulated teammates; the audit and benchmark leave
 
-- Status: Accepted
+- Status: Accepted; amended by [0008](0008-scope-synthetic-users-any-software.md)
+  (any software, any number of synthetic users)
 - Date: 2026-11-13
 - Deciders: maintainer
 - Plan reference: none

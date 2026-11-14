@@ -6,7 +6,7 @@ body:
     id: problem
     attributes:
       label: What are you trying to test?
-      description: The product, the team behaviour you want simulated, and what should be checked.
+      description: The product, the users and behaviour you want simulated, and what should be checked.
     validations:
       required: true
   - type: textarea
