@@ -1,72 +1,59 @@
 # teamsim (working name)
 
-**Simulated teammates for testing software that works with a team: pick a team, run it in a
-local synthetic workspace, and score your bot or agent against the facts the team planted.**
+**A simulated team for testing software that works with a team.**
 
 [![CI](https://github.com/koolestasian/teamsim/actions/workflows/ci.yml/badge.svg)](https://github.com/koolestasian/teamsim/actions/workflows/ci.yml)
 ![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)
 ![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)
 ![Licence: MIT or Apache-2.0](https://img.shields.io/badge/licence-MIT%20or%20Apache--2.0-lightgrey)
 
-![A scenario pack and an isolated test oracle feed state-based verifiers of a system under test in a synthetic workspace.](docs/research/figures/testing-loop.png)
+If you build a bot, an AI agent or a tool for team chat, testing it properly needs a team:
+people who post, decide, change their minds, go quiet for a week, message each other privately
+and paste things they shouldn't. Most people building these tools, students especially, don't
+have one to test with.
 
-An assistant in a shared channel works for several people at once. It can act on a decision
-that was reversed last week, follow an instruction from someone with no authority over it,
-repeat in public what it was told in private, or post back a credential someone pasted by
-mistake. Single-user evaluations cannot express these failures, because they depend on who
-knew what, where and when.
-
-teamsim runs a small team of simulated teammates in a local, synthetic workspace, so you can
-test team-facing software without a team or a professional test setup. By default the team is
-scripted and seeded: it posts, decides, reverses decisions, goes quiet and discloses facts on a
-fixed timeline, and the simulator records the ground truth of every fact it plants. The system
-under test, whether an agent acting as a teammate or a bot observing the channels, is scored
-by state-based verifiers against that ground truth.
+teamsim gives you one. You pick a team, teamsim plays it in a local fake workspace, plants
+facts it knows (a decision, a reversal, a private message, a pasted password, an absence) and
+scores your software against them. It runs on your machine, with no real accounts and no
+real servers.
 
 > **Pre-alpha.** What runs today is a prototype built to test one product. The general engine
 > is designed but not yet built. See [Status](#status).
 
+## What it catches
+
+Team-facing software fails in ways a one-person test never shows, because the right answer
+depends on who knew what, where and when:
+
+- acting on a decision the team reversed last week;
+- following an instruction from someone with no say over it;
+- repeating in a public channel what was said in private;
+- posting back a password someone pasted by mistake;
+- missing what happened while someone was away, or getting a due date wrong across time zones.
+
 ## How it works
 
-1. **A scenario pack** declares the team, its channels, a timeline of events and the facts
-   they carry: who disclosed what, where, and who is permitted to know it. Packs are versioned
-   data, not code.
-2. **A discrete-event engine plays the timeline** in virtual time. Scripted teammates react to
-   the system under test through declared triggers (a mention, a direct message, an action),
-   never by interpreting free text. A pack can optionally make a teammate model-driven, so it
-   can answer what the system under test actually says; its replies are stored in the run
-   record.
-3. **Verifiers read the final state**: recorded values, where a canary secret ended up, which
-   actions were taken and by whom. Each returns pass, fail, not applicable (the planted fact was
-   never delivered) or harness error.
-4. **Verifiers are validated before they are trusted.** Each one declares its expected verdict
-   for a set of control agents: a null agent, a noise agent, a flood agent, a reward-hacking
-   agent that probes for the oracle, a reference solution, and mutants of that solution that are
-   almost right.
+1. **Pick a team.** A scenario pack describes the team, its channels, a timeline of messages
+   and the facts they carry, including who is allowed to know each one. Packs are data files,
+   not code. Presets (choose size, roles and habits) are planned.
+2. **teamsim plays it** in a local emulated workspace while your software joins or watches.
+   Teammates are scripted and seeded by default, so a run repeats exactly. A teammate can
+   optionally be model-driven, so it can answer what your software actually says; its replies
+   are recorded, so that run can be replayed too.
+3. **teamsim scores the result** from the final state of the workspace against the planted
+   facts. Each check returns pass, fail, not applicable (the fact never reached your software)
+   or harness error. Model replies never decide a score.
 
-## Design guarantees
-
-| Property | Mechanism |
-|---|---|
-| Exact replay | For scripted runs, the same pack and seed produce a byte-identical event stream: no wall clock, no shared random stream, no model. Runs with a model-driven teammate replay exactly from their run record |
-| Minimal failing scenarios | Randomness is keyed per event, so removing one event leaves the rest unchanged; a failing run can be reduced by delta debugging to the few events that still trigger the failure |
-| Oracle isolation | Expected values live outside the process, files and network of the system under test |
-| Honest scores | Counts with confidence intervals; a planted fact that was never delivered is not scored against the system under test |
-| Runs on a laptop | Python standard library only; no account, API key or GPU needed for the engine |
-
-These are design commitments from [ADR 0006](docs/adr/0006-core-shape.md) and
-[ADR 0007](docs/adr/0007-scope-simulated-teammates-sandbox.md); the new engine does not
-implement them yet.
+The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine) and
+[ADR 0007](docs/adr/0007-scope-simulated-teammates-sandbox.md) (scope).
 
 ## What teamsim is not
 
-- **Not a claim about real people.** The teammates exist to exercise your software. teamsim
-  makes no claim that they behave like humans, and model replies never decide a verdict.
-- **Not synthetic user research.** Simulated opinions are weakly supported by current evidence
-  ([literature synthesis](docs/research/2026-11-lit-synthesis.md)); that direction is parked
-  until it can be measured.
-- **Not a public benchmark or an audit of other people's agents.** It is for testing the
-  software you build.
+- **Not a claim about real people.** The teammates exist to exercise your software; teamsim
+  makes no claim that they behave like humans.
+- **Not user research.** Simulated opinions are weakly supported by current evidence
+  ([literature synthesis](docs/research/2026-11-lit-synthesis.md)); that idea is parked until
+  it can be measured.
 - **Not for real servers.** Runs happen in local emulated workspaces.
 
 ## Status
@@ -75,13 +62,13 @@ implement them yet.
 |---|---|
 | [`prototypes/teamctx-sim/`](prototypes/teamctx-sim/) | **Working.** An end-to-end simulation built to test [teamctx](https://github.com/koolestasian/discord-team-context): a six-person simulated team chats through a local Discord emulator while the product syncs it, and a checker scores sync, commands, search quality, visibility, prompt injection, catch-up after an absence and due dates across time zones. 230 offline tests |
 | Research | **Done for now.** Prior art, workspace emulators, a review of 455 papers, stack options and a market check ([docs/research/](docs/research/)) |
-| Design | **Decided.** Stack, scope and core shape ([ADRs 0004, 0006 and 0007](docs/adr/)) |
+| Design | **Decided.** Stack, engine shape and scope ([ADRs 0004, 0006 and 0007](docs/adr/)) |
 | Engine | Not started |
 
 ### Roadmap
 
-1. The core engine: scenario packs, virtual time, the knowledge ledger, verifiers, run records
-   and replay.
+1. The general engine: scenario packs, simulated time, the record of who knows what, checks,
+   run records and replay.
 2. One product other than teamctx tested end to end, with the prototype's checks ported.
 3. Team presets: choose a team's size, roles and habits instead of writing a pack by hand.
 4. Optional model-driven teammates, recorded for replay.
@@ -99,20 +86,8 @@ python -I -m unittest discover -s prototypes/teamctx-sim/tests
 A live run needs the Discord emulator and a teamctx build; the
 [runbook](prototypes/teamctx-sim/RUNBOOK.md) covers setup. Its realism mode reproduces patterns
 seen in real student team chat, never its content: handles instead of names, one thought split
-over several messages, reactions instead of replies, pasted AI answers, a pasted credential
+over several messages, reactions instead of replies, pasted AI answers, a pasted password
 ([REALISM.md](prototypes/teamctx-sim/REALISM.md)).
-
-## Terms
-
-| Term | Meaning here |
-|---|---|
-| System under test | The agent, bot or product being evaluated |
-| Synthetic workspace | A local emulated chat workspace seeded by the scenario; no real accounts |
-| Planted fact | A fact the scenario discloses at a known time and place, with its permitted audience |
-| Test oracle | The expected outcomes derived from the planted facts, kept out of the system's reach |
-| Verifier | A function of the final workspace state and the run record that returns a verdict |
-| Control agent | A scripted agent whose correct verdict is known in advance, used to validate verifiers |
-| Mutant | A reference solution with one deliberate defect, as in mutation testing |
 
 ## Repository layout
 

@@ -41,7 +41,9 @@ All notable changes to this project are documented here. The format follows
 
 - Scope: ADR 0007 makes teamsim a sandbox of simulated teammates for testing your own
   team-facing software, with optional model-driven teammates recorded for replay. It
-  supersedes ADR 0005 and amends ADR 0006. The README and roadmap follow it.
+  supersedes ADR 0005 and amends ADR 0006. The README is rewritten for the sandbox in plain
+  language (the testing-terms glossary and the test-oracle figure are dropped from it), with a
+  new roadmap.
 - Standard testing terms across the README, designs and the testing-loop figure: synthetic
   workspace, system under test, test oracle, verifiers, control agents and mutants. The README
   gains a glossary.
