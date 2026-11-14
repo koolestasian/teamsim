@@ -1,6 +1,7 @@
 # 0005. Scope: a deterministic test instrument first; audit, then a small benchmark
 
-- Status: Accepted
+- Status: Superseded by [0007](0007-scope-simulated-teammates-sandbox.md); the audit and
+  benchmark designs it cites left this repository with it
 - Date: 2026-11-12
 - Deciders: maintainer
 - Plan reference: none
@@ -40,7 +41,7 @@ tested.
   the synthesis describes. It stays subject to ADR 0003's bar: measured or not shipped.
 - **Order of public work:**
   1. A control-agent audit of public multi-user agent benchmarks
-     ([design](../design/control-agent-audit.md)), reported to their authors first.
+     (design no longer in this repository), reported to their authors first.
   2. A small benchmark (20 to 30 tasks): an agent acts as one member of a scripted team, and
      is graded only from workspace state by graders that have passed the same controls.
      Published in a task format existing harnesses can run.
@@ -81,7 +82,7 @@ This supersedes ADR 0003. The rest of ADR 0002 stands.
 
 ### Follow-ups
 
-- Benchmark design: [docs/design/benchmark.md](../design/benchmark.md).
+- Benchmark design (no longer in this repository).
 - Update the README "Direction" section (done with this ADR).
 - Choose a final name before the repository is public: the working name collides with
   existing products ([gap check](../research/2026-11-gap-check.md)).
