@@ -7,7 +7,7 @@
 ![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)
 ![Licence: MIT or Apache-2.0](https://img.shields.io/badge/licence-MIT%20or%20Apache--2.0-lightgrey)
 
-Testing a product properly needs people using it: someone who enters things, changes their
+Testing a product properly needs actual human using it: someone who enters things, changes their
 mind, makes mistakes and comes back a week later, or a group who post, decide, message each
 other privately and paste things they shouldn't. Most people building software, students
 especially, don't have those people to test with.
