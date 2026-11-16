@@ -8,10 +8,14 @@ headers, Discord-style bot tokens, control-token query strings).
 
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
 MASK = "***"
+
+# The repo-root `.env` (gitignored), next to `prototypes/`.
+REPO_ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 
 
 class Secret:
@@ -143,3 +147,19 @@ def load_secret(path: Path, key: str) -> Secret | None:
     secret = Secret(value, key)
     REDACTOR.add(secret)
     return secret
+
+
+def setting(key: str, env_file: Path | None = None) -> str:
+    """A plain (non-secret) setting: the process environment first, then the env file.
+
+    Returns "" when neither holds a non-empty value. Secrets go through `load_secret`, which
+    registers them for redaction; this value is returned as is.
+    """
+    value = os.environ.get(key, "").strip()
+    if value:
+        return value
+    try:
+        text = Path(REPO_ENV_FILE if env_file is None else env_file).read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    return parse_env(text).get(key, "").strip()

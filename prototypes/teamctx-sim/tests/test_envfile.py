@@ -1,10 +1,12 @@
 import copy
 import io
+import os
 import json
 import pickle
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import fakes  # noqa: F401  (puts prototypes/teamctx-sim on sys.path)
 from simlib import envfile, host as H, report as R
@@ -103,6 +105,20 @@ class RedactionTests(unittest.TestCase):
         env = H.child_env({"PATH": "p", "SECRET_OTHER": "no"}, {"TEAMCTX_DISCORD_TOKEN": FAKE_BOT, **choice.env})
         self.assertEqual(env["TEAMCTX_LLM_KEY"], FAKE_OR)
         self.assertNotIn("SECRET_OTHER", env)
+
+
+class SettingTests(unittest.TestCase):
+    def test_setting_prefers_the_environment_then_the_env_file(self):
+        with tempfile.TemporaryDirectory() as d:
+            env_file = Path(d) / ".env"
+            env_file.write_text('TEAMSIM_WSL_DISTRO="file-distro"\nTEAMSIM_WSL_USER=\n', encoding="utf-8")
+            with mock.patch.dict(os.environ, {"TEAMSIM_WSL_DISTRO": ""}):
+                self.assertEqual(envfile.setting("TEAMSIM_WSL_DISTRO", env_file=env_file), "file-distro")
+                os.environ["TEAMSIM_WSL_DISTRO"] = "env-distro"
+                self.assertEqual(envfile.setting("TEAMSIM_WSL_DISTRO", env_file=env_file), "env-distro")
+            with mock.patch.dict(os.environ, {"TEAMSIM_WSL_USER": ""}):
+                self.assertEqual(envfile.setting("TEAMSIM_WSL_USER", env_file=env_file), "")
+                self.assertEqual(envfile.setting("TEAMSIM_WSL_DISTRO", env_file=Path(d) / "missing.env"), "")
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ FACTS_ASSUMPTIONS = [
     "of the simulate call, which includes the emulator's own wait for the answer.",
     "The emulator ignores attachments on simulated messages (JSON and multipart), so attachment names stay unverified (n.a.).",
     "teamctx's graceful shutdown handles only Ctrl-C in its own console; the harness hard-stops the process on Windows.",
-    "The `q` client and API shapes were read from source (crates/teamctx-server, crates/teamctx/src/q.rs); `status.sync.gateway` and "
+    "The `q` client and API shapes were read from source (read from the teamctx source at the time of reading; that source is not in this repository); `status.sync.gateway` and "
     "the `record` line format are assumed to match the source at the time of reading.",
 ]
 
@@ -615,7 +615,7 @@ class Harness:
             version = "not run"
         facts = {
             "teamctx binary": f"{(self.binary_arg or H.DEFAULT_BINARY)} ({version}); run from a copy in .state/bin, sha256 {(self.state.get('binary') or {}).get('sha256', 'n/a')}...",
-            "emulator": "@deploybaseline/discord 0.14.0 in WSL distro sbx-ubuntu, http://localhost:4000 (inspector: that URL, no token needed)",
+            "emulator": "@deploybaseline/discord 0.14.0 in the configured WSL distro, http://localhost:4000 (inspector: that URL, no token needed)",
             "model for /ask": f"{model.get('kind')}: {model.get('reason')}" + (f"; model {model.get('table', {}).get('model')}" if model.get("table") else ""),
             "model tokens recorded by teamctx (llm_usage)": usage,
             "offline eval source": self.state.get("offline_eval_source", "not loaded"),

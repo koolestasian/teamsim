@@ -1,10 +1,11 @@
 """The Discord emulator: simulate/REST client and the WSL process manager.
 
-The emulator (`@deploybaseline/discord`) only ever runs inside the isolated WSL distro
-`sbx-ubuntu` (never on Windows). This module talks to it over loopback HTTP and starts or
-stops it through `wsl.exe`, touching nothing in the distro except `~/emu` and the
-emulator process. The control token the emulator prints is a local secret: it is parsed
-only to be registered with the redactor, never stored or shown.
+The emulator (`@deploybaseline/discord`) only ever runs inside a WSL distro that you name
+(`TEAMSIM_WSL_DISTRO`, never on Windows). This module talks to it over loopback HTTP and
+starts or stops it through `wsl.exe`, touching nothing in the distro except the remote
+directory (`TEAMSIM_EMU_REMOTE_DIR`) and the emulator process. The control token the
+emulator prints is a local secret: it is parsed only to be registered with the redactor,
+never stored or shown.
 """
 
 from __future__ import annotations
@@ -20,14 +21,19 @@ from typing import Callable
 from . import envfile
 from .net import PolicyError, Response, Transport, assert_loopback_url, multipart
 
-DEFAULT_BASE = "http://127.0.0.1:4000"  # the spec says localhost; see net._ipv4_loopback
-DISTRO = "sbx-ubuntu"
-WSL_USER = "dev"
-REMOTE_SEED = "~/emu/seed.json"
-REMOTE_LOG = "~/emu/emu.log"
-START_SCRIPT = f"cd ~/emu && exec npx baseline start --service discord --seed {REMOTE_SEED} > {REMOTE_LOG} 2>&1"
+DEFAULT_BASE = "http://127.0.0.1:4000"  # see net._ipv4_loopback
+# Settings for the WSL side, read from the environment or the repo's .env (see .env.example).
+WSL_DISTRO_SETTING = "TEAMSIM_WSL_DISTRO"
+WSL_USER_SETTING = "TEAMSIM_WSL_USER"  # optional: without it, the distro's default user runs the commands
+REMOTE_DIR_SETTING = "TEAMSIM_EMU_REMOTE_DIR"
+DEFAULT_REMOTE_DIR = "~/teamsim-emu"
+REMOTE_DIR_RE = re.compile(r"~?[A-Za-z0-9._/+\-]+")  # the value is spliced into a bash script
 STOP_SCRIPT = "pkill -f '[b]aseline start --service discord'; pkill -f '[@]deploybaseline/discord/dist/provider.js'; sleep 1; true"
 RETRY_LIMIT = 8
+
+
+class WslConfigError(RuntimeError):
+    """A WSL setting is missing or unusable. The message names the setting to change."""
 
 
 class EmuError(Exception):
@@ -215,33 +221,54 @@ def _retry_after(resp: Response) -> float:
 class Wsl:
     """Starts, stops and feeds the emulator through wsl.exe. `runner` is injectable for tests."""
 
-    def __init__(self, state_dir: Path, *, runner=subprocess, distro: str = DISTRO, user: str = WSL_USER) -> None:
+    def __init__(self, state_dir: Path, *, runner=subprocess, distro: str | None = None, user: str | None = None,
+                 remote_dir: str | None = None) -> None:
+        """Arguments left as None are read from the environment, then the repo's .env. An empty
+        distro means it is not configured; an empty user means the distro's default user."""
         self.state_dir = state_dir
         self.runner = runner
-        self.distro = distro
-        self.user = user
+        self.distro = envfile.setting(WSL_DISTRO_SETTING) if distro is None else distro
+        self.user = (envfile.setting(WSL_USER_SETTING) if user is None else user) or None
+        self.remote_dir = (remote_dir if remote_dir is not None else
+                           (envfile.setting(REMOTE_DIR_SETTING) or DEFAULT_REMOTE_DIR))
+        self.remote_seed = f"{self.remote_dir}/seed.json"
+        self.remote_log = f"{self.remote_dir}/emu.log"
+        self.start_script = (f"cd {self.remote_dir} && exec npx baseline start --service discord "
+                             f"--seed {self.remote_seed} > {self.remote_log} 2>&1")
+
+    def check(self) -> None:
+        if not self.distro:
+            raise WslConfigError(f"set {WSL_DISTRO_SETTING} to the WSL distro that runs the emulator, in the "
+                                 "environment or the repo's .env (see .env.example and RUNBOOK.md)")
+        if not REMOTE_DIR_RE.fullmatch(self.remote_dir):
+            raise WslConfigError(f"{REMOTE_DIR_SETTING} must be a plain path such as {DEFAULT_REMOTE_DIR} "
+                                 "(letters, digits and ._/+- only)")
 
     def args(self, script: str) -> list[str]:
-        return ["wsl.exe", "-d", self.distro, "-u", self.user, "--", "bash", "-lc", script]
+        self.check()
+        cmd = ["wsl.exe", "-d", self.distro]
+        if self.user:
+            cmd += ["-u", self.user]
+        return cmd + ["--", "bash", "-lc", script]
 
     def copy_seed(self, seed: dict) -> None:
-        """Writes ~/emu/seed.json through stdin (the distro has no Windows drives)."""
+        """Writes the seed file in the remote directory through stdin (the distro has no Windows drives)."""
         payload = json.dumps(seed, indent=2).encode("utf-8")
-        proc = self.runner.run(self.args(f"cat > {REMOTE_SEED}"), input=payload, capture_output=True, timeout=60)
+        proc = self.runner.run(self.args(f"cat > {self.remote_seed}"), input=payload, capture_output=True, timeout=60)
         if proc.returncode != 0:
             raise RuntimeError("could not copy the seed into WSL: " + envfile.redact(_decode(proc.stderr)))
 
     def start(self) -> "subprocess.Popen":
-        """Starts the emulator detached from this process. Its output goes to ~/emu/emu.log
-        inside the distro (a pipe through wsl.exe loses the banner); `read_log` fetches it."""
+        """Starts the emulator detached from this process. Its output goes to the log file in the
+        remote directory (a pipe through wsl.exe loses the banner); `read_log` fetches it."""
         flags = 0
         if hasattr(subprocess, "DETACHED_PROCESS"):
             flags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
-        return self.runner.Popen(self.args(START_SCRIPT), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        return self.runner.Popen(self.args(self.start_script), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                  stdin=subprocess.DEVNULL, creationflags=flags)
 
     def read_log(self) -> str:
-        proc = self.runner.run(self.args(f"cat {REMOTE_LOG} 2>/dev/null; true"), capture_output=True, timeout=30)
+        proc = self.runner.run(self.args(f"cat {self.remote_log} 2>/dev/null; true"), capture_output=True, timeout=30)
         return _decode(proc.stdout)
 
     def stop(self) -> None:
