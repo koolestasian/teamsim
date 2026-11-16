@@ -3,6 +3,11 @@
 *.env
 !.env.example
 
+# Local workflow files (never tracked)
+.claude/
+ideas/
+*.local.md
+
 # Python
 __pycache__/
 *.pyc
