@@ -321,7 +321,7 @@ baseline
 
     def test_remote_dir_must_be_a_plain_path_because_it_goes_into_a_shell_script(self):
         with tempfile.TemporaryDirectory() as d:
-            wsl, calls = self._recording_wsl(d, distro="test-distro", user="", remote_dir="~/emu; rm -rf ~")
+            wsl, calls = self._recording_wsl(d, distro="test-distro", user="", remote_dir="~/teamsim; rm -rf ~")
             with self.assertRaisesRegex(WslConfigError, "TEAMSIM_EMU_REMOTE_DIR"):
                 wsl.start()
         self.assertEqual(calls, [])
