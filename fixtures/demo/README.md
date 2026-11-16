@@ -68,12 +68,12 @@ to April 24, 2026, UTC.
 
 ## Tests
 
-`crates/teamctx-store/tests/demo.rs` loads all messages into core events and all
+The teamctx test suite (not in this repository) has `demo.rs`, which loads all messages into core events and all
 entries into validated core requests. It checks references, timestamp consistency,
 parent relationships, lifecycle transitions and the decision reversals, plus the
 properties listed above: message and entry counts, thread structure, author spread,
 share of short messages, links, code block, meeting-notes count, injection-style
-messages and the task and question lifecycles. `crates/teamctx-store/tests/demo_import.rs`
+messages and the task and question lifecycles. Its `demo_import.rs`
 imports the dataset into a store through `teamctx_store::demo::import`, which the
 `teamctx demo` command and the eval runner share.
 
@@ -92,7 +92,7 @@ must appear in them.
 - **thread-context:** the answer needs neighbouring messages from the same conversation,
   so `expected_messages` lists several of them.
 
-`crates/teamctx-store/tests/eval_fixture.rs` checks that every cited message and entry
+The teamctx test suite's `eval_fixture.rs` checks that every cited message and entry
 exists, that statuses match, that each answer fragment appears in the cited evidence,
 that every category has its minimum number of cases and the paraphrase rule above. It
-does not score retrieval; `cargo xtask eval` arrives in M2.
+does not score retrieval; the teamctx eval runner does the scoring and is not in this repository.

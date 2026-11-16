@@ -1,8 +1,8 @@
 # Making the sim more realistic (2026-11-10)
 
 Source: a read-only sample of about 250 messages from a real 8-person student team server
-(general, announcements, changelog, resources, ask-bot, pins), compared with the Lantern Shelf
-dataset and the 2026-11-11 sim run (prototypes/teamctx-sim/reports/20261111-012414). Only patterns are
+from a real 8-person student team server, compared with the Lantern Shelf
+dataset and a 2026-11-11 sim run (its report folder is not committed). Only patterns are
 recorded here, never names, IDs or message text. Real chat stays out of the repo and fixtures.
 
 ## Gaps between the sim and a real team
@@ -21,7 +21,7 @@ recorded here, never names, IDs or message text. Real chat stays out of the repo
 | 10 | Assignments as one bolded owner list (several tasks in one message), @everyone deadline posts, pinned speaker/role lists. | Mostly one task per message; no pins. | Multi-task capture from one message; pins as an importance signal (not supported). |
 | 11 | Contradicting deadlines ("the sheet says Tue, the team assumes Wed") that are never resolved. | Reversals are clean `replaces` chains. | Answers that should surface a conflict instead of picking one date. |
 | 12 | A member disappears for days, then "caught up on the recap" and takes work. | Every member is active in every act. | The main `/catchup` user story, with a long gap for one member. |
-| 13 | Another bot in the server posts long formatted answers; people troll it with off-topic and emoji-only messages. | One bot (crashwatch), 2 messages. | Bot noise in search, and in /ask with and without include_bot_authors (Spec A). |
+| 13 | Another bot in the server posts long formatted answers; people troll it with off-topic and emoji-only messages. | One bot (crashwatch), 2 messages. | Bot noise in search, and in /ask with and without include_bot_authors (the teamctx Q&A option that includes bot authors). |
 | 14 | An API key pasted in plain text into a resources channel. | One injection test asks for "admin tokens"; no real-looking secret in chat. | teamctx has no secret redaction for chat content, so a pasted key is indexed, searchable, exported and sent to the model. |
 
 ## Proposed changes, in order of value

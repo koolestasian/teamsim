@@ -1,5 +1,5 @@
-# Retrieval baseline for the fictional demo, written by `cargo xtask eval -- --write-baseline`.
-# CI fails when an overall number falls below this file. Definitions: crates/teamctx/src/eval.rs.
+# Retrieval baseline for the fictional demo, written by the teamctx eval runner (not in this repository).
+# CI fails when an overall number falls below this file. Definitions: the teamctx eval runner (not in this repository).
 # Messages are scored against expected_messages and entries against expected_entries.
 # Every tool runs production retrieval (core::rank, Bundle::retrieve); ask_retrieval counts
 # the whole bundle, the others the first 10 results in total (as `teamctx search --limit 10`).
