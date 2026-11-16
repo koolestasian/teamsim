@@ -1,6 +1,7 @@
 # 0004. Stack: Python core on the standard library, shipped with uv
 
-- Status: Accepted
+- Status: Accepted; amended by [0009](0009-version-0-built-in-workspace-subject-protocol-python-floor.md)
+  (the Python floor is 3.12)
 - Date: 2026-11-12
 - Deciders: maintainer
 - Plan reference: none

@@ -39,6 +39,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Version 0: ADR 0009 sets what the first runnable version contains: a workspace built into
+  the engine, a subject protocol with an in-process and a child-process transport, the
+  `teamsim` package at the repository root, and Python 3.12 as the oldest supported version.
+  It amends ADRs 0004 and 0007.
 - Scope: ADR 0008 widens teamsim to synthetic users for any software, from one person to an
   organisation, with a configurable number of users and per-user roles, habits and traits.
   Scoring against planted facts is unchanged. It amends ADRs 0006 and 0007. README,
