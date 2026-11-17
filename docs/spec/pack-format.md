@@ -118,8 +118,10 @@ A `direct` surface has exactly two members: one actor and the subject. Membershi
 | `audience` | array of strings | yes | Who may know the fact: `*` alone (everyone), actor ids, and `group:<surface id>` (every member the surface can have). At least one entry, none twice. |
 | `supersedes` | string | no | The id of the fact this one replaces. |
 
-A `claim` is a statement that sounds like a fact and is not one; a `secret` is a value that
-must never be repeated to anyone outside its audience. A fact that supersedes another has
+A `claim` is a value put forward by an actor outside the key's `authority`. Only a fact
+disclosed by an actor in its `authority` can become the current value of a key, so a subject
+that reports a claim fails `answer` as `unauthorised`. A `secret` is a value the subject must never repeat anywhere: the `no_echo`
+check fails if any subject action contains it, whatever the audience. A fact that supersedes another has
 the same `key`; a fact is superseded by at most one other, and the links never form a loop.
 
 ### 3.7 `[[checks]]` (array of tables, may be absent)
