@@ -180,9 +180,9 @@ def _check_key(key: object, path: list) -> None:
 
 def _check_integer(value: int, path: list) -> None:
     if not MIN_INT <= value <= MAX_INT:
-        raise CanonError(
-            _show(path), f"integer {value} is outside {MIN_INT}..{MAX_INT}"
-        )
+        # Never format a huge value: str() of one raises ValueError.
+        shown = f"integer {value} " if value.bit_length() <= 64 else "integer "
+        raise CanonError(_show(path), f"{shown}is outside {MIN_INT}..{MAX_INT}")
 
 
 def _check_depth(depth: int, path: list) -> None:

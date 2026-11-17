@@ -356,6 +356,11 @@ class CanonRejectTests(unittest.TestCase):
     def test_very_large_integer(self) -> None:
         self.assert_rejected(10**400, "$", "outside")
 
+    def test_integer_beyond_the_string_conversion_limit_is_a_canon_error(self) -> None:
+        self.assert_rejected(10**5000, "$", "outside")
+        self.assert_rejected(-(10**5000), "$", "outside")
+        self.assert_rejected(int("f" * 5000, 16), "$", "outside")
+
     def test_integer_out_of_range_inside_an_array(self) -> None:
         self.assert_rejected([0, [2**64]], "$[1][0]", "outside")
 
