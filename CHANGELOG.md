@@ -37,8 +37,24 @@ All notable changes to this project are documented here. The format follows
 - Design for a control-agent audit of public multi-user agent benchmarks
   (`docs/design/control-agent-audit.md`).
 
+- The `teamsim` engine package, standard library only, on Python 3.12 or later:
+  `teamsim.canon` (the canonical form: JSON with sorted keys, no floats or nulls, NFC text,
+  integers within ±(2^53 − 1), and its SHA-256 hash), `teamsim.draw` (keyed, seeded draws
+  that do not depend on the order or number of other draws) and `teamsim.model` (the pack
+  and timeline types). Golden vectors in `tests/golden/` pin the bytes and hashes.
+- Subject protocol version 1 (`docs/spec/subject-protocol.md`): how software under test
+  connects to the engine, in process or as a child process exchanging one JSON object per
+  line in lockstep, with a watchdog, limits and an example in another language. A standard
+  input/output spike (`tests/spike_stdio.py`) backs its implementation notes; it was run on
+  Windows only.
+- CI runs the engine tests (`python -I -m unittest discover -s tests -t .`) on Python 3.12 and
+  3.14 on Linux, macOS and Windows.
+
 ### Changed
 
+- The prototype's emulator settings are configurable: `TEAMSIM_WSL_DISTRO` (required for live
+  runs), `TEAMSIM_WSL_USER` and `TEAMSIM_EMU_REMOTE_DIR`, read from the environment or `.env`
+  (see `.env.example`). Machine-specific defaults are removed.
 - Version 0: ADR 0009 sets what the first runnable version contains: a workspace built into
   the engine, a subject protocol with an in-process and a child-process transport, the
   `teamsim` package at the repository root, and Python 3.12 as the oldest supported version.
