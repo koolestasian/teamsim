@@ -269,7 +269,7 @@ class NoRandomNoHash(unittest.TestCase):
         return ast.parse((CORE / name).read_text(encoding="utf-8"), filename=name)
 
     def test_no_random_import_and_no_builtin_hash(self):
-        for name in ("draw.py", "canon.py"):
+        for name in ("draw.py", "canon.py", "model.py"):
             tree = self.parse(name)
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
