@@ -763,5 +763,102 @@ class Coverage(unittest.TestCase):
             self.assertIsNone(re.search(banned, source), banned)
 
 
+class ReviewRegressions(TempCase):
+    def test_bare_newlines_stop_at_the_event_limit_with_bounded_memory(self):
+        import tracemalloc
+
+        text = "\n" * 3_000_000
+        tracemalloc.start()
+        try:
+            with self.assertRaises(PackError) as caught:
+                pack._read_timeline(text)
+            _, peak = tracemalloc.get_traced_memory()
+        finally:
+            tracemalloc.stop()
+        self.assertEqual(caught.exception.code, "limit_exceeded")
+        self.assertLess(peak, 5_000_000, "the timeline was split into a huge list")
+
+    def test_huge_decimal_toml_integer_is_a_pack_error(self):
+        text = dump_toml(BASE_TOML).replace('"format" = 1', '"format" = ' + "9" * 5000, 1)
+        with self.assertRaises(PackError) as caught:
+            pack.load(self.make(toml_text=text))
+        self.assertEqual(caught.exception.code, "bad_toml")
+
+    def test_huge_hex_toml_integer_is_a_pack_error(self):
+        text = dump_toml(BASE_TOML).replace('"format" = 1', '"format" = 0x' + "f" * 5000, 1)
+        with self.assertRaises(PackError) as caught:
+            pack.load(self.make(toml_text=text))
+        self.assertEqual(caught.exception.code, "non_canonical")
+        self.assertLess(len(str(caught.exception)), 500)
+
+    def _nested(self, depth):
+        value = []
+        for _ in range(depth - 1):
+            value = [value]
+        return value
+
+    def test_every_loadable_pack_hashes_at_the_depth_limit(self):
+        # Find the deepest transformation that loads; it must hash, one deeper must not load.
+        deepest = None
+        for depth in range(canon.MAX_DEPTH - 6, canon.MAX_DEPTH + 2):
+            def edit(obj, depth=depth):
+                obj["provenance"] = {"transformation": self._nested(depth)}
+
+            try:
+                loaded = pack.load(self.make(toml=edit))
+            except PackError as error:
+                self.assertEqual(error.code, "non_canonical")
+                self.assertIsNotNone(deepest, "nothing loaded")
+                self.assertEqual(depth, deepest + 1)
+                break
+            pack.pack_hash(loaded)
+            deepest = depth
+        else:
+            self.fail("the depth limit was never reached")
+
+    def test_deep_event_args_that_load_also_hash(self):
+        for depth in range(canon.MAX_DEPTH - 6, canon.MAX_DEPTH + 1):
+            def edit(evs, depth=depth):
+                op = next(e for e in evs if e["kind"] == "op")
+                op["args"] = {"a": self._nested(depth)}
+
+            try:
+                loaded = pack.load(self.make(events=edit))
+            except PackError as error:
+                self.assertEqual(error.code, "non_canonical")
+                break
+            pack.pack_hash(loaded)
+
+    def test_write_refuses_a_pack_the_loader_would_reject_for_size(self):
+        loaded = pack.load(MINIMAL)
+        big = dataclasses.replace(loaded, header=dataclasses.replace(loaded.header, title="	" * 600_000))
+        target = self.tmp / "out"
+        with self.assertRaises(PackError) as caught:
+            pack.write(big, target)
+        self.assertEqual(caught.exception.code, "limit_exceeded")
+        self.assertFalse(target.exists())
+        # an existing pack is left untouched
+        pack.write(loaded, target)
+        before = (target / "pack.toml").read_bytes()
+        with self.assertRaises(PackError):
+            pack.write(big, target)
+        self.assertEqual((target / "pack.toml").read_bytes(), before)
+
+    def test_many_forms_load_and_a_repeat_is_still_located(self):
+        forms = [f"form {n}" for n in range(20000)]
+
+        def edit(obj):
+            table(obj, "facts", "f.date.1")["forms"] = forms
+
+        loaded = self.loads(toml=edit)
+        self.assertEqual(len(next(f for f in loaded.facts if f.id == "f.date.1").forms), 20000)
+
+        def repeat(obj):
+            table(obj, "facts", "f.date.1")["forms"] = forms + ["form 17"]
+
+        error = self.fails("bad_fact", toml=repeat)
+        self.assertIn("forms[20000]", error.path)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -321,9 +321,11 @@ def _read_timeline(text: str):
             "the last line has no line feed",
             line=text.count("\n") + 1,
         )
-    lines = text.split("\n")[:-1]
-    if len(lines) > MAX_EVENTS:
+    # The text ends with a line feed, so the count of line feeds is the count of
+    # lines; check it before splitting so a hostile file builds no huge list.
+    if text.count("\n") > MAX_EVENTS:
         raise _err("limit_exceeded", TIMELINE_FILE, f"more than {MAX_EVENTS} events")
+    lines = text.split("\n")[:-1]
     events = []
     for number, line in enumerate(lines, 1):
         if len(line.encode("utf-8")) > MAX_LINE_BYTES:
@@ -353,7 +355,7 @@ def load(path) -> Pack:
     timeline_text = _read_file(root, TIMELINE_FILE, MAX_TIMELINE_BYTES)
     try:
         toml_obj = tomllib.loads(toml_text)
-    except (tomllib.TOMLDecodeError, RecursionError) as error:
+    except (ValueError, RecursionError) as error:  # includes TOMLDecodeError and the int digit limit
         raise _err("bad_toml", TOML_FILE, str(error)) from None
     try:
         canon.check(toml_obj)
@@ -409,6 +411,13 @@ class _Validator:
             canon.check(p.timeline_objs())
         except canon.CanonError as error:
             raise _err("non_canonical", TOML_FILE, str(error)) from None
+        # pack_hash() wraps both in one object, which adds depth; every pack that
+        # loads must hash, so check the wrapped value too.
+        try:
+            canon.check({"pack": p.to_obj(), "timeline": p.timeline_objs()})
+        except canon.CanonError as error:
+            file = TIMELINE_FILE if error.path.startswith('$["timeline"]') else TOML_FILE
+            raise _err("non_canonical", file, str(error)) from None
         if p.header.format != model.FORMAT:
             raise self.t("bad_format", "format", f"format is {p.header.format}, not {model.FORMAT}")
         self.ids()
@@ -522,12 +531,14 @@ class _Validator:
             if not fact.value:
                 raise self.t("bad_fact", f"{base}.value", "the value is empty")
             forms = fact.forms or ()
+            seen_forms = set()
             for position, form in enumerate(forms):
                 path = f"{base}.forms[{position}]"
                 if not form:
                     raise self.t("bad_fact", path, "a form is empty")
-                if form in forms[:position]:
+                if form in seen_forms:
                     raise self.t("bad_fact", path, f"form {form!r} is listed twice")
+                seen_forms.add(form)
             self.authority(fact, base)
             self.audience(fact, base)
         successors = set()
@@ -897,7 +908,24 @@ def write(pack: Pack, path) -> None:
     """
     validate(pack)
     text = toml_text(pack).encode("utf-8")
-    events = timeline_bytes(pack)
+    lines = [canon.canon(event) + b"\n" for event in pack.timeline_objs()]
+    events = b"".join(lines)
+    # The writer's spelling can be longer than the source (escapes), so check the
+    # bytes against the loader's limits before any file is touched.
+    if len(text) > MAX_TOML_BYTES:
+        raise _err("limit_exceeded", TOML_FILE, f"{len(text)} bytes exceeds the limit of {MAX_TOML_BYTES}")
+    if len(events) > MAX_TIMELINE_BYTES:
+        raise _err(
+            "limit_exceeded", TIMELINE_FILE, f"{len(events)} bytes exceeds the limit of {MAX_TIMELINE_BYTES}"
+        )
+    for number, line in enumerate(lines, 1):
+        if len(line) - 1 > MAX_LINE_BYTES:
+            raise _err(
+                "limit_exceeded",
+                TIMELINE_FILE,
+                f"a line is longer than {MAX_LINE_BYTES} bytes",
+                line=number,
+            )
     root = Path(path)
     root.mkdir(parents=True, exist_ok=True)
     (root / TOML_FILE).write_bytes(text)
