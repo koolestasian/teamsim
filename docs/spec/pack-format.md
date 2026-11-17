@@ -442,7 +442,8 @@ time; none is a recommendation.
 | `MAX_CHECKS` | 10,000 | One per fact and probe at the fact limit. |
 | `MAX_TIME_MS` | 1,099,511,627,776 | 2^40 ms, about 34 years; a sum of two times stays far below 2^53. |
 
-Nesting is limited to 64 (section 2). Ids are 1 to 64 characters.
+Nesting is limited to 64 (section 2), counted inside the object that the pack hash covers
+(section 8), so a pack that loads can always be hashed. Ids are 1 to 64 characters.
 
 ## 10. Writing a pack
 
