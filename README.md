@@ -4,10 +4,10 @@
 
 [![CI](https://github.com/koolestasian/teamsim/actions/workflows/ci.yml/badge.svg)](https://github.com/koolestasian/teamsim/actions/workflows/ci.yml)
 ![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)
-![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)
+![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
 ![Licence: MIT or Apache-2.0](https://img.shields.io/badge/licence-MIT%20or%20Apache--2.0-lightgrey)
 
-Testing a product properly needs actual human using it: someone who enters things, changes their
+Testing a product properly needs people using it: someone who enters things, changes their
 mind, makes mistakes and comes back a week later, or a group who post, decide, message each
 other privately and paste things they shouldn't. Most people building software, students
 especially, don't have those people to test with.
@@ -18,7 +18,9 @@ one's role, habits and traits), teamsim plays them in a local sandbox, plants fa
 software against them. It runs on your machine, with no real accounts and no real servers.
 
 > **Pre-alpha.** What runs today is a prototype built to test one product with a six-person
-> simulated team. The general engine is designed but not yet built. See [Status](#status).
+> simulated team. The general engine is being built: its data format, seeded randomness,
+> scenario pack format and subject protocol exist, but it cannot run a scenario yet. See
+> [Status](#status).
 
 ## Who it is for
 
@@ -62,22 +64,25 @@ instructions, how often it makes a mistake), never what it thinks of your produc
 
 The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine),
 [ADR 0007](docs/adr/0007-scope-simulated-teammates-sandbox.md) and
-[ADR 0008](docs/adr/0008-scope-synthetic-users-any-software.md) (scope).
-
+[ADR 0008](docs/adr/0008-scope-synthetic-users-any-software.md) (scope), and
+[ADR 0009](docs/adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)
+(what version 0 contains).
 
 ## Status
 
 | Part | State |
 |---|---|
-| [`prototypes/teamctx-sim/`](prototypes/teamctx-sim/) | **Working.** An end-to-end simulation built to test [teamctx](https://github.com/koolestasian/discord-team-context): a six-person simulated team chats through a local Discord emulator while the product syncs it, and a checker scores sync, commands, search quality, visibility, prompt injection, catch-up after an absence and due dates across time zones. 230 offline tests |
+| [`prototypes/teamctx-sim/`](prototypes/teamctx-sim/) | **Working.** An end-to-end simulation built to test [teamctx](https://github.com/koolestasian/discord-team-context): a six-person simulated team chats through a local Discord emulator while the product syncs it, and a checker scores sync, commands, search quality, visibility, prompt injection, catch-up after an absence and due dates across time zones. 235 offline tests |
 | Research | **Done for now.** Prior art, workspace emulators, a review of 455 papers, stack options and a market check ([docs/research/](docs/research/)) |
-| Design | **Decided.** Stack, engine shape and scope ([ADRs 0004, 0006, 0007 and 0008](docs/adr/)) |
-| Engine | Not started |
+| Design | **Decided.** Stack, engine shape, scope and version 0 ([ADRs 0004 and 0006 to 0009](docs/adr/)) |
+| Engine ([`teamsim/`](teamsim/)) | **In progress.** Built and tested on Python 3.12 and 3.14: the canonical data form, seeded draws, the data model, the [scenario pack format](docs/spec/pack-format.md) with a [minimal pack](packs/minimal/), and the [subject protocol](docs/spec/subject-protocol.md) specification. Not built yet: the scheduler, the built-in workspace, the subject transports, checks and run records |
 
 ### Roadmap
 
-1. The general engine: scenario packs, simulated time, the record of who knows what, checks,
-   run records and replay.
+1. Version 0 of the engine ([ADR 0009](docs/adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)):
+   simulated time, a workspace built into the engine, the record of who knows what, checks,
+   run records and replay, with software under test connected in process or as a child
+   process over standard input and output.
 2. One product other than teamctx tested end to end, with the prototype's checks ported.
 3. Presets: choose the number of synthetic users and each one's role, habits and traits
    instead of writing a pack by hand. A single-user scenario comes with this step.
@@ -87,12 +92,14 @@ The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine
 
 ## Try the prototype
 
-The unit tests run offline on Linux, macOS and Windows:
+Both test suites run offline on Linux, macOS and Windows with Python 3.12 or later and
+nothing else installed:
 
 ```sh
 git clone https://github.com/koolestasian/teamsim.git
 cd teamsim
-python -I -m unittest discover -s prototypes/teamctx-sim/tests
+python -I -m unittest discover -s prototypes/teamctx-sim/tests   # the prototype
+python -I -m unittest discover -s tests -t .                     # the engine
 ```
 
 A live run needs the Discord emulator and a teamctx build; the
@@ -105,6 +112,10 @@ over several messages, reactions instead of replies, pasted AI answers, a pasted
 
 | Path | Contents |
 |---|---|
+| [`teamsim/`](teamsim/) | The engine package (standard library only) |
+| [`tests/`](tests/) | Engine tests and golden vectors |
+| [`packs/`](packs/) | Scenario packs |
+| [`docs/spec/`](docs/spec/) | Formats and protocols the engine implements |
 | [`docs/adr/`](docs/adr/) | Architecture decision records |
 | [`docs/research/`](docs/research/) | Research notes with sources and dates, the bibliography and figures |
 | [`prototypes/teamctx-sim/`](prototypes/teamctx-sim/) | The working prototype |
@@ -112,7 +123,7 @@ over several messages, reactions instead of replies, pasted AI answers, a pasted
 
 ## Contributing and security
 
-The project is pre-alpha and the engine does not exist yet, so open an issue before starting
+The project is pre-alpha and the engine is incomplete, so open an issue before starting
 anything larger than a small fix. See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the
 [code of conduct](.github/CODE_OF_CONDUCT.md). Report vulnerabilities privately as described
 in [SECURITY.md](.github/SECURITY.md).

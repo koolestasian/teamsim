@@ -42,6 +42,10 @@ All notable changes to this project are documented here. The format follows
   integers within ±(2^53 − 1), and its SHA-256 hash), `teamsim.draw` (keyed, seeded draws
   that do not depend on the order or number of other draws) and `teamsim.model` (the pack
   and timeline types). Golden vectors in `tests/golden/` pin the bytes and hashes.
+- Scenario pack format 1 (`docs/spec/pack-format.md`): the `pack.toml` and `timeline.jsonl`
+  files, 35 validation rules each with a code, and the pack hash. `teamsim.pack` loads,
+  validates, hashes and writes packs; `packs/minimal` is a hand-written pack that uses every
+  event kind, time form and check kind, with its hash pinned in the tests.
 - Subject protocol version 1 (`docs/spec/subject-protocol.md`): how software under test
   connects to the engine, in process or as a child process exchanging one JSON object per
   line in lockstep, with a watchdog, limits and an example in another language. A standard
