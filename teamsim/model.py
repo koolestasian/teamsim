@@ -71,6 +71,7 @@ __all__ = [
     "PACK_HEADER_FIELDS",
     "PACK_LISTS",
     "PACK_TABLES",
+    "Pack",
     "PackHeader",
     "Provenance",
     "REASONS",
@@ -802,3 +803,38 @@ class Event:
             discloses=_maybe(_texts, obj, "discloses", what),
             probe=_maybe(_flag, obj, "probe", what),
         )
+
+
+# --- the whole pack --------------------------------------------------------
+
+
+@dataclass(frozen=True, slots=True)
+class Pack:
+    """A pack: ``pack.toml`` read as typed parts, and the events of ``timeline.jsonl``.
+
+    ``to_obj`` is ``pack.toml`` as one plain object: the header fields, the
+    ``subject`` table, the ``provenance`` table when there is one, and the four
+    arrays of tables, which are always present (an empty array stands for an
+    absent one). ``timeline_objs`` is the events, in file order.
+    """
+
+    header: PackHeader
+    subject: Subject
+    actors: tuple[Actor, ...]
+    surfaces: tuple[Surface, ...]
+    facts: tuple[Fact, ...]
+    checks: tuple[Check, ...]
+    events: tuple[Event, ...]
+    provenance: Provenance | None = None
+
+    def to_obj(self) -> dict:
+        obj = self.header.to_obj()
+        obj["subject"] = self.subject.to_obj()
+        if self.provenance is not None:
+            obj["provenance"] = self.provenance.to_obj()
+        for name in PACK_LISTS:
+            obj[name] = [item.to_obj() for item in getattr(self, name)]
+        return obj
+
+    def timeline_objs(self) -> list:
+        return [event.to_obj() for event in self.events]
