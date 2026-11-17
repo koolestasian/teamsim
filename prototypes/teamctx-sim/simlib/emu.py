@@ -234,7 +234,7 @@ class Wsl:
         self.remote_seed = f"{self.remote_dir}/seed.json"
         self.remote_log = f"{self.remote_dir}/emu.log"
         self.start_script = (f"cd {self.remote_dir} && exec npx baseline start --service discord "
-                             f"--seed {self.remote_seed} > {self.remote_log} 2>&1")
+                             f"--seed seed.json > emu.log 2>&1")  # relative to the directory after cd
 
     def check(self) -> None:
         if not self.distro:

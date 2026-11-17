@@ -277,6 +277,21 @@ baseline
 
         return Wsl(Path(d), runner=Runner, **kw), calls
 
+    def test_start_script_uses_paths_relative_to_the_directory_it_enters(self):
+        for remote in ("emu", "~/emu", "~/a/b", "a/b"):
+            with tempfile.TemporaryDirectory() as d:
+                wsl, calls = self._recording_wsl(d, distro="x", remote_dir=remote)
+                wsl.start()
+            script = calls[0][0][-1]
+            self.assertTrue(script.startswith(f"cd {remote} && "), script)
+            rest = script[len(f"cd {remote} && "):]
+            self.assertNotIn(f"{remote}/", rest)
+            self.assertIn("--seed seed.json", rest)
+            self.assertIn("> emu.log", rest)
+            # the files written and read before start use the same directory
+            self.assertEqual(wsl.remote_seed, f"{remote}/seed.json")
+            self.assertEqual(wsl.remote_log, f"{remote}/emu.log")
+
     def test_wsl_commands_touch_only_the_emulator_and_feed_the_seed_through_stdin(self):
         with tempfile.TemporaryDirectory() as d:
             wsl, calls = self._recording_wsl(d, distro="test-distro", user="test-user", remote_dir="~/test-emu")
