@@ -1,4 +1,5 @@
-"""Shared types and names for a pack and its timeline (pack format 1).
+"""Shared types and names for a pack and its timeline (pack format 1), and for
+a run: log entries, verdicts, the run record and a transport's reply.
 
 Types only. Nothing here reads a file, and nothing checks one object against
 another: that an id exists, that times are ordered or that a check names a real
@@ -27,11 +28,17 @@ from types import MappingProxyType
 from . import canon
 
 __all__ = [
-    "AUDIENCE_ALL",
-    "AUDIENCE_GROUP_PREFIX",
+    "Action",
+    "ACTION_KINDS",
+    "ACTION_POST",
+    "ACTION_REACT",
+    "ACTION_RESULT",
+    "Actor",
     "After",
     "At",
-    "Actor",
+    "AUDIENCE_ALL",
+    "AUDIENCE_GROUP_PREFIX",
+    "Check",
     "CHECK_ANSWER",
     "CHECK_CATCH_UP",
     "CHECK_HARNESS",
@@ -39,7 +46,29 @@ __all__ = [
     "CHECK_NO_ECHO",
     "CHECK_NO_LEAK",
     "CHECK_WITHHOLD",
-    "Check",
+    "CODE_EXITED",
+    "CODE_INVALID_MESSAGE",
+    "CODE_LATE_ACTION",
+    "CODE_LINE_TOO_LONG",
+    "CODE_MALFORMED_LINE",
+    "CODE_NO_EXIT",
+    "CODE_OUTPUT_AFTER_SHUTDOWN",
+    "CODE_REJECTED_ACTION",
+    "CODE_REPORTED",
+    "CODE_TIMEOUT",
+    "CODE_TOO_MANY_ACTIONS",
+    "CODE_VERSION_MISMATCH",
+    "CODE_WRONG_IN_REPLY_TO",
+    "Delivery",
+    "ENDS_SESSION",
+    "ENTRY_DELIVERY",
+    "ENTRY_DIGEST",
+    "entry_from_obj",
+    "ENTRY_HEADER",
+    "ENTRY_NOTE",
+    "ENTRY_OBSERVATION",
+    "ENTRY_VERDICT",
+    "Event",
     "EVENT_AWAY",
     "EVENT_BACK",
     "EVENT_DELETE",
@@ -54,7 +83,7 @@ __all__ = [
     "EVENT_SUBJECT_JOIN",
     "EVENT_SUBJECT_LEAVE",
     "EVENT_SUBJECT_UP",
-    "Event",
+    "Fact",
     "FACT_ASSIGNMENT",
     "FACT_CLAIM",
     "FACT_DATE",
@@ -64,46 +93,79 @@ __all__ = [
     "FACT_PREFERENCE",
     "FACT_SECRET",
     "FAIL_REASONS",
+    "Fault",
     "FORMAT",
-    "Fact",
+    "LOG_ENTRY_TYPES",
+    "LogEntry",
+    "MODE_SCRIPTED",
     "ModelError",
+    "Note",
+    "NOTE_CODES",
+    "NOTE_NOT_FIRED",
+    "NOTE_SHUTDOWN",
+    "NOTE_START",
+    "NOTE_TICK_DROPPED",
+    "OBS_ACTION",
+    "OBS_DONE",
+    "OBS_ERROR",
+    "OBS_KINDS",
+    "OBS_READY",
+    "OBS_STALLED",
+    "Observation",
     "On",
+    "Pack",
     "PACK_HEADER_FIELDS",
     "PACK_LISTS",
     "PACK_TABLES",
-    "Pack",
     "PackHeader",
     "Provenance",
-    "REASONS",
     "REASON_ECHOED",
     "REASON_LEAKED",
     "REASON_MISSED",
     "REASON_MISSING",
-    "REASON_NOT_DELIVERED",
     "REASON_NO_RESPONSE",
+    "REASON_NOT_DELIVERED",
     "REASON_OUT_OF_ORDER",
     "REASON_STALE",
     "REASON_UNAUTHORISED",
-    "SURFACE_CHANNEL",
-    "SURFACE_DIRECT",
-    "SURFACE_KINDS",
+    "REASONS",
+    "RECORD_FORMAT",
+    "RecordHeader",
+    "Reply",
+    "REPLY_CLOSED",
+    "REPLY_DONE",
+    "REPLY_ENDED",
+    "REPLY_ENDS",
+    "REPLY_READY",
+    "RunResult",
+    "SHUTDOWN_END_OF_RUN",
+    "SHUTDOWN_ERROR",
+    "SHUTDOWN_REASONS",
+    "SHUTDOWN_WATCHDOG",
+    "STALL_CODES",
     "Subject",
     "SubjectMentions",
     "SubjectPost",
     "Surface",
+    "SURFACE_CHANNEL",
+    "SURFACE_DIRECT",
+    "SURFACE_KINDS",
     "TAG_POLICY",
+    "TICK",
     "TIME_FORMS",
+    "Trigger",
+    "trigger_from_obj",
     "TRIGGER_KINDS",
     "TRIGGER_SUBJECT_MENTIONS",
     "TRIGGER_SUBJECT_POST",
-    "Trigger",
-    "VERDICTS",
+    "Verdict",
     "VERDICT_FAIL",
     "VERDICT_HARNESS_ERROR",
     "VERDICT_NOT_APPLICABLE",
     "VERDICT_PASS",
+    "VERDICTS",
+    "VIOLATION_CODES",
     "When",
-    "trigger_from_obj",
     "when_from_obj",
 ]
 
@@ -838,3 +900,530 @@ class Pack:
 
     def timeline_objs(self) -> list:
         return [event.to_obj() for event in self.events]
+
+
+# --- a run -----------------------------------------------------------------
+#
+# The types below describe a run, not a pack: what the engine did, what the
+# subject did, what each check decided, and the run record that holds them all
+# (engine spec sections 4 to 8, docs/spec/engine-modules.md). They follow the
+# same rules as the pack types: frozen, ``to_obj``/``from_obj``, lossless.
+
+RECORD_FORMAT = 1
+MODE_SCRIPTED = "scripted"
+
+# The ``type`` of each line of ``record.jsonl``, in the order they appear: one
+# header, the log entries, the verdicts, one digest.
+ENTRY_HEADER = "header"
+ENTRY_DELIVERY = "delivery"
+ENTRY_OBSERVATION = "observation"
+ENTRY_NOTE = "note"
+ENTRY_VERDICT = "verdict"
+ENTRY_DIGEST = "digest"
+LOG_ENTRY_TYPES = (ENTRY_DELIVERY, ENTRY_OBSERVATION, ENTRY_NOTE)
+
+# The event kind of a wake-up the subject asked for (protocol section 5.4).
+TICK = "tick"
+
+ACTION_POST = "post"
+ACTION_REACT = "react"
+ACTION_RESULT = "result"
+ACTION_KINDS = (ACTION_POST, ACTION_REACT, ACTION_RESULT)
+
+# What an observation records. ``subject_error`` and ``subject_stalled`` are
+# the protocol's names (section 6).
+OBS_READY = "ready"
+OBS_ACTION = "action"
+OBS_DONE = "done"
+OBS_ERROR = "subject_error"
+OBS_STALLED = "subject_stalled"
+OBS_KINDS = (OBS_READY, OBS_ACTION, OBS_DONE, OBS_ERROR, OBS_STALLED)
+
+# Violation codes, protocol section 6.
+CODE_LATE_ACTION = "late_action"
+CODE_WRONG_IN_REPLY_TO = "wrong_in_reply_to"
+CODE_REJECTED_ACTION = "rejected_action"
+CODE_TOO_MANY_ACTIONS = "too_many_actions"
+CODE_INVALID_MESSAGE = "invalid_message"
+CODE_MALFORMED_LINE = "malformed_line"
+CODE_LINE_TOO_LONG = "line_too_long"
+CODE_VERSION_MISMATCH = "version_mismatch"
+CODE_REPORTED = "reported"
+CODE_TIMEOUT = "timeout"
+CODE_EXITED = "exited"
+CODE_NO_EXIT = "no_exit"
+CODE_OUTPUT_AFTER_SHUTDOWN = "output_after_shutdown"
+VIOLATION_CODES = (
+    CODE_LATE_ACTION,
+    CODE_WRONG_IN_REPLY_TO,
+    CODE_REJECTED_ACTION,
+    CODE_TOO_MANY_ACTIONS,
+    CODE_INVALID_MESSAGE,
+    CODE_MALFORMED_LINE,
+    CODE_LINE_TOO_LONG,
+    CODE_VERSION_MISMATCH,
+    CODE_REPORTED,
+    CODE_TIMEOUT,
+    CODE_EXITED,
+    CODE_NO_EXIT,
+    CODE_OUTPUT_AFTER_SHUTDOWN,
+)
+# The codes observed as ``subject_stalled``; every other code is ``subject_error``.
+STALL_CODES = frozenset({CODE_TIMEOUT, CODE_NO_EXIT})
+# The codes after which the session is over (protocol section 6, "Ends the session").
+ENDS_SESSION = frozenset(
+    {
+        CODE_TOO_MANY_ACTIONS,
+        CODE_INVALID_MESSAGE,
+        CODE_MALFORMED_LINE,
+        CODE_LINE_TOO_LONG,
+        CODE_VERSION_MISMATCH,
+        CODE_REPORTED,
+        CODE_TIMEOUT,
+        CODE_EXITED,
+    }
+)
+
+SHUTDOWN_END_OF_RUN = "end_of_run"
+SHUTDOWN_ERROR = "error"
+SHUTDOWN_WATCHDOG = "watchdog"
+SHUTDOWN_REASONS = (SHUTDOWN_END_OF_RUN, SHUTDOWN_ERROR, SHUTDOWN_WATCHDOG)
+
+# Engine notes: things the engine did that are neither a delivery nor
+# something the subject did.
+NOTE_START = "start"  # ``hello`` was sent; observations up to the next delivery answer it
+NOTE_SHUTDOWN = "shutdown"  # ``shutdown`` was sent; ``detail`` is the reason
+NOTE_TICK_DROPPED = "tick_dropped"  # a wake-up fell while the subject was down
+NOTE_NOT_FIRED = "not_fired"  # at the end, an event whose trigger or dependency never happened
+NOTE_CODES = (NOTE_START, NOTE_SHUTDOWN, NOTE_TICK_DROPPED, NOTE_NOT_FIRED)
+
+# The four reply endings a transport returns (``Reply.end``).
+REPLY_READY = "ready"
+REPLY_DONE = "done"
+REPLY_ENDED = "ended"  # the session ended; the last item of ``items`` is the fault
+REPLY_CLOSED = "closed"  # the answer to ``stop``
+REPLY_ENDS = (REPLY_READY, REPLY_DONE, REPLY_ENDED, REPLY_CLOSED)
+
+
+def _ints(obj: dict, name: str, what: str) -> tuple[int, ...]:
+    value = obj[name]
+    if type(value) is not list or any(type(item) is not int for item in value):
+        raise ModelError(f"{what}: field {name!r} must be an array of integers")
+    return tuple(value)
+
+
+def _one_of(obj: dict, name: str, what: str, allowed: tuple) -> str:
+    value = _text(obj, name, what)
+    if value not in allowed:
+        raise ModelError(
+            f"{what}: {name} {value!r} is not one of {', '.join(allowed)}"
+        )
+    return value
+
+
+def _type(obj: object, what: str, expected: str) -> None:
+    if type(obj) is dict and obj.get("type") != expected:
+        raise ModelError(f"{what}: type must be {expected!r}")
+
+
+@dataclass(frozen=True, slots=True)
+class Action:
+    """Something the subject did: a protocol ``action`` without ``type`` and
+    ``in_reply_to`` (the observation that holds it carries those)."""
+
+    kind: str
+    surface: str
+    text: str
+    data: dict | None = field(default=None, hash=False)
+    reply_to: str | None = None
+
+    def to_obj(self) -> dict:
+        obj: dict = {"kind": self.kind, "surface": self.surface, "text": self.text}
+        _put(obj, "data", self.data)
+        _put(obj, "reply_to", self.reply_to)
+        return obj
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "Action":
+        what = "action"
+        obj = _open(obj, what, ("kind", "surface", "text"), ("data", "reply_to"))
+        return cls(
+            kind=_kind(obj, what, ACTION_KINDS),
+            surface=_text(obj, "surface", what),
+            text=_text(obj, "text", what),
+            data=_maybe(_table, obj, "data", what),
+            reply_to=_maybe(_text, obj, "reply_to", what),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Delivery:
+    """The engine applied one event, or a wake-up fell due.
+
+    ``n`` is the entry's position in the log, from 1. ``event``, ``actor`` and
+    ``surface`` are ``None`` for a ``tick``. ``recipients`` are the actors
+    (never the subject) that were members of the surface at ``t_ms``, in
+    ascending code-point order. ``seq`` is the protocol ``seq`` when the event
+    was sent to the subject and ``None`` when it was not (not a member, down,
+    or the session had ended).
+    """
+
+    n: int
+    t_ms: int
+    kind: str
+    event: str | None = None
+    actor: str | None = None
+    surface: str | None = None
+    recipients: tuple[str, ...] = ()
+    seq: int | None = None
+
+    def to_obj(self) -> dict:
+        obj: dict = {
+            "type": ENTRY_DELIVERY,
+            "n": self.n,
+            "t_ms": self.t_ms,
+            "kind": self.kind,
+        }
+        _put(obj, "event", self.event)
+        _put(obj, "actor", self.actor)
+        _put(obj, "surface", self.surface)
+        obj["recipients"] = list(self.recipients)
+        _put(obj, "seq", self.seq)
+        return obj
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "Delivery":
+        what = "delivery"
+        _type(obj, what, ENTRY_DELIVERY)
+        obj = _open(
+            obj,
+            what,
+            ("type", "n", "t_ms", "kind", "recipients"),
+            ("event", "actor", "surface", "seq"),
+        )
+        return cls(
+            n=_whole(obj, "n", what),
+            t_ms=_whole(obj, "t_ms", what),
+            kind=_kind(obj, what, EVENT_KINDS + (TICK,)),
+            event=_maybe(_text, obj, "event", what),
+            actor=_maybe(_text, obj, "actor", what),
+            surface=_maybe(_text, obj, "surface", what),
+            recipients=_texts(obj, "recipients", what),
+            seq=_maybe(_whole, obj, "seq", what),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Observation:
+    """One thing the subject sent, or one violation, at the virtual time of
+    the message it answers.
+
+    ``seq`` is the ``seq`` of that message, 0 for ``hello`` and for
+    ``shutdown``. By ``kind``:
+
+    - ``ready``: ``name`` and ``version``.
+    - ``action``: ``action``, and ``readers``: the actors (never the subject)
+      that are members of the action's surface at ``t_ms``, in ascending
+      code-point order.
+    - ``done``: ``wake_at_ms`` when the subject asked for a wake-up.
+    - ``subject_error``, ``subject_stalled``: ``code`` (one of
+      ``VIOLATION_CODES``) and ``detail``. A ``rejected_action`` keeps the
+      rejected ``action``, so a replay rejects it again.
+    """
+
+    n: int
+    t_ms: int
+    seq: int
+    kind: str
+    action: Action | None = None
+    readers: tuple[str, ...] | None = None
+    wake_at_ms: int | None = None
+    name: str | None = None
+    version: str | None = None
+    code: str | None = None
+    detail: str | None = None
+
+    def to_obj(self) -> dict:
+        obj: dict = {
+            "type": ENTRY_OBSERVATION,
+            "n": self.n,
+            "t_ms": self.t_ms,
+            "seq": self.seq,
+            "kind": self.kind,
+        }
+        if self.action is not None:
+            obj["action"] = self.action.to_obj()
+        _put(obj, "readers", self.readers)
+        _put(obj, "wake_at_ms", self.wake_at_ms)
+        _put(obj, "name", self.name)
+        _put(obj, "version", self.version)
+        _put(obj, "code", self.code)
+        _put(obj, "detail", self.detail)
+        return obj
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "Observation":
+        what = "observation"
+        _type(obj, what, ENTRY_OBSERVATION)
+        obj = _open(
+            obj,
+            what,
+            ("type", "n", "t_ms", "seq", "kind"),
+            ("action", "readers", "wake_at_ms", "name", "version", "code", "detail"),
+        )
+        code = _maybe(_text, obj, "code", what)
+        if code is not None and code not in VIOLATION_CODES:
+            raise ModelError(f"{what}: code {code!r} is not a violation code")
+        return cls(
+            n=_whole(obj, "n", what),
+            t_ms=_whole(obj, "t_ms", what),
+            seq=_whole(obj, "seq", what),
+            kind=_kind(obj, what, OBS_KINDS),
+            action=Action.from_obj(obj["action"]) if "action" in obj else None,
+            readers=_maybe(_texts, obj, "readers", what),
+            wake_at_ms=_maybe(_whole, obj, "wake_at_ms", what),
+            name=_maybe(_text, obj, "name", what),
+            version=_maybe(_text, obj, "version", what),
+            code=code,
+            detail=_maybe(_text, obj, "detail", what),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class Note:
+    """Something the engine did that is neither a delivery nor an observation.
+
+    ``code`` is one of ``NOTE_CODES``. ``event`` names the event concerned
+    (``not_fired``); ``detail`` is the shutdown reason (``shutdown``).
+    """
+
+    n: int
+    t_ms: int
+    code: str
+    event: str | None = None
+    detail: str | None = None
+
+    def to_obj(self) -> dict:
+        obj: dict = {"type": ENTRY_NOTE, "n": self.n, "t_ms": self.t_ms, "code": self.code}
+        _put(obj, "event", self.event)
+        _put(obj, "detail", self.detail)
+        return obj
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "Note":
+        what = "note"
+        _type(obj, what, ENTRY_NOTE)
+        obj = _open(obj, what, ("type", "n", "t_ms", "code"), ("event", "detail"))
+        return cls(
+            n=_whole(obj, "n", what),
+            t_ms=_whole(obj, "t_ms", what),
+            code=_one_of(obj, "code", what, NOTE_CODES),
+            event=_maybe(_text, obj, "event", what),
+            detail=_maybe(_text, obj, "detail", what),
+        )
+
+
+LogEntry = Delivery | Observation | Note
+
+_ENTRY_TYPES = MappingProxyType(
+    {ENTRY_DELIVERY: Delivery, ENTRY_OBSERVATION: Observation, ENTRY_NOTE: Note}
+)
+
+
+def entry_from_obj(obj: object) -> LogEntry:
+    """Read one log entry, choosing the type by its ``type`` field."""
+    what = "log entry"
+    if type(obj) is not dict:
+        raise ModelError(f"{what}: expected an object, not {type(obj).__name__}")
+    kind = obj.get("type")
+    if kind not in _ENTRY_TYPES:
+        raise ModelError(
+            f"{what}: type {kind!r} is not one of {', '.join(LOG_ENTRY_TYPES)}"
+        )
+    return _ENTRY_TYPES[kind].from_obj(obj)
+
+
+@dataclass(frozen=True, slots=True)
+class Verdict:
+    """What one check decided.
+
+    ``reason`` is one of ``FAIL_REASONS[kind]`` when ``verdict`` is ``fail``
+    and ``None`` otherwise. ``events`` are the ids of the timeline events and
+    ``entries`` the log positions that are its evidence. ``detail`` holds ids
+    only (fact keys, actor ids), never a fact value. ``policy`` copies whether
+    the check is tagged ``policy``.
+    """
+
+    check: str
+    kind: str
+    verdict: str
+    reason: str | None = None
+    events: tuple[str, ...] = ()
+    entries: tuple[int, ...] = ()
+    detail: tuple[str, ...] = ()
+    policy: bool = False
+
+    def to_obj(self) -> dict:
+        obj: dict = {
+            "type": ENTRY_VERDICT,
+            "check": self.check,
+            "kind": self.kind,
+            "verdict": self.verdict,
+        }
+        _put(obj, "reason", self.reason)
+        obj["events"] = list(self.events)
+        obj["entries"] = list(self.entries)
+        obj["detail"] = list(self.detail)
+        obj["policy"] = self.policy
+        return obj
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "Verdict":
+        what = "verdict"
+        _type(obj, what, ENTRY_VERDICT)
+        obj = _open(
+            obj,
+            what,
+            ("type", "check", "kind", "verdict", "events", "entries", "detail", "policy"),
+            ("reason",),
+        )
+        kind = _kind(obj, what, CHECK_KINDS)
+        verdict = _one_of(obj, "verdict", what, VERDICTS)
+        reason = _maybe(_text, obj, "reason", what)
+        if verdict == VERDICT_FAIL:
+            if reason not in FAIL_REASONS[kind]:
+                raise ModelError(
+                    f"{what}: a failing {kind!r} check needs a reason from "
+                    f"{', '.join(FAIL_REASONS[kind])}"
+                )
+        elif reason is not None:
+            raise ModelError(f"{what}: only a failing check has a reason")
+        return cls(
+            check=_text(obj, "check", what),
+            kind=kind,
+            verdict=verdict,
+            reason=reason,
+            events=_texts(obj, "events", what),
+            entries=_ints(obj, "entries", what),
+            detail=_texts(obj, "detail", what),
+            policy=_flag(obj, "policy", what),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RecordHeader:
+    """The first line of ``record.jsonl``.
+
+    ``subject`` describes the subject as the person running it named it, for
+    example ``{"builtin": "null"}`` or ``{"command": "naive_bot"}``; it never
+    holds a local path the runner did not type. ``limits`` are the pack's.
+    """
+
+    format: int
+    engine: str
+    pack_id: str
+    pack_hash: str
+    seed: str
+    subject: dict = field(hash=False)
+    mode: str
+    limits: tuple[str, ...]
+
+    def to_obj(self) -> dict:
+        return {
+            "type": ENTRY_HEADER,
+            "format": self.format,
+            "engine": self.engine,
+            "pack_id": self.pack_id,
+            "pack_hash": self.pack_hash,
+            "seed": self.seed,
+            "subject": _copy(self.subject),
+            "mode": self.mode,
+            "limits": list(self.limits),
+        }
+
+    @classmethod
+    def from_obj(cls, obj: object) -> "RecordHeader":
+        what = "record header"
+        _type(obj, what, ENTRY_HEADER)
+        obj = _open(
+            obj,
+            what,
+            (
+                "type",
+                "format",
+                "engine",
+                "pack_id",
+                "pack_hash",
+                "seed",
+                "subject",
+                "mode",
+                "limits",
+            ),
+        )
+        return cls(
+            format=_whole(obj, "format", what),
+            engine=_text(obj, "engine", what),
+            pack_id=_text(obj, "pack_id", what),
+            pack_hash=_text(obj, "pack_hash", what),
+            seed=_text(obj, "seed", what),
+            subject=_table(obj, "subject", what),
+            mode=_one_of(obj, "mode", what, (MODE_SCRIPTED,)),
+            limits=_texts(obj, "limits", what),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class RunResult:
+    """A whole run: what ``record.jsonl`` holds, read back as types.
+
+    ``digest`` is ``canon.hash_of`` over the list of every earlier line's
+    object (header, entries, verdicts), computed by ``teamsim.record``.
+    """
+
+    header: RecordHeader
+    entries: tuple[LogEntry, ...]
+    verdicts: tuple[Verdict, ...]
+    digest: str
+
+    def lines(self) -> list:
+        """Every line of the record as a plain object, the digest last."""
+        out = [self.header.to_obj()]
+        out.extend(entry.to_obj() for entry in self.entries)
+        out.extend(verdict.to_obj() for verdict in self.verdicts)
+        out.append({"type": ENTRY_DIGEST, "digest": self.digest})
+        return out
+
+
+# --- a transport's answer --------------------------------------------------
+#
+# Not written anywhere: what a transport (``teamsim.subject``) hands the engine
+# for one message. The engine turns it into observations.
+
+
+@dataclass(frozen=True, slots=True)
+class Fault:
+    """A violation a transport detected (protocol section 6). ``code`` is one
+    of ``VIOLATION_CODES``; ``detail`` is short text for the record, never
+    longer than the transport's limit."""
+
+    code: str
+    detail: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Reply:
+    """A transport's answer to ``start``, ``exchange`` or ``stop``.
+
+    ``items`` are well-formed actions for the outstanding message and faults,
+    in the order they arrived. ``end`` says how the exchange finished:
+    ``ready`` (with ``name`` and ``version``), ``done`` (with ``wake_at_ms``
+    when asked), ``ended`` (the session is over and the last item is the fault
+    that ended it), or ``closed`` (the answer to ``stop``; ``items`` holds
+    only ``no_exit`` or ``output_after_shutdown`` faults).
+    """
+
+    end: str
+    items: tuple[Action | Fault, ...] = ()
+    wake_at_ms: int | None = None
+    name: str | None = None
+    version: str | None = None
