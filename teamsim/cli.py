@@ -31,10 +31,9 @@ import sys
 import time
 from pathlib import Path
 
-from teamsim import checks, controls, engine, generate, ledger, model, pack, record, report
+from teamsim import __version__, checks, controls, engine, generate, ledger, model, pack, record, report
 from teamsim.subject import ChildProcess, InProcess
 
-ENGINE_VERSION = "0.1.0"
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLE_BOTS = ("naive_bot", "careful_bot")
 BUILTINS = tuple(controls.NAMES) + EXAMPLE_BOTS
@@ -137,7 +136,7 @@ def _ms(start: int) -> int:
 
 def _run_once(the_pack, subject: _Subject, stderr_path=None):
     """One run: ``(RunResult, timing rows)``."""
-    head = record.header(the_pack, subject.descriptor, engine=ENGINE_VERSION)
+    head = record.header(the_pack, subject.descriptor, engine=__version__)
     session = subject.make_session(the_pack, stderr_path)
     started = time.monotonic_ns()
     try:

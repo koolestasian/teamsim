@@ -6,6 +6,7 @@ import pathlib
 import re
 import unittest
 
+import teamsim
 from teamsim import checks, controls, engine, generate, pack
 from teamsim.generate import PopulationError
 from teamsim.subject import InProcess
@@ -168,6 +169,21 @@ class StatedLimitsTests(unittest.TestCase):
     def test_the_solo_limits_state_what_was_never_said_once(self):
         limits = generate.generate(solo()).header.limits
         self.assertEqual(sum("never said" in line for line in limits), 1, limits)
+
+
+class EngineVersionTests(unittest.TestCase):
+    def test_the_version_lives_in_the_package_and_the_command_line_writes_it_to_records(self):
+        import tempfile
+
+        from teamsim import cli, record
+
+        self.assertEqual(teamsim.__version__, "0.1.0")
+        self.assertFalse(hasattr(cli, "ENGINE_VERSION") and cli.ENGINE_VERSION != teamsim.__version__)
+        with tempfile.TemporaryDirectory() as tmp:
+            code = cli.main(["run", str(ROOT / "packs" / "minimal"), "--builtin", "oracle", "--out", tmp])
+            self.assertEqual(code, 0)
+            header = record.read(next(pathlib.Path(tmp).glob("record-*.jsonl"))).header
+            self.assertEqual(header.engine, teamsim.__version__)
 
 
 class SoloDaysTests(unittest.TestCase):

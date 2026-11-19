@@ -6,6 +6,7 @@ import pathlib
 import re
 import unittest
 
+import teamsim
 from teamsim import checks, controls, engine, pack, record, report
 from teamsim.model import Verdict
 from teamsim.subject import InProcess
@@ -22,7 +23,7 @@ PIPE = re.compile(r"(?<!\\)\|")
 
 def run_result(name="oracle"):
     entries = engine.run(MINIMAL, InProcess(controls.make(name, MINIMAL)))
-    head = record.header(MINIMAL, {"builtin": name}, engine="0.1.0")
+    head = record.header(MINIMAL, {"builtin": name}, engine=teamsim.__version__)
     return record.build(head, entries, checks.evaluate(MINIMAL, entries))
 
 

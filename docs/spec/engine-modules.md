@@ -263,6 +263,8 @@ its position) and `unsupported_format` (a header `format` this version does not 
 raises `pack_mismatch` for a record made from another pack, and takes the optional keyword
 arguments `run=` and `evaluate=`, which default to `engine.run` and `checks.evaluate`.
 
+The `engine` string that `teamsim.cli` passes to `header` is `teamsim.__version__`.
+
 `record.jsonl` is one canonical JSON object per line (`canon.canon`), `\n` line ends, UTF-8
 without a byte-order mark, in the order of `RunResult.lines()`. The subject descriptor names
 a built-in (`{"builtin": "<name>"}`) or the command's program name only
