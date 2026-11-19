@@ -73,3 +73,13 @@ and compares it with both the file and the implementation.
 
 Not verified: the vectors have been run on Windows only, with CPython 3.12 and 3.14. The
 frequency test checks one case (`below(7)`); it does not prove uniformity.
+
+## `record-*.jsonl`
+
+`record-tiny.jsonl` is a run record (`teamsim/record.py`) for a hand-built run: one channel,
+two actors, one post delivered to a subject that answers it, two passing verdicts. Each line is
+one canonical object and the last is the digest, the SHA-256 of the canonical list of all
+earlier lines. The lines were typed as dictionaries in a separate script that used only `json`
+and `hashlib`, and the digest was confirmed with GNU coreutils `sha256sum` over the first
+lines joined as a JSON array. `tests/test_record.py` builds the same run from the model types
+and compares the bytes written with this file. Not verified: Windows only, CPython 3.12 and 3.14.
