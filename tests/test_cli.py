@@ -3,7 +3,9 @@
 import contextlib
 import io
 import json
+import os
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -178,6 +180,60 @@ class SubjectTests(Tmp):
         self.assertNotIn("careful_bot.py", text)
         self.assertNotIn(pathlib.Path(sys.executable).parent.name, text)
         self.assertNotIn(" -I", text)
+
+
+class RelativeSubjectTests(Tmp):
+    """The subject command names files relative to the caller's directory, as typed."""
+
+    def setUp(self):
+        super().setUp()
+        if shutil.which("python") is None:
+            self.skipTest("no program named python on the path")
+        before = os.getcwd()
+        self.addCleanup(os.chdir, before)
+
+    def _verdicts(self, out_dir):
+        path = next(pathlib.Path(out_dir).glob("report-*.json"))
+        return json.loads(path.read_text("utf-8"))["checks"]
+
+    def test_a_relative_script_path_runs_from_the_repository_root(self):
+        os.chdir(ROOT)
+        code, out, err = call(
+            "run", "packs/minimal", "--subject", "python examples/careful_bot.py", "--out", str(self.tmp / "o")
+        )
+        self.assertEqual((code, err), (0, ""))
+        self.assertEqual([c["check"] for c in self._verdicts(self.tmp / "o") if c["verdict"] != "pass"], [])
+
+    def test_a_script_in_the_current_directory_runs_as_the_readme_shows(self):
+        work = self.tmp / "work"
+        work.mkdir()
+        shutil.copy(ROOT / "examples" / "careful_bot.py", work / "my_bot.py")
+        os.chdir(work)
+        code, out, err = call("run", str(MINIMAL), "--subject", "python my_bot.py", "--out", str(self.tmp / "o"))
+        self.assertEqual((code, err), (0, ""))
+        self.assertEqual([c["check"] for c in self._verdicts(self.tmp / "o") if c["verdict"] != "pass"], [])
+        header = next(pathlib.Path(self.tmp / "o").glob("record-*.jsonl")).read_text("utf-8")
+        self.assertNotIn("my_bot.py", header)
+
+    def test_a_backslash_in_the_command_is_refused_on_windows_with_one_line(self):
+        with mock.patch.object(os, "name", "nt"):
+            code, _, err = call(
+                "run", str(MINIMAL), "--subject", "python examples\\careful_bot.py", "--out", str(self.tmp / "o")
+            )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(err.strip().splitlines()), 1)
+        self.assertIn("forward slash", err)
+
+    def test_a_subject_that_never_says_ready_names_its_stderr_file(self):
+        script = self.tmp / "mute.py"
+        script.write_text("import sys\nprint('boom', file=sys.stderr)\n", encoding="utf-8")
+        code, out, err = call(
+            "run", str(MINIMAL), "--subject", 'python "%s"' % script.as_posix(), "--out", str(self.tmp / "o")
+        )
+        self.assertEqual(code, 1)
+        lines = [line for line in err.strip().splitlines() if "ready" in line]
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn("stderr-python.txt", lines[0])
 
 
 class HelpTests(unittest.TestCase):

@@ -9,10 +9,14 @@ does not reproduce the record; 2 a usage or input error. Errors are one line on 
 error, never a traceback.
 
 ``--subject "<command>"`` is split with ``shlex.split`` using POSIX rules on every
-operating system, so on Windows a backslash in the command must be doubled or the path
-quoted. The record names only the program's base name, never its arguments or path, and the
-subject's standard error is written to ``stderr-<name>.txt`` with the pack's secret values
-replaced by ``[redacted]``.
+operating system, which strips backslashes, so on Windows a command that holds one is
+refused with a hint to use forward slashes. The subject runs in an empty temporary
+directory, so the program is looked up on the path and each later argument that names a
+file relative to the caller's directory is made absolute first. The record names only the
+program's base name, never its arguments or path, and the subject's standard error is
+written to ``stderr-<name>.txt`` with the pack's secret values replaced by ``[redacted]``.
+A subject that never sends ``ready`` is reported in one line on standard error that names
+that file.
 
 This module reads and writes files and a clock (for timings, which never enter a record).
 It is the only core module that does.
@@ -102,9 +106,16 @@ def _command_subject(command: str) -> _Subject:
         raise CliError("cannot read the subject command: %s" % _line(error)) from None
     if not argv:
         raise CliError("the subject command is empty")
+    if os.name == "nt" and "\\" in command:
+        raise CliError(
+            "the subject command holds a backslash, which is dropped when it is split; use forward slashes, as in C:/tools/bot.py"
+        )
     program = _program_name(argv[0])
-    if shutil.which(argv[0]) is None:
+    found = shutil.which(argv[0])
+    if found is None:
         raise CliError("the subject program %r was not found" % program)
+    # the subject starts in an empty directory: name what it runs by absolute path
+    argv = [found] + [os.path.abspath(a) if os.path.isfile(a) else a for a in argv[1:]]
 
     def make(the_pack, stderr_path):
         return ChildProcess(
@@ -187,6 +198,10 @@ def _summary(label: str, result) -> str:
     return "%s: %s" % (label, "; ".join(parts))
 
 
+def _said_ready(result) -> bool:
+    return any(getattr(e, "kind", None) == model.OBS_READY for e in result.entries)
+
+
 def _failed(result) -> bool:
     return any(v.verdict in (model.VERDICT_FAIL, model.VERDICT_HARNESS_ERROR) for v in result.verdicts)
 
@@ -213,6 +228,12 @@ def _run_subject(the_pack, subject: _Subject, out: Path, repeats: int, *, matrix
         )
     for result in results:
         print(_summary(subject.label, result), file=stdout)
+    if "command" in subject.descriptor and any(not _said_ready(r) for r in results):
+        print(
+            "the subject sent no ready message; its standard error is in %s"
+            % (out / ("stderr-%s%s.txt" % (subject.label, "" if repeats == 1 else "-1"))),
+            file=sys.stderr,
+        )
     if repeats > 1:
         passed = sum(1 for r in results if not _failed(r))
         print(
