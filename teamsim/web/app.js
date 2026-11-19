@@ -18,6 +18,24 @@ const SCENARIOS = {
   solo: ["Personal assistant",
     "One person over three weeks: changes of mind, a pasted document with a hidden instruction, a week away."],
 };
+// What a user should keep in mind when reading results. The scenario's own technical notes
+// stay available under "Technical notes".
+const COMMON_LIMITS = [
+  "Messages come from templates, so they don't show how real people write.",
+  "Answers are matched against a few known phrasings; a correct answer worded differently can fail.",
+  "Only facts said in the conversation are scored. A question about anything else has no test.",
+];
+const SCENARIO_LIMITS = {
+  "social-ten": [
+    "Posting, following and blocking are generic actions; your product has to map them to its own.",
+    "A post's audience is a list of people. A rule like everyone except one person can't be described.",
+  ],
+  solo: [
+    "With one person, tests about who may see what don't apply.",
+    "The pasted document is scored only on whether the bot repeats a harmless code it asks for.",
+  ],
+};
+
 const BOTS = {
   naive_bot: ["Naive bot", "Remembers everything and answers by matching words; ignores who may see what."],
   careful_bot: ["Careful bot", "Gives the latest answer and only to people allowed to see it."],
@@ -650,10 +668,14 @@ function renderPlaces(pack) {
 
 function renderAbout(pack) {
   const summary = state.packs.find((p) => p.name === pack.name);
-  $("purpose").textContent = summary.purpose;
+  $("purpose").textContent = scenarioAbout(summary);
   const limits = $("limits");
   clear(limits);
-  for (const text of summary.limits) limits.append(el("li", { text }));
+  for (const text of COMMON_LIMITS.concat(SCENARIO_LIMITS[pack.name] || [])) limits.append(el("li", { text }));
+  $("tech-purpose").textContent = summary.purpose;
+  const tech = $("tech-limits");
+  clear(tech);
+  for (const text of summary.limits) tech.append(el("li", { text }));
 }
 
 function testRowTitle(pack, check) {
@@ -784,7 +806,9 @@ function describe(animate) {
   const pack = state.packs.find((p) => p.name === $("pack").value);
   const bot = $("subject").value;
   const node = $("about-line");
-  node.textContent = ((pack ? scenarioAbout(pack) : "") + " " + botAbout(bot)).trim();
+  node.replaceChildren(
+    el("span", { class: "line" }, el("strong", { text: "Scenario: " }), pack ? scenarioAbout(pack) : ""),
+    el("span", { class: "line" }, el("strong", { text: (BOTS[bot] ? BOTS[bot][0] : "Bot") + ": " }), botAbout(bot)));
   if (animate && !reduced()) restart(node, "fade");
 }
 

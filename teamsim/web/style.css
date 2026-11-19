@@ -284,3 +284,8 @@ table.reveal th, table.reveal td { animation: fade var(--t-fast) var(--ease) bac
   .progress.on::before { width: 100%; transform: none; }
   .running .spin { border-right-color: currentColor; opacity: .6; }
 }
+#about-line .line { display: block; }
+#about-line strong { font-weight: 500; color: var(--fg); }
+.about .limits-head { margin: 14px 0 0; color: var(--fg); font-weight: 500; }
+.about .tech { margin-top: 10px; }
+.about .tech summary { min-height: 40px; }

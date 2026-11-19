@@ -90,7 +90,12 @@ async function runMode(browser, name, width, height, scheme) {
   const empty = await page.locator("#strip").innerText();
   check(empty.includes("Choose a scenario") && empty.includes("Team workspace") && empty.includes("Naive bot") && empty.includes("Run test"), "empty state shows three steps with the current choices");
   check(/14 tests · \d+ questions to the bot · 10 people · 21 days/.test(empty), "empty state counts tests, questions, people and days");
-  check((await page.locator("#about-line").innerText()).startsWith("A 10-person team chat over three weeks"), "description line names the scenario");
+  const aboutLines = (await page.locator("#about-line").innerText()).split(/\n/).filter(Boolean);
+  check(aboutLines.length === 2 && aboutLines[0].startsWith("Scenario: A 10-person team chat over three weeks") && aboutLines[1].startsWith("Naive bot: Remembers everything"), "description names the scenario and the bot on separate lines");
+  await page.click(".about > summary");
+  const about = await page.locator(".about").first().innerText();
+  check(about.includes("Keep in mind") && !/reply_median_s|\bpack\b|surface/.test(about), "scenario limits are in plain language");
+  await page.click(".about > summary");
   check((await page.locator("#about-line").innerText()).includes("Remembers everything and answers by matching words"), "description line names the bot");
   check((await page.locator("#pack option:checked").innerText()) === "Team workspace · 10 people · 21 days", "scenario option reads name, people, days");
   check((await page.locator("#tab-checks").innerText()) === "Results 14", "results tab shows the count");
