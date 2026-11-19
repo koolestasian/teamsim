@@ -17,10 +17,10 @@ one's role, habits and traits), teamsim plays them in a local sandbox, plants fa
 (a decision, a reversal, a private message, a pasted password, an absence) and scores your
 software against them. It runs on your machine, with no real accounts and no real servers.
 
-> **Pre-alpha.** What runs today is a prototype built to test one product with a six-person
-> simulated team. The general engine is being built: its data format, seeded randomness,
-> scenario pack format and subject protocol exist, but it cannot run a scenario yet. See
-> [Status](#status).
+> **Pre-alpha.** The engine runs scenarios end to end from the command line: generate a pack
+> from a population file, run software against it, score it and replay the run. Software
+> connects in process (Python) or as a child process over standard input and output. There is
+> no package release yet. See [Try it](#try-it) and [Status](#status).
 
 ## Who it is for
 
@@ -49,8 +49,9 @@ who knew what, where and when:
 
 1. **Choose your users.** A scenario pack describes the synthetic users, the places they act,
    a timeline of what they do and the facts their actions carry, including who is allowed to
-   know each one. Packs are data files, not code. Presets (a solo user, a small team, a
-   community) with editable size, roles, habits and traits are planned.
+   know each one. Packs are data files, not code. Three presets (`solo`, `team`, `social`)
+   generate a pack from a short population file that sets the number of users and each one's
+   role, habits and traits.
 2. **teamsim plays them** in a local sandbox while your software joins, watches or is used
    directly. Synthetic users are scripted and seeded by default, so a run repeats exactly. A
    user can optionally be model-driven, so it can answer what your software actually says;
@@ -75,20 +76,51 @@ The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine
 | [`prototypes/teamctx-sim/`](prototypes/teamctx-sim/) | **Working.** An end-to-end simulation built to test [teamctx](https://github.com/koolestasian/discord-team-context): a six-person simulated team chats through a local Discord emulator while the product syncs it, and a checker scores sync, commands, search quality, visibility, prompt injection, catch-up after an absence and due dates across time zones. 235 offline tests |
 | Research | **Done for now.** Prior art, workspace emulators, a review of 455 papers, stack options and a market check ([docs/research/](docs/research/)) |
 | Design | **Decided.** Stack, engine shape, scope and version 0 ([ADRs 0004 and 0006 to 0009](docs/adr/)) |
-| Engine ([`teamsim/`](teamsim/)) | **In progress.** Built and tested on Python 3.12 and 3.14: the canonical data form, seeded draws, the data model, the [scenario pack format](docs/spec/pack-format.md) with a [minimal pack](packs/minimal/), and the [subject protocol](docs/spec/subject-protocol.md) specification. Not built yet: the scheduler, the built-in workspace, the subject transports, checks and run records |
+| Engine ([`teamsim/`](teamsim/)) | **Version 0 runs.** Tested on Python 3.12 and 3.14: the [scenario pack format](docs/spec/pack-format.md), the population generator with `solo`, `team` and `social` presets, the scheduler and built-in workspace, both [subject protocol](docs/spec/subject-protocol.md) transports, the record of who was exposed to what, six check kinds, control subjects that test the checks, run records with replay, and the command line. Not built yet: reduction of a failing run, an HTTP adapter, model-driven users, a package release |
 
 ### Roadmap
 
 1. Version 0 of the engine ([ADR 0009](docs/adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)):
    simulated time, a workspace built into the engine, the record of who knows what, checks,
    run records and replay, with software under test connected in process or as a child
-   process over standard input and output.
+   process over standard input and output, and presets that generate packs. Runs now;
+   reduction of a failing run and a package release remain.
 2. One product other than teamctx tested end to end, with the prototype's checks ported.
-3. Presets: choose the number of synthetic users and each one's role, habits and traits
-   instead of writing a pack by hand. A single-user scenario comes with this step.
-4. Synthetic users that operate software directly (an API, a command line, a browser), after
+3. Synthetic users that operate software directly (an API, a command line, a browser), after
    research into existing tools.
-5. Optional model-driven users, recorded for replay.
+4. Optional model-driven users, recorded for replay.
+
+## Try it
+
+The engine needs Python 3.12 or later and nothing else. From a clone:
+
+```sh
+git clone https://github.com/koolestasian/teamsim.git
+cd teamsim
+python -m teamsim demo
+```
+
+`demo` checks the `team-ten` pack with the control subjects, then runs two example subjects
+against it and writes a record and a Markdown and JSON report for each to `teamsim-demo/`.
+[`naive_bot`](examples/naive_bot.py) stores everything and answers by word overlap;
+[`careful_bot`](examples/careful_bot.py) tracks who could see what, who decided and what
+replaced what. Neither reads the answer key. On `team-ten`, `naive_bot` repeats the private
+offsite budget and hiring plan to people who should not see them and gives stale answers;
+`careful_bot` passes every check.
+
+The other commands:
+
+```sh
+python -m teamsim generate populations/team-ten.toml -o my-pack   # population file -> pack
+python -m teamsim validate packs/team-ten                          # do the checks catch the seeded defects?
+python -m teamsim run packs/team-ten --builtin careful_bot         # one subject, one pack
+python -m teamsim run packs/team-ten --subject "python my_bot.py"  # your program, over stdin/stdout
+python -m teamsim inspect packs/team-ten                           # who was exposed to which fact, when
+python -m teamsim replay teamsim-demo/record-naive_bot.jsonl --pack packs/team-ten
+```
+
+Each command's `--help` lists its options. How a program speaks to the engine is in the
+[subject protocol](docs/spec/subject-protocol.md).
 
 ## Try the prototype
 
@@ -96,8 +128,6 @@ Both test suites run offline on Linux, macOS and Windows with Python 3.12 or lat
 nothing else installed:
 
 ```sh
-git clone https://github.com/koolestasian/teamsim.git
-cd teamsim
 python -I -m unittest discover -s prototypes/teamctx-sim/tests   # the prototype
 python -I -m unittest discover -s tests -t .                     # the engine
 ```
@@ -114,7 +144,9 @@ over several messages, reactions instead of replies, pasted AI answers, a pasted
 |---|---|
 | [`teamsim/`](teamsim/) | The engine package (standard library only) |
 | [`tests/`](tests/) | Engine tests and golden vectors |
-| [`packs/`](packs/) | Scenario packs |
+| [`packs/`](packs/) | Scenario packs: `minimal` (hand-written) and `team-ten`, `solo`, `social-ten` (generated) |
+| [`populations/`](populations/) | Population files the packs are generated from |
+| [`examples/`](examples/) | Example subjects: `naive_bot` and `careful_bot` |
 | [`docs/spec/`](docs/spec/) | Formats and protocols the engine implements |
 | [`docs/adr/`](docs/adr/) | Architecture decision records |
 | [`docs/research/`](docs/research/) | Research notes with sources and dates, the bibliography and figures |

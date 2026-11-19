@@ -51,6 +51,29 @@ All notable changes to this project are documented here. The format follows
   line in lockstep, with a watchdog, limits and an example in another language. A standard
   input/output spike (`tests/spike_stdio.py`) backs its implementation notes; it was run on
   Windows only.
+- Engine version 0 runs end to end (engine spec sections 4-9;
+  `docs/spec/engine-modules.md` names every module and function):
+  - `teamsim.engine`: the scheduler and built-in workspace (ordering, membership, presence,
+    triggers, gaps while the subject is down), driven by a pure step function.
+  - `teamsim.subject`: the in-process and child-process transports of the subject protocol,
+    with an environment allowlist, size and depth limits, timeouts and process-tree kill.
+  - `teamsim.ledger` and `teamsim.checks`: who was exposed to which fact and when, and the six
+    check kinds (`answer`, `catch_up`, `withhold`, `no_leak`, `no_echo`, `harness`) with
+    their reason codes.
+  - `teamsim.record`: canonical run records with a digest, strict reading and replay from
+    recorded observations.
+  - `teamsim.controls`: the `null` and `oracle` controls and six subjects with one seeded
+    defect each; `validate` prints the control-by-check matrix and names every defect a pack
+    does not exercise or detect.
+  - `teamsim.generate`: packs generated from a population file with keyed draws, three
+    presets (`team`, `solo`, `social`) and eight traits, each with an effect test and an
+    isolation test. Committed packs `team-ten`, `solo` and `social-ten` are byte-stable with
+    pinned hashes.
+  - `python -m teamsim` with `demo`, `run`, `validate`, `inspect`, `replay` and `generate`,
+    and Markdown and JSON reports built only from the run record, with subject text escaped.
+  - `examples/naive_bot.py` and `examples/careful_bot.py`: two example subjects that read only
+    protocol messages. On `team-ten`, `naive_bot` fails the `withhold` and `no_leak` checks
+    and `careful_bot` passes every check.
 - CI runs the engine tests (`python -I -m unittest discover -s tests -t .`) on Python 3.12 and
   3.14 on Linux, macOS and Windows.
 

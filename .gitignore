@@ -19,6 +19,10 @@ prototypes/*/reports/
 prototypes/*/watch-speed
 prototypes/*/*.log
 
+# Engine command line output (default directories of demo and run)
+teamsim-demo/
+teamsim-run/
+
 # Databases
 *.db
 *.db-wal
