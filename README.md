@@ -150,7 +150,7 @@ over several messages, reactions instead of replies, pasted AI answers, a pasted
 |---|---|
 | [`teamsim/`](teamsim/) | The engine package (standard library only) |
 | [`tests/`](tests/) | Engine tests and golden vectors |
-| [`packs/`](packs/) | Scenario packs: `minimal` (hand-written) and `team-ten`, `solo`, `social-ten` (generated) |
+| [`packs/`](packs/) | Scenario packs: `minimal` (hand-written), `lantern-shelf` (converted from the fictional fixture in `fixtures/demo/`) and `team-ten`, `solo`, `social-ten` (generated) |
 | [`populations/`](populations/) | Population files the packs are generated from |
 | [`examples/`](examples/) | Example subjects: `naive_bot` and `careful_bot` |
 | [`docs/spec/`](docs/spec/) | Formats and protocols the engine implements |

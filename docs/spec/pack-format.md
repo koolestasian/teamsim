@@ -495,3 +495,10 @@ correction that changes no pack's validity or hash may be made without a new ver
 `packs/minimal/` is a small invented pack, written by hand, that uses every event kind, all
 three time forms, both trigger kinds, a superseding fact, a secret with a restricted
 audience, a `group:` audience, and one check of each kind. Further packs follow.
+
+`packs/lantern-shelf/` is converted by `fixtures/demo/make_pack.py` from the fictional
+six-person team chat in `fixtures/demo/` (314 messages in ten channels and threads, one
+fixed transcript). Each fact is a value that a question of the fixture's eval set asks for,
+disclosed by the message that contains it; entries that replaced one another form a
+`supersedes` chain, and each answer check asks the question after the transcript. All
+channels are public, so the pack has no `withhold`, `no_leak`, `no_echo` or `catch_up` check.
