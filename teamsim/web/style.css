@@ -303,3 +303,10 @@ table.reveal th, table.reveal td { animation: fade var(--t-fast) var(--ease) bac
   .progress.on::before { width: 100%; transform: none; }
   .running .spin { border-right-color: currentColor; opacity: .6; }
 }
+/* The select above already names the scenario and bot: keep the card heading for screen
+   readers only and let the description lead. */
+.card .card-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.card { position: relative; }
+.card-line { margin: 0; color: var(--fg); font-size: 1.125rem; line-height: 1.45; }
+.bot-card .card-line { margin-top: 0; }
+.bot-head:has(.flaw) { margin-bottom: 0.5rem; }

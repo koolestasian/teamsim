@@ -322,6 +322,8 @@ async function runMode(browser, name, width, height, scheme) {
   check(tags.some((t) => t === "Secret: access code"), "the secret is labelled 'Secret: access code'");
   check(tags.some((t) => t === "Fact: budget = 12 units · private to leads"), "a private fact names its audience");
   check(tags.some((t) => t === "Update: date → Thursday 16 April"), "a changed fact reads 'Update: date → …'");
+  const cueTime = await page.locator("#timeline .event", { hasText: "Did I miss anything while I was away?" }).first().locator("time").innerText();
+  check(cueTime.trim() === "—", "an event timed by the run shows a dash before a run, not Day 1 00:00");
   check(tags.includes("Edited"), "edits are tagged 'Edited'");
   const opts = await page.locator("#place option").allInnerTexts();
   check(opts.includes("All channels") && opts.includes("#leads · Ana, Di") && opts.includes("DM with Bo"), "channel select: " + opts.join(" / "));

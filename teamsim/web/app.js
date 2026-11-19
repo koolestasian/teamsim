@@ -605,7 +605,9 @@ function renderTimeline(scrollToHit, fromIndex) {
     const cls = "event" + (r.bot ? " bot" : "") + (state.hit.has(r.n) ? " hit" : "") + (fromIndex != null && i >= fromIndex ? " fresh" : "");
     const action = actionText(pack, r);
     frag.append(el("div", { class: cls },
-      el("time", null, el("span", { text: "Day " + dayOf(r.t) }), el("span", { text: clock(r.t) })),
+      r.t == null
+        ? el("time", { title: "Sent in response to an earlier message; the time is set when the test runs." }, el("span", { text: "—" }))
+        : el("time", null, el("span", { text: "Day " + dayOf(r.t) }), el("span", { text: clock(r.t) })),
       el("div", null, meta, action != null
         ? el("p", { class: "action", text: action })
         : el("p", { text: r.text == null ? "" : r.text }))));
