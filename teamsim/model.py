@@ -1419,7 +1419,8 @@ class Reply:
     ``ready`` (with ``name`` and ``version``), ``done`` (with ``wake_at_ms``
     when asked), ``ended`` (the session is over and the last item is the fault
     that ended it), or ``closed`` (the answer to ``stop``; ``items`` holds
-    only ``no_exit`` or ``output_after_shutdown`` faults).
+    only ``no_exit`` or ``output_after_shutdown`` faults, or ``exited`` when an
+    in-process handler raised while stopping).
     """
 
     end: str

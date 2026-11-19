@@ -1,6 +1,6 @@
 # Subject protocol, version 1
 
-- Status: specification. Neither transport is implemented yet;
+- Status: specification, implemented by both transports in `teamsim.subject`;
   [ADR 0009](../adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)
   requires this document to exist first.
 - Date: 2026-11-16
@@ -207,7 +207,9 @@ A diagnostic line. Never scored and never shown to an actor.
 | `text` | string | yes | The line. |
 
 The engine keeps the first 100 `log` messages received while one message is outstanding and
-records how many more it dropped.
+records how many more it dropped. The kept lines and the dropped count are written, through the
+redactor, to the standard-error file of a child process (they never enter the run log); an
+in-process subject has no such file.
 
 #### `error`
 
@@ -265,8 +267,11 @@ A subject with timers does not read the wall clock. It asks for a wake-up in vir
 - `done` may carry `wake_at_ms`, later than the `t_ms` of the event it answers.
 - At that virtual time the engine sends an `event` of kind `tick` whose `t_ms` is the time
   asked for.
-- A later request does not cancel an earlier one. Requests for the same time give one
-  `tick`.
+- A later request does not cancel an earlier one: the pending wake-ups are a set of times, and
+  each time gets one `tick`. Requests for the same time give one `tick`.
+- A `wake_at_ms` that is not later than the `t_ms` of the event it answers is a violation: the
+  transport ends the session with `invalid_message`. The engine also ignores such a value,
+  as a defence, and leaves the pending wake-ups as they were.
 - When scripted events are due at the same virtual time as a `tick`, they are delivered
   first.
 - A `tick` that falls while the subject is down is dropped, not postponed.
@@ -567,8 +572,7 @@ is killed.
 
 **Not verified.** Any behaviour on macOS or Linux. A subject written in a language other than
 Python. A subject that deliberately escapes its job through another service. Behaviour under
-heavy load or on slow disks. The redactor, which does not exist yet: the script only shows
-that standard error reaches a file unchanged.
+heavy load or on slow disks.
 
 ## 14. Prior art
 
