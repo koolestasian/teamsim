@@ -44,16 +44,26 @@
     </div>
   </section>
   <section id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline" hidden>
-    <div class="toolbar">
-      <div class="segmented" id="seg">
-        <button type="button" data-filter="key" aria-pressed="true">Highlights</button>
-        <button type="button" data-filter="all" aria-pressed="false">Everything</button>
-      </div>
-      <select id="place" aria-label="Channel"></select>
-      <span id="count" class="muted small"></span>
+    <div class="ws" id="ws">
+      <aside class="ws-side ws-channels" id="ws-channels" aria-label="Channels">
+        <div class="ws-scn" id="ws-scn"></div>
+        <nav id="ws-chlist" class="ws-scroll"></nav>
+      </aside>
+      <section class="ws-main">
+        <header class="ws-head">
+          <button type="button" id="ws-chbtn" class="ws-chbtn" aria-haspopup="dialog"></button>
+          <h2 id="ws-title" class="ws-title"></h2>
+          <span id="count" class="ws-count"></span>
+          <span id="ws-chips" class="ws-chips"></span>
+          <label class="ws-key"><input type="checkbox" id="key-only"><span>Only key messages</span></label>
+          <button type="button" id="ws-membtn" class="ws-membtn" aria-haspopup="dialog">Members</button>
+        </header>
+        <div id="timeline" class="ws-feed" tabindex="-1"></div>
+      </section>
+      <aside class="ws-side ws-members" id="ws-members" aria-label="Members">
+        <div id="ws-memlist" class="ws-scroll"></div>
+      </aside>
     </div>
-    <div id="timeline" class="timeline"></div>
-    <button type="button" id="more" class="secondary" hidden></button>
   </section>
   <section id="panel-users" role="tabpanel" aria-labelledby="tab-users" hidden>
     <div class="table-scroll"><table id="users"></table></div>
@@ -83,6 +93,8 @@
   </div>
 </main>
 </div>
+<div id="scrim" class="scrim" hidden></div>
+<div id="profile" class="profile" role="dialog" aria-modal="false" tabindex="-1" hidden></div>
 <script src="/app.js"></script>
 </body>
 </html>
