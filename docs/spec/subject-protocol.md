@@ -392,10 +392,10 @@ The messages and rules are those above, with these differences:
 - Messages that follow the first `done` or `error` in a returned list are treated as if they
   had arrived while the next message was outstanding, which is where the child-process
   transport would read them.
-- A list that ends without `done` or `error` is logged as `subject_stalled` with code
-  `no_done` and ends the session.
-- An exception raised by `handle` is logged as `subject_error` with code `raised` and ends
-  the session.
+- A list that ends without `done` or `error` is logged as `subject_error` with code
+  `exited` and detail `no_done`, and ends the session.
+- An exception raised by `handle` is logged as `subject_error` with code `exited` and the
+  exception's type name as detail, and ends the session.
 - There is no watchdog, because a call cannot be interrupted from outside. A `handle` that
   does not return stops the run. In-process subjects run inside the engine's process and are
   trusted code.
