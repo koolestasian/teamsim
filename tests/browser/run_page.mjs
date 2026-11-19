@@ -460,7 +460,7 @@ async function runWorkspace(browser, name, width, height, scheme) {
     return n;
   })();
   check(members >= 2, name + ": member list shows people and the bot (" + members + ")");
-  check(phone || (await page.locator("#ws-members").isVisible()), name + ": member list is a column on wide screens");
+  check(phone || (await page.locator("#ws-members").isVisible()) !== (await page.locator("#ws-membtn").isVisible()), name + ": the member list is a column or a Members button, never both");
   await pickSurface(page, "", phone);
 
   // Profile card.
@@ -540,6 +540,74 @@ async function runWorkspace(browser, name, width, height, scheme) {
   await context.close();
 }
 
+// The setup column collapses on wide screens, which gives the feed room.
+async function runCollapse(browser, name, scheme) {
+  const tag = "collapse-" + name + "-" + scheme;
+  console.log("--- setup collapse " + name + " 1440x900 " + scheme);
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: scheme });
+  const page = await context.newPage();
+  const problems = [];
+  page.on("console", (m) => { if (m.type() === "error") problems.push("console: " + m.text()); });
+  page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
+  await page.goto(base + "?pack=" + name + "#timeline");
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  const toggle = page.locator("#setup-toggle");
+  check((await toggle.getAttribute("aria-expanded")) === "true" && (await toggle.innerText()) === "Hide setup", name + ": setup starts expanded with a 'Hide setup' button");
+  await page.waitForTimeout(300);
+  const feedOn = (await page.locator("#timeline").boundingBox()).width;
+  check(await page.locator("#ws-membtn").isVisible() && !(await page.locator("#ws-members").isVisible()), name + ": a narrow workspace swaps the member column for the Members button (feed " + Math.round(feedOn) + "px)");
+  check((await scrollWidth(page)) <= 1440, name + ": expanded layout has no horizontal scroll");
+  await page.evaluate(() => document.querySelector("#ws").scrollIntoView({ block: "start" }));
+  await page.screenshot({ path: path.join(outDir, tag + "-expanded.png") });
+  // Keyboard: focus the button and press Enter.
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(450);
+  check((await toggle.getAttribute("aria-expanded")) === "false" && await page.locator(".page.setup-off").count() === 1, name + ": Enter on the button collapses the setup column");
+  const bar = await page.locator(".setup").boundingBox();
+  check(bar.width <= 72, name + ": the collapsed column is a slim bar (" + Math.round(bar.width) + "px)");
+  const feedOff = (await page.locator("#timeline").boundingBox()).width;
+  check(feedOff >= 820, name + ": the feed is at least 820px wide when collapsed (" + Math.round(feedOff) + "px)");
+  check(await page.locator("#ws-members").isVisible() && !(await page.locator("#ws-membtn").isVisible()), name + ": the member column returns when the workspace is wide");
+  const cut = await page.evaluate(() => [...document.querySelectorAll("#ws-chlist .ch-name")].filter((n) => n.scrollWidth > n.clientWidth + 1).map((n) => n.textContent));
+  check(cut.length === 0, name + ": no channel name is cut off" + (cut.length ? " (" + cut.join(", ") + ")" : ""));
+  const runBox = await page.locator("#run").boundingBox();
+  check(runBox.width <= 48 && runBox.height >= 39.5 && (await page.locator("#run").getAttribute("title")) === "Run test" && (await page.locator("#run").innerText()).trim() === "Run test", name + ": collapsed Run is an icon button with a name and tooltip (" + Math.round(runBox.width) + "x" + Math.round(runBox.height) + ")");
+  check((await scrollWidth(page)) <= 1440, name + ": collapsed layout has no horizontal scroll");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(100);
+  await page.screenshot({ path: path.join(outDir, tag + "-collapsed.png") });
+  await page.reload();
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  check((await page.locator("#setup-toggle").getAttribute("aria-expanded")) === "false" && (await page.locator("#setup-toggle").getAttribute("title")) === "Show setup", name + ": the collapsed state survives a reload");
+  await page.click("#run");
+  await page.waitForSelector(".headline");
+  check(true, name + ": the icon Run button runs the test");
+  await page.click("#setup-toggle");
+  await page.waitForTimeout(400);
+  check((await page.locator("#setup-toggle").getAttribute("aria-expanded")) === "true" && (await page.locator("#pack").isVisible()), name + ": Show setup brings the controls back");
+  await page.click("#setup-toggle");
+  await page.reload();
+  await page.click("#setup-toggle");
+  check(problems.length === 0, name + ": no console errors" + (problems.length ? ": " + problems.join(" | ") : ""));
+  await context.close();
+}
+
+// Reactions and operation names come from the pack.
+async function runEmoji(browser) {
+  console.log("--- reactions and operations");
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(base + "?pack=minimal#timeline");
+  await page.waitForSelector("#timeline .react");
+  check((await page.locator("#timeline .react").first().innerText()).replace(/\s+/g, "") === "\u{1F44D}1", "a +1 reaction shows 👍 with its count");
+  await page.goto(base + "?pack=social-ten#timeline");
+  await page.waitForSelector("#timeline .sys");
+  const op = await page.evaluate(async () => (await (await fetch("/api/pack?name=social-ten")).json()).events.find((e) => e.kind === "op").op);
+  check(!!op && (await page.locator("#timeline .sys").first().textContent()).includes("used the product: " + op), "an operation row names the operation (" + op + ")");
+  await context.close();
+}
+
 async function runWorkspaceRun(browser, width, height) {
   console.log("--- workspace after a run " + width + "x" + height);
   const context = await browser.newContext({ viewport: { width, height }, colorScheme: "dark" });
@@ -589,6 +657,8 @@ for (const [width, height] of [[1440, 900], [390, 844]]) {
   await runWorkspace(browser, "minimal", width, height, width > 760 ? "light" : "dark");
   await runWorkspaceRun(browser, width, height);
 }
+for (const name of ["team-ten", "minimal"].concat(lanternPack ? ["lantern-shelf"] : [])) await runCollapse(browser, name, name === "team-ten" ? "dark" : "light");
+await runEmoji(browser);
 await runReduced(browser);
 
 // Motion check: the count-up starts at 0 and ends on the exact number; the tab indicator follows the tab.

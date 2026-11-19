@@ -3,6 +3,7 @@
 
 const DAY = 86400000;
 const KEY_STORE = "teamsim.onlyKey";
+const SETUP_STORE = "teamsim.setupOff";
 const TABS = ["checks", "timeline", "users", "controls"];
 const CONTROL_ORDER = ["null", "oracle"];
 
@@ -1414,6 +1415,27 @@ async function start() {
   if (state.packs.some((p) => p.name === params.get("pack"))) $("pack").value = params.get("pack");
   if (state.subjects.includes(params.get("subject"))) $("subject").value = params.get("subject");
   renderBotCard(false);
+
+  // The setup column can collapse to a slim bar on wide screens; the member column follows the workspace width.
+  const setSetup = (off, remember) => {
+    document.querySelector(".page").classList.toggle("setup-off", off);
+    const t = $("setup-toggle");
+    t.setAttribute("aria-expanded", off ? "false" : "true");
+    t.title = off ? "Show setup" : "Hide setup";
+    $("setup-toggle-label").textContent = off ? "Show setup" : "Hide setup";
+    if (remember) { try { localStorage.setItem(SETUP_STORE, off ? "1" : "0"); } catch (_) { /* ignore */ } }
+  };
+  let setupOff = false;
+  try { setupOff = localStorage.getItem(SETUP_STORE) === "1"; } catch (_) { /* works without storage */ }
+  setSetup(setupOff, false);
+  $("setup-toggle").addEventListener("click", () => setSetup($("setup-toggle").getAttribute("aria-expanded") === "true", true));
+  const fitWorkspace = () => {
+    const ws = $("ws"), rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    if (ws.offsetWidth) ws.classList.toggle("wide", ws.offsetWidth >= 62 * rem);
+  };
+  fitWorkspace();
+  if (window.ResizeObserver) new ResizeObserver(fitWorkspace).observe($("ws"));
+  window.addEventListener("resize", fitWorkspace);
 
   $("controls").addEventListener("submit", (ev) => { ev.preventDefault(); if (!state.busy && !state.matrixBusy) doRun(); });
   $("pack").addEventListener("change", () => { loadPack($("pack").value).catch((e) => setStatus(e.message, true)); });
