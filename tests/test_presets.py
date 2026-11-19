@@ -468,9 +468,24 @@ class ToyProductTests(unittest.TestCase):
             by_kind.setdefault(check.kind, []).append(verdicts[check.id])
         self.assertTrue(all(v.verdict == "fail" and v.reason == "leaked" for v in by_kind["withhold"]))
         self.assertTrue(all(v.verdict == "fail" and v.reason == "leaked" for v in by_kind["no_leak"]))
-        stale = [v for c, v in zip(built.checks, [verdicts[c.id] for c in built.checks]) if c.id == "c.meetup-post"]
-        self.assertEqual([(v.verdict, v.reason) for v in stale], [("fail", "stale")])
+        # it lists the deleted original beside the current post, so the current value is there
+        # (engine spec 6.3: stale means a superseded value and not the current one)
+        self.assertEqual((verdicts["c.meetup-post"].verdict, verdicts["c.meetup-post"].reason), ("pass", None))
         self.assertEqual(verdicts["c.harness"].verdict, "pass")
+
+    def test_a_product_that_shows_only_the_oldest_post_fails_the_answer_as_stale(self):
+        class OldestOnly(Feed):
+            def handle(self, message):
+                reply = super().handle(message)
+                if reply is not None and message["payload"]["op"] == "read_feed":
+                    old = [p["text"] for p in self.posts.values() if "Saturday market" in p["text"]]
+                    if old:
+                        return done(post(message["payload"]["surface"], old[0], reply_to=message["payload"]["id"]))
+                return reply
+
+        built = generate.generate(social())
+        verdict = run_checks(built, OldestOnly(enforce=False).handle)["c.meetup-post"]
+        self.assertEqual((verdict.verdict, verdict.reason), ("fail", "stale"))
 
     def test_a_silent_product_fails_every_answer_so_that_withholding_means_something(self):
         built = generate.generate(social())
