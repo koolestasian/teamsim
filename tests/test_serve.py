@@ -134,7 +134,8 @@ class RoutesTest(ServerTest):
         self.assertEqual(self.request("PUT", "/api/run", body={})[0], 405)
 
     def test_static_files_carry_the_csp(self):
-        for path, kind in (("/", "text/html"), ("/app.js", "text/javascript"), ("/style.css", "text/css")):
+        for path, kind in (("/", "text/html"), ("/app.js", "text/javascript"), ("/style.css", "text/css"),
+                           ("/dm-sans.woff2", "font/woff2"), ("/dmsans-OFL.txt", "text/plain")):
             status, head, body = self.request("GET", path)
             self.assertEqual(status, 200, path)
             self.assertTrue(body)

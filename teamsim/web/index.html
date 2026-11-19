@@ -4,55 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>teamsim run</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<header>
-  <h1>teamsim</h1>
-  <form id="controls" autocomplete="off">
-    <label>Pack <select id="pack"></select></label>
-    <label>Bot <select id="subject"></select></label>
-    <button type="submit" id="run">Run</button>
-    <button type="button" id="validate">Check the checks</button>
-  </form>
-  <p id="status" role="status"></p>
+<header class="app-header">
+  <div class="inner">
+    <div class="brand">teamsim</div>
+    <form id="controls" autocomplete="off">
+      <label class="field"><span>Pack</span><select id="pack"></select></label>
+      <label class="field"><span>Bot</span><select id="subject"></select></label>
+      <button type="submit" id="run" class="primary">Run</button>
+    </form>
+    <p id="about-line" class="muted small"></p>
+    <p id="status" role="status"></p>
+  </div>
 </header>
 <main>
-  <section id="summary" hidden>
-    <h2>Run</h2>
-    <p id="purpose"></p>
-    <ul id="facts-line" class="plain"></ul>
-    <p id="digest"></p>
-    <details><summary>Limits of this pack</summary><ul id="limits"></ul></details>
-  </section>
-  <section id="checks-section" hidden>
-    <h2>Checks</h2>
-    <ul id="checks" class="plain"></ul>
-  </section>
-  <section id="timeline-section" hidden>
-    <h2>Timeline</h2>
-    <div class="toolbar">
-      <label>Show
-        <select id="filter">
-          <option value="key">planted facts, questions and bot replies</option>
-          <option value="all">all messages</option>
-        </select>
-      </label>
-      <label>Place <select id="place"><option value="">all places</option></select></label>
-      <span id="count"></span>
+  <div id="strip"></div>
+  <div class="tabs" role="tablist" id="tabs">
+    <button type="button" role="tab" id="tab-checks" data-tab="checks" aria-controls="panel-checks"></button>
+    <button type="button" role="tab" id="tab-timeline" data-tab="timeline" aria-controls="panel-timeline">Timeline</button>
+    <button type="button" role="tab" id="tab-users" data-tab="users" aria-controls="panel-users">Users</button>
+    <button type="button" role="tab" id="tab-controls" data-tab="controls" aria-controls="panel-controls">Controls</button>
+  </div>
+  <section id="panel-checks" role="tabpanel" aria-labelledby="tab-checks" hidden>
+    <div id="checks-empty" class="empty" hidden></div>
+    <div id="result" class="result-layout" hidden>
+      <div id="check-list" class="check-results"></div>
+      <div id="evidence" class="evidence"></div>
     </div>
-    <div id="timeline" class="scroll"></div>
   </section>
-  <section id="users-section" hidden>
-    <h2>Users</h2>
-    <div class="scroll"><table id="users"></table></div>
+  <section id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline" hidden>
+    <div class="toolbar">
+      <div class="segmented" id="seg">
+        <button type="button" data-filter="key" aria-pressed="true">Key events</button>
+        <button type="button" data-filter="all" aria-pressed="false">All</button>
+      </div>
+      <select id="place" aria-label="Place"></select>
+      <span id="count" class="muted small"></span>
+    </div>
+    <div id="timeline" class="timeline"></div>
+    <button type="button" id="more" class="secondary" hidden></button>
   </section>
-  <section id="matrix-section" hidden>
-    <h2>Control matrix</h2>
-    <p id="matrix-note"></p>
-    <div class="scroll"><table id="matrix"></table></div>
-    <ul id="mismatches"></ul>
+  <section id="panel-users" role="tabpanel" aria-labelledby="tab-users" hidden>
+    <div class="table-scroll"><table id="users"></table></div>
   </section>
+  <section id="panel-controls" role="tabpanel" aria-labelledby="tab-controls" hidden>
+    <p id="matrix-note" class="muted small"></p>
+    <div class="table-scroll" id="matrix-wrap" hidden><table id="matrix"></table></div>
+    <ul id="mismatches" class="problems"></ul>
+  </section>
+  <details class="about">
+    <summary>About this pack</summary>
+    <p id="purpose"></p>
+    <ul id="limits"></ul>
+  </details>
 </main>
 <script src="/app.js"></script>
 </body>
