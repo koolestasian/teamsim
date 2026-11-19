@@ -54,13 +54,16 @@ class LanternShelfPackTest(unittest.TestCase):
 
     def test_skipped_cases_and_aspect_keys(self):
         _, summary = self.converter.build(self.dataset, self.cases)
-        # No message of the dataset states these values; nothing is invented for them.
-        self.assertEqual(
-            sorted(c for c, _ in summary["skipped"]), ["para-10", "para-21", "rev-09", "rev-10"]
-        )
-        self.assertEqual(len(summary["aspects"]), 10)
+        self.assertEqual(summary["skipped"], [])
+        self.assertEqual(sorted(c for c, _ in summary["spans"]), ["para-10", "para-21", "rev-09", "rev-10"])
+        # Each span stands in the pack as the value, with the eval fragment as a form.
+        facts_by_value = {f.value: f for f in self.pack.facts}
+        for case_id, span in summary["spans"]:
+            fragment = next(c for c in self.cases if c["id"] == case_id)["answer_contains"]
+            self.assertIn(fragment, facts_by_value[span].forms)
+        self.assertEqual(len(summary["aspects"]), 11)
         facts = {f.key: f for f in self.pack.facts if "." in f.key}
-        self.assertEqual(len(facts), 10)
+        self.assertEqual(len(facts), 11)
         for fact in facts.values():
             self.assertIsNone(fact.supersedes)
         self.assertEqual(summary["fallback"][0][0], "rev-11")

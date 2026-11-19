@@ -232,6 +232,15 @@ authority = ["pell"]
 audience = ["*"]
 
 [[facts]]
+id = "f.d-43"
+key = "d-43"
+kind = "decision"
+value = "out of the EPUB"
+forms = ["extracted from the EPUB"]
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-14"
 key = "d-46"
 kind = "decision"
@@ -282,12 +291,22 @@ authority = ["dov"]
 audience = ["*"]
 
 [[facts]]
+id = "f.d-35"
+key = "d-54"
+kind = "decision"
+value = "only on Wi-Fi"
+forms = ["Wi-Fi only"]
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-54"
 key = "d-54"
 kind = "decision"
 value = "25 MB"
 authority = ["wren"]
 audience = ["*"]
+supersedes = "f.d-35"
 
 [[facts]]
 id = "f.d-1"
@@ -324,8 +343,27 @@ authority = ["tavish"]
 audience = ["*"]
 
 [[facts]]
+id = "f.d-41"
+key = "d-59"
+kind = "decision"
+value = "no curl"
+forms = ["No page-curl"]
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-59"
 key = "d-59"
+kind = "decision"
+value = "opt-in, in the page turn settings"
+forms = ["page curl"]
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-41"
+
+[[facts]]
+id = "f.d-59.thread-context"
+key = "d-59.thread-context"
 kind = "decision"
 value = "1.1%"
 authority = ["imke"]
@@ -609,6 +647,12 @@ key = "d-54"
 probe = "q.para-09"
 
 [[checks]]
+id = "para-10"
+kind = "answer"
+key = "d-59"
+probe = "q.para-10"
+
+[[checks]]
 id = "para-11"
 kind = "answer"
 key = "d-71"
@@ -667,6 +711,12 @@ id = "para-20"
 kind = "answer"
 key = "d-63"
 probe = "q.para-20"
+
+[[checks]]
+id = "para-21"
+kind = "answer"
+key = "d-43"
+probe = "q.para-21"
 
 [[checks]]
 id = "para-22"
@@ -815,7 +865,7 @@ probe = "q.ctx-06"
 [[checks]]
 id = "ctx-07"
 kind = "answer"
-key = "d-59"
+key = "d-59.thread-context"
 probe = "q.ctx-07"
 
 [[checks]]

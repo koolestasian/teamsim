@@ -26,7 +26,8 @@ Mapping
   none of its expected messages is read from the nearest earlier message of the same
   channel that has it verbatim and is written by one of the expected authors (case
   rev-11, "I'd say API 26", confirmed there by "26 it is"); otherwise it is skipped
-  and listed with its reason. When a case gives a different value for an entry that
+  and listed with its reason, unless ``VERBATIM_SPANS`` names a span of an expected message
+  that states the same answer: the span is then the value and the fragment a form. When a case gives a different value for an entry that
   already has one, it asks about another aspect of that entry (owner or due date, say):
   it gets its own key, ``<entry key>.<category>`` (``.<case id>`` if that is taken), and
   its own fact, without a ``supersedes`` link.
@@ -60,6 +61,22 @@ from teamsim.model import (  # noqa: E402
     Subject,
     Surface,
 )
+
+# Cases whose eval fragment is in none of the expected messages, which state the answer in
+# other words. Each maps a case id to the span of an expected message that states the same
+# answer. The span is the fact value and the fragment becomes a form of it. Every span
+# occurs in exactly one message of the dataset (checked by hand when this table was
+# written). No fuzzy matching: a case not listed here is skipped.
+VERBATIM_SPANS = {
+    # "ship it, but opt-in, in the page turn settings. the default stays slide"
+    "para-10": "opt-in, in the page turn settings",
+    # "why not pull the cover out of the EPUB itself and make a thumbnail on import?"
+    "para-21": "out of the EPUB",
+    # "downloads only on Wi-Fi by default."
+    "rev-09": "only on Wi-Fi",
+    # "no curl. slide and fade only."
+    "rev-10": "no curl",
+}
 
 PROBE_GAP_MS = 5 * 60 * 1000
 KIND_OF_ENTRY = {"decision": "decision", "task": "assignment", "question": "item"}
@@ -124,7 +141,7 @@ def build(dataset, cases):
             entry_id = entries[entry_id]["superseded_by"]
         return entry_id
 
-    summary = {"skipped": [], "kept": [], "old_only": [], "aspects": [], "fallback": []}
+    summary = {"skipped": [], "kept": [], "old_only": [], "aspects": [], "fallback": [], "spans": []}
     facts = {}  # (entry id, aspect or None) -> value, kind, first case, disclosing message ids
     case_entry = {}
     order = {m["id"]: i for i, m in enumerate(messages)}
@@ -134,6 +151,14 @@ def build(dataset, cases):
         disclosing = [
             mid for mid in case["expected_messages"] if fragment.lower() in by_message[mid]["content"].lower()
         ]
+        spelling = None
+        if not disclosing and case["id"] in VERBATIM_SPANS:
+            spelling = fragment
+            fragment = VERBATIM_SPANS[case["id"]]
+            disclosing = [
+                mid for mid in case["expected_messages"] if fragment.lower() in by_message[mid]["content"].lower()
+            ]
+            summary["spans"].append((case["id"], fragment))
         if not disclosing:
             # The expected messages may only confirm a value that an earlier message of the
             # same channel proposed in the words of the fragment.
@@ -165,7 +190,9 @@ def build(dataset, cases):
             slot = (entry_id, aspect)
             summary["aspects"].append((case["id"], "%s-%d.%s" % (PREFIX[entry["kind"]], entry_id, aspect)))
         if slot not in facts:
-            facts[slot] = {"value": fragment, "kind": kind, "case": case["id"], "messages": []}
+            facts[slot] = {"value": fragment, "kind": kind, "case": case["id"], "messages": [], "forms": []}
+        if spelling is not None and spelling not in facts[slot]["forms"]:
+            facts[slot]["forms"].append(spelling)
         for mid in disclosing:
             if mid not in facts[slot]["messages"]:
                 facts[slot]["messages"].append(mid)
@@ -205,6 +232,7 @@ def build(dataset, cases):
                 key=fact_key(slot),
                 kind=f["kind"],
                 value=_nfc(f["value"]),
+                forms=tuple(f["forms"]) or None,
                 authority=tuple(authors),
                 audience=("*",),
                 supersedes=fact_id((prev, None)) if prev is not None else None,
@@ -338,6 +366,9 @@ def main(argv=None):
     print("cases disclosed by an earlier message of the channel (%d):" % len(summary["fallback"]))
     for case_id, mid in summary["fallback"]:
         print("  %s: m.%s" % (case_id, mid))
+    print("cases stated by a verbatim span of an expected message (%d):" % len(summary["spans"]))
+    for case_id, span in summary["spans"]:
+        print("  %s: %r" % (case_id, span))
     print("skipped cases (%d):" % len(summary["skipped"]))
     for case_id, why in summary["skipped"]:
         print("  %s: %s" % (case_id, why))
