@@ -1,0 +1,194 @@
+format = 1
+id = "social-10"
+title = "Social feature: 10 synthetic users, 21 days"
+purpose = "Test a multi-user feature: a friends-only post, a post made after a block, a deleted post, and feeds read by users inside and outside the audience."
+seed = "social-ten-1"
+limits = ["The text is templated. A pack says nothing about how real people write.", "The operations (post, follow, block, delete_post, read_feed) and their arguments are defined by this preset, not by any product. A product under test has to map them to its own actions.", "An audience in a pack is an explicit list of users, so a friends-only or followers-only post names who may read it. A rule such as everyone except one user cannot be written.", "A deleted post is scored as a post replaced by a later one: the feed must show the later post and not the deleted one. A feed that correctly shows nothing cannot be scored in this version.", "Nobody replies to anyone, so reply_median_s has no effect. Split, typo and wrong-place habits change message text, not operation arguments, so they have none either. probe_pct has no effect either: a feed read is not a question with a planted answer.", "Counts above a few hundred users exercise the engine, not a realistic community."]
+
+[subject]
+id = "subject"
+
+[provenance]
+generator_version = "teamsim-generate 1"
+population_hash = "d9c8f51e98d60c54331af3c35c4690de32632f0bd8ffc4cd927689f2af09beb5"
+
+[[actors]]
+id = "member-1"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-2"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-3"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [{ "from_day" = 8, "to_day" = 12 }], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-4"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-5"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-6"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-7"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-8"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-9"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[actors]]
+id = "member-10"
+role = "member"
+traits = { "active_hours" = { "end" = 18, "offset" = 0, "start" = 9 }, "away" = [], "probe_pct" = 0, "reply_median_s" = 60, "short_pct" = 29, "split_pct" = 20, "typo_pct" = 2, "wrong_place_pct" = 0 }
+
+[[surfaces]]
+id = "direct:member-1"
+kind = "direct"
+members = ["member-1", "subject"]
+
+[[surfaces]]
+id = "direct:member-2"
+kind = "direct"
+members = ["member-2", "subject"]
+
+[[surfaces]]
+id = "direct:member-3"
+kind = "direct"
+members = ["member-3", "subject"]
+
+[[surfaces]]
+id = "direct:member-4"
+kind = "direct"
+members = ["member-4", "subject"]
+
+[[surfaces]]
+id = "direct:member-5"
+kind = "direct"
+members = ["member-5", "subject"]
+
+[[surfaces]]
+id = "direct:member-6"
+kind = "direct"
+members = ["member-6", "subject"]
+
+[[surfaces]]
+id = "direct:member-7"
+kind = "direct"
+members = ["member-7", "subject"]
+
+[[surfaces]]
+id = "direct:member-8"
+kind = "direct"
+members = ["member-8", "subject"]
+
+[[surfaces]]
+id = "direct:member-9"
+kind = "direct"
+members = ["member-9", "subject"]
+
+[[surfaces]]
+id = "direct:member-10"
+kind = "direct"
+members = ["member-10", "subject"]
+
+[[facts]]
+id = "f.garden-note"
+key = "garden-note"
+kind = "item"
+value = "garden party"
+forms = ["garden party"]
+authority = ["member-4"]
+audience = ["member-4", "member-8", "member-2"]
+
+[[facts]]
+id = "f.trip-note"
+key = "trip-note"
+kind = "item"
+value = "mountain cabin"
+forms = ["mountain cabin"]
+authority = ["member-5"]
+audience = ["member-5", "member-1"]
+
+[[facts]]
+id = "f.meetup-post.1"
+key = "meetup-post"
+kind = "item"
+value = "Saturday market"
+forms = ["Saturday market"]
+authority = ["member-7"]
+audience = ["*"]
+
+[[facts]]
+id = "f.meetup-post.2"
+key = "meetup-post"
+kind = "item"
+value = "Sunday market"
+forms = ["Sunday market"]
+authority = ["member-7"]
+audience = ["*"]
+supersedes = "f.meetup-post.1"
+
+[[checks]]
+id = "c.harness"
+kind = "harness"
+
+[[checks]]
+id = "c.garden-note.answer"
+kind = "answer"
+key = "garden-note"
+probe = "plant.garden-note.qa"
+
+[[checks]]
+id = "c.garden-note.withhold"
+kind = "withhold"
+fact = "f.garden-note"
+probe = "plant.garden-note.qo"
+
+[[checks]]
+id = "c.garden-note.no_leak"
+kind = "no_leak"
+fact = "f.garden-note"
+
+[[checks]]
+id = "c.trip-note.answer"
+kind = "answer"
+key = "trip-note"
+probe = "plant.trip-note.qa"
+
+[[checks]]
+id = "c.trip-note.withhold"
+kind = "withhold"
+fact = "f.trip-note"
+probe = "plant.trip-note.qo"
+
+[[checks]]
+id = "c.trip-note.no_leak"
+kind = "no_leak"
+fact = "f.trip-note"
+
+[[checks]]
+id = "c.meetup-post"
+kind = "answer"
+key = "meetup-post"
+probe = "plant.meetup-post.q"

@@ -1,0 +1,881 @@
+format = 1
+id = "lantern-shelf"
+title = "Lantern Shelf: six people and a crash bot build an e-reader app"
+purpose = "Test an assistant that joins a team chat: it must recall the current value of decisions, task owners and dates after plans changed over eight weeks."
+seed = "lantern-shelf-1"
+limits = ["The chat is a fixed hand-written transcript, so it is the same in every run.", "Every channel is public, so there are no privacy, secret or catch-up checks.", "Answers are matched against the evidence fragments of the eval set, not judged for meaning.", "Replies and message edits in the original chat are not kept: the pack format has no field for them."]
+
+[subject]
+id = "subject"
+
+[provenance]
+generator_version = "fixtures/demo/make_pack.py"
+transformation = "converted from fixtures/demo/dataset.json and fixtures/demo/eval.toml"
+
+[[actors]]
+id = "wren"
+display = "Wren Calloway"
+
+[[actors]]
+id = "dov"
+display = "Dov Kestrel"
+
+[[actors]]
+id = "imke"
+display = "Imke Brandt"
+
+[[actors]]
+id = "tavish"
+display = "Tavish Orme"
+
+[[actors]]
+id = "nadia"
+display = "Nadia Quill"
+
+[[actors]]
+id = "pell"
+display = "Pell Hartnoll"
+
+[[actors]]
+id = "crashwatch"
+role = "bot"
+display = "crashwatch"
+
+[[surfaces]]
+id = "general"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "pricing-numbers"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "engineering"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "epub-parser-crashes"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "sync-conflicts"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "design"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "onboarding-v2"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "dyslexia-and-accessibility"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "release-ops"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "beta-1-checklist"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[facts]]
+id = "f.t-65.date"
+key = "accessibility-audit-due-date"
+kind = "date"
+value = "Apr 17"
+authority = ["wren", "imke"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-65"
+key = "accessibility-audit-owner"
+kind = "assignment"
+value = "Imke"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-24"
+key = "android-reader-due-date"
+kind = "date"
+value = "Apr 1"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-56.thread-context"
+key = "beta-delay-reason"
+kind = "decision"
+value = "debugging it on a Saturday"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-1"
+key = "beta-release-date"
+kind = "decision"
+value = "3 April"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-50"
+key = "beta-release-date"
+kind = "decision"
+value = "10 April"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-1"
+
+[[facts]]
+id = "f.d-56"
+key = "beta-release-date"
+kind = "date"
+value = "14 April"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-50"
+
+[[facts]]
+id = "f.d-21"
+key = "bug-review-day"
+kind = "decision"
+value = "Thursday"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-68"
+key = "bug-review-day"
+kind = "decision"
+value = "Tuesdays"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-21"
+
+[[facts]]
+id = "f.d-29"
+key = "chapter-image-limit"
+kind = "decision"
+value = "2048 px"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-51"
+key = "chapter-image-limit"
+kind = "decision"
+value = "96 MB"
+authority = ["dov"]
+audience = ["*"]
+supersedes = "f.d-29"
+
+[[facts]]
+id = "f.t-42"
+key = "cover-cdn-owner"
+kind = "assignment"
+value = "Tavish"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-43"
+key = "cover-source"
+kind = "decision"
+value = "out of the EPUB"
+forms = ["extracted from the EPUB"]
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-67"
+key = "crash-urgency-rule"
+kind = "decision"
+value = "1% of sessions"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-60"
+key = "curl-battery-test-owner"
+kind = "assignment"
+value = "Imke"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-64.date"
+key = "dyslexia-eval-due-date"
+kind = "date"
+value = "May 15"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-64"
+key = "dyslexia-eval-owner"
+kind = "assignment"
+value = "Nadia"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-63.thread-context"
+key = "dyslexia-font-removal-reason"
+kind = "decision"
+value = "rag badly"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-47"
+key = "dyslexia-support-plan"
+kind = "decision"
+value = "Easeread"
+authority = ["wren", "nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-63"
+key = "dyslexia-support-plan"
+kind = "decision"
+value = "spacing sliders"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-47"
+
+[[facts]]
+id = "f.d-34"
+key = "edit-delete-conflict"
+kind = "decision"
+value = "edit wins"
+authority = ["tavish", "wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-3"
+key = "epub-parser-library"
+kind = "decision"
+value = "libspine"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-23"
+key = "epub-parser-library"
+kind = "decision"
+value = "junk bytes"
+authority = ["imke"]
+audience = ["*"]
+supersedes = "f.d-3"
+
+[[facts]]
+id = "f.d-8"
+key = "first-launch-signup"
+kind = "decision"
+value = "account at first launch"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-16"
+key = "first-launch-signup"
+kind = "decision"
+value = "optional"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-8"
+
+[[facts]]
+id = "f.d-18"
+key = "full-app-price"
+kind = "decision"
+value = "$4.99"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-36"
+key = "full-app-price"
+kind = "decision"
+value = "$7.99"
+authority = ["wren", "dov"]
+audience = ["*"]
+supersedes = "f.d-18"
+
+[[facts]]
+id = "f.d-31"
+key = "highlight-export-format"
+kind = "decision"
+value = "Markdown"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-29.thread-context"
+key = "image-memory-cause"
+kind = "decision"
+value = "216 MB"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-14"
+key = "min-android-version"
+kind = "decision"
+value = "API 26"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-46"
+key = "min-android-version"
+kind = "decision"
+value = "API 24"
+authority = ["dov"]
+audience = ["*"]
+supersedes = "f.d-14"
+
+[[facts]]
+id = "f.d-35"
+key = "mobile-data-downloads"
+kind = "decision"
+value = "only on Wi-Fi"
+forms = ["Wi-Fi only"]
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-54"
+key = "mobile-data-downloads"
+kind = "decision"
+value = "25 MB"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-35"
+
+[[facts]]
+id = "f.d-28"
+key = "note-merge-method"
+kind = "decision"
+value = "union"
+authority = ["tavish", "wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-59.thread-context"
+key = "page-curl-return-reason"
+kind = "decision"
+value = "1.1%"
+authority = ["imke"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-41"
+key = "page-curl-setting"
+kind = "decision"
+value = "no curl"
+forms = ["No page-curl"]
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-59"
+key = "page-curl-setting"
+kind = "decision"
+value = "opt-in, in the page turn settings"
+forms = ["page curl"]
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-41"
+
+[[facts]]
+id = "f.d-39.thread-context"
+key = "position-sync-reason"
+kind = "decision"
+value = "jumps back to page 12"
+authority = ["pell"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-72.date"
+key = "privacy-page-due-date"
+kind = "date"
+value = "Fri 1 May"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-72"
+key = "privacy-page-owner"
+kind = "assignment"
+value = "Tavish"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-71"
+key = "read-aloud-support"
+kind = "decision"
+value = "no text-to-speech"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-27"
+key = "reading-position-sync"
+kind = "decision"
+value = "last write wins"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-39"
+key = "reading-position-sync"
+kind = "decision"
+value = "furthest page"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-27"
+
+[[facts]]
+id = "f.d-7"
+key = "reading-typeface"
+kind = "decision"
+value = "Fenwick Serif"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-32"
+key = "resumable-downloads-owner"
+kind = "assignment"
+value = "Tav"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-12"
+key = "scanned-papers"
+kind = "decision"
+value = "PDF"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-16.thread-context"
+key = "signup-change-reason"
+kind = "decision"
+value = "just want to read my book"
+authority = ["pell"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-13"
+key = "store-bought-books"
+kind = "decision"
+value = "DRM"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-73.date"
+key = "store-screenshots-due-date"
+kind = "date"
+value = "Fri 8 May"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-73"
+key = "store-screenshots-owner"
+kind = "assignment"
+value = "Pell"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-76"
+key = "store-submission-date"
+kind = "date"
+value = "2 June"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-48"
+key = "tap-target-size"
+kind = "decision"
+value = "48dp"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-25"
+key = "test-corpus-owner"
+kind = "assignment"
+value = "Pell"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-2"
+key = "tester-confirmation-due-date"
+kind = "date"
+value = "Mar 31"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-30"
+key = "transfer-limit"
+kind = "decision"
+value = "2 at a time"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-75.date"
+key = "trial-banner-due-date"
+kind = "date"
+value = "Apr 28"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-75"
+key = "trial-banner-owner"
+kind = "assignment"
+value = "Nadia"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-20"
+key = "trial-length"
+kind = "decision"
+value = "14-day"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-74"
+key = "trial-length"
+kind = "decision"
+value = "7 days"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-20"
+
+[[facts]]
+id = "f.d-22"
+key = "usage-statistics"
+kind = "decision"
+value = "third-party analytics"
+authority = ["wren"]
+audience = ["*"]
+
+[[checks]]
+id = "c.harness"
+kind = "harness"
+
+[[checks]]
+id = "para-01"
+kind = "answer"
+key = "reading-typeface"
+probe = "q.para-01"
+
+[[checks]]
+id = "para-02"
+kind = "answer"
+key = "min-android-version"
+probe = "q.para-02"
+
+[[checks]]
+id = "para-03"
+kind = "answer"
+key = "full-app-price"
+probe = "q.para-03"
+
+[[checks]]
+id = "para-04"
+kind = "answer"
+key = "trial-length"
+probe = "q.para-04"
+
+[[checks]]
+id = "para-05"
+kind = "answer"
+key = "reading-position-sync"
+probe = "q.para-05"
+
+[[checks]]
+id = "para-06"
+kind = "answer"
+key = "first-launch-signup"
+probe = "q.para-06"
+
+[[checks]]
+id = "para-07"
+kind = "answer"
+key = "epub-parser-library"
+probe = "q.para-07"
+
+[[checks]]
+id = "para-08"
+kind = "answer"
+key = "chapter-image-limit"
+probe = "q.para-08"
+
+[[checks]]
+id = "para-09"
+kind = "answer"
+key = "mobile-data-downloads"
+probe = "q.para-09"
+
+[[checks]]
+id = "para-10"
+kind = "answer"
+key = "page-curl-setting"
+probe = "q.para-10"
+
+[[checks]]
+id = "para-11"
+kind = "answer"
+key = "read-aloud-support"
+probe = "q.para-11"
+
+[[checks]]
+id = "para-12"
+kind = "answer"
+key = "scanned-papers"
+probe = "q.para-12"
+
+[[checks]]
+id = "para-13"
+kind = "answer"
+key = "store-bought-books"
+probe = "q.para-13"
+
+[[checks]]
+id = "para-14"
+kind = "answer"
+key = "usage-statistics"
+probe = "q.para-14"
+
+[[checks]]
+id = "para-15"
+kind = "answer"
+key = "note-merge-method"
+probe = "q.para-15"
+
+[[checks]]
+id = "para-16"
+kind = "answer"
+key = "bug-review-day"
+probe = "q.para-16"
+
+[[checks]]
+id = "para-17"
+kind = "answer"
+key = "transfer-limit"
+probe = "q.para-17"
+
+[[checks]]
+id = "para-18"
+kind = "answer"
+key = "tap-target-size"
+probe = "q.para-18"
+
+[[checks]]
+id = "para-19"
+kind = "answer"
+key = "highlight-export-format"
+probe = "q.para-19"
+
+[[checks]]
+id = "para-20"
+kind = "answer"
+key = "dyslexia-support-plan"
+probe = "q.para-20"
+
+[[checks]]
+id = "para-21"
+kind = "answer"
+key = "cover-source"
+probe = "q.para-21"
+
+[[checks]]
+id = "para-22"
+kind = "answer"
+key = "crash-urgency-rule"
+probe = "q.para-22"
+
+[[checks]]
+id = "name-01"
+kind = "answer"
+key = "privacy-page-owner"
+probe = "q.name-01"
+
+[[checks]]
+id = "name-02"
+kind = "answer"
+key = "store-screenshots-owner"
+probe = "q.name-02"
+
+[[checks]]
+id = "name-03"
+kind = "answer"
+key = "dyslexia-eval-owner"
+probe = "q.name-03"
+
+[[checks]]
+id = "name-04"
+kind = "answer"
+key = "test-corpus-owner"
+probe = "q.name-04"
+
+[[checks]]
+id = "name-05"
+kind = "answer"
+key = "accessibility-audit-owner"
+probe = "q.name-05"
+
+[[checks]]
+id = "name-06"
+kind = "answer"
+key = "resumable-downloads-owner"
+probe = "q.name-06"
+
+[[checks]]
+id = "name-07"
+kind = "answer"
+key = "trial-banner-owner"
+probe = "q.name-07"
+
+[[checks]]
+id = "name-08"
+kind = "answer"
+key = "curl-battery-test-owner"
+probe = "q.name-08"
+
+[[checks]]
+id = "name-09"
+kind = "answer"
+key = "cover-cdn-owner"
+probe = "q.name-09"
+
+[[checks]]
+id = "date-01"
+kind = "answer"
+key = "privacy-page-due-date"
+probe = "q.date-01"
+
+[[checks]]
+id = "date-02"
+kind = "answer"
+key = "store-screenshots-due-date"
+probe = "q.date-02"
+
+[[checks]]
+id = "date-03"
+kind = "answer"
+key = "dyslexia-eval-due-date"
+probe = "q.date-03"
+
+[[checks]]
+id = "date-04"
+kind = "answer"
+key = "trial-banner-due-date"
+probe = "q.date-04"
+
+[[checks]]
+id = "date-05"
+kind = "answer"
+key = "accessibility-audit-due-date"
+probe = "q.date-05"
+
+[[checks]]
+id = "date-06"
+kind = "answer"
+key = "store-submission-date"
+probe = "q.date-06"
+
+[[checks]]
+id = "date-07"
+kind = "answer"
+key = "beta-release-date"
+probe = "q.date-07"
+
+[[checks]]
+id = "date-08"
+kind = "answer"
+key = "tester-confirmation-due-date"
+probe = "q.date-08"
+
+[[checks]]
+id = "date-09"
+kind = "answer"
+key = "android-reader-due-date"
+probe = "q.date-09"
+
+[[checks]]
+id = "ctx-01"
+kind = "answer"
+key = "reading-typeface"
+probe = "q.ctx-01"
+
+[[checks]]
+id = "ctx-02"
+kind = "answer"
+key = "edit-delete-conflict"
+probe = "q.ctx-02"
+
+[[checks]]
+id = "ctx-03"
+kind = "answer"
+key = "full-app-price"
+probe = "q.ctx-03"
+
+[[checks]]
+id = "ctx-04"
+kind = "answer"
+key = "signup-change-reason"
+probe = "q.ctx-04"
+
+[[checks]]
+id = "ctx-06"
+kind = "answer"
+key = "beta-delay-reason"
+probe = "q.ctx-06"
+
+[[checks]]
+id = "ctx-07"
+kind = "answer"
+key = "page-curl-return-reason"
+probe = "q.ctx-07"
+
+[[checks]]
+id = "ctx-08"
+kind = "answer"
+key = "dyslexia-font-removal-reason"
+probe = "q.ctx-08"
+
+[[checks]]
+id = "ctx-09"
+kind = "answer"
+key = "position-sync-reason"
+probe = "q.ctx-09"

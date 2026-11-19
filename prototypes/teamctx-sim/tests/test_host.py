@@ -1,14 +1,16 @@
+import os
 import subprocess
 import sys
 import tempfile
 import tomllib
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import fakes
 from fakes import json_bytes
 from simlib import envfile, host as H, net
-from simlib.emu import EmuClient, Wsl, parse_startup_log, wait_ready, START_SCRIPT, STOP_SCRIPT, REMOTE_SEED
+from simlib.emu import EmuClient, Wsl, WslConfigError, parse_startup_log, wait_ready, STOP_SCRIPT
 from simlib.net import FakeTransport, PolicyError, Response, UrllibTransport, assert_loopback_url, multipart
 
 INIT_OUTPUT = """# Offline template. Review and save as teamctx.toml; no file was written.
@@ -259,38 +261,85 @@ baseline
         self.assertFalse(parse_startup_log("starting...").ready)
         self.assertTrue(parse_startup_log("Error: EADDRINUSE").failed)
 
-    def test_wsl_commands_touch_only_the_emulator_and_feed_the_seed_through_stdin(self):
+    def _recording_wsl(self, d, **kw):
         calls = []
 
         class Runner:
             @staticmethod
-            def run(args, **kw):
-                calls.append((args, kw))
+            def run(args, **kwargs):
+                calls.append((args, kwargs))
                 return subprocess.CompletedProcess(args, 0, stdout=b"log", stderr=b"")
 
             @staticmethod
-            def Popen(args, **kw):
-                calls.append((args, kw))
+            def Popen(args, **kwargs):
+                calls.append((args, kwargs))
                 return object()
 
+        return Wsl(Path(d), runner=Runner, **kw), calls
+
+    def test_start_script_uses_paths_relative_to_the_directory_it_enters(self):
+        for remote in ("emu", "~/emu", "~/a/b", "a/b"):
+            with tempfile.TemporaryDirectory() as d:
+                wsl, calls = self._recording_wsl(d, distro="x", remote_dir=remote)
+                wsl.start()
+            script = calls[0][0][-1]
+            self.assertTrue(script.startswith(f"cd {remote} && "), script)
+            rest = script[len(f"cd {remote} && "):]
+            self.assertNotIn(f"{remote}/", rest)
+            self.assertIn("--seed seed.json", rest)
+            self.assertIn("> emu.log", rest)
+            # the files written and read before start use the same directory
+            self.assertEqual(wsl.remote_seed, f"{remote}/seed.json")
+            self.assertEqual(wsl.remote_log, f"{remote}/emu.log")
+
+    def test_wsl_commands_touch_only_the_emulator_and_feed_the_seed_through_stdin(self):
         with tempfile.TemporaryDirectory() as d:
-            wsl = Wsl(Path(d), runner=Runner)
+            wsl, calls = self._recording_wsl(d, distro="test-distro", user="test-user", remote_dir="~/test-emu")
             wsl.copy_seed({"discord": {"users": []}})
             wsl.start()
             wsl.stop()
             self.assertEqual(wsl.read_log(), "log")
         copy_args, copy_kw = calls[0]
-        self.assertEqual(copy_args[:5], ["wsl.exe", "-d", "sbx-ubuntu", "-u", "dev"])
-        self.assertEqual(copy_args[-1], f"cat > {REMOTE_SEED}")
+        self.assertEqual(copy_args[:5], ["wsl.exe", "-d", "test-distro", "-u", "test-user"])
+        self.assertEqual(copy_args[-1], f"cat > {wsl.remote_seed}")
         self.assertEqual(copy_kw["input"].decode()[:1], "{")
         start_args = calls[1][0]
-        self.assertEqual(start_args[-1], START_SCRIPT)
-        self.assertIn("exec npx baseline start --service discord", START_SCRIPT)
-        self.assertIn("~/emu", START_SCRIPT)
+        self.assertEqual(start_args[-1], wsl.start_script)
+        self.assertIn("exec npx baseline start --service discord", wsl.start_script)
+        self.assertIn("cd ~/test-emu && ", wsl.start_script)
         stop = calls[2][0][-1]
         self.assertEqual(stop, STOP_SCRIPT)
         self.assertNotIn("rm ", STOP_SCRIPT)
         self.assertIn("[b]aseline start --service discord", STOP_SCRIPT)
+
+    def test_wsl_settings_come_from_the_environment_when_not_passed(self):
+        env = {"TEAMSIM_WSL_DISTRO": "env-distro", "TEAMSIM_WSL_USER": "env-user", "TEAMSIM_EMU_REMOTE_DIR": "~/env-emu"}
+        with tempfile.TemporaryDirectory() as d, mock.patch.dict(os.environ, env):
+            wsl, calls = self._recording_wsl(d)
+            wsl.copy_seed({})
+        self.assertEqual(calls[0][0][:5], ["wsl.exe", "-d", "env-distro", "-u", "env-user"])
+        self.assertIn("~/env-emu/seed.json", calls[0][0][-1])
+        self.assertIn("cd ~/env-emu && ", wsl.start_script)
+
+    def test_missing_distro_fails_with_an_error_that_names_the_setting(self):
+        with tempfile.TemporaryDirectory() as d:
+            wsl, calls = self._recording_wsl(d, distro="", user="", remote_dir="~/x")
+            with self.assertRaisesRegex(WslConfigError, "TEAMSIM_WSL_DISTRO"):
+                wsl.copy_seed({})
+        self.assertEqual(calls, [])
+
+    def test_no_user_setting_omits_the_user_flag(self):
+        with tempfile.TemporaryDirectory() as d:
+            wsl, calls = self._recording_wsl(d, distro="test-distro", user="", remote_dir="~/x")
+            wsl.read_log()
+        self.assertEqual(calls[0][0][:4], ["wsl.exe", "-d", "test-distro", "--"])
+
+    def test_remote_dir_must_be_a_plain_path_because_it_goes_into_a_shell_script(self):
+        with tempfile.TemporaryDirectory() as d:
+            wsl, calls = self._recording_wsl(d, distro="test-distro", user="", remote_dir="~/teamsim; rm -rf ~")
+            with self.assertRaisesRegex(WslConfigError, "TEAMSIM_EMU_REMOTE_DIR"):
+                wsl.start()
+        self.assertEqual(calls, [])
 
     def test_wait_ready_returns_when_banner_and_port_are_up(self):
         fake = fakes.FakeEmulator()

@@ -1,0 +1,28 @@
+# Ten synthetic users in a team workspace for 21 virtual days. Fictional.
+# Regenerate the pack with: python -c "from teamsim.generate import generate_file; generate_file('populations/team-ten.toml', 'packs/team-ten')"
+format = 1
+preset = "team"
+seed = "team-ten-1"
+days = 21
+
+[[groups]]
+role = "lead"
+count = 1
+traits = { bundle = "careful" }
+
+[[groups]]
+role = "member"
+count = 9
+traits = { reply_median_s = { min = 30, max = 300 }, split_pct = 30, typo_pct = 2 }
+
+[[overrides]]
+user = "member-3"
+traits = { away = [{ from_day = 8, to_day = 12 }], wrong_place_pct = 10 }
+
+[plant]
+reversals = 3
+private_facts = 2
+secrets = 1
+unauthorised_claims = 1
+absences = 1
+unanswerable = 2

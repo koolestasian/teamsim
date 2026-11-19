@@ -774,7 +774,7 @@ def case_ready(case: dict, posted: set[str]) -> bool:
 
 
 def recall_at(ranked: list, gold: set, k: int = 10) -> float | None:
-    """|top-k ∩ gold| / |gold|, as crates/teamctx/src/eval.rs does. None when gold is empty."""
+    """|top-k ∩ gold| / |gold|, as the teamctx retrieval metric does. None when gold is empty."""
     if not gold:
         return None
     return len(set(ranked[:k]) & gold) / len(gold)

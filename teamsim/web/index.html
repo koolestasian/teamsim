@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>teamsim run</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="inner"><div class="brand">teamsim</div></div>
+</header>
+<div class="page">
+<aside class="setup">
+  <button type="button" id="setup-toggle" class="setup-toggle" aria-expanded="true" aria-controls="controls" title="Hide setup"><svg class="chev" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="setup-toggle-label">Hide setup</span></button>
+  <form id="controls" autocomplete="off">
+    <label class="field" for="pack"><span>Scenario</span></label>
+    <select id="pack"></select>
+    <div id="scenario-card" class="card scenario-card"></div>
+    <label class="field" for="subject"><span>Bot</span></label>
+    <select id="subject"></select>
+    <div id="bot-card" class="card bot-card"></div>
+    <button type="submit" id="run" class="primary" title="Run test"><span class="spin" aria-hidden="true"></span><svg class="run-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg><span id="run-label">Run test</span></button>
+  </form>
+  <p id="status" role="status"></p>
+</aside>
+<main>
+  <div id="strip" class="strip"></div>
+  <p id="live" class="sr-only" role="status" aria-live="polite"></p>
+  <div class="tabs-wrap">
+    <div class="tabs" role="tablist" id="tabs">
+      <button type="button" role="tab" id="tab-checks" data-tab="checks" aria-controls="panel-checks" aria-disabled="true"></button>
+      <button type="button" role="tab" id="tab-timeline" data-tab="timeline" aria-controls="panel-timeline">Conversation</button>
+      <button type="button" role="tab" id="tab-users" data-tab="users" aria-controls="panel-users">People</button>
+      <button type="button" role="tab" id="tab-controls" data-tab="controls" aria-controls="panel-controls">Verify tests</button>
+      <span class="tab-ind still" id="tab-ind" aria-hidden="true"></span>
+    </div>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+  </div>
+  <section id="panel-checks" role="tabpanel" aria-labelledby="tab-checks" hidden>
+    <div id="result" class="result-layout" hidden>
+      <div id="check-list" class="check-results"></div>
+      <div id="evidence" class="evidence"></div>
+    </div>
+  </section>
+  <section id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline" hidden>
+    <div class="ws" id="ws">
+      <aside class="ws-side ws-channels" id="ws-channels" aria-label="Channels">
+        <div class="ws-scn" id="ws-scn"></div>
+        <nav id="ws-chlist" class="ws-scroll"></nav>
+      </aside>
+      <section class="ws-main">
+        <header class="ws-head">
+          <button type="button" id="ws-chbtn" class="ws-chbtn" aria-haspopup="dialog"></button>
+          <h2 id="ws-title" class="ws-title"></h2>
+          <span id="count" class="ws-count"></span>
+          <span id="ws-chips" class="ws-chips"></span>
+          <label class="ws-key"><input type="checkbox" id="key-only"><span>Only key messages</span></label>
+          <button type="button" id="ws-membtn" class="ws-membtn" aria-haspopup="dialog">Members</button>
+        </header>
+        <div id="timeline" class="ws-feed" tabindex="-1"></div>
+      </section>
+      <aside class="ws-side ws-members" id="ws-members" aria-label="Members">
+        <div id="ws-memlist" class="ws-scroll"></div>
+      </aside>
+    </div>
+  </section>
+  <section id="panel-users" role="tabpanel" aria-labelledby="tab-users" hidden>
+    <div class="table-scroll"><table id="users"></table></div>
+  </section>
+  <section id="panel-controls" role="tabpanel" aria-labelledby="tab-controls" hidden>
+    <p id="matrix-note" class="muted small"></p>
+    <button type="button" id="run-controls" class="secondary"><span class="spin" aria-hidden="true"></span><span id="run-controls-label">Verify tests</span></button>
+    <div class="table-scroll" id="matrix-wrap" hidden><table id="matrix"></table></div>
+    <ul id="mismatches" class="problems"></ul>
+  </section>
+  <div class="foot">
+    <details class="about">
+      <summary>About this scenario</summary>
+      <p id="purpose"></p>
+      <p class="limits-head">Keep in mind</p>
+      <ul id="limits"></ul>
+      <details class="tech">
+        <summary>Technical notes</summary>
+        <p id="tech-purpose"></p>
+        <ul id="tech-limits"></ul>
+      </details>
+    </details>
+    <details class="about" id="run-details" hidden>
+      <summary>Run details</summary>
+      <div id="details-body"></div>
+    </details>
+  </div>
+</main>
+</div>
+<div id="scrim" class="scrim" hidden></div>
+<div id="profile" class="profile" role="dialog" aria-modal="false" tabindex="-1" hidden></div>
+<script src="/app.js"></script>
+</body>
+</html>

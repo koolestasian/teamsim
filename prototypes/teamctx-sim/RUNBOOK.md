@@ -28,8 +28,11 @@ an `invalidate`.
 
 ## Preconditions
 
-- WSL distro `sbx-ubuntu` with the emulator installed in `~/emu` (already done; never reinstall).
-- A teamctx binary with the loopback `[discord] api_url` setting (Spec C).
+- A WSL distro with the emulator installed. Name it in `TEAMSIM_WSL_DISTRO` (environment or the repo's
+  `.env`, see `.env.example`). Optional: `TEAMSIM_WSL_USER` (empty means the distro's default user) and
+  `TEAMSIM_EMU_REMOTE_DIR` (where the emulator lives in the distro; default `~/teamsim-emu`). The harness
+  does not install the emulator. A missing distro stops the emulator steps with an error that names the setting.
+- A teamctx binary with the loopback `[discord] api_url` setting.
 - Optional: `TEAMCTX_LLM_KEY` in the repo-root `.env` (OpenRouter) or LM Studio on
   `127.0.0.1:1234`. Without either, `/ask` checks are `blocked` and the rest runs.
 - Ports free on Windows: 4000 (emulator via WSL), 4001 (shim), 7420 (teamctx).
@@ -87,13 +90,12 @@ command runs checks 0 and 2 per act.
 
 ## Live view (no commands needed)
 
-Double-click `prototypes/teamctx-sim/open-live-view.cmd` (or open <http://127.0.0.1:4100> if it is already up). It
-starts the viz server in a minimised window (keep that window open: the run it starts is its child,
-and the emulator lives as long as it does), then opens the browser. The page has two buttons:
+Run `python -I prototypes/teamctx-sim/sim.py viz` (or open <http://127.0.0.1:4100> if it is already up). It
+starts the viz server and, unless `--no-open` is given, opens the browser. Keep that terminal open: a run it
+starts is its child, and the emulator lives as long as it does. The page has two buttons:
 "Watch the last run" (replay of `.state`, with play/pause, 1x-8x, restart) and "Start a new live
 run" (the server starts `sim.py run-all --force --paced` itself and the page switches to LIVE). Only
-one run at a time; a run started from a terminal also disables the buttons. CLI equivalents:
-`python -I prototypes/teamctx-sim/sim.py viz [--port 4100] [--no-open]` and `run-all --watch`.
+one run at a time; a run started from a terminal also disables the buttons. Flags: `viz --port N` changes the port (default 4100); `run-all --watch` starts a new run with the live view.
 Safety: loopback bind only; Host and Origin must be exactly `127.0.0.1:<port>`; the only endpoint that
 changes anything is `POST /api/start`, which also needs the per-process nonce embedded in the page.
 Everything the page receives passes through the redactor; chat text is rendered with `textContent`.
@@ -150,9 +152,9 @@ record / 5 retrieval vs offline eval / 6 visibility (`leads` channel) / 7 prompt
   written to a report: every output passes through `simlib/envfile.py` (literals plus shape
   patterns for `sk-or-...`, `tctx_...`, `Bot ...`/`Bearer ...`, Discord-style tokens, control
   token). The key reaches only the teamctx child process environment and the one probe.
-- The harness touches the WSL distro only in `~/emu` and the emulator process.
+- The harness touches the WSL distro only in the remote directory (`TEAMSIM_EMU_REMOTE_DIR`) and the emulator process.
 - Dataset text is untrusted data, including two prompt-injection messages; nothing follows it.
-- Nothing here is committed or pushed. The repo is public; this folder must stay local.
+- Nothing here is committed or pushed.
 
 ## Known limits
 

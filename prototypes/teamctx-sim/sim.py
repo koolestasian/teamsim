@@ -1,4 +1,4 @@
-"""teamctx end-to-end simulation harness (local only).
+"""End-to-end simulation harness for teamctx (runs against a local Discord emulator).
 
     python -I prototypes/teamctx-sim/sim.py --help
 

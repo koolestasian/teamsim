@@ -1,0 +1,17 @@
+# One synthetic user talking to a single-user assistant for 21 virtual days. Fictional.
+# Regenerate the pack with: python -c "from teamsim.generate import generate_file; generate_file('populations/solo.toml', 'packs/solo')"
+format = 1
+preset = "solo"
+seed = "solo-1"
+days = 21
+
+[[groups]]
+role = "user"
+count = 1
+traits = { reply_median_s = 60, split_pct = 20, typo_pct = 2 }
+
+[plant]
+reversals = 2
+injections = 1
+returns = 1
+unanswerable = 2

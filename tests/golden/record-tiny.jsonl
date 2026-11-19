@@ -1,0 +1,10 @@
+{"engine":"0.1.0","format":1,"limits":["one channel, two actors"],"mode":"scripted","pack_hash":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef","pack_id":"tiny","seed":"tiny-seed","subject":{"command":"naive_bot"},"type":"header"}
+{"code":"start","n":1,"t_ms":0,"type":"note"}
+{"kind":"ready","n":2,"name":"naive_bot","seq":0,"t_ms":0,"type":"observation","version":"1"}
+{"actor":"ana","event":"e1","kind":"post","n":3,"recipients":["ana","bo"],"seq":1,"surface":"general","t_ms":1000,"type":"delivery"}
+{"action":{"kind":"post","reply_to":"e1","surface":"general","text":"Thursday 16 April"},"kind":"action","n":4,"readers":["ana","bo"],"seq":1,"t_ms":1000,"type":"observation"}
+{"kind":"done","n":5,"seq":1,"t_ms":1000,"type":"observation"}
+{"code":"shutdown","detail":"end_of_run","n":6,"t_ms":1000,"type":"note"}
+{"check":"c1","detail":[],"entries":[],"events":[],"kind":"harness","policy":false,"type":"verdict","verdict":"pass"}
+{"check":"c2","detail":[],"entries":[4],"events":["e1"],"kind":"answer","policy":false,"type":"verdict","verdict":"pass"}
+{"digest":"efb1177a1e16d8edd4c7fb60267c01af92f0bd86a7042a44dfc3df725a267a11","type":"digest"}

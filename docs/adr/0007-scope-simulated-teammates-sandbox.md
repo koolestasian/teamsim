@@ -1,7 +1,9 @@
 # 0007. Scope: a sandbox of simulated teammates; the audit and benchmark leave
 
 - Status: Accepted; amended by [0008](0008-scope-synthetic-users-any-software.md)
-  (any software, any number of synthetic users)
+  (any software, any number of synthetic users) and
+  [0009](0009-version-0-built-in-workspace-subject-protocol-python-floor.md) (the first
+  workspace is built in)
 - Date: 2026-11-13
 - Deciders: maintainer
 - Plan reference: none

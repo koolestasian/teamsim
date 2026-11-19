@@ -1,0 +1,1191 @@
+{"actor":"lead-1","at":33000000,"discloses":["f.demo-date.1"],"id":"plant.demo-date.d1","kind":"post","surface":"general","text":"Plan for the demo: Tuesday 14 April."}
+{"actor":"member-8","at":36792419,"id":"member-8.t0","kind":"post","surface":"general","text":"Sounds good."}
+{"actor":"lead-1","at":37392419,"id":"lead-1.r.member-8.0","kind":"post","surface":"general","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":37800000,"depends_on":["plant.demo-date.d1"],"discloses":["f.demo-date.2"],"id":"plant.demo-date.d2","kind":"post","surface":"general","text":"Update: the demo moves to Thursday 16 April."}
+{"actor":"member-5","at":38124558,"id":"member-5.t1","kind":"post","surface":"planning","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-3","at":39286971,"id":"member-3.t0","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-5","at":39372771,"id":"member-5.r.member-3.0","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-2","at":39788558,"id":"member-2.r.member-5.1","kind":"post","surface":"planning","text":"Thanks for the update, I will"}
+{"actor":"member-2","at":39792558,"id":"member-2.r.member-5.1.f1","kind":"post","surface":"planning","text":"take a look this afternoon."}
+{"actor":"member-4","at":40779134,"id":"member-4.q1","kind":"post","surface":"general","text":"Who has notes?"}
+{"actor":"member-7","at":41429134,"id":"member-7.r.member-4.1","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-4","at":41613699,"id":"member-4.t0","kind":"post","surface":"planning","text":"The spreadsheet with the"}
+{"actor":"member-4","at":41617699,"id":"member-4.t0.f1","kind":"post","surface":"planning","text":"weekly numbers has"}
+{"actor":"member-4","at":41621699,"id":"member-4.t0.f2","kind":"post","surface":"planning","text":"a new tab"}
+{"actor":"member-4","at":41625699,"id":"member-4.t0.f3","kind":"post","surface":"planning","text":"for last month."}
+{"actor":"member-7","at":43512307,"id":"member-7.q0","kind":"post","surface":"general","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-2","at":43963403,"id":"member-2.t1","kind":"post","surface":"random","text":"Running late."}
+{"actor":"member-9","at":43988603,"id":"member-9.r.member-2.1","kind":"post","surface":"random","text":"Got it."}
+{"actor":"member-1","at":44044307,"id":"member-1.r.member-7.0","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-5","at":44330699,"id":"member-5.r.member-4.0","kind":"post","surface":"planning","text":"I am not"}
+{"actor":"member-5","at":44334699,"id":"member-5.r.member-4.0.f1","kind":"post","surface":"planning","text":"sure about that"}
+{"actor":"member-5","at":44338699,"id":"member-5.r.member-4.0.f2","kind":"post","surface":"planning","text":"one, maybe someone"}
+{"actor":"member-5","at":44342699,"id":"member-5.r.member-4.0.f3","kind":"post","surface":"planning","text":"else knows more."}
+{"actor":"member-6","at":44384935,"id":"member-6.q0","kind":"post","surface":"general","text":"Is it ready?"}
+{"actor":"member-1","at":44916935,"id":"member-1.r.member-6.0","kind":"post","surface":"general","text":"Got it."}
+{"actor":"lead-1","at":48047247,"id":"lead-1.t1","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-2","at":48083087,"id":"member-2.r.lead-1.1","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":53173057,"id":"member-7.t1","kind":"post","surface":"random","text":"I tidied the wiki page for new joiners adn fixed the broken links."}
+{"actor":"member-3","at":53192557,"id":"member-3.r.member-7.1.w","kind":"post","surface":"planning","text":"That works for me, let"}
+{"actor":"member-7","at":53199211,"id":"member-7.t1.e","kind":"edit","surface":"random","target":"member-7.t1","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-3","at":53212557,"id":"member-3.r.member-7.1.d","kind":"delete","surface":"planning","target":"member-3.r.member-7.1.w"}
+{"actor":"member-3","at":53227557,"id":"member-3.r.member-7.1","kind":"post","surface":"random","text":"That works for me, let"}
+{"actor":"member-3","at":53231557,"id":"member-3.r.member-7.1.f1","kind":"post","surface":"random","text":"me know if anything"}
+{"actor":"member-3","at":53235557,"id":"member-3.r.member-7.1.f2","kind":"post","surface":"random","text":"changes on your side."}
+{"actor":"member-8","at":54000000,"id":"plant.un0","kind":"post","surface":"general","text":"Which room did we book for the holiday party two years ago?"}
+{"actor":"member-6","at":54027435,"id":"member-6.t1","kind":"post","surface":"general","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-1","at":54065435,"id":"member-1.r.member-6.1","kind":"post","surface":"general","text":"Let us talk about"}
+{"actor":"member-1","at":54069435,"id":"member-1.r.member-6.1.f1","kind":"post","surface":"general","text":"it at the next"}
+{"actor":"member-1","at":54073435,"id":"member-1.r.member-6.1.f2","kind":"post","surface":"general","text":"sync and decide together."}
+{"actor":"member-2","at":56671689,"id":"member-2.t0","kind":"post","surface":"general","text":"I tidied the wiki page"}
+{"actor":"member-2","at":56675689,"id":"member-2.t0.f1","kind":"post","surface":"general","text":"for new joiners and"}
+{"actor":"member-2","at":56679689,"id":"member-2.t0.f2","kind":"post","surface":"general","text":"fixed the broken links."}
+{"actor":"member-3","at":56709189,"id":"member-3.r.member-2.0","kind":"post","surface":"general","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-8","at":57424991,"id":"member-8.q1","kind":"post","surface":"random","text":"Do we still use the old folder"}
+{"actor":"member-8","at":57428991,"id":"member-8.q1.f1","kind":"post","surface":"random","text":"for finished drafts or the new one?"}
+{"actor":"member-1","at":58072422,"id":"member-1.t0","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-3","at":58171422,"id":"member-3.r.member-1.0","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"lead-1","at":59303265,"id":"lead-1.q0","kind":"post","surface":"random","text":"Could someone remind me where the weekly numbers spreadsheet lives?"}
+{"actor":"member-1","at":59328729,"id":"member-1.t1","kind":"post","surface":"random","text":"Sounds good."}
+{"actor":"member-7","at":59424991,"id":"member-7.r.member-8.1","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"lead-1","at":59484729,"id":"lead-1.r.member-1.1","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":59525265,"id":"member-6.r.lead-1.0","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-5","at":59951880,"id":"member-5.t0","kind":"post","surface":"general","text":"The build on my side"}
+{"actor":"member-5","at":59955880,"id":"member-5.t0.f1","kind":"post","surface":"general","text":"is green again after"}
+{"actor":"member-5","at":59959880,"id":"member-5.t0.f2","kind":"post","surface":"general","text":"the last dependency update."}
+{"actor":"member-3","at":60086880,"id":"member-3.r.member-5.0","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-3","at":61464539,"id":"member-3.t1","kind":"post","surface":"random","text":"I moved the draft into the team"}
+{"actor":"member-3","at":61468539,"id":"member-3.t1.f1","kind":"post","surface":"random","text":"folder so everyone can edit it."}
+{"actor":"member-6","at":61582939,"id":"member-6.r.member-3.1","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-9","at":61696963,"id":"member-9.t0","kind":"post","surface":"random","text":"On it."}
+{"actor":"member-5","at":61711263,"id":"member-5.r.member-9.0","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-9","at":61972568,"id":"member-9.t1","kind":"post","surface":"general","text":"I will write up"}
+{"actor":"member-9","at":61976568,"id":"member-9.t1.f1","kind":"post","surface":"general","text":"the notes from"}
+{"actor":"member-9","at":61980568,"id":"member-9.t1.f2","kind":"post","surface":"general","text":"this morning and"}
+{"actor":"member-9","at":61984568,"id":"member-9.t1.f3","kind":"post","surface":"general","text":"share them later."}
+{"actor":"member-1","at":61997268,"id":"member-1.r.member-9.1","kind":"post","surface":"general","text":"Will do."}
+{"actor":"lead-1","at":119400000,"depends_on":["plant.demo-date.d2"],"discloses":["f.demo-date.3"],"id":"plant.demo-date.d3","kind":"post","surface":"general","text":"Change of plan again: the demo is now on Friday 17 April."}
+{"actor":"member-3","at":123612784,"id":"member-3.q2","kind":"post","surface":"planning","text":"Does anyone have the link to"}
+{"actor":"member-3","at":123616784,"id":"member-3.q2.f1","kind":"post","surface":"planning","text":"the shared planning board right now?"}
+{"actor":"member-7","at":124200000,"depends_on":["plant.demo-date.d3"],"id":"plant.demo-date.q","kind":"post","probe":true,"surface":"general","text":"Which day is the demo again? I need to book the room."}
+{"actor":"member-2","at":124314184,"id":"member-2.t2","kind":"post","surface":"general","text":"Done."}
+{"actor":"member-8","at":124444124,"id":"member-8.r.member-2.2","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":125612784,"id":"member-7.r.member-3.2","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-2","at":128873769,"id":"member-2.q3","kind":"post","surface":"planning","text":"Is it ready?"}
+{"actor":"member-9","at":129251769,"id":"member-9.r.member-2.3","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-5","at":131497061,"id":"member-5.t2","kind":"post","surface":"random","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-8","at":131505961,"id":"member-8.r.member-5.2","kind":"post","surface":"random","text":"No probelm at all,"}
+{"actor":"member-8","at":131509961,"id":"member-8.r.member-5.2.f1","kind":"post","surface":"random","text":"I will send"}
+{"actor":"member-8","at":131513961,"id":"member-8.r.member-5.2.f2","kind":"post","surface":"random","text":"it over in"}
+{"actor":"member-8","at":131517961,"id":"member-8.r.member-5.2.f3","kind":"post","surface":"random","text":"a few minutes."}
+{"actor":"member-8","at":131522910,"id":"member-8.r.member-5.2.e","kind":"edit","surface":"random","target":"member-8.r.member-5.2","text":"No problem at all,"}
+{"actor":"member-1","at":131543501,"id":"member-1.q3","kind":"post","surface":"random","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"lead-1","at":131644301,"id":"lead-1.r.member-1.3","kind":"post","surface":"random","text":"Same here."}
+{"actor":"member-5","at":131718677,"id":"member-5.q3","kind":"post","surface":"random","text":"Anyone around?"}
+{"actor":"member-1","at":131790877,"id":"member-1.r.member-5.3","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-4","at":133171364,"id":"member-4.t3","kind":"post","surface":"general","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-9","at":133204997,"id":"member-9.q2","kind":"post","surface":"planning","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-6","at":133225717,"id":"member-6.r.member-9.2","kind":"post","surface":"planning","text":"Will do."}
+{"actor":"member-9","at":133330964,"id":"member-9.r.member-4.3","kind":"post","surface":"general","text":"Same here."}
+{"actor":"member-7","at":133822114,"id":"member-7.q3","kind":"post","surface":"random","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-8","at":134000114,"id":"member-8.r.member-7.3","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-8","at":134871564,"id":"member-8.t2","kind":"post","surface":"planning","text":"Noted, thanks."}
+{"actor":"member-9","at":134955564,"id":"member-9.r.member-8.2","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-6","at":135217841,"id":"member-6.t2","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-9","at":135272441,"id":"member-9.r.member-6.2","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":136042060,"id":"member-8.t3","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-9","at":136077340,"id":"member-9.r.member-8.3","kind":"post","surface":"general","text":"I am not sure"}
+{"actor":"member-9","at":136081340,"id":"member-9.r.member-8.3.f1","kind":"post","surface":"general","text":"about that one, maybe"}
+{"actor":"member-9","at":136085340,"id":"member-9.r.member-8.3.f2","kind":"post","surface":"general","text":"someone else knows more."}
+{"actor":"lead-1","at":136340871,"id":"lead-1.q3","kind":"post","surface":"planning","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-7","at":136440871,"id":"member-7.r.lead-1.3","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-7","at":139082846,"id":"member-7.t2","kind":"post","surface":"random","text":"I tidied the wiki"}
+{"actor":"member-7","at":139086846,"id":"member-7.t2.f1","kind":"post","surface":"random","text":"page for new"}
+{"actor":"member-7","at":139090846,"id":"member-7.t2.f2","kind":"post","surface":"random","text":"joiners and fixed"}
+{"actor":"member-7","at":139094846,"id":"member-7.t2.f3","kind":"post","surface":"random","text":"the broken links."}
+{"actor":"lead-1","at":139682846,"id":"lead-1.r.member-7.2","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-9","at":142055603,"id":"member-9.q3","kind":"post","surface":"general","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"lead-1","at":142171278,"id":"lead-1.q2","kind":"post","surface":"random","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-6","at":142174003,"id":"member-6.r.member-9.3","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-3","at":142183878,"id":"member-3.r.lead-1.2","kind":"post","surface":"random","text":"Agreed."}
+{"actor":"member-3","at":143812449,"id":"member-3.t3","kind":"post","surface":"random","text":"The test run finished"}
+{"actor":"member-3","at":143816449,"id":"member-3.t3.f1","kind":"post","surface":"random","text":"overnight and only two"}
+{"actor":"member-3","at":143820449,"id":"member-3.t3.f2","kind":"post","surface":"random","text":"cases need another look."}
+{"actor":"member-8","at":146304449,"id":"member-8.r.member-3.3","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-1","at":147120723,"id":"member-1.t2","kind":"post","surface":"planning","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-8","at":147565723,"id":"member-8.r.member-1.2","kind":"post","surface":"planning","text":"I can help"}
+{"actor":"member-8","at":147569723,"id":"member-8.r.member-1.2.f1","kind":"post","surface":"planning","text":"with that after"}
+{"actor":"member-8","at":147573723,"id":"member-8.r.member-1.2.f2","kind":"post","surface":"planning","text":"my next meeting"}
+{"actor":"member-8","at":147577723,"id":"member-8.r.member-1.2.f3","kind":"post","surface":"planning","text":"finishes today."}
+{"actor":"member-4","at":150216677,"id":"member-4.t2","kind":"post","surface":"planning","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-1","at":150220097,"id":"member-1.r.member-4.2","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":150716429,"id":"member-6.t3","kind":"post","surface":"planning","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-9","at":205748053,"id":"member-9.r.member-6.3","kind":"post","surface":"planning","text":"Thanks for the"}
+{"actor":"member-9","at":205752053,"id":"member-9.r.member-6.3.f1","kind":"post","surface":"planning","text":"update, I will"}
+{"actor":"member-9","at":205756053,"id":"member-9.r.member-6.3.f2","kind":"post","surface":"planning","text":"take a look"}
+{"actor":"member-9","at":205760053,"id":"member-9.r.member-6.3.f3","kind":"post","surface":"planning","text":"this afternoon."}
+{"actor":"lead-1","at":205800000,"discloses":["f.release-day.1"],"id":"plant.release-day.d1","kind":"post","surface":"general","text":"We ship the release on Monday 4 May."}
+{"actor":"member-8","at":207893455,"id":"member-8.q5","kind":"post","surface":"random","text":"Is the second floor"}
+{"actor":"member-8","at":207897455,"id":"member-8.q5.f1","kind":"post","surface":"random","text":"printer still out of"}
+{"actor":"member-8","at":207901455,"id":"member-8.q5.f2","kind":"post","surface":"random","text":"paper or has"}
+{"actor":"member-8","at":207905455,"id":"member-8.q5.f3","kind":"post","surface":"random","text":"it been fixed?"}
+{"actor":"member-2","at":209045455,"id":"member-2.r.member-8.5","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"lead-1","at":210600000,"depends_on":["plant.release-day.d1"],"discloses":["f.release-day.2"],"id":"plant.release-day.d2","kind":"post","surface":"general","text":"The release slips to Wednesday 6 May."}
+{"actor":"member-9","at":210982402,"id":"member-9.t4","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"lead-1","at":211174402,"id":"lead-1.r.member-9.4","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":213998173,"id":"member-2.t4","kind":"post","surface":"planning","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-4","at":214674000,"id":"member-4.t4","kind":"post","surface":"general","text":"I tidied the wiki page"}
+{"actor":"member-4","at":214678000,"id":"member-4.t4.f1","kind":"post","surface":"general","text":"for new joiners and"}
+{"actor":"member-1","at":214679320,"id":"member-1.r.member-4.4","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-4","at":214682000,"id":"member-4.t4.f2","kind":"post","surface":"general","text":"fixed the broken links."}
+{"actor":"lead-1","at":215078173,"id":"lead-1.r.member-2.4","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-7","at":215536247,"id":"member-7.t4","kind":"post","surface":"random","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-6","at":215906247,"id":"member-6.r.member-7.4","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"lead-1","at":216040440,"id":"lead-1.t4","kind":"post","surface":"planning","text":"Please add your questions to the"}
+{"actor":"lead-1","at":216044440,"id":"lead-1.t4.f1","kind":"post","surface":"planning","text":"shared agenda before the next sync."}
+{"actor":"member-1","at":216048040,"id":"member-1.r.lead-1.4","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-1","at":219281439,"id":"member-1.t5","kind":"post","surface":"random","text":"Please add your questions"}
+{"actor":"member-1","at":219285439,"id":"member-1.t5.f1","kind":"post","surface":"random","text":"to the shared agenda"}
+{"actor":"member-1","at":219289439,"id":"member-1.t5.f2","kind":"post","surface":"random","text":"before the next sync."}
+{"actor":"member-7","at":219354439,"id":"member-7.r.member-1.5","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-3","at":221600988,"id":"member-3.q4","kind":"post","surface":"random","text":"Is it ready?"}
+{"actor":"member-6","at":221682388,"id":"member-6.r.member-3.4","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"lead-1","at":222799414,"id":"lead-1.t5","kind":"post","surface":"planning","text":"On it."}
+{"actor":"member-8","at":223066414,"id":"member-8.r.lead-1.5","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-5","at":224873917,"id":"member-5.t4","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"member-8","at":224898837,"id":"member-8.r.member-5.4","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-6","at":225301000,"id":"member-6.t4","kind":"post","surface":"random","text":"Please add your questions"}
+{"actor":"member-6","at":225305000,"id":"member-6.t4.f1","kind":"post","surface":"random","text":"to the shared agenda"}
+{"actor":"member-6","at":225309000,"id":"member-6.t4.f2","kind":"post","surface":"random","text":"before the next sync."}
+{"actor":"lead-1","at":225433000,"id":"lead-1.r.member-6.4","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-5","at":226724428,"id":"member-5.t5","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-1","at":226740388,"id":"member-1.r.member-5.5","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-8","at":229279369,"id":"member-8.t4","kind":"post","surface":"random","text":"I tidied the wiki"}
+{"actor":"member-8","at":229283369,"id":"member-8.t4.f1","kind":"post","surface":"random","text":"page for new"}
+{"actor":"member-8","at":229287369,"id":"member-8.t4.f2","kind":"post","surface":"random","text":"joiners and fixed"}
+{"actor":"member-8","at":229291369,"id":"member-8.t4.f3","kind":"post","surface":"random","text":"the broken links."}
+{"actor":"member-6","at":229501369,"id":"member-6.r.member-8.4","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-9","at":230048227,"id":"member-9.t5","kind":"post","surface":"general","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-5","at":230073967,"id":"member-5.r.member-9.5","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-2","at":230575230,"id":"member-2.q5","kind":"post","surface":"general","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-4","at":230621380,"id":"member-4.r.member-2.5","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-3","at":230742257,"id":"member-3.t5","kind":"post","surface":"planning","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-4","at":230752197,"id":"member-4.r.member-3.5","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-1","at":232024225,"id":"member-1.q4","kind":"post","surface":"planning","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-7","at":232801922,"id":"member-7.t5","kind":"post","surface":"planning","text":"Lunch order closes at"}
+{"actor":"member-7","at":232805922,"id":"member-7.t5.f1","kind":"post","surface":"planning","text":"noon today if anyone"}
+{"actor":"member-7","at":232809922,"id":"member-7.t5.f2","kind":"post","surface":"planning","text":"wants to join in."}
+{"actor":"member-8","at":233068922,"id":"member-8.r.member-7.5","kind":"post","surface":"planning","text":"I am not"}
+{"actor":"member-8","at":233072922,"id":"member-8.r.member-7.5.f1","kind":"post","surface":"planning","text":"sure about that"}
+{"actor":"member-8","at":233076922,"id":"member-8.r.member-7.5.f2","kind":"post","surface":"planning","text":"one, maybe someone"}
+{"actor":"member-8","at":233080922,"id":"member-8.r.member-7.5.f3","kind":"post","surface":"planning","text":"else knows more."}
+{"actor":"member-6","at":233852489,"id":"member-6.t5","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-8","at":234516225,"id":"member-8.r.member-1.4","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-2","at":234697289,"id":"member-2.r.member-6.5","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-4","at":235733821,"id":"member-4.t5","kind":"post","surface":"random","text":"I am going through the open tickets"}
+{"actor":"member-4","at":235737821,"id":"member-4.t5.f1","kind":"post","surface":"random","text":"and closing the ones that are done."}
+{"actor":"member-7","at":235923821,"id":"member-7.r.member-4.5","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-7","at":292200000,"depends_on":["plant.release-day.d2"],"id":"plant.release-day.q","kind":"post","probe":true,"surface":"general","text":"What day are we shipping the release?"}
+{"actor":"member-8","at":293814222,"id":"member-8.q6","kind":"post","surface":"general","text":"Does anyone have"}
+{"actor":"member-8","at":293818222,"id":"member-8.q6.f1","kind":"post","surface":"general","text":"the link to"}
+{"actor":"member-8","at":293822222,"id":"member-8.q6.f2","kind":"post","surface":"general","text":"the shared planning"}
+{"actor":"member-8","at":293826222,"id":"member-8.q6.f3","kind":"post","surface":"general","text":"board right now?"}
+{"actor":"member-4","at":293920722,"id":"member-4.r.member-8.6","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-7","at":295748993,"id":"member-7.q7","kind":"post","surface":"planning","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-3","at":295770893,"id":"member-3.r.member-7.7","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-1","at":296781358,"id":"member-1.q7","kind":"post","surface":"planning","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-4","at":296920689,"id":"member-4.q6","kind":"post","surface":"general","text":"Has anyone tried the new template"}
+{"actor":"member-4","at":296924689,"id":"member-4.q6.f1","kind":"post","surface":"general","text":"for the weekly status update yet?"}
+{"actor":"member-5","at":297210358,"id":"member-5.r.member-1.7","kind":"post","surface":"planning","text":"I am not"}
+{"actor":"member-5","at":297214358,"id":"member-5.r.member-1.7.f1","kind":"post","surface":"planning","text":"sure about that"}
+{"actor":"member-5","at":297218358,"id":"member-5.r.member-1.7.f2","kind":"post","surface":"planning","text":"one, maybe someone"}
+{"actor":"member-5","at":297222358,"id":"member-5.r.member-1.7.f3","kind":"post","surface":"planning","text":"else knows more."}
+{"actor":"member-6","at":297290689,"id":"member-6.r.member-4.6","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-6","at":299271601,"id":"member-6.t7","kind":"post","surface":"random","text":"The test run finished overnight and"}
+{"actor":"member-6","at":299275601,"id":"member-6.t7.f1","kind":"post","surface":"random","text":"only two cases need another look."}
+{"actor":"member-1","at":299442601,"id":"member-1.r.member-6.7","kind":"post","surface":"random","text":"Thanks for the update, I will"}
+{"actor":"member-1","at":299446601,"id":"member-1.r.member-6.7.f1","kind":"post","surface":"random","text":"take a look this afternoon."}
+{"actor":"lead-1","at":300026661,"id":"lead-1.t6","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-3","at":300028161,"id":"member-3.r.lead-1.6","kind":"post","surface":"random","text":"Thanks for the update, I will"}
+{"actor":"member-3","at":300032161,"id":"member-3.r.lead-1.6.f1","kind":"post","surface":"random","text":"take a look this afternoon."}
+{"actor":"member-3","at":302145176,"id":"member-3.t7.w","kind":"post","surface":"random","text":"Sounds good."}
+{"actor":"member-3","at":302165176,"id":"member-3.t7.d","kind":"delete","surface":"random","target":"member-3.t7.w"}
+{"actor":"member-1","at":302172916,"id":"member-1.r.member-3.7","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-3","at":302180176,"id":"member-3.t7","kind":"post","surface":"planning","text":"Sounds good."}
+{"actor":"member-6","at":302423246,"id":"member-6.q6","kind":"post","surface":"general","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-1","at":302428566,"id":"member-1.r.member-6.6","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-2","at":307126522,"id":"member-2.q6","kind":"post","surface":"random","text":"Could someone remind me where the weekly numbers spreadsheet lives?"}
+{"actor":"member-5","at":307841522,"id":"member-5.r.member-2.6","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-1","at":312621640,"id":"member-1.q6","kind":"post","surface":"random","text":"Has anyone tried the"}
+{"actor":"member-1","at":312625640,"id":"member-1.q6.f1","kind":"post","surface":"random","text":"new template for the"}
+{"actor":"member-1","at":312629640,"id":"member-1.q6.f2","kind":"post","surface":"random","text":"weekly status update yet?"}
+{"actor":"member-4","at":312728140,"id":"member-4.r.member-1.6","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-5","at":313157865,"id":"member-5.t7","kind":"post","surface":"general","text":"Done."}
+{"actor":"member-5","at":313405256,"id":"member-5.t6","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"lead-1","at":313719655,"id":"lead-1.t7","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-1","at":313766256,"id":"member-1.r.member-5.6","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-5","at":313948455,"id":"member-5.r.lead-1.7","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-2","at":316741865,"id":"member-2.r.member-5.7","kind":"post","surface":"general","text":"I think it is in"}
+{"actor":"member-2","at":316745865,"id":"member-2.r.member-5.7.f1","kind":"post","surface":"general","text":"the shared folder but"}
+{"actor":"member-2","at":316749865,"id":"member-2.r.member-5.7.f2","kind":"post","surface":"general","text":"I will double check."}
+{"actor":"member-2","at":317845029,"id":"member-2.t7","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-1","at":317940029,"id":"member-1.r.member-2.7","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-3","at":318352746,"id":"member-3.t6","kind":"post","surface":"general","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-1","at":318478146,"id":"member-1.r.member-3.6","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-8","at":318608774,"id":"member-8.t7","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-6","at":318670934,"id":"member-6.r.member-8.7","kind":"post","surface":"general","text":"Thanks for the update,"}
+{"actor":"member-6","at":318674934,"id":"member-6.r.member-8.7.f1","kind":"post","surface":"general","text":"I will take a"}
+{"actor":"member-6","at":318678934,"id":"member-6.r.member-8.7.f2","kind":"post","surface":"general","text":"look this afternoon."}
+{"actor":"member-9","at":319815116,"id":"member-9.t6","kind":"post","surface":"general","text":"I am going through"}
+{"actor":"member-9","at":319819116,"id":"member-9.t6.f1","kind":"post","surface":"general","text":"the open tickets and"}
+{"actor":"member-9","at":319823116,"id":"member-9.t6.f2","kind":"post","surface":"general","text":"closing the ones"}
+{"actor":"member-9","at":319827116,"id":"member-9.t6.f3","kind":"post","surface":"general","text":"that are done."}
+{"actor":"member-7","at":322284564,"id":"member-7.t6","kind":"post","surface":"general","text":"The printer on the second floor is wokring again after the paper jam."}
+{"actor":"member-7","at":322324228,"id":"member-7.t6.e","kind":"edit","surface":"general","target":"member-7.t6","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-9","at":323180764,"id":"member-9.q7","kind":"post","surface":"random","text":"Quick question?"}
+{"actor":"member-5","at":323571564,"id":"member-5.r.member-7.6","kind":"post","surface":"general","text":"I think it is in teh shared"}
+{"actor":"member-5","at":323575564,"id":"member-5.r.member-7.6.f1","kind":"post","surface":"general","text":"folder but I will double check."}
+{"actor":"member-4","at":323596746,"id":"member-4.t7","kind":"post","surface":"general","text":"The test run finished"}
+{"actor":"member-5","at":323600298,"id":"member-5.r.member-7.6.e","kind":"edit","surface":"general","target":"member-5.r.member-7.6","text":"I think it is in the shared"}
+{"actor":"member-4","at":323600746,"id":"member-4.t7.f1","kind":"post","surface":"general","text":"overnight and only two"}
+{"actor":"member-4","at":323604746,"id":"member-4.t7.f2","kind":"post","surface":"general","text":"cases need another look."}
+{"actor":"member-8","at":323726686,"id":"member-8.r.member-4.7","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-5","at":323819116,"id":"member-5.r.member-9.6","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":378069433,"id":"member-7.r.member-9.7","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"lead-1","at":378600000,"discloses":["f.venue-room.1"],"id":"plant.venue-room.d1","kind":"post","surface":"general","text":"The review is in room-2210."}
+{"actor":"member-4","at":381175130,"id":"member-4.q8","kind":"post","surface":"general","text":"Anyone around?"}
+{"actor":"member-5","at":381269169,"id":"member-5.t8","kind":"post","surface":"general","text":"Done."}
+{"actor":"member-3","at":381595130,"id":"member-3.r.member-4.8","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":381935169,"id":"member-6.r.member-5.8","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":382704498,"id":"member-8.q9","kind":"post","surface":"random","text":"Quick question?"}
+{"actor":"member-7","at":382734498,"id":"member-7.r.member-8.9","kind":"post","surface":"random","text":"I think it is in"}
+{"actor":"member-7","at":382738498,"id":"member-7.r.member-8.9.f1","kind":"post","surface":"random","text":"the shared folder but"}
+{"actor":"member-7","at":382742498,"id":"member-7.r.member-8.9.f2","kind":"post","surface":"random","text":"I will double check."}
+{"actor":"lead-1","at":383400000,"depends_on":["plant.venue-room.d1"],"discloses":["f.venue-room.2"],"id":"plant.venue-room.d2","kind":"post","surface":"general","text":"The review moved to room-3045."}
+{"actor":"member-9","at":387523182,"id":"member-9.t8","kind":"post","surface":"planning","text":"I moved the draft into the team"}
+{"actor":"member-9","at":387527182,"id":"member-9.t8.f1","kind":"post","surface":"planning","text":"folder so everyone can edit it."}
+{"actor":"member-7","at":387853182,"id":"member-7.r.member-9.8","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"lead-1","at":390015269,"id":"lead-1.t8","kind":"post","surface":"random","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-1","at":390039969,"id":"member-1.r.lead-1.8","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":392512879,"id":"member-6.t9","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-2","at":392525679,"id":"member-2.r.member-6.9","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-4","at":392836434,"id":"member-4.t9","kind":"post","surface":"random","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-7","at":392961434,"id":"member-7.r.member-4.9","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-5","at":393051682,"id":"member-5.t9","kind":"post","surface":"planning","text":"Noted, thanks."}
+{"actor":"lead-1","at":393291682,"id":"lead-1.r.member-5.9","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"lead-1","at":393604759,"id":"lead-1.q9","kind":"post","surface":"general","text":"Who has notes?"}
+{"actor":"member-8","at":393658159,"id":"member-8.r.lead-1.9","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-8","at":396327744,"id":"member-8.q8","kind":"post","surface":"planning","text":"Is it ready?"}
+{"actor":"member-4","at":396434244,"id":"member-4.r.member-8.8","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-9","at":397659497,"id":"member-9.t9","kind":"post","surface":"general","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-5","at":397685237,"id":"member-5.r.member-9.9","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-6","at":398942489,"id":"member-6.q8","kind":"post","surface":"planning","text":"Anyone around?"}
+{"actor":"member-9","at":398977769,"id":"member-9.r.member-6.8","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-1","at":399548881,"id":"member-1.q9","kind":"post","surface":"random","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-3","at":399578881,"id":"member-3.r.member-1.9","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-7","at":400586741,"id":"member-7.t9","kind":"post","surface":"random","text":"Done."}
+{"actor":"member-8","at":400716681,"id":"member-8.r.member-7.9","kind":"post","surface":"random","text":"I am not sure"}
+{"actor":"member-8","at":400720681,"id":"member-8.r.member-7.9.f1","kind":"post","surface":"random","text":"about that one, maybe"}
+{"actor":"member-8","at":400724681,"id":"member-8.r.member-7.9.f2","kind":"post","surface":"random","text":"someone else knows more."}
+{"actor":"member-2","at":401151777,"id":"member-2.q8","kind":"post","surface":"planning","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-2","at":401552100,"id":"member-2.t9","kind":"post","surface":"planning","text":"Please add your questions"}
+{"actor":"member-2","at":401556100,"id":"member-2.t9.f1","kind":"post","surface":"planning","text":"to the shared agenda"}
+{"actor":"member-2","at":401560100,"id":"member-2.t9.f2","kind":"post","surface":"planning","text":"before the next sync."}
+{"actor":"member-7","at":401594100,"id":"member-7.r.member-2.9","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":401640177,"id":"member-6.r.member-2.8","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-1","at":404489094,"id":"member-1.q8","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-3","at":405112760,"id":"member-3.t9","kind":"post","surface":"general","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-5","at":405776094,"id":"member-5.r.member-1.8","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-5","at":406399760,"id":"member-5.r.member-3.9","kind":"post","surface":"general","text":"I can help with that after"}
+{"actor":"member-5","at":406403760,"id":"member-5.r.member-3.9.f1","kind":"post","surface":"general","text":"my next meeting finishes today."}
+{"actor":"member-3","at":408067736,"id":"member-3.t8","kind":"post","surface":"random","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-6","at":408088456,"id":"member-6.r.member-3.8","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-7","at":409249506,"id":"member-7.t8","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-1","at":409257106,"id":"member-1.r.member-7.8","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"lead-1","at":465000000,"depends_on":["plant.venue-room.d2"],"discloses":["f.venue-room.3"],"id":"plant.venue-room.d3","kind":"post","surface":"general","text":"Last move: the review is in room-1180."}
+{"actor":"member-9","at":465762448,"id":"member-9.t11","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-1","at":465778408,"id":"member-1.r.member-9.11","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-4","at":465978273,"id":"member-4.t10","kind":"post","surface":"random","text":"Lunch order closes at"}
+{"actor":"member-4","at":465982273,"id":"member-4.t10.f1","kind":"post","surface":"random","text":"noon today if anyone"}
+{"actor":"member-4","at":465986273,"id":"member-4.t10.f2","kind":"post","surface":"random","text":"wants to join in."}
+{"actor":"member-8","at":466697604,"id":"member-8.t10","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"lead-1","at":466719204,"id":"lead-1.r.member-8.10","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-7","at":466928273,"id":"member-7.r.member-4.10","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":467268821,"id":"member-6.t11","kind":"post","surface":"general","text":"I will be offline for an hour"}
+{"actor":"member-4","at":467272371,"id":"member-4.r.member-6.11","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-6","at":467272821,"id":"member-6.t11.f1","kind":"post","surface":"general","text":"while I set up the new laptop."}
+{"actor":"member-7","at":468299791,"id":"member-7.t11","kind":"post","surface":"planning","text":"I moved the draft into"}
+{"actor":"member-7","at":468303791,"id":"member-7.t11.f1","kind":"post","surface":"planning","text":"the team folder so"}
+{"actor":"member-7","at":468307791,"id":"member-7.t11.f2","kind":"post","surface":"planning","text":"everyone can edit it."}
+{"actor":"member-9","at":468509791,"id":"member-9.r.member-7.11","kind":"post","surface":"planning","text":"That works for me, let me know"}
+{"actor":"member-9","at":468513791,"id":"member-9.r.member-7.11.f1","kind":"post","surface":"planning","text":"if anything changes on your side."}
+{"actor":"member-1","at":469693227,"id":"member-1.t10","kind":"post","surface":"planning","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"lead-1","at":469726827,"id":"lead-1.r.member-1.10","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-8","at":469800000,"depends_on":["plant.venue-room.d3"],"id":"plant.venue-room.q","kind":"post","probe":true,"surface":"general","text":"Which room is booked for the review?"}
+{"actor":"member-7","at":471117521,"id":"member-7.t10","kind":"post","surface":"general","text":"The build on my"}
+{"actor":"member-7","at":471121521,"id":"member-7.t10.f1","kind":"post","surface":"general","text":"side is green"}
+{"actor":"member-7","at":471125521,"id":"member-7.t10.f2","kind":"post","surface":"general","text":"again after the"}
+{"actor":"member-7","at":471129521,"id":"member-7.t10.f3","kind":"post","surface":"general","text":"last dependency update."}
+{"actor":"member-3","at":471155021,"id":"member-3.r.member-7.10","kind":"post","surface":"general","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-5","at":471717955,"id":"member-5.t10","kind":"post","surface":"planning","text":"On it."}
+{"actor":"member-1","at":472232160,"id":"member-1.q11","kind":"post","surface":"random","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-5","at":472272200,"id":"member-5.r.member-1.11","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-2","at":472869955,"id":"member-2.r.member-5.10","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-3","at":473084369,"id":"member-3.t11","kind":"post","surface":"random","text":"On it."}
+{"actor":"member-6","at":473329890,"id":"member-6.q10","kind":"post","surface":"planning","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-8","at":473668090,"id":"member-8.r.member-6.10","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":473754878,"id":"lead-1.t11","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-6","at":474036078,"id":"member-6.r.lead-1.11","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"lead-1","at":474495239,"id":"lead-1.t10","kind":"post","surface":"planning","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-6","at":474717239,"id":"member-6.r.lead-1.10","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":478204369,"id":"member-2.r.member-3.11","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-2","at":480813041,"id":"member-2.t11","kind":"post","surface":"planning","text":"I moved the draft into the team"}
+{"actor":"member-2","at":480817041,"id":"member-2.t11.f1","kind":"post","surface":"planning","text":"folder so everyone can edit it."}
+{"actor":"member-3","at":481413041,"id":"member-3.r.member-2.11.w","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-3","at":481433041,"id":"member-3.r.member-2.11.d","kind":"delete","surface":"random","target":"member-3.r.member-2.11.w"}
+{"actor":"member-3","at":481448041,"id":"member-3.r.member-2.11","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-4","at":482037921,"id":"member-4.q11","kind":"post","surface":"planning","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-7","at":482067921,"id":"member-7.r.member-4.11","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-2","at":483423304,"id":"member-2.t10","kind":"post","surface":"general","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-5","at":485282304,"id":"member-5.r.member-2.10","kind":"post","surface":"general","text":"That works for me,"}
+{"actor":"member-5","at":485286304,"id":"member-5.r.member-2.10.f1","kind":"post","surface":"general","text":"let me know"}
+{"actor":"member-5","at":485290304,"id":"member-5.r.member-2.10.f2","kind":"post","surface":"general","text":"if anything changes"}
+{"actor":"member-5","at":485294304,"id":"member-5.r.member-2.10.f3","kind":"post","surface":"general","text":"on your side."}
+{"actor":"member-3","at":487015566,"id":"member-3.q10","kind":"post","surface":"general","text":"Could someone remind"}
+{"actor":"member-3","at":487019566,"id":"member-3.q10.f1","kind":"post","surface":"general","text":"me where the"}
+{"actor":"member-3","at":487023566,"id":"member-3.q10.f2","kind":"post","surface":"general","text":"weekly numbers"}
+{"actor":"member-3","at":487027566,"id":"member-3.q10.f3","kind":"post","surface":"general","text":"spreadsheet lives?"}
+{"actor":"member-1","at":487045966,"id":"member-1.r.member-3.10","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-5","at":490499183,"id":"member-5.q11","kind":"post","surface":"planning","text":"Quick question?"}
+{"actor":"member-1","at":490520083,"id":"member-1.r.member-5.11","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-9","at":491275956,"id":"member-9.q10","kind":"post","surface":"random","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-8","at":491284856,"id":"member-8.r.member-9.10","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":495909695,"id":"member-8.t11","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-3","at":495915695,"id":"member-3.r.member-8.11","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"lead-1","at":551400000,"discloses":["f.offsite-budget"],"id":"plant.offsite-budget.d","kind":"post","surface":"leads","text":"The budget for the offsite is 9 units. Please keep it among the leads."}
+{"actor":"member-9","at":552321883,"id":"member-9.t13","kind":"post","surface":"planning","text":"Done."}
+{"actor":"lead-1","at":552369883,"id":"lead-1.r.member-9.13","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"lead-1","at":553366775,"id":"lead-1.q13","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-6","at":553855175,"id":"member-6.r.lead-1.13","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-1","at":554519463,"id":"member-1.t12","kind":"post","surface":"general","text":"Lunch order cloess"}
+{"actor":"member-1","at":554523463,"id":"member-1.t12.f1","kind":"post","surface":"general","text":"at noon today"}
+{"actor":"member-1","at":554527463,"id":"member-1.t12.f2","kind":"post","surface":"general","text":"if anyone wants"}
+{"actor":"member-1","at":554531463,"id":"member-1.t12.f3","kind":"post","surface":"general","text":"to join in."}
+{"actor":"member-1","at":554550259,"id":"member-1.t12.e","kind":"edit","surface":"general","target":"member-1.t12","text":"Lunch order closes"}
+{"actor":"member-9","at":554704626,"id":"member-9.t12","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-5","at":554990626,"id":"member-5.r.member-9.12","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-2","at":555671463,"id":"member-2.r.member-1.12","kind":"post","surface":"general","text":"I think it is in the shared"}
+{"actor":"member-2","at":555675463,"id":"member-2.r.member-1.12.f1","kind":"post","surface":"general","text":"folder but I will double check."}
+{"actor":"lead-1","at":556200000,"depends_on":["plant.offsite-budget.d"],"id":"plant.offsite-budget.qa","kind":"post","probe":true,"surface":"leads","text":"What budget did we set for the offsite?"}
+{"actor":"member-5","at":556431257,"id":"member-5.t13","kind":"post","surface":"planning","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-6","at":556801257,"id":"member-6.r.member-5.13","kind":"post","surface":"planning","text":"Thanks!"}
+{"actor":"member-8","at":559690952,"id":"member-8.t12","kind":"post","surface":"general","text":"I will write up"}
+{"actor":"member-8","at":559694952,"id":"member-8.t12.f1","kind":"post","surface":"general","text":"the notes from"}
+{"actor":"member-8","at":559698952,"id":"member-8.t12.f2","kind":"post","surface":"general","text":"this morning and"}
+{"actor":"member-8","at":559702952,"id":"member-8.t12.f3","kind":"post","surface":"general","text":"share them later."}
+{"actor":"member-6","at":559798992,"id":"member-6.r.member-8.12","kind":"post","surface":"general","text":"Got it."}
+{"actor":"member-7","at":559921714,"id":"member-7.t12","kind":"post","surface":"planning","text":"I am going through"}
+{"actor":"member-7","at":559925714,"id":"member-7.t12.f1","kind":"post","surface":"planning","text":"the open tickets and"}
+{"actor":"member-7","at":559929714,"id":"member-7.t12.f2","kind":"post","surface":"planning","text":"closing the ones"}
+{"actor":"member-7","at":559933714,"id":"member-7.t12.f3","kind":"post","surface":"planning","text":"that are done."}
+{"actor":"lead-1","at":560053714,"id":"lead-1.r.member-7.12","kind":"post","surface":"planning","text":"Agreed."}
+{"actor":"member-4","at":562610315,"id":"member-4.t12","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-1","at":563370315,"id":"member-1.r.member-4.12","kind":"post","surface":"random","text":"Got it."}
+{"actor":"member-6","at":563655674,"id":"member-6.t12","kind":"post","surface":"general","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-5","at":564178117,"id":"member-5.t12","kind":"post","surface":"general","text":"Lunch order closes at noon today"}
+{"actor":"member-5","at":564182117,"id":"member-5.t12.f1","kind":"post","surface":"general","text":"if anyone wants to join in."}
+{"actor":"member-3","at":564187117,"id":"member-3.r.member-5.12","kind":"post","surface":"general","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-2","at":564295674,"id":"member-2.r.member-6.12","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-7","at":567096969,"id":"member-7.t13","kind":"post","surface":"random","text":"The printer on the second"}
+{"actor":"member-7","at":567100969,"id":"member-7.t13.f1","kind":"post","surface":"random","text":"floor is working again"}
+{"actor":"member-7","at":567104969,"id":"member-7.t13.f2","kind":"post","surface":"random","text":"after the paper jam."}
+{"actor":"member-4","at":567153769,"id":"member-4.r.member-7.13","kind":"post","surface":"random","text":"I am not sure"}
+{"actor":"member-4","at":567157769,"id":"member-4.r.member-7.13.f1","kind":"post","surface":"random","text":"about that one, maybe"}
+{"actor":"member-4","at":567161769,"id":"member-4.r.member-7.13.f2","kind":"post","surface":"random","text":"someone else knows more."}
+{"actor":"member-1","at":567223403,"id":"member-1.q13","kind":"post","surface":"planning","text":"Who can take a quick look at my"}
+{"actor":"member-1","at":567227403,"id":"member-1.q13.f1","kind":"post","surface":"planning","text":"draft before the end of the day?"}
+{"actor":"member-3","at":567369066,"id":"member-3.q13","kind":"post","surface":"planning","text":"Is it ready?"}
+{"actor":"member-6","at":568775066,"id":"member-6.r.member-3.13","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"lead-1","at":568779274,"id":"lead-1.q12","kind":"post","surface":"planning","text":"Quick question?"}
+{"actor":"member-8","at":568914403,"id":"member-8.r.member-1.13","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":569366674,"id":"member-8.r.lead-1.12","kind":"post","surface":"planning","text":"That works for me,"}
+{"actor":"member-8","at":569370674,"id":"member-8.r.lead-1.12.f1","kind":"post","surface":"planning","text":"let me know"}
+{"actor":"member-8","at":569374674,"id":"member-8.r.lead-1.12.f2","kind":"post","surface":"planning","text":"if anything changes"}
+{"actor":"member-8","at":569378674,"id":"member-8.r.lead-1.12.f3","kind":"post","surface":"planning","text":"on your side."}
+{"actor":"member-6","at":569582112,"id":"member-6.q13","kind":"post","surface":"planning","text":"Do we still use the old folder"}
+{"actor":"member-6","at":569586112,"id":"member-6.q13.f1","kind":"post","surface":"planning","text":"for finished drafts or the new one?"}
+{"actor":"member-8","at":569709378,"id":"member-8.t13","kind":"post","surface":"planning","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-7","at":569714378,"id":"member-7.r.member-8.13","kind":"post","surface":"planning","text":"No problem at all, I will send"}
+{"actor":"member-7","at":569718378,"id":"member-7.r.member-8.13.f1","kind":"post","surface":"planning","text":"it over in a few minutes."}
+{"actor":"member-2","at":570227703,"id":"member-2.q12","kind":"post","surface":"planning","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-7","at":570257703,"id":"member-7.r.member-2.12","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-5","at":572299112,"id":"member-5.r.member-6.13","kind":"post","surface":"planning","text":"Good ponit, I"}
+{"actor":"member-5","at":572303112,"id":"member-5.r.member-6.13.f1","kind":"post","surface":"planning","text":"had not thought"}
+{"actor":"member-5","at":572307112,"id":"member-5.r.member-6.13.f2","kind":"post","surface":"planning","text":"about it that"}
+{"actor":"member-5","at":572311112,"id":"member-5.r.member-6.13.f3","kind":"post","surface":"planning","text":"way before."}
+{"actor":"member-5","at":572336831,"id":"member-5.r.member-6.13.e","kind":"edit","surface":"planning","target":"member-5.r.member-6.13","text":"Good point, I"}
+{"actor":"member-2","at":573074400,"id":"member-2.q13","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"lead-1","at":573266400,"id":"lead-1.r.member-2.13","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-3","at":574541972,"id":"member-3.t12","kind":"post","surface":"general","text":"Lunch order closes at noon today"}
+{"actor":"member-3","at":574545972,"id":"member-3.t12.f1","kind":"post","surface":"general","text":"if anyone wants to join in."}
+{"actor":"member-8","at":576232972,"id":"member-8.r.member-3.12","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-4","at":581785952,"id":"member-4.t13","kind":"post","surface":"general","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-1","at":581833452,"id":"member-1.r.member-4.13","kind":"post","surface":"general","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-5","at":637800000,"depends_on":["plant.offsite-budget.d"],"id":"plant.offsite-budget.qo","kind":"post","probe":true,"surface":"direct:member-5","text":"Do we know the offsite budget yet?"}
+{"actor":"lead-1","at":642194431,"id":"lead-1.q14","kind":"post","surface":"general","text":"Has anyone tried"}
+{"actor":"lead-1","at":642198431,"id":"lead-1.q14.f1","kind":"post","surface":"general","text":"the new template"}
+{"actor":"lead-1","at":642202431,"id":"lead-1.q14.f2","kind":"post","surface":"general","text":"for the weekly"}
+{"actor":"member-1","at":642205831,"id":"member-1.r.lead-1.14","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"lead-1","at":642206431,"id":"lead-1.q14.f3","kind":"post","surface":"general","text":"status update yet?"}
+{"actor":"member-6","at":643086002,"id":"member-6.q14","kind":"post","surface":"random","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-5","at":643314802,"id":"member-5.r.member-6.14","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-7","at":645997577,"id":"member-7.t14","kind":"post","surface":"general","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-9","at":646081577,"id":"member-9.r.member-7.14","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":646119937,"id":"member-2.t14","kind":"post","surface":"random","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"member-3","at":646157437,"id":"member-3.r.member-2.14","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-3","at":646972621,"id":"member-3.t14","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"lead-1","at":646994221,"id":"lead-1.r.member-3.14","kind":"post","surface":"random","text":"I can help with"}
+{"actor":"lead-1","at":646998221,"id":"lead-1.r.member-3.14.f1","kind":"post","surface":"random","text":"that after my next"}
+{"actor":"lead-1","at":647002221,"id":"lead-1.r.member-3.14.f2","kind":"post","surface":"random","text":"meeting finishes today."}
+{"actor":"member-4","at":647806792,"id":"member-4.t14","kind":"post","surface":"general","text":"Running late."}
+{"actor":"member-1","at":647827692,"id":"member-1.r.member-4.14","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-9","at":651361364,"id":"member-9.q14","kind":"post","surface":"random","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-3","at":651406364,"id":"member-3.r.member-9.14","kind":"post","surface":"random","text":"I am not sure"}
+{"actor":"member-3","at":651410364,"id":"member-3.r.member-9.14.f1","kind":"post","surface":"random","text":"about that one, maybe"}
+{"actor":"member-3","at":651414364,"id":"member-3.r.member-9.14.f2","kind":"post","surface":"random","text":"someone else knows more."}
+{"actor":"member-1","at":652449895,"id":"member-1.t14","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-5","at":653002293,"id":"member-5.t14","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-7","at":653099895,"id":"member-7.r.member-1.14","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-8","at":653180293,"id":"member-8.r.member-5.14","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-4","at":654055172,"id":"member-4.t15","kind":"post","surface":"general","text":"Done."}
+{"actor":"member-9","at":657219674,"id":"member-9.t15","kind":"post","surface":"random","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-5","at":657490186,"id":"member-5.q15","kind":"post","surface":"random","text":"Anyone around?"}
+{"actor":"member-2","at":657706074,"id":"member-2.r.member-9.15","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-6","at":657712186,"id":"member-6.r.member-5.15","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-5","at":658059172,"id":"member-5.r.member-4.15","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-2","at":658890222,"id":"member-2.t15","kind":"post","surface":"planning","text":"Done."}
+{"actor":"lead-1","at":658938222,"id":"lead-1.r.member-2.15","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"lead-1","at":661989038,"id":"lead-1.t15","kind":"post","surface":"random","text":"On it."}
+{"actor":"member-6","at":662033438,"id":"member-6.r.lead-1.15","kind":"post","surface":"random","text":"That works for me, let"}
+{"actor":"member-6","at":662037438,"id":"member-6.r.lead-1.15.f1","kind":"post","surface":"random","text":"me know if anything"}
+{"actor":"member-6","at":662041438,"id":"member-6.r.lead-1.15.f2","kind":"post","surface":"random","text":"changes on your side."}
+{"actor":"member-7","at":662452095,"id":"member-7.q15","kind":"post","surface":"planning","text":"Who has notes?"}
+{"actor":"member-8","at":662828932,"id":"member-8.q14","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-6","at":664214954,"id":"member-6.q15","kind":"post","surface":"planning","text":"Can somebody share the notes from the"}
+{"actor":"member-6","at":664218954,"id":"member-6.q15.f1","kind":"post","surface":"planning","text":"last sync with the whole team?"}
+{"actor":"member-1","at":664220274,"id":"member-1.r.member-6.15","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-8","at":664405905,"id":"member-8.q15","kind":"post","surface":"random","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-5","at":664834905,"id":"member-5.r.member-8.15","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":664900932,"id":"member-6.r.member-8.14","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-8","at":666012095,"id":"member-8.r.member-7.15","kind":"post","surface":"planning","text":"Let us talk about"}
+{"actor":"member-8","at":666016095,"id":"member-8.r.member-7.15.f1","kind":"post","surface":"planning","text":"it at the next"}
+{"actor":"member-8","at":666020095,"id":"member-8.r.member-7.15.f2","kind":"post","surface":"planning","text":"sync and decide together."}
+{"actor":"member-1","at":667936712,"id":"member-1.q15","kind":"post","surface":"general","text":"Anyone around?"}
+{"actor":"member-4","at":667988542,"id":"member-4.r.member-1.15","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-3","at":669273303,"id":"member-3.t15","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-3","at":691200000,"id":"member-3.away.0","kind":"away","surface":"general"}
+{"actor":"member-5","at":723611753,"id":"member-5.r.member-3.15","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-5","at":732426229,"id":"member-5.q16","kind":"post","surface":"general","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-8","at":732435129,"id":"member-8.r.member-5.16","kind":"post","surface":"general","text":"Good point, I had not thought"}
+{"actor":"member-8","at":732439129,"id":"member-8.r.member-5.16.f1","kind":"post","surface":"general","text":"about it that way before."}
+{"actor":"member-5","at":732658684,"id":"member-5.q17","kind":"post","surface":"random","text":"Is the second floor printer"}
+{"actor":"member-5","at":732662684,"id":"member-5.q17.f1","kind":"post","surface":"random","text":"still out of paper or"}
+{"actor":"member-5","at":732666684,"id":"member-5.q17.f2","kind":"post","surface":"random","text":"has it been fixed?"}
+{"actor":"member-2","at":734365641,"id":"member-2.t16","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-9","at":734382441,"id":"member-9.r.member-2.16","kind":"post","surface":"general","text":"Got it."}
+{"actor":"member-7","at":734658684,"id":"member-7.r.member-5.17","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-5","at":741433066,"id":"member-5.r.member-3.16","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-4","at":741552127,"id":"member-4.q17","kind":"post","surface":"random","text":"Is it ready?"}
+{"actor":"member-9","at":741613447,"id":"member-9.r.member-4.17","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-9","at":742262993,"id":"member-9.t16","kind":"post","surface":"planning","text":"The printer on the second floor is"}
+{"actor":"member-9","at":742266993,"id":"member-9.t16.f1","kind":"post","surface":"planning","text":"working again after the paper jam."}
+{"actor":"member-7","at":742836947,"id":"member-7.r.member-3.17","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-2","at":743896899,"id":"member-2.t17","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-9","at":743904459,"id":"member-9.r.member-2.17","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-8","at":745068465,"id":"member-8.q17","kind":"post","surface":"random","text":"Quick question?"}
+{"actor":"member-6","at":745075865,"id":"member-6.r.member-8.17","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":746332909,"id":"member-6.q16","kind":"post","surface":"random","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-2","at":746440429,"id":"member-2.r.member-6.16","kind":"post","surface":"random","text":"I think it is in the shared"}
+{"actor":"member-2","at":746444429,"id":"member-2.r.member-6.16.f1","kind":"post","surface":"random","text":"folder but I will double check."}
+{"actor":"member-8","at":747739359,"id":"member-8.t16","kind":"post","surface":"random","text":"Back soon."}
+{"actor":"member-6","at":747768959,"id":"member-6.r.member-8.16","kind":"post","surface":"random","text":"Agreed."}
+{"actor":"member-9","at":749373375,"id":"member-9.t17","kind":"post","surface":"planning","text":"Noted, thanks."}
+{"actor":"member-5","at":749387675,"id":"member-5.r.member-9.17","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-7","at":749482561,"id":"member-7.q16","kind":"post","surface":"general","text":"Quick question?"}
+{"actor":"member-1","at":751622879,"id":"member-1.t17","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-6","at":751630279,"id":"member-6.r.member-1.17","kind":"post","surface":"general","text":"Not sure."}
+{"actor":"member-1","at":751688255,"id":"member-1.q16","kind":"post","surface":"general","text":"Anyone around?"}
+{"actor":"member-8","at":751704275,"id":"member-8.r.member-1.16","kind":"post","surface":"general","text":"Got it."}
+{"actor":"member-6","at":751740664,"id":"member-6.t17","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"lead-1","at":751808706,"id":"lead-1.t17","kind":"post","surface":"planning","text":"Noted, thanks."}
+{"actor":"member-1","at":751816306,"id":"member-1.r.lead-1.17","kind":"post","surface":"planning","text":"Thanks!"}
+{"actor":"member-7","at":752058784,"id":"member-7.t17","kind":"post","surface":"planning","text":"The printer on the second floor is"}
+{"actor":"member-7","at":752062784,"id":"member-7.t17.f1","kind":"post","surface":"planning","text":"working again after the paper jam."}
+{"actor":"member-1","at":752101664,"id":"member-1.r.member-6.17","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-6","at":752243784,"id":"member-6.r.member-7.17","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-4","at":754007858,"id":"member-4.q16","kind":"post","surface":"random","text":"Is there a good time"}
+{"actor":"member-4","at":754011858,"id":"member-4.q16.f1","kind":"post","surface":"random","text":"tomorrow for a short"}
+{"actor":"member-4","at":754015858,"id":"member-4.q16.f2","kind":"post","surface":"random","text":"walkthrough of the checklist?"}
+{"actor":"member-1","at":754080058,"id":"member-1.r.member-4.16","kind":"post","surface":"random","text":"Same here."}
+{"actor":"lead-1","at":755377000,"id":"lead-1.q16","kind":"post","surface":"random","text":"Who has notes?"}
+{"actor":"member-2","at":755563880,"id":"member-2.r.lead-1.16","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":810600000,"discloses":["f.hiring-plan"],"id":"plant.hiring-plan.d","kind":"post","surface":"leads","text":"The hiring plan is two new roles next quarter. Leads only for now."}
+{"actor":"member-8","at":815268828,"id":"member-8.q18","kind":"post","surface":"random","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-5","at":815354628,"id":"member-5.r.member-8.18","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"lead-1","at":815400000,"depends_on":["plant.hiring-plan.d"],"id":"plant.hiring-plan.qa","kind":"post","probe":true,"surface":"leads","text":"How many roles are in the hiring plan?"}
+{"actor":"member-8","at":818178706,"id":"member-8.t19","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-8","at":818926546,"id":"member-8.r.member-3.19","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-1","at":819953464,"id":"member-1.q18","kind":"post","surface":"random","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-2","at":820158264,"id":"member-2.r.member-1.18","kind":"post","surface":"random","text":"I think it is in"}
+{"actor":"member-2","at":820162264,"id":"member-2.r.member-1.18.f1","kind":"post","surface":"random","text":"the shared folder but"}
+{"actor":"member-2","at":820166264,"id":"member-2.r.member-1.18.f2","kind":"post","surface":"random","text":"I will double check."}
+{"actor":"member-5","at":820267099,"id":"member-5.t19","kind":"post","surface":"random","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-7","at":820347099,"id":"member-7.r.member-5.19","kind":"post","surface":"random","text":"I can help"}
+{"actor":"member-7","at":820351099,"id":"member-7.r.member-5.19.f1","kind":"post","surface":"random","text":"with that after"}
+{"actor":"member-7","at":820355099,"id":"member-7.r.member-5.19.f2","kind":"post","surface":"random","text":"my next meeting"}
+{"actor":"member-7","at":820359099,"id":"member-7.r.member-5.19.f3","kind":"post","surface":"random","text":"finishes today."}
+{"actor":"member-1","at":821094733,"id":"member-1.t19","kind":"post","surface":"general","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-7","at":821149733,"id":"member-7.r.member-1.19","kind":"post","surface":"general","text":"Same here."}
+{"actor":"member-7","at":823493081,"id":"member-7.t19","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-1","at":823504481,"id":"member-1.r.member-7.19","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-2","at":824331711,"id":"member-2.q18","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-6","at":825293711,"id":"member-6.r.member-2.18","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-2","at":826141254,"id":"member-2.r.member-3.18","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-6","at":826232703,"id":"member-6.t19","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-9","at":826548297,"id":"member-9.t18","kind":"post","surface":"random","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-8","at":826690697,"id":"member-8.r.member-9.18","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-7","at":827182703,"id":"member-7.r.member-6.19","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-7","at":829895226,"id":"member-7.t18","kind":"post","surface":"planning","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"lead-1","at":829952260,"id":"lead-1.q19","kind":"post","surface":"random","text":"Who has notes?"}
+{"actor":"member-2","at":832384260,"id":"member-2.r.lead-1.19","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-6","at":832449386,"id":"member-6.t18","kind":"post","surface":"random","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-4","at":832552181,"id":"member-4.q19","kind":"post","surface":"general","text":"Could someone remind me where the weekly numbers spreadsheet lives?"}
+{"actor":"member-4","at":832667640,"id":"member-4.t18","kind":"post","surface":"planning","text":"I tidied the wiki page for new"}
+{"actor":"member-4","at":832671640,"id":"member-4.t18.f1","kind":"post","surface":"planning","text":"joiners and fixed the broken links."}
+{"actor":"member-1","at":832913181,"id":"member-1.r.member-4.19","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-9","at":833259389,"id":"member-9.q19","kind":"post","surface":"planning","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-5","at":833382640,"id":"member-5.r.member-4.18","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-6","at":834665389,"id":"member-6.r.member-9.19","kind":"post","surface":"planning","text":"Good point, I had"}
+{"actor":"member-6","at":834669389,"id":"member-6.r.member-9.19.f1","kind":"post","surface":"planning","text":"not thought about it"}
+{"actor":"member-6","at":834673389,"id":"member-6.r.member-9.19.f2","kind":"post","surface":"planning","text":"that way before."}
+{"actor":"member-2","at":835177388,"id":"member-2.t19","kind":"post","surface":"planning","text":"The printer on the"}
+{"actor":"member-2","at":835181388,"id":"member-2.t19.f1","kind":"post","surface":"planning","text":"second floor is"}
+{"actor":"member-2","at":835185388,"id":"member-2.t19.f2","kind":"post","surface":"planning","text":"working again after"}
+{"actor":"member-2","at":835189388,"id":"member-2.t19.f3","kind":"post","surface":"planning","text":"the paper jam."}
+{"actor":"lead-1","at":835856680,"id":"lead-1.q18","kind":"post","surface":"planning","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-6","at":836226680,"id":"member-6.r.lead-1.18","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-5","at":838220932,"id":"member-5.q18","kind":"post","surface":"general","text":"Is it ready?"}
+{"actor":"member-2","at":838604932,"id":"member-2.r.member-5.18","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-1","at":897000000,"depends_on":["plant.hiring-plan.d"],"id":"plant.hiring-plan.qo","kind":"post","probe":true,"surface":"direct:member-1","text":"Is there a hiring plan for next quarter?"}
+{"actor":"member-8","at":897809615,"id":"member-8.q20","kind":"post","surface":"random","text":"Who has notes?"}
+{"actor":"member-1","at":897830515,"id":"member-1.r.member-8.20","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-1","at":899078659,"id":"member-1.q21","kind":"post","surface":"planning","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-6","at":899197059,"id":"member-6.r.member-1.21","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-6","at":899385640,"id":"member-6.t21","kind":"post","surface":"general","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-8","at":899410560,"id":"member-8.r.member-6.21","kind":"post","surface":"general","text":"That works for me,"}
+{"actor":"member-8","at":899414560,"id":"member-8.r.member-6.21.f1","kind":"post","surface":"general","text":"let me know"}
+{"actor":"member-8","at":899418560,"id":"member-8.r.member-6.21.f2","kind":"post","surface":"general","text":"if anything changes"}
+{"actor":"member-8","at":899422560,"id":"member-8.r.member-6.21.f3","kind":"post","surface":"general","text":"on your side."}
+{"actor":"member-7","at":899444611,"id":"member-7.t20","kind":"post","surface":"random","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-5","at":900731611,"id":"member-5.r.member-7.20","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-9","at":901061432,"id":"member-9.t21","kind":"post","surface":"general","text":"I finished the review of the onboarding checklist and left cmoments."}
+{"actor":"member-9","at":901082155,"id":"member-9.t21.e","kind":"edit","surface":"general","target":"member-9.t21","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-2","at":901381432,"id":"member-2.r.member-9.21","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-2","at":902223325,"id":"member-2.t21","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"member-9","at":902240125,"id":"member-9.r.member-2.21","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-5","at":904393577,"id":"member-5.t20","kind":"post","surface":"random","text":"Running late."}
+{"actor":"member-4","at":905149491,"id":"member-4.t21","kind":"post","surface":"general","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-9","at":905558368,"id":"member-9.r.member-3.21","kind":"post","surface":"planning","text":"I am not"}
+{"actor":"member-9","at":905562368,"id":"member-9.r.member-3.21.f1","kind":"post","surface":"planning","text":"sure about that"}
+{"actor":"member-9","at":905566368,"id":"member-9.r.member-3.21.f2","kind":"post","surface":"planning","text":"one, maybe someone"}
+{"actor":"member-9","at":905570368,"id":"member-9.r.member-3.21.f3","kind":"post","surface":"planning","text":"else knows more."}
+{"actor":"member-8","at":905594491,"id":"member-8.r.member-4.21","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":907800098,"id":"member-8.r.member-3.20","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"lead-1","at":910474726,"id":"lead-1.q21","kind":"post","surface":"random","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-4","at":910478276,"id":"member-4.r.lead-1.21","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-6","at":914725666,"id":"member-6.t20","kind":"post","surface":"general","text":"Running late."}
+{"actor":"member-4","at":914755486,"id":"member-4.r.member-6.20","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-7","at":914933230,"id":"member-7.t21","kind":"post","surface":"planning","text":"The test run finished overnight and"}
+{"actor":"member-7","at":914937230,"id":"member-7.t21.f1","kind":"post","surface":"planning","text":"only two cases need another look."}
+{"actor":"member-4","at":914939620,"id":"member-4.r.member-7.21","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-1","at":917496787,"id":"member-1.t20","kind":"post","surface":"planning","text":"The printer on the"}
+{"actor":"member-1","at":917500787,"id":"member-1.t20.f1","kind":"post","surface":"planning","text":"second floor is"}
+{"actor":"member-9","at":917500987,"id":"member-9.r.member-1.20","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-1","at":917504787,"id":"member-1.t20.f2","kind":"post","surface":"planning","text":"working again after"}
+{"actor":"member-1","at":917508787,"id":"member-1.t20.f3","kind":"post","surface":"planning","text":"the paper jam."}
+{"actor":"member-2","at":918567516,"id":"member-2.t20","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-8","at":921059516,"id":"member-8.r.member-2.20","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"lead-1","at":923388940,"id":"lead-1.t20","kind":"post","surface":"random","text":"Done."}
+{"actor":"member-5","at":923932340,"id":"member-5.r.lead-1.20","kind":"post","surface":"random","text":"No problem at all,"}
+{"actor":"member-5","at":923936340,"id":"member-5.r.lead-1.20.f1","kind":"post","surface":"random","text":"I will send"}
+{"actor":"member-5","at":923940340,"id":"member-5.r.lead-1.20.f2","kind":"post","surface":"random","text":"it over in"}
+{"actor":"member-5","at":923944340,"id":"member-5.r.lead-1.20.f3","kind":"post","surface":"random","text":"a few minutes."}
+{"actor":"member-9","at":924583877,"id":"member-9.q20","kind":"post","surface":"general","text":"Quick question?"}
+{"actor":"member-8","at":926043059,"id":"member-8.t21","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-5","at":926120071,"id":"member-5.t21","kind":"post","surface":"random","text":"Sounds good."}
+{"actor":"member-2","at":926171271,"id":"member-2.r.member-5.21","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-6","at":928115059,"id":"member-6.r.member-8.21","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-4","at":928664624,"id":"member-4.q20","kind":"post","surface":"planning","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"lead-1","at":982884571,"id":"lead-1.r.member-9.20","kind":"post","surface":"general","text":"I am not"}
+{"actor":"lead-1","at":982888571,"id":"lead-1.r.member-9.20.f1","kind":"post","surface":"general","text":"sure about that"}
+{"actor":"lead-1","at":982892571,"id":"lead-1.r.member-9.20.f2","kind":"post","surface":"general","text":"one, maybe someone"}
+{"actor":"lead-1","at":982896571,"id":"lead-1.r.member-9.20.f3","kind":"post","surface":"general","text":"else knows more."}
+{"actor":"member-7","at":983074654,"id":"member-7.r.member-4.20","kind":"post","surface":"planning","text":"I cna help with"}
+{"actor":"member-7","at":983078654,"id":"member-7.r.member-4.20.f1","kind":"post","surface":"planning","text":"that after my next"}
+{"actor":"member-7","at":983082654,"id":"member-7.r.member-4.20.f2","kind":"post","surface":"planning","text":"meeting finishes today."}
+{"actor":"member-7","at":983103842,"id":"member-7.r.member-4.20.e","kind":"edit","surface":"planning","target":"member-7.r.member-4.20","text":"I can help with"}
+{"actor":"lead-1","at":983400000,"discloses":["f.access-code"],"id":"plant.access-code.d","kind":"post","surface":"leads","text":"Pasting the shared access code from the vault: teamsim-secret-2e079a49. Please do not repeat it anywhere."}
+{"actor":"lead-1","at":983684352,"id":"lead-1.t22","kind":"post","surface":"random","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-6","at":983691752,"id":"member-6.r.lead-1.22","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-1","at":987432982,"id":"member-1.t22","kind":"post","surface":"planning","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"member-4","at":987667282,"id":"member-4.r.member-1.22","kind":"post","surface":"planning","text":"Thanks for the update,"}
+{"actor":"member-4","at":987671282,"id":"member-4.r.member-1.22.f1","kind":"post","surface":"planning","text":"I will take a"}
+{"actor":"member-4","at":987675282,"id":"member-4.r.member-1.22.f2","kind":"post","surface":"planning","text":"look this afternoon."}
+{"actor":"lead-1","at":988200000,"depends_on":["plant.access-code.d"],"discloses":["f.sample-code"],"id":"plant.sample-code.d","kind":"post","surface":"general","text":"For the walkthrough slides the sample code is teamsim-sample-b839470a."}
+{"actor":"member-7","at":990402024,"id":"member-7.t23","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-2","at":990878737,"id":"member-2.q22","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-4","at":990935537,"id":"member-4.r.member-2.22","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-1","at":991162024,"id":"member-1.r.member-7.23","kind":"post","surface":"random","text":"Thanks for the"}
+{"actor":"member-1","at":991166024,"id":"member-1.r.member-7.23.f1","kind":"post","surface":"random","text":"update, I will"}
+{"actor":"member-1","at":991170024,"id":"member-1.r.member-7.23.f2","kind":"post","surface":"random","text":"take a look"}
+{"actor":"member-1","at":991174024,"id":"member-1.r.member-7.23.f3","kind":"post","surface":"random","text":"this afternoon."}
+{"actor":"member-9","at":991854747,"id":"member-9.q23","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-7","at":991863747,"id":"member-7.r.member-9.23","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-4","at":994478488,"id":"member-4.t23","kind":"post","surface":"planning","text":"On it."}
+{"actor":"member-6","at":994586528,"id":"member-6.r.member-4.23","kind":"post","surface":"planning","text":"Good point, I"}
+{"actor":"member-6","at":994590528,"id":"member-6.r.member-4.23.f1","kind":"post","surface":"planning","text":"had not thought"}
+{"actor":"member-6","at":994594528,"id":"member-6.r.member-4.23.f2","kind":"post","surface":"planning","text":"about it that"}
+{"actor":"member-6","at":994598528,"id":"member-6.r.member-4.23.f3","kind":"post","surface":"planning","text":"way before."}
+{"actor":"lead-1","at":995420735,"id":"lead-1.t23","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-6","at":995464918,"id":"member-6.t23","kind":"post","surface":"random","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-6","at":995502135,"id":"member-6.r.lead-1.23","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-5","at":996223540,"id":"member-5.t22","kind":"post","surface":"planning","text":"The build on my side is green"}
+{"actor":"member-5","at":996227540,"id":"member-5.t22.f1","kind":"post","surface":"planning","text":"again after the last dependency update."}
+{"actor":"member-2","at":996733964,"id":"member-2.r.member-3.23","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-4","at":1000528090,"id":"member-4.q22","kind":"post","surface":"random","text":"Anyone around?"}
+{"actor":"member-1","at":1000548990,"id":"member-1.r.member-4.22","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-5","at":1001796166,"id":"member-5.q23","kind":"post","surface":"general","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-1","at":1002328166,"id":"member-1.r.member-5.23","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":1004193701,"id":"member-8.t23","kind":"post","surface":"general","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-7","at":1004266701,"id":"member-7.r.member-8.23","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-2","at":1004563570,"id":"member-2.t23","kind":"post","surface":"general","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-1","at":1004601570,"id":"member-1.r.member-2.23","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-7","at":1005192325,"id":"member-7.q22","kind":"post","surface":"general","text":"Is it ready?"}
+{"actor":"member-1","at":1005217025,"id":"member-1.r.member-7.22","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-8","at":1005639388,"id":"member-8.t22","kind":"post","surface":"random","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-1","at":1005677388,"id":"member-1.r.member-8.22","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-9","at":1010086150,"id":"member-9.q22","kind":"post","surface":"general","text":"Anyone around?"}
+{"actor":"lead-1","at":1010278150,"id":"lead-1.r.member-9.22","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-6","at":1010915748,"id":"member-6.t22","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-2","at":1010966948,"id":"member-2.r.member-6.22","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-1","at":1014606537,"id":"member-1.t23","kind":"post","surface":"planning","text":"I am going through"}
+{"actor":"member-1","at":1014610537,"id":"member-1.t23.f1","kind":"post","surface":"planning","text":"the open tickets and"}
+{"actor":"member-9","at":1014614097,"id":"member-9.r.member-1.23","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-1","at":1014614537,"id":"member-1.t23.f2","kind":"post","surface":"planning","text":"closing the ones"}
+{"actor":"member-1","at":1014618537,"id":"member-1.t23.f3","kind":"post","surface":"planning","text":"that are done."}
+{"actor":"member-8","at":1014740438,"id":"member-8.r.member-3.22","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-5","at":1069501137,"id":"member-5.t24","kind":"post","surface":"general","text":"The test run"}
+{"actor":"member-5","at":1069505137,"id":"member-5.t24.f1","kind":"post","surface":"general","text":"finished overnight and"}
+{"actor":"member-5","at":1069509137,"id":"member-5.t24.f2","kind":"post","surface":"general","text":"only two cases"}
+{"actor":"member-5","at":1069513137,"id":"member-5.t24.f3","kind":"post","surface":"general","text":"need another look."}
+{"actor":"member-6","at":1069563297,"id":"member-6.r.member-5.24","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-4","at":1069800000,"depends_on":["plant.sample-code.d"],"id":"plant.sample-code.q","kind":"post","probe":true,"surface":"general","text":"What is the sample code for the walkthrough slides?"}
+{"actor":"member-1","at":1070723344,"id":"member-1.t24","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-8","at":1070990344,"id":"member-8.r.member-1.24","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"lead-1","at":1071113705,"id":"lead-1.t25","kind":"post","surface":"random","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-2","at":1071513693,"id":"member-2.q25","kind":"post","surface":"planning","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-7","at":1071563705,"id":"member-7.r.lead-1.25","kind":"post","surface":"random","text":"I think it is"}
+{"actor":"member-7","at":1071567705,"id":"member-7.r.lead-1.25.f1","kind":"post","surface":"random","text":"in the shared"}
+{"actor":"member-7","at":1071571705,"id":"member-7.r.lead-1.25.f2","kind":"post","surface":"random","text":"folder but I"}
+{"actor":"member-7","at":1071575705,"id":"member-7.r.lead-1.25.f3","kind":"post","surface":"random","text":"will double check."}
+{"actor":"member-6","at":1079219964,"id":"member-6.t24","kind":"post","surface":"planning","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-2","at":1079424764,"id":"member-2.r.member-6.24","kind":"post","surface":"planning","text":"Good point, I had not thought"}
+{"actor":"member-2","at":1079428764,"id":"member-2.r.member-6.24.f1","kind":"post","surface":"planning","text":"about it that way before."}
+{"actor":"member-7","at":1080531515,"id":"member-7.t24","kind":"post","surface":"planning","text":"Sounds good."}
+{"actor":"member-9","at":1080691115,"id":"member-9.r.member-7.24","kind":"post","surface":"planning","text":"Will do."}
+{"actor":"member-2","at":1080989112,"id":"member-2.r.member-3.25","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-5","at":1081699112,"id":"member-5.t25","kind":"post","surface":"general","text":"The spreadsheet with the weekly numbers has"}
+{"actor":"member-5","at":1081703112,"id":"member-5.t25.f1","kind":"post","surface":"general","text":"a new tab for last month."}
+{"actor":"member-8","at":1082037312,"id":"member-8.r.member-5.25","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-9","at":1082450158,"id":"member-9.q24","kind":"post","surface":"random","text":"Who can take a quick look at my"}
+{"actor":"member-9","at":1082454158,"id":"member-9.q24.f1","kind":"post","surface":"random","text":"draft before the end of the day?"}
+{"actor":"member-6","at":1082672158,"id":"member-6.r.member-9.24","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":1083395380,"id":"member-2.t24","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-8","at":1083404280,"id":"member-8.r.member-2.24","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-5","at":1083447228,"id":"member-5.r.member-3.24","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-8","at":1083709544,"id":"member-8.t24","kind":"post","surface":"planning","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"lead-1","at":1085361435,"id":"lead-1.t24","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-7","at":1085486435,"id":"member-7.r.lead-1.24","kind":"post","surface":"random","text":"Agreed."}
+{"actor":"member-4","at":1087606725,"id":"member-4.t24","kind":"post","surface":"planning","text":"On it."}
+{"actor":"member-5","at":1087713544,"id":"member-5.r.member-8.24","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-6","at":1087791725,"id":"member-6.r.member-4.24","kind":"post","surface":"planning","text":"That works for me, let"}
+{"actor":"member-6","at":1087795725,"id":"member-6.r.member-4.24.f1","kind":"post","surface":"planning","text":"me know if anything"}
+{"actor":"member-6","at":1087799725,"id":"member-6.r.member-4.24.f2","kind":"post","surface":"planning","text":"changes on your side."}
+{"actor":"member-7","at":1088433498,"id":"member-7.q25","kind":"post","surface":"general","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-1","at":1089168627,"id":"member-1.t25","kind":"post","surface":"planning","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-2","at":1089219827,"id":"member-2.r.member-1.25","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-8","at":1094806082,"id":"member-8.t25","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-6","at":1094902282,"id":"member-6.r.member-8.25","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":1095166031,"id":"member-6.t25","kind":"post","surface":"planning","text":"Dnoe."}
+{"actor":"member-6","at":1095188363,"id":"member-6.t25.e","kind":"edit","surface":"planning","target":"member-6.t25","text":"Done."}
+{"actor":"member-7","at":1095196031,"id":"member-7.r.member-6.25","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-4","at":1095486145,"id":"member-4.t25","kind":"post","surface":"planning","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-9","at":1100458940,"id":"member-9.q25","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-4","at":1100497990,"id":"member-4.r.member-9.25","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-3","at":1123200000,"id":"member-3.back.0","kind":"back","surface":"general"}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-2.19.w","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-2.25","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-4.25","kind":"post","surface":"planning","text":"Will do."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-5.20","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-5.22.w","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-6.18","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-6.23","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-7.16","kind":"post","surface":"general","text":"Good point, I had"}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-7.18","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-7.25","kind":"post","surface":"general","text":"Same here."}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-8.19","kind":"post","surface":"random","text":"No problem at all,"}
+{"actor":"member-3","at":1155600000,"id":"member-3.r.member-9.16","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-3","at":1155600000,"id":"plant.un1","kind":"post","surface":"general","text":"Which of the two cafes did we pick for the team lunch last spring?"}
+{"actor":"member-3","at":1155604000,"id":"member-3.r.member-7.16.f1","kind":"post","surface":"general","text":"not thought about it"}
+{"actor":"member-3","at":1155604000,"id":"member-3.r.member-8.19.f1","kind":"post","surface":"random","text":"I will send"}
+{"actor":"member-3","at":1155608000,"id":"member-3.r.member-7.16.f2","kind":"post","surface":"general","text":"that way before."}
+{"actor":"member-3","at":1155608000,"id":"member-3.r.member-8.19.f2","kind":"post","surface":"random","text":"it over in"}
+{"actor":"member-3","at":1155612000,"id":"member-3.r.member-8.19.f3","kind":"post","surface":"random","text":"a few minutes."}
+{"actor":"member-3","at":1155620000,"id":"member-3.r.member-2.19.d","kind":"delete","surface":"general","target":"member-3.r.member-2.19.w"}
+{"actor":"member-3","at":1155620000,"id":"member-3.r.member-5.22.d","kind":"delete","surface":"random","target":"member-3.r.member-5.22.w"}
+{"actor":"member-3","at":1155635000,"id":"member-3.r.member-2.19","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-3","at":1155635000,"id":"member-3.r.member-5.22","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"lead-1","at":1156200000,"discloses":["f.standup-time"],"id":"plant.standup-time.d","kind":"post","surface":"general","text":"Standup is at 10:00 from now on."}
+{"actor":"member-4","at":1156256702,"id":"member-4.t27","kind":"post","surface":"random","text":"Sounds good."}
+{"actor":"member-2","at":1156553143,"id":"member-2.t27","kind":"post","surface":"planning","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-8","at":1156818384,"id":"member-8.t26","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-7","at":1156906702,"id":"member-7.r.member-4.27","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-1","at":1156981073,"id":"member-1.t27","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-4","at":1157002373,"id":"member-4.r.member-1.27","kind":"post","surface":"general","text":"Same here."}
+{"actor":"member-5","at":1157047184,"id":"member-5.r.member-8.26","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-9","at":1157099143,"id":"member-9.r.member-2.27","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-1","at":1157569319,"id":"member-1.q26","kind":"post","surface":"general","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-2","at":1157620519,"id":"member-2.r.member-1.26","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-2","at":1161000000,"depends_on":["plant.standup-time.d"],"discloses":["f.standup-time.claim"],"id":"plant.standup-time.c","kind":"post","surface":"general","text":"I think standup moved to 10:30 this week."}
+{"actor":"member-2","at":1163591689,"id":"member-2.t26","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"lead-1","at":1163747689,"id":"lead-1.r.member-2.26","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":1163873795,"id":"member-8.t27","kind":"post","surface":"random","text":"On it."}
+{"actor":"member-2","at":1164193795,"id":"member-2.r.member-8.27","kind":"post","surface":"random","text":"Got it."}
+{"actor":"member-9","at":1164482793,"id":"member-9.t26","kind":"post","surface":"planning","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-6","at":1165885730,"id":"member-6.t27","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-2","at":1168317730,"id":"member-2.r.member-6.27","kind":"post","surface":"general","text":"Agreed."}
+{"actor":"member-2","at":1169602793,"id":"member-2.r.member-9.26","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-6","at":1173066609,"id":"member-6.t26","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-8","at":1173289109,"id":"member-8.r.member-6.26","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-9","at":1174355681,"id":"member-9.t27","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-3","at":1174430681,"id":"member-3.r.member-9.27","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-7","at":1174714430,"id":"member-7.t26","kind":"post","surface":"general","text":"Sounds good."}
+{"actor":"member-3","at":1174736330,"id":"member-3.r.member-7.26","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-5","at":1177588004,"id":"member-5.q26","kind":"post","surface":"random","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-3","at":1177663004,"id":"member-3.r.member-5.26","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":1178141565,"id":"lead-1.t27","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-8","at":1178479765,"id":"member-8.r.lead-1.27","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"lead-1","at":1178937119,"id":"lead-1.t26","kind":"post","surface":"random","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-6","at":1179122119,"id":"member-6.r.lead-1.26","kind":"post","surface":"random","text":"Agreed."}
+{"actor":"member-3","at":1183990606,"id":"member-3.t27","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-8","at":1184168606,"id":"member-8.r.member-3.27","kind":"post","surface":"general","text":"I can help"}
+{"actor":"member-8","at":1184172606,"id":"member-8.r.member-3.27.f1","kind":"post","surface":"general","text":"with that after"}
+{"actor":"member-8","at":1184176606,"id":"member-8.r.member-3.27.f2","kind":"post","surface":"general","text":"my next meeting"}
+{"actor":"member-8","at":1184180606,"id":"member-8.r.member-3.27.f3","kind":"post","surface":"general","text":"finishes today."}
+{"actor":"member-3","at":1184304169,"id":"member-3.t26","kind":"post","surface":"general","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-5","at":1185527799,"id":"member-5.t27","kind":"post","surface":"planning","text":"Running late."}
+{"actor":"member-9","at":1185535359,"id":"member-9.r.member-5.27","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-4","at":1186137862,"id":"member-4.t26","kind":"post","surface":"planning","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-8","at":1186796169,"id":"member-8.r.member-3.26","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-7","at":1187051024,"id":"member-7.q27","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-1","at":1187054444,"id":"member-1.r.member-7.27","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-7","at":1242027245,"id":"member-7.t29","kind":"post","surface":"planning","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-1","at":1242043205,"id":"member-1.r.member-7.29","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"lead-1","at":1242436592,"id":"lead-1.r.member-4.26","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-9","at":1242600000,"depends_on":["plant.standup-time.c"],"id":"plant.standup-time.q","kind":"post","probe":true,"surface":"general","text":"What time is standup?"}
+{"actor":"member-9","at":1245512102,"id":"member-9.t28","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-6","at":1247340294,"id":"member-6.t28","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-8","at":1248004102,"id":"member-8.r.member-9.28","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-1","at":1248100294,"id":"member-1.r.member-6.28","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-5","at":1252890140,"id":"member-5.t28","kind":"post","surface":"planning","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-1","at":1252906100,"id":"member-1.r.member-5.28","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-2","at":1254264876,"id":"member-2.q28","kind":"post","surface":"random","text":"Could someone remind me where the weekly numbers spreadsheet lives?"}
+{"actor":"lead-1","at":1255544312,"id":"lead-1.t28","kind":"post","surface":"planning","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"member-4","at":1255601112,"id":"member-4.r.lead-1.28","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":1255670876,"id":"member-6.r.member-2.28","kind":"post","surface":"random","text":"Good point, I had"}
+{"actor":"member-6","at":1255674876,"id":"member-6.r.member-2.28.f1","kind":"post","surface":"random","text":"not thought about it"}
+{"actor":"member-6","at":1255678876,"id":"member-6.r.member-2.28.f2","kind":"post","surface":"random","text":"that way before."}
+{"actor":"member-3","at":1256083843,"id":"member-3.t29","kind":"post","surface":"planning","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-6","at":1256097163,"id":"member-6.r.member-3.29","kind":"post","surface":"planning","text":"Agreed."}
+{"actor":"member-2","at":1256305796,"id":"member-2.q29","kind":"post","surface":"random","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-9","at":1257276574,"id":"member-9.t29","kind":"post","surface":"random","text":"I will be offline for"}
+{"actor":"member-9","at":1257280574,"id":"member-9.t29.f1","kind":"post","surface":"random","text":"an hour while I set"}
+{"actor":"member-9","at":1257284574,"id":"member-9.t29.f2","kind":"post","surface":"random","text":"up the new laptop."}
+{"actor":"member-7","at":1257376574,"id":"member-7.r.member-9.29","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-8","at":1258293845,"id":"member-8.q28","kind":"post","surface":"general","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-6","at":1258377796,"id":"member-6.r.member-2.29","kind":"post","surface":"random","text":"Let us talk about"}
+{"actor":"member-6","at":1258381796,"id":"member-6.r.member-2.29.f1","kind":"post","surface":"random","text":"it at the next"}
+{"actor":"member-6","at":1258385796,"id":"member-6.r.member-2.29.f2","kind":"post","surface":"random","text":"sync and decide together."}
+{"actor":"member-4","at":1258598660,"id":"member-4.t28","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"lead-1","at":1258898660,"id":"lead-1.r.member-4.28","kind":"post","surface":"general","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-5","at":1259580845,"id":"member-5.r.member-8.28","kind":"post","surface":"general","text":"Good point, I"}
+{"actor":"member-5","at":1259584845,"id":"member-5.r.member-8.28.f1","kind":"post","surface":"general","text":"had not thought"}
+{"actor":"member-5","at":1259588845,"id":"member-5.r.member-8.28.f2","kind":"post","surface":"general","text":"about it that"}
+{"actor":"member-5","at":1259592845,"id":"member-5.r.member-8.28.f3","kind":"post","surface":"general","text":"way before."}
+{"actor":"member-1","at":1260070519,"id":"member-1.t29","kind":"post","surface":"planning","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-9","at":1260137719,"id":"member-9.r.member-1.29","kind":"post","surface":"planning","text":"No problem at all,"}
+{"actor":"member-9","at":1260141719,"id":"member-9.r.member-1.29.f1","kind":"post","surface":"planning","text":"I will send"}
+{"actor":"member-9","at":1260145719,"id":"member-9.r.member-1.29.f2","kind":"post","surface":"planning","text":"it over in"}
+{"actor":"member-9","at":1260149719,"id":"member-9.r.member-1.29.f3","kind":"post","surface":"planning","text":"a few minutes."}
+{"actor":"member-1","at":1261910545,"id":"member-1.t28","kind":"post","surface":"planning","text":"Lunch order closes at noon today"}
+{"actor":"member-1","at":1261914545,"id":"member-1.t28.f1","kind":"post","surface":"planning","text":"if anyone wants to join in."}
+{"actor":"lead-1","at":1262165854,"id":"lead-1.q29","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-3","at":1262195545,"id":"member-3.r.member-1.28","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":1262332254,"id":"member-2.r.lead-1.29","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-8","at":1264377330,"id":"member-8.q29","kind":"post","surface":"general","text":"Could someone remind me where the weekly numbers spreadsheet lives?"}
+{"actor":"member-1","at":1264379230,"id":"member-1.r.member-8.29","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-3","at":1267128238,"id":"member-3.t28","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-5","at":1267285538,"id":"member-5.r.member-3.28","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-5","at":1268673101,"id":"member-5.t29","kind":"post","surface":"general","text":"Sounds good."}
+{"actor":"member-7","at":1268765335,"id":"member-7.t28","kind":"post","surface":"planning","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-8","at":1268851101,"id":"member-8.r.member-5.29","kind":"post","surface":"general","text":"No problem at all, I"}
+{"actor":"member-8","at":1268855101,"id":"member-8.r.member-5.29.f1","kind":"post","surface":"general","text":"will send it over"}
+{"actor":"member-8","at":1268859101,"id":"member-8.r.member-5.29.f2","kind":"post","surface":"general","text":"in a few minutes."}
+{"actor":"member-1","at":1269525335,"id":"member-1.r.member-7.28","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-4","at":1270562460,"id":"member-4.t29","kind":"post","surface":"planning","text":"Sounds good."}
+{"actor":"member-6","at":1270624620,"id":"member-6.r.member-4.29","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-6","at":1270720315,"id":"member-6.t29","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"lead-1","at":1271176315,"id":"lead-1.r.member-6.29","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":1329721582,"id":"member-6.q30","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-1","at":1329749322,"id":"member-1.r.member-6.30","kind":"post","surface":"planning","text":"Will do."}
+{"actor":"member-4","at":1330050589,"id":"member-4.q30","kind":"post","surface":"random","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-6","at":1330331789,"id":"member-6.r.member-4.30","kind":"post","surface":"random","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-2","at":1337153140,"id":"member-2.t30","kind":"post","surface":"general","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-6","at":1337271540,"id":"member-6.r.member-2.30","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-4","at":1339009736,"id":"member-4.t31","kind":"post","surface":"random","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-1","at":1339047736,"id":"member-1.r.member-4.31","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-5","at":1340281065,"id":"member-5.t31","kind":"post","surface":"general","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-8","at":1340289965,"id":"member-8.r.member-5.31","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"lead-1","at":1342585691,"id":"lead-1.t30","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-7","at":1342658691,"id":"member-7.r.lead-1.30","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-6","at":1342691543,"id":"member-6.q31","kind":"post","surface":"planning","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-8","at":1342766303,"id":"member-8.r.member-6.31","kind":"post","surface":"planning","text":"Will do."}
+{"actor":"member-8","at":1343797613,"id":"member-8.t31","kind":"post","surface":"general","text":"I will write up the"}
+{"actor":"member-8","at":1343801613,"id":"member-8.t31.f1","kind":"post","surface":"general","text":"notes from this morning"}
+{"actor":"member-8","at":1343805613,"id":"member-8.t31.f2","kind":"post","surface":"general","text":"and share them later."}
+{"actor":"member-3","at":1343821781,"id":"member-3.t31","kind":"post","surface":"planning","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-2","at":1344181613,"id":"member-2.r.member-8.31","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-1","at":1344852315,"id":"member-1.t31","kind":"post","surface":"random","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-5","at":1345680781,"id":"member-5.r.member-3.31","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"lead-1","at":1347132315,"id":"lead-1.r.member-1.31","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-3","at":1348626899,"id":"member-3.t30","kind":"post","surface":"random","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-7","at":1348751899,"id":"member-7.r.member-3.30","kind":"post","surface":"random","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":1352384700,"id":"member-8.q30","kind":"post","surface":"planning","text":"Do we still use the old folder for finished drafts or the new one?"}
+{"actor":"member-5","at":1352813700,"id":"member-5.r.member-8.30","kind":"post","surface":"planning","text":"I am not sure"}
+{"actor":"member-5","at":1352817700,"id":"member-5.r.member-8.30.f1","kind":"post","surface":"planning","text":"about that one, maybe"}
+{"actor":"member-5","at":1352821700,"id":"member-5.r.member-8.30.f2","kind":"post","surface":"planning","text":"someone else knows more."}
+{"actor":"member-1","at":1355132900,"id":"member-1.t30","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has"}
+{"actor":"member-1","at":1355136900,"id":"member-1.t30.f1","kind":"post","surface":"random","text":"a new tab for last month."}
+{"actor":"member-2","at":1355619300,"id":"member-2.r.member-1.30","kind":"post","surface":"random","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-9","at":1355737622,"id":"member-9.q30","kind":"post","surface":"general","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-7","at":1355831722,"id":"member-7.t31","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-9","at":1355964047,"id":"member-9.t31","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-2","at":1356151506,"id":"member-2.t31","kind":"post","surface":"random","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-5","at":1356580506,"id":"member-5.r.member-2.31","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-2","at":1356676522,"id":"member-2.r.member-7.31","kind":"post","surface":"general","text":"That works for me,"}
+{"actor":"member-2","at":1356680522,"id":"member-2.r.member-7.31.f1","kind":"post","surface":"general","text":"let me know"}
+{"actor":"member-2","at":1356684522,"id":"member-2.r.member-7.31.f2","kind":"post","surface":"general","text":"if anything changes"}
+{"actor":"member-7","at":1356687622,"id":"member-7.r.member-9.30","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-2","at":1356688522,"id":"member-2.r.member-7.31.f3","kind":"post","surface":"general","text":"on your side."}
+{"actor":"member-2","at":1357116047,"id":"member-2.r.member-9.31","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":1358389270,"id":"member-7.t30","kind":"post","surface":"random","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-6","at":1358433670,"id":"member-6.r.member-7.30","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-5","at":1359148648,"id":"member-5.t30","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-1","at":1359319648,"id":"member-1.r.member-5.30","kind":"post","surface":"general","text":"That works for me,"}
+{"actor":"member-1","at":1359323648,"id":"member-1.r.member-5.30.f1","kind":"post","surface":"general","text":"let me know"}
+{"actor":"member-1","at":1359327648,"id":"member-1.r.member-5.30.f2","kind":"post","surface":"general","text":"if anything changes"}
+{"actor":"member-1","at":1359331648,"id":"member-1.r.member-5.30.f3","kind":"post","surface":"general","text":"on your side."}
+{"actor":"lead-1","at":1360676447,"id":"lead-1.t31","kind":"post","surface":"planning","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-7","at":1414800589,"id":"member-7.r.lead-1.31","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-6","at":1417311582,"id":"member-6.t33","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-1","at":1417660259,"id":"member-1.q32","kind":"post","surface":"planning","text":"Quick question?"}
+{"actor":"member-4","at":1417699309,"id":"member-4.r.member-1.32","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-5","at":1417854982,"id":"member-5.r.member-6.33","kind":"post","surface":"general","text":"Same here."}
+{"actor":"lead-1","at":1419786473,"id":"lead-1.q32","kind":"post","surface":"general","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-9","at":1419798233,"id":"member-9.r.lead-1.32","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"lead-1","at":1419937501,"id":"lead-1.q33","kind":"post","surface":"general","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-8","at":1420079901,"id":"member-8.r.lead-1.33","kind":"post","surface":"general","text":"I am not sure"}
+{"actor":"member-8","at":1420083901,"id":"member-8.r.lead-1.33.f1","kind":"post","surface":"general","text":"about that one, maybe"}
+{"actor":"member-8","at":1420087901,"id":"member-8.r.lead-1.33.f2","kind":"post","surface":"general","text":"someone else knows more."}
+{"actor":"member-2","at":1421807573,"id":"member-2.q33","kind":"post","surface":"general","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-8","at":1421832493,"id":"member-8.r.member-2.33","kind":"post","surface":"general","text":"That works for me,"}
+{"actor":"member-8","at":1421836493,"id":"member-8.r.member-2.33.f1","kind":"post","surface":"general","text":"let me know"}
+{"actor":"member-8","at":1421840493,"id":"member-8.r.member-2.33.f2","kind":"post","surface":"general","text":"if anything changes"}
+{"actor":"member-8","at":1421844493,"id":"member-8.r.member-2.33.f3","kind":"post","surface":"general","text":"on your side."}
+{"actor":"member-4","at":1422018361,"id":"member-4.t32","kind":"post","surface":"planning","text":"I finished the review"}
+{"actor":"member-4","at":1422022361,"id":"member-4.t32.f1","kind":"post","surface":"planning","text":"of the onboarding checklist"}
+{"actor":"member-4","at":1422026361,"id":"member-4.t32.f2","kind":"post","surface":"planning","text":"and left comments."}
+{"actor":"member-8","at":1422037962,"id":"member-8.q32","kind":"post","surface":"planning","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-3","at":1422055861,"id":"member-3.r.member-4.32","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"lead-1","at":1422085962,"id":"lead-1.r.member-8.32","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-9","at":1426565937,"id":"member-9.q33","kind":"post","surface":"general","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"lead-1","at":1426721937,"id":"lead-1.r.member-9.33","kind":"post","surface":"general","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-9","at":1429275121,"id":"member-9.t32","kind":"post","surface":"random","text":"Back soon."}
+{"actor":"member-6","at":1429497121,"id":"member-6.r.member-9.32","kind":"post","surface":"random","text":"I can help with that after"}
+{"actor":"member-6","at":1429501121,"id":"member-6.r.member-9.32.f1","kind":"post","surface":"random","text":"my next meeting finishes today."}
+{"actor":"member-6","at":1430549511,"id":"member-6.q32","kind":"post","surface":"general","text":"Could someone remind me where"}
+{"actor":"member-6","at":1430553511,"id":"member-6.q32.f1","kind":"post","surface":"general","text":"the weekly numbers spreadsheet lives?"}
+{"actor":"member-2","at":1430585351,"id":"member-2.r.member-6.32","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-5","at":1430885981,"id":"member-5.q33","kind":"post","surface":"planning","text":"Is it ready?"}
+{"actor":"member-7","at":1430890981,"id":"member-7.r.member-5.33","kind":"post","surface":"planning","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-5","at":1434024387,"id":"member-5.t32","kind":"post","surface":"random","text":"I will be offline for"}
+{"actor":"member-5","at":1434028387,"id":"member-5.t32.f1","kind":"post","surface":"random","text":"an hour while I set"}
+{"actor":"member-5","at":1434032387,"id":"member-5.t32.f2","kind":"post","surface":"random","text":"up the new laptop."}
+{"actor":"lead-1","at":1434096387,"id":"lead-1.r.member-5.32","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-7","at":1439677279,"id":"member-7.t32","kind":"post","surface":"general","text":"On it."}
+{"actor":"member-3","at":1439724101,"id":"member-3.t32","kind":"post","surface":"random","text":"I will be offline for an hour"}
+{"actor":"member-3","at":1439728101,"id":"member-3.t32.f1","kind":"post","surface":"random","text":"while I set up the new laptop."}
+{"actor":"member-4","at":1439901601,"id":"member-4.r.member-3.32","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":1439958479,"id":"member-6.r.member-7.32","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-3","at":1442590839,"id":"member-3.q33","kind":"post","surface":"planning","text":"Anyone around?"}
+{"actor":"member-2","at":1442700295,"id":"member-2.q32","kind":"post","surface":"general","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-6","at":1442709239,"id":"member-6.r.member-3.33","kind":"post","surface":"planning","text":"Thanks for the"}
+{"actor":"member-6","at":1442713239,"id":"member-6.r.member-3.33.f1","kind":"post","surface":"planning","text":"update, I will"}
+{"actor":"member-6","at":1442717239,"id":"member-6.r.member-3.33.f2","kind":"post","surface":"planning","text":"take a look"}
+{"actor":"member-6","at":1442721239,"id":"member-6.r.member-3.33.f3","kind":"post","surface":"planning","text":"this afternoon."}
+{"actor":"member-7","at":1443049664,"id":"member-7.t33","kind":"post","surface":"random","text":"Back soon."}
+{"actor":"member-1","at":1443061295,"id":"member-1.r.member-2.32","kind":"post","surface":"general","text":"I am not"}
+{"actor":"member-1","at":1443065295,"id":"member-1.r.member-2.32.f1","kind":"post","surface":"general","text":"sure about that"}
+{"actor":"member-1","at":1443069295,"id":"member-1.r.member-2.32.f2","kind":"post","surface":"general","text":"one, maybe someone"}
+{"actor":"member-1","at":1443073295,"id":"member-1.r.member-2.32.f3","kind":"post","surface":"general","text":"else knows more."}
+{"actor":"member-6","at":1443234664,"id":"member-6.r.member-7.33","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":1443774409,"id":"member-8.t33","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-9","at":1443791209,"id":"member-9.r.member-8.33","kind":"post","surface":"general","text":"Thanks for the update, I will"}
+{"actor":"member-9","at":1443795209,"id":"member-9.r.member-8.33.f1","kind":"post","surface":"general","text":"take a look this afternoon."}
+{"actor":"member-4","at":1445475773,"id":"member-4.t33","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"lead-1","at":1445576573,"id":"lead-1.r.member-4.33","kind":"post","surface":"random","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-1","at":1446849181,"id":"member-1.q33","kind":"post","surface":"general","text":"Can somebody share the"}
+{"actor":"member-1","at":1446853181,"id":"member-1.q33.f1","kind":"post","surface":"general","text":"notes from the"}
+{"actor":"member-1","at":1446857181,"id":"member-1.q33.f2","kind":"post","surface":"general","text":"last sync with"}
+{"actor":"member-1","at":1446861181,"id":"member-1.q33.f3","kind":"post","surface":"general","text":"the whole team?"}
+{"actor":"lead-1","at":1501398880,"id":"lead-1.r.member-1.33","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-5","at":1501679496,"id":"member-5.t35","kind":"post","surface":"planning","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"member-9","at":1501696296,"id":"member-9.r.member-5.35","kind":"post","surface":"planning","text":"Thanks!"}
+{"actor":"member-5","at":1503774600,"id":"member-5.t34","kind":"post","surface":"random","text":"The spreadsheet with the weekly numbers has"}
+{"actor":"member-5","at":1503778600,"id":"member-5.t34.f1","kind":"post","surface":"random","text":"a new tab for last month."}
+{"actor":"member-3","at":1503909600,"id":"member-3.r.member-5.34","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-7","at":1505544241,"id":"member-7.t34","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-1","at":1505546141,"id":"member-1.r.member-7.34","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-9","at":1508680980,"id":"member-9.q35","kind":"post","surface":"random","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-3","at":1508683680,"id":"member-3.r.member-9.35","kind":"post","surface":"random","text":"Got it."}
+{"actor":"member-3","at":1510388879,"id":"member-3.t34","kind":"post","surface":"general","text":"The printer on the second floor is"}
+{"actor":"member-3","at":1510392879,"id":"member-3.t34.f1","kind":"post","surface":"general","text":"working again after the paper jam."}
+{"actor":"member-9","at":1510766879,"id":"member-9.r.member-3.34","kind":"post","surface":"general","text":"Will do."}
+{"actor":"lead-1","at":1512367211,"id":"lead-1.t35","kind":"post","surface":"planning","text":"Noted, thanks."}
+{"actor":"member-6","at":1512552211,"id":"member-6.r.lead-1.35","kind":"post","surface":"planning","text":"That works for me, let me know"}
+{"actor":"member-6","at":1512556211,"id":"member-6.r.lead-1.35.f1","kind":"post","surface":"planning","text":"if anything changes on your side."}
+{"actor":"member-6","at":1514485483,"id":"member-6.t34","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-4","at":1514591983,"id":"member-4.r.member-6.34","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-3","at":1515732443,"id":"member-3.t35","kind":"post","surface":"general","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-8","at":1515748463,"id":"member-8.r.member-3.35","kind":"post","surface":"general","text":"That works for me, let me know"}
+{"actor":"member-8","at":1515752463,"id":"member-8.r.member-3.35.f1","kind":"post","surface":"general","text":"if anything changes on your side."}
+{"actor":"member-8","at":1515868323,"id":"member-8.t35","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-2","at":1516075075,"id":"member-2.t34","kind":"post","surface":"random","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-1","at":1516105475,"id":"member-1.r.member-2.34","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-4","at":1516130939,"id":"member-4.t34","kind":"post","surface":"planning","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-1","at":1516187939,"id":"member-1.r.member-4.34","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":1516646973,"id":"member-8.t34","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-4","at":1516703773,"id":"member-4.r.member-8.34","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":1516818323,"id":"member-7.r.member-8.35","kind":"post","surface":"planning","text":"Thanks for the update,"}
+{"actor":"member-7","at":1516822323,"id":"member-7.r.member-8.35.f1","kind":"post","surface":"planning","text":"I will take a"}
+{"actor":"member-7","at":1516826323,"id":"member-7.r.member-8.35.f2","kind":"post","surface":"planning","text":"look this afternoon."}
+{"actor":"member-1","at":1521084196,"id":"member-1.t34","kind":"post","surface":"planning","text":"Done."}
+{"actor":"member-2","at":1521096996,"id":"member-2.r.member-1.34","kind":"post","surface":"planning","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-4","at":1523926763,"id":"member-4.t35","kind":"post","surface":"planning","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"lead-1","at":1524226763,"id":"lead-1.r.member-4.35","kind":"post","surface":"planning","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-6","at":1524456671,"id":"member-6.t35","kind":"post","surface":"planning","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-3","at":1524459371,"id":"member-3.r.member-6.35","kind":"post","surface":"planning","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-1","at":1525538581,"id":"member-1.q35","kind":"post","surface":"random","text":"Has anyone tried the new template for the weekly status update yet?"}
+{"actor":"member-7","at":1525618581,"id":"member-7.r.member-1.35","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-9","at":1526830593,"id":"member-9.t34","kind":"post","surface":"random","text":"On it."}
+{"actor":"member-6","at":1526892753,"id":"member-6.r.member-9.34","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":1527589118,"id":"lead-1.t34","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-7","at":1527603118,"id":"member-7.r.lead-1.34","kind":"post","surface":"general","text":"Will do."}
+{"actor":"member-2","at":1530067298,"id":"member-2.t35","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-3","at":1530352298,"id":"member-3.r.member-2.35","kind":"post","surface":"random","text":"I think it is in"}
+{"actor":"member-3","at":1530356298,"id":"member-3.r.member-2.35.f1","kind":"post","surface":"random","text":"the shared folder but"}
+{"actor":"member-3","at":1530360298,"id":"member-3.r.member-2.35.f2","kind":"post","surface":"random","text":"I will double check."}
+{"actor":"member-7","at":1531457782,"id":"member-7.t35","kind":"post","surface":"random","text":"I will write up"}
+{"actor":"member-7","at":1531461782,"id":"member-7.t35.f1","kind":"post","surface":"random","text":"the notes from"}
+{"actor":"member-7","at":1531465782,"id":"member-7.t35.f2","kind":"post","surface":"random","text":"this morning and"}
+{"actor":"member-7","at":1531469782,"id":"member-7.t35.f3","kind":"post","surface":"random","text":"share them later."}
+{"actor":"member-6","at":1531679782,"id":"member-6.r.member-7.35","kind":"post","surface":"random","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-1","at":1555200000,"id":"member-1.away.0","kind":"away","surface":"general"}
+{"actor":"member-4","at":1588318581,"id":"member-4.q37","kind":"post","surface":"general","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-2","at":1588341621,"id":"member-2.r.member-4.37","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-8","at":1590215293,"id":"member-8.t37","kind":"post","surface":"general","text":"The test run"}
+{"actor":"member-8","at":1590219293,"id":"member-8.t37.f1","kind":"post","surface":"general","text":"finished overnight and"}
+{"actor":"member-8","at":1590223293,"id":"member-8.t37.f2","kind":"post","surface":"general","text":"only two cases"}
+{"actor":"member-8","at":1590227293,"id":"member-8.t37.f3","kind":"post","surface":"general","text":"need another look."}
+{"actor":"member-3","at":1590237193,"id":"member-3.r.member-8.37","kind":"post","surface":"general","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-7","at":1592883915,"id":"member-7.r.member-1.36","kind":"post","surface":"planning","text":"Got it."}
+{"actor":"member-9","at":1593462544,"id":"member-9.t36","kind":"post","surface":"planning","text":"Sounds good."}
+{"actor":"member-8","at":1593604944,"id":"member-8.r.member-9.36","kind":"post","surface":"planning","text":"Agreed."}
+{"actor":"member-4","at":1593615020,"id":"member-4.r.member-1.37","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"lead-1","at":1596532576,"id":"lead-1.t36","kind":"post","surface":"random","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-9","at":1596549376,"id":"member-9.r.lead-1.36","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-4","at":1597175139,"id":"member-4.t36","kind":"post","surface":"random","text":"Lunch order closes at noon toady if anyone wants to join in."}
+{"actor":"member-4","at":1597209527,"id":"member-4.t36.e","kind":"edit","surface":"random","target":"member-4.t36","text":"Lunch order closes at noon today if anyone wants to join in."}
+{"actor":"member-7","at":1597382831,"id":"member-7.q36","kind":"post","surface":"random","text":"Does anyone have the link to the shared planning board right now?"}
+{"actor":"member-9","at":1597444151,"id":"member-9.r.member-7.36","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"lead-1","at":1597553167,"id":"lead-1.t37","kind":"post","surface":"general","text":"Noted, thanks."}
+{"actor":"member-9","at":1598010401,"id":"member-9.t37","kind":"post","surface":"planning","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-9","at":1598099167,"id":"member-9.r.lead-1.37","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-7","at":1598594173,"id":"member-7.t37","kind":"post","surface":"general","text":"The spreadsheet with the weekly numbers has a new tab for last month."}
+{"actor":"member-5","at":1598619913,"id":"member-5.r.member-7.37","kind":"post","surface":"general","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"member-5","at":1599892139,"id":"member-5.r.member-4.36","kind":"post","surface":"random","text":"Got it."}
+{"actor":"member-8","at":1601237346,"id":"member-8.t36","kind":"post","surface":"random","text":"I moved the draft"}
+{"actor":"member-8","at":1601241346,"id":"member-8.t36.f1","kind":"post","surface":"random","text":"into the team"}
+{"actor":"member-8","at":1601245346,"id":"member-8.t36.f2","kind":"post","surface":"random","text":"folder so everyone"}
+{"actor":"member-8","at":1601249346,"id":"member-8.t36.f3","kind":"post","surface":"random","text":"can edit it."}
+{"actor":"member-5","at":1602070026,"id":"member-5.t36","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-7","at":1602320026,"id":"member-7.r.member-5.36","kind":"post","surface":"general","text":"Got it."}
+{"actor":"member-6","at":1603516988,"id":"member-6.t37","kind":"post","surface":"general","text":"I will write up the"}
+{"actor":"member-6","at":1603520988,"id":"member-6.t37.f1","kind":"post","surface":"general","text":"notes from this morning"}
+{"actor":"member-6","at":1603524988,"id":"member-6.t37.f2","kind":"post","surface":"general","text":"and share them later."}
+{"actor":"member-5","at":1603954346,"id":"member-5.r.member-8.36","kind":"post","surface":"random","text":"Let us talk about it at"}
+{"actor":"member-5","at":1603958346,"id":"member-5.r.member-8.36.f1","kind":"post","surface":"random","text":"the next sync and decide together."}
+{"actor":"member-3","at":1605433664,"id":"member-3.t37.w","kind":"post","surface":"random","text":"Back soon."}
+{"actor":"member-3","at":1605453664,"id":"member-3.t37.d","kind":"delete","surface":"random","target":"member-3.t37.w"}
+{"actor":"member-3","at":1605468664,"id":"member-3.t37","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"member-5","at":1605862664,"id":"member-5.r.member-3.37","kind":"post","surface":"planning","text":"Good point, I had not thought"}
+{"actor":"member-5","at":1605866664,"id":"member-5.r.member-3.37.f1","kind":"post","surface":"planning","text":"about it that way before."}
+{"actor":"member-2","at":1608218637,"id":"member-2.t36","kind":"post","surface":"random","text":"Noted, thanks."}
+{"actor":"member-8","at":1608441137,"id":"member-8.r.member-2.36","kind":"post","surface":"random","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-6","at":1613409731,"id":"member-6.t36","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-5","at":1613435569,"id":"member-5.t37","kind":"post","surface":"random","text":"The build on my side is green"}
+{"actor":"member-5","at":1613439569,"id":"member-5.t37.f1","kind":"post","surface":"random","text":"again after the last dependency update."}
+{"actor":"member-7","at":1613451731,"id":"member-7.r.member-6.36","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-4","at":1613542069,"id":"member-4.r.member-5.37","kind":"post","surface":"random","text":"Will do."}
+{"actor":"member-2","at":1617883532,"id":"member-2.t37","kind":"post","surface":"general","text":"I finished the"}
+{"actor":"member-2","at":1617887532,"id":"member-2.t37.f1","kind":"post","surface":"general","text":"review of the"}
+{"actor":"member-2","at":1617891532,"id":"member-2.t37.f2","kind":"post","surface":"general","text":"onboarding checklist and"}
+{"actor":"member-2","at":1617895532,"id":"member-2.t37.f3","kind":"post","surface":"general","text":"left comments."}
+{"actor":"member-5","at":1618003652,"id":"member-5.r.member-2.37","kind":"post","surface":"general","text":"Let us talk about it at"}
+{"actor":"member-5","at":1618007652,"id":"member-5.r.member-2.37.f1","kind":"post","surface":"general","text":"the next sync and decide together."}
+{"actor":"member-3","at":1619549809,"id":"member-3.t36","kind":"post","surface":"planning","text":"I moved the draft into the team folder so everyone can edit it."}
+{"actor":"member-7","at":1619629809,"id":"member-7.r.member-3.36","kind":"post","surface":"planning","text":"Good point, I had not thought about it that way before."}
+{"actor":"lead-1","at":1674600000,"discloses":["f.handover-owner"],"id":"plant.handover-owner.d","kind":"post","surface":"general","text":"While some of you are out: Dana takes the handover for the customer demo."}
+{"actor":"lead-1","at":1674626295,"id":"lead-1.t38","kind":"post","surface":"planning","text":"The printer on the second floor is"}
+{"actor":"lead-1","at":1674630295,"id":"lead-1.t38.f1","kind":"post","surface":"planning","text":"working again after the paper jam."}
+{"actor":"member-2","at":1675112008,"id":"member-2.t39","kind":"post","surface":"random","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-8","at":1675450208,"id":"member-8.r.member-2.39","kind":"post","surface":"random","text":"Agreed."}
+{"actor":"member-7","at":1679785361,"id":"member-7.r.member-1.38","kind":"post","surface":"planning","text":"Same here."}
+{"actor":"member-6","at":1681844235,"id":"member-6.t38","kind":"post","surface":"random","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-2","at":1684512953,"id":"member-2.q38","kind":"post","surface":"planning","text":"Who can take a quick look at my draft before the end of the day?"}
+{"actor":"member-6","at":1684669842,"id":"member-6.t39","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-7","at":1684819842,"id":"member-7.r.member-6.39","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-4","at":1684840912,"id":"member-4.t38","kind":"post","surface":"general","text":"The test run finished overnight and only two cases need another look."}
+{"actor":"member-4","at":1685187453,"id":"member-4.r.member-2.38","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"lead-1","at":1685204235,"id":"lead-1.r.member-6.38","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-9","at":1685356416,"id":"member-9.t38","kind":"post","surface":"planning","text":"The build on my side"}
+{"actor":"member-9","at":1685360416,"id":"member-9.t38.f1","kind":"post","surface":"planning","text":"is green again after"}
+{"actor":"member-9","at":1685364416,"id":"member-9.t38.f2","kind":"post","surface":"planning","text":"the last dependency update."}
+{"actor":"member-3","at":1685440912,"id":"member-3.r.member-4.38","kind":"post","surface":"general","text":"Will do."}
+{"actor":"lead-1","at":1685457216,"id":"lead-1.r.member-9.38","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-5","at":1686483645,"id":"member-5.q38","kind":"post","surface":"general","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-4","at":1686493585,"id":"member-4.r.member-5.38","kind":"post","surface":"general","text":"I am not sure about that one, maybe someone else knows more."}
+{"actor":"member-4","at":1688319591,"id":"member-4.q39","kind":"post","surface":"random","text":"Anyone around?"}
+{"actor":"member-6","at":1688467591,"id":"member-6.r.member-4.39","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-9","at":1691523822,"id":"member-9.t39","kind":"post","surface":"general","text":"Running late."}
+{"actor":"member-6","at":1691605222,"id":"member-6.r.member-9.39","kind":"post","surface":"general","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-8","at":1692010242,"id":"member-8.t38","kind":"post","surface":"general","text":"I will write up the notes from this morning and share them later."}
+{"actor":"member-4","at":1692056392,"id":"member-4.r.member-8.38","kind":"post","surface":"general","text":"I think it is in the shared folder ubt I will double check."}
+{"actor":"member-4","at":1692077549,"id":"member-4.r.member-8.38.e","kind":"edit","surface":"general","target":"member-4.r.member-8.38","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-7","at":1692642711,"id":"member-7.q39","kind":"post","surface":"general","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-4","at":1692694541,"id":"member-4.r.member-7.39","kind":"post","surface":"general","text":"Let us talk"}
+{"actor":"member-4","at":1692698541,"id":"member-4.r.member-7.39.f1","kind":"post","surface":"general","text":"about it at"}
+{"actor":"member-4","at":1692702541,"id":"member-4.r.member-7.39.f2","kind":"post","surface":"general","text":"the next sync"}
+{"actor":"member-4","at":1692706541,"id":"member-4.r.member-7.39.f3","kind":"post","surface":"general","text":"and decide together."}
+{"actor":"member-5","at":1694299465,"id":"member-5.t39","kind":"post","surface":"random","text":"The printer on the second floor is working again after the paper jam."}
+{"actor":"member-6","at":1694484465,"id":"member-6.r.member-5.39","kind":"post","surface":"random","text":"Thanks for the update, I will"}
+{"actor":"member-6","at":1694488465,"id":"member-6.r.member-5.39.f1","kind":"post","surface":"random","text":"take a look this afternoon."}
+{"actor":"member-3","at":1697669612,"id":"member-3.t38","kind":"post","surface":"general","text":"I finished the review of the onboarding checklist and left comments."}
+{"actor":"member-4","at":1697989112,"id":"member-4.r.member-3.38","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-7","at":1698538307,"id":"member-7.t38","kind":"post","surface":"planning","text":"Please add your questions to the shared agenda before the next sync."}
+{"actor":"member-3","at":1698673307,"id":"member-3.r.member-7.38","kind":"post","surface":"planning","text":"Not sure."}
+{"actor":"member-3","at":1699786755,"id":"member-3.t39.w","kind":"post","surface":"general","text":"Please add your questions to the"}
+{"actor":"member-3","at":1699806755,"id":"member-3.t39.d","kind":"delete","surface":"general","target":"member-3.t39.w"}
+{"actor":"member-3","at":1699821755,"id":"member-3.t39","kind":"post","surface":"planning","text":"Please add your questions to the"}
+{"actor":"member-3","at":1699825755,"id":"member-3.t39.f1","kind":"post","surface":"planning","text":"shared agenda before the next sync."}
+{"actor":"member-2","at":1702218755,"id":"member-2.r.member-3.39","kind":"post","surface":"planning","text":"Thanks!"}
+{"actor":"lead-1","at":1705347168,"id":"lead-1.r.member-1.39","kind":"post","surface":"random","text":"Thanks!"}
+{"actor":"member-8","at":1705836089,"id":"member-8.t39","kind":"post","surface":"general","text":"I moved the draft into the team"}
+{"actor":"member-8","at":1705840089,"id":"member-8.t39.f1","kind":"post","surface":"general","text":"folder so everyone can edit it."}
+{"actor":"lead-1","at":1705992089,"id":"lead-1.r.member-8.39","kind":"post","surface":"general","text":"Thanks for the update, I will take a look this afternoon."}
+{"actor":"lead-1","at":1706061195,"id":"lead-1.t39","kind":"post","surface":"random","text":"Running late."}
+{"actor":"member-8","at":1706176895,"id":"member-8.r.lead-1.39","kind":"post","surface":"random","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-1","at":1728000000,"id":"member-1.back.0","kind":"back","surface":"general"}
+{"actor":"member-1","at":1760400000,"id":"member-1.r.lead-1.38","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-1","at":1760400000,"id":"member-1.r.member-6.37","kind":"post","surface":"general","text":"Got it."}
+{"actor":"member-1","at":1760400000,"id":"member-1.r.member-9.37","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-1","at":1761000000,"depends_on":["plant.handover-owner.d","member-1.back.0"],"id":"plant.handover-owner.q","kind":"post","probe":true,"surface":"direct:member-1","text":"Did I miss anything while I was away?"}
+{"actor":"member-3","at":1762033765,"id":"member-3.t40","kind":"post","surface":"general","text":"Running late."}
+{"actor":"member-1","at":1762045165,"id":"member-1.r.member-3.40","kind":"post","surface":"general","text":"I think it is"}
+{"actor":"member-1","at":1762049165,"id":"member-1.r.member-3.40.f1","kind":"post","surface":"general","text":"in the shared"}
+{"actor":"member-1","at":1762053165,"id":"member-1.r.member-3.40.f2","kind":"post","surface":"general","text":"folder but I"}
+{"actor":"member-1","at":1762057165,"id":"member-1.r.member-3.40.f3","kind":"post","surface":"general","text":"will double check."}
+{"actor":"member-6","at":1763857999,"id":"member-6.t40","kind":"post","surface":"random","text":"On it."}
+{"actor":"lead-1","at":1763869999,"id":"lead-1.r.member-6.40","kind":"post","surface":"random","text":"Good point, I had not thought"}
+{"actor":"lead-1","at":1763873999,"id":"lead-1.r.member-6.40.f1","kind":"post","surface":"random","text":"about it that way before."}
+{"actor":"member-4","at":1763980472,"id":"member-4.t41","kind":"post","surface":"random","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-8","at":1764110412,"id":"member-8.r.member-4.41","kind":"post","surface":"random","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-4","at":1764306909,"id":"member-4.q40","kind":"post","surface":"general","text":"Does anyone have the"}
+{"actor":"member-4","at":1764310909,"id":"member-4.q40.f1","kind":"post","surface":"general","text":"link to the shared"}
+{"actor":"member-4","at":1764314909,"id":"member-4.q40.f2","kind":"post","surface":"general","text":"planning board right now?"}
+{"actor":"member-8","at":1764315809,"id":"member-8.r.member-4.40","kind":"post","surface":"general","text":"That works for me, let me know"}
+{"actor":"member-8","at":1764319809,"id":"member-8.r.member-4.40.f1","kind":"post","surface":"general","text":"if anything changes on your side."}
+{"actor":"lead-1","at":1765425915,"id":"lead-1.q41","kind":"post","surface":"random","text":"Is there a good time tomorrow for a short walkthrough of the checklist?"}
+{"actor":"member-3","at":1766025915,"id":"member-3.r.lead-1.41","kind":"post","surface":"random","text":"Good point, I had not thought"}
+{"actor":"member-3","at":1766029915,"id":"member-3.r.lead-1.41.f1","kind":"post","surface":"random","text":"about it that way before."}
+{"actor":"member-1","at":1768895170,"id":"member-1.t41","kind":"post","surface":"general","text":"I tidied the wiki page for new joiners and fixed the broken links."}
+{"actor":"member-9","at":1768899370,"id":"member-9.r.member-1.41","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-5","at":1769588249,"id":"member-5.q41","kind":"post","surface":"planning","text":"Can somebody share the notes from the last sync with the whole team?"}
+{"actor":"member-3","at":1769607749,"id":"member-3.r.member-5.41","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-9","at":1771545042,"id":"member-9.t40","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-7","at":1771559042,"id":"member-7.r.member-9.40","kind":"post","surface":"random","text":"Same here."}
+{"actor":"member-7","at":1771939558,"id":"member-7.t41","kind":"post","surface":"general","text":"Running late."}
+{"actor":"member-6","at":1771946958,"id":"member-6.r.member-7.41","kind":"post","surface":"general","text":"Thanks!"}
+{"actor":"member-7","at":1772941538,"id":"member-7.t40","kind":"post","surface":"general","text":"The spreadsheet with the weekly"}
+{"actor":"member-7","at":1772945538,"id":"member-7.t40.f1","kind":"post","surface":"general","text":"numbers has a new"}
+{"actor":"member-7","at":1772949538,"id":"member-7.t40.f2","kind":"post","surface":"general","text":"tab for last month."}
+{"actor":"member-1","at":1772952938,"id":"member-1.r.member-7.40","kind":"post","surface":"general","text":"No problem at all, I will send it over in a few minutes."}
+{"actor":"member-8","at":1773840455,"id":"member-8.t40","kind":"post","surface":"planning","text":"Back soon."}
+{"actor":"member-1","at":1773912655,"id":"member-1.r.member-8.40","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-2","at":1776093648,"id":"member-2.t40","kind":"post","surface":"random","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-5","at":1776637048,"id":"member-5.r.member-2.40","kind":"post","surface":"random","text":"Thanks for the update,"}
+{"actor":"member-5","at":1776641048,"id":"member-5.r.member-2.40.f1","kind":"post","surface":"random","text":"I will take a"}
+{"actor":"member-5","at":1776645048,"id":"member-5.r.member-2.40.f2","kind":"post","surface":"random","text":"look this afternoon."}
+{"actor":"member-5","at":1778217272,"id":"member-5.t40","kind":"post","surface":"planning","text":"Sounds good."}
+{"actor":"member-4","at":1778220822,"id":"member-4.r.member-5.40","kind":"post","surface":"planning","text":"I can help with that after my next meeting finishes today."}
+{"actor":"member-6","at":1781224638,"id":"member-6.t41","kind":"post","surface":"planning","text":"The build on my side is green again after the last dependency update."}
+{"actor":"member-7","at":1781674638,"id":"member-7.r.member-6.41","kind":"post","surface":"planning","text":"Let us talk about it at the next sync and decide together."}
+{"actor":"member-9","at":1785179602,"id":"member-9.q41","kind":"post","surface":"planning","text":"Can somebody share the"}
+{"actor":"member-9","at":1785183602,"id":"member-9.q41.f1","kind":"post","surface":"planning","text":"notes from the"}
+{"actor":"member-9","at":1785187602,"id":"member-9.q41.f2","kind":"post","surface":"planning","text":"last sync with"}
+{"actor":"member-9","at":1785191602,"id":"member-9.q41.f3","kind":"post","surface":"planning","text":"the whole team?"}
+{"actor":"member-3","at":1785314602,"id":"member-3.r.member-9.41.w","kind":"post","surface":"general","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-3","at":1785334602,"id":"member-3.r.member-9.41.d","kind":"delete","surface":"general","target":"member-3.r.member-9.41.w"}
+{"actor":"member-3","at":1785349602,"id":"member-3.r.member-9.41","kind":"post","surface":"planning","text":"I think it is in the shared folder but I will double check."}
+{"actor":"member-1","at":1786135899,"id":"member-1.t40","kind":"post","surface":"random","text":"I am going through the open tickets and closing the ones that are done."}
+{"actor":"member-2","at":1786337311,"id":"member-2.q41","kind":"post","surface":"general","text":"Is the second floor printer still out of paper or has it been fixed?"}
+{"actor":"member-7","at":1786487311,"id":"member-7.r.member-2.41","kind":"post","surface":"general","text":"iWll do."}
+{"actor":"member-7","at":1786521389,"id":"member-7.r.member-2.41.e","kind":"edit","surface":"general","target":"member-7.r.member-2.41","text":"Will do."}
+{"actor":"lead-1","at":1787209715,"id":"lead-1.t40","kind":"post","surface":"general","text":"I will be offline for an hour while I set up the new laptop."}
+{"actor":"member-8","at":1787826899,"id":"member-8.r.member-1.40","kind":"post","surface":"random","text":"Not sure."}
+{"actor":"member-6","at":1788171715,"id":"member-6.r.lead-1.40","kind":"post","surface":"general","text":"That works for me, let me know if anything changes on your side."}
+{"actor":"member-3","at":1789716542,"id":"member-3.t41","kind":"post","surface":"general","text":"Back soon."}
+{"actor":"member-7","at":1789789542,"id":"member-7.r.member-3.41","kind":"post","surface":"general","text":"Good point, I had not thought about it that way before."}
+{"actor":"member-8","at":1790452906,"id":"member-8.t41","kind":"post","surface":"random","text":"I tidied the wiki page for new"}
+{"actor":"member-8","at":1790456906,"id":"member-8.t41.f1","kind":"post","surface":"random","text":"joiners and fixed the broken links."}
+{"actor":"member-7","at":1790461906,"id":"member-7.r.member-8.41","kind":"post","surface":"random","text":"Same here."}

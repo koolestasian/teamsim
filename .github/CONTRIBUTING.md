@@ -11,10 +11,12 @@ ADRs in `docs/adr/`; changing one needs a maintainer decision and a new ADR. For
 
 ## Checks
 
-The prototype is Python 3.14, standard library only. Before you open a pull request, run:
+The engine and the prototype use Python 3.12 or later and the standard library only. Before
+you open a pull request, run both suites:
 
 ```sh
 python -I -m unittest discover -s prototypes/teamctx-sim/tests
+python -I -m unittest discover -s tests -t .
 ```
 
 CI runs the same tests on Linux, macOS and Windows, plus a static check of the workflow files.
