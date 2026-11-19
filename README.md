@@ -106,7 +106,10 @@ against it and writes a record and a Markdown and JSON report for each to `teams
 [`careful_bot`](examples/careful_bot.py) tracks who could see what, who decided and what
 replaced what. Neither reads the answer key. On `team-ten`, `naive_bot` repeats the private
 offsite budget and hiring plan to people who should not see them and gives stale answers;
-`careful_bot` passes every check.
+`careful_bot` passes every check. Its cue lists were written against the `team` preset's wording:
+on the `solo` pack it fails two checks, `c.reading-format` and `c.study-slot`, both as `stale`.
+Neither bot implements the `social` operations, so on `social-ten` both get `no_response` on every
+answer check.
 
 The other commands:
 

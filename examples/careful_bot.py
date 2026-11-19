@@ -23,6 +23,10 @@ made while that person was away, keeping only those with a number or a name in t
 
 Secrets. A statement that mentions a password, token or secret, or asks not to be repeated, is
 never stored, and any word of an outgoing text that looks like one is replaced.
+
+Limits. The cue lists above were written against the team preset's wording. On the solo pack the
+bot fails two checks (c.reading-format and c.study-slot, both stale). It does not implement the
+social preset's operations, so on social-ten every answer check gets no_response.
 """
 import json
 import re
