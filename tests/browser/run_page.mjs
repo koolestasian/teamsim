@@ -4,7 +4,7 @@
 //   2. PW_PATH=<path to the playwright package> node tests/browser/run_page.mjs <page url> <screenshot dir>
 //
 // PW_PATH points at an installed `playwright` module folder (it is not a repo dependency).
-// Runs at 1440x900 and 390x844, each in a light and a dark colour scheme, then once more with
+// Runs at 1440x900, 2560x1440 and 390x844, each in a light and a dark colour scheme, then once more with
 // reduced motion. Exits 1 when any assertion fails.
 import { createRequire } from "node:module";
 import { mkdirSync } from "node:fs";
@@ -74,33 +74,82 @@ async function runMode(browser, name, width, height, scheme) {
   page.on("response", (r) => { if (r.status() >= 400) problems.push(r.status() + " " + r.url()); });
   const scored = [];
   page.on("request", (r) => { if (/\/api\/(run|validate)$/.test(new URL(r.url()).pathname)) scored.push(r.url()); });
-  const shot = (label) => page.screenshot({ path: path.join(outDir, tag + "-" + label + ".png") });
+  const shot = async (label) => { await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(120); await page.screenshot({ path: path.join(outDir, tag + "-" + label + ".png") }); };
 
   // Nothing is scored until a button is pressed, whatever the URL asks for.
   await page.goto(base + "?pack=team-ten&subject=naive_bot&run=1&validate=1#controls");
-  await page.waitForSelector("#strip .steps");
+  await page.waitForSelector("#scenario-card .stat-num");
   await page.waitForTimeout(500);
   check(scored.length === 0, "no run or validation on load, even with run=1, validate=1 and #controls");
   check(await page.locator("#run-controls").isVisible(), "Verify tests tab offers a button instead of running");
-  check(!(await bodyText(page)).includes("Every test behaves as expected"), "no verification result before the button is pressed");
+  check(!(await bodyText(page)).includes("Every test catches its flaw and passes the Perfect bot"), "no verification result before the button is pressed");
   await shot("5a-verify-before");
 
   await page.goto(base + "?pack=team-ten&subject=naive_bot#checks");
-  await page.waitForSelector("#strip .steps");
-  const empty = await page.locator("#strip").innerText();
-  check(empty.includes("Choose a scenario") && empty.includes("Team workspace") && empty.includes("Naive bot") && empty.includes("Run test"), "empty state shows three steps with the current choices");
-  check(/14 tests · \d+ questions to the bot · 10 people · 21 days/.test(empty), "empty state counts tests, questions, people and days");
-  const aboutLines = (await page.locator("#about-line").innerText()).split(/\n/).filter(Boolean);
-  check(aboutLines.length === 2 && aboutLines[0].startsWith("Scenario: A 10-person team chat over three weeks") && aboutLines[1].startsWith("Naive bot: Remembers everything"), "description names the scenario and the bot on separate lines");
+  await page.waitForSelector("#scenario-card .stat-num");
+  check((await page.locator("#strip").innerText()).trim() === "" && !(await page.locator("#strip").isVisible()), "no summary or placeholder before a run");
+  const rootPx = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize));
+  const bodyPx = await page.evaluate(() => parseFloat(getComputedStyle(document.body).fontSize));
+  const wantRoot = width >= 2560 ? 20 : 16;
+  check(Math.abs(rootPx - wantRoot) < 0.5 && Math.abs(bodyPx - wantRoot) < 0.5, "root and body font-size are " + wantRoot + "px (" + rootPx.toFixed(2) + ", " + bodyPx.toFixed(2) + ")");
+  const minText = await page.evaluate((root) => {
+    let least = 99;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const el = n.parentElement;
+      if (!n.textContent.trim() || !el.getClientRects().length || getComputedStyle(el).visibility === "hidden") continue;
+      least = Math.min(least, parseFloat(getComputedStyle(el).fontSize));
+    }
+    return least;
+  });
+  check(minText >= 13 - 0.01, "no visible text below 13px (smallest " + minText.toFixed(1) + "px)");
+  const optTexts = await page.locator("#pack option").allInnerTexts();
+  check(optTexts.length === 4 && ["Team workspace", "Demo day planning", "Social feed", "Personal assistant"].every((n) => optTexts.includes(n)), "scenario options show only the name: " + optTexts.join("|"));
+  const botTexts = await page.locator("#subject option").allInnerTexts();
+  check(botTexts.slice(0, 2).join("|") === "Naive bot|Careful bot" && botTexts.every((t) => !/[·:(]/.test(t)), "bot options show only the name: " + botTexts.join("|"));
+  const stats = await page.locator("#scenario-card .stat").evaluateAll((n) => n.map((x) => x.querySelector(".stat-num").textContent + " " + x.querySelector(".stat-label").textContent));
+  check(stats.slice(0, 3).join("|") === "10 people|21 days|14 tests" && /^\d+ questions to the bot$/.test(stats[3]), "scenario card shows 10 people, 21 days, 14 tests: " + stats.join("|"));
+  const chipTexts = await page.locator("#scenario-card .tagchip").allInnerTexts();
+  check(["Changed plans", "Private info", "Secrets", "False claims", "Time away"].every((c) => chipTexts.includes(c)), "Team workspace chips: " + chipTexts.join(", "));
+  check((await page.locator("#scenario-card .card-line").innerText()) === "A 10-person team chats for three weeks.", "scenario card has one short line");
+  check((await page.locator("#bot-card").innerText()).includes("Remembers everything and answers by matching words.") && !(await page.locator("#bot-card .flaw").count()), "bot card names the Naive bot with its line and no flaw chip");
+  const cardNum = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector(".stat-num")).fontSize) / parseFloat(getComputedStyle(document.documentElement).fontSize));
+  check(Math.abs(cardNum - 1.75) < 0.01, "stat numbers are 1.75rem");
+  const layout = await page.evaluate(() => {
+    const a = document.querySelector(".setup").getBoundingClientRect(), b = document.querySelector("main").getBoundingClientRect();
+    const run = document.querySelector("#run").getBoundingClientRect();
+    return { sideBySide: b.left >= a.right - 1 && Math.abs(a.top - b.top) < 4, stacked: b.top >= a.bottom - 1, span: b.right - a.left, runW: run.width, setupW: a.width };
+  });
+  if (width >= 1100) check(layout.sideBySide, "setup panel and results sit side by side");
+  else check(layout.stacked, "setup panel sits above the results");
+  if (width >= 2560) check(layout.span > 1700, "page content is wider than 1700px (" + Math.round(layout.span) + ")");
+  check(Math.abs(layout.runW - layout.setupW) < 2, "Run test fills the setup panel width");
+  check(!(await bodyText(page)).includes("Results appear here after a run") && !/Choose a scenario|Choose a bot|questions to the bot ·/.test(await bodyText(page)), "removed commentary is gone");
+  check((await page.locator("#tab-checks").getAttribute("aria-disabled")) === "true" && (await page.locator("#tab-timeline").getAttribute("aria-selected")) === "true", "Results tab is disabled and Conversation is open before a run");
+  await page.click("#tab-checks", { force: true });
+  check((await page.locator("#tab-timeline").getAttribute("aria-selected")) === "true", "clicking the disabled Results tab does nothing");
   await page.click(".about > summary");
   const about = await page.locator(".about").first().innerText();
   check(about.includes("Keep in mind") && !/reply_median_s|\bpack\b|surface/.test(about), "scenario limits are in plain language");
   await page.click(".about > summary");
-  check((await page.locator("#about-line").innerText()).includes("Remembers everything and answers by matching words"), "description line names the bot");
-  check((await page.locator("#pack option:checked").innerText()) === "Team workspace · 10 people · 21 days", "scenario option reads name, people, days");
   check((await page.locator("#tab-checks").innerText()) === "Results 14", "results tab shows the count");
-  await assertNoIds(page, "the empty Results tab");
+  await assertNoIds(page, "the Conversation tab before a run");
   await shot("1-empty");
+
+  // Switching scenario updates the card.
+  await page.selectOption("#pack", "minimal");
+  await page.waitForFunction(() => document.querySelector("#scenario-card .card-name")?.textContent === "Demo day planning");
+  await page.waitForTimeout(500);
+  const stats2 = await page.locator("#scenario-card .stat").evaluateAll((n) => n.map((x) => x.querySelector(".stat-num").textContent + " " + x.querySelector(".stat-label").textContent));
+  check(stats2[0] === "4 people" && stats2[1] === "1 day", "scenario card updates to 4 people and 1 day: " + stats2.join("|"));
+  await shot("1b-minimal-card");
+  await page.selectOption("#subject", "defect:stale");
+  check((await page.locator("#bot-card").innerText()).includes("Gives old answers.") && (await page.locator("#bot-card .flaw").innerText()) === "Known flaw", "reference bot card has the Known flaw chip and its line");
+  await shot("1c-flaw-card");
+  await page.selectOption("#subject", "naive_bot");
+  await page.selectOption("#pack", "team-ten");
+  await page.waitForFunction(() => document.querySelector("#scenario-card .card-name")?.textContent === "Team workspace");
+  await page.waitForTimeout(500);
 
   // Run: the button changes state without changing width.
   const idleWidth = await page.evaluate(() => document.querySelector("#run").getBoundingClientRect().width);
@@ -128,7 +177,7 @@ async function runMode(browser, name, width, height, scheme) {
   check(headBox.y + headBox.height <= vh, "headline in the first viewport");
 
   const body = await bodyText(page);
-  check(!body.includes(".."), "no '..' in body text");
+  check(!body.includes("..") && !/Results appear here|The same scenario and bot always|tests · \d+ questions/.test(body), "no '..' and none of the removed strings in body text");
   check(!/\b1 (people|persons|days|tests)\b/.test(body), "no '1 people', '1 days' or '1 tests'");
   const words = body.split(/\s+/).filter(Boolean).length;
   check(words < 650, "visible words on the Results tab " + words + " < 650");
@@ -148,12 +197,12 @@ async function runMode(browser, name, width, height, scheme) {
   const why = await page.locator("#evidence .why").innerText();
   check(why.includes("Why it failed") && why.includes("room-2210") && why.includes("room-1180"), "why line names the old and the current room: " + why.replace(/\n/g, " "));
   check(evidence.includes("Expected") && evidence.includes("Bot said") && evidence.includes("Show in conversation"), "detail has Expected, Bot said and Show in conversation");
-  check(evidence.includes("Old answer") || width < 760, "chip says 'Old answer'");
+  check(evidence.includes("Old answer") || width < 1280, "chip says 'Old answer'");
   const evidenceAfterRow = await page.evaluate(() => {
     const prev = document.querySelector("#evidence").previousElementSibling;
     return !!prev && prev.matches(".result-row[aria-pressed=true]");
   });
-  check(evidenceAfterRow === (width < 760), width < 760 ? "detail opens under the tapped row" : "detail stays in the right column");
+  check(evidenceAfterRow === (width < 1280), width < 1280 ? "detail opens under the tapped row" : "detail stays in the right column");
   check((await page.locator("#timeline .tag", { hasText: /^bot$/i }).count()) === 0, "bot rows do not repeat 'bot' as a tag");
   await assertNoIds(page, "the venue room detail");
   await shot("3-venue-room");
@@ -209,8 +258,8 @@ async function runMode(browser, name, width, height, scheme) {
   await page.click("#run-controls");
   const progress = await page.evaluate(() => ({ on: document.querySelector("#progress").classList.contains("on"), label: document.querySelector("#run-controls").textContent }));
   check(progress.on && progress.label === "Verifying…", "while verifying: progress bar on and button reads Verifying…");
-  await page.waitForFunction(() => document.body.innerText.includes("Every test behaves as expected."), null, { timeout: 60000 });
-  check(true, "Verify tests tab shows 'Every test behaves as expected.'");
+  await page.waitForFunction(() => document.body.innerText.includes("Every test catches its flaw and passes the Perfect bot."), null, { timeout: 60000 });
+  check(true, "Verify tests tab shows 'Every test catches its flaw and passes the Perfect bot.'");
   const heads = await page.locator("#matrix thead th").allInnerTexts();
   check(heads.join("|") === "Test|Silent|Perfect|Out of date|Gullible|Leaky|Echo|Forgetful|DMs only", "matrix columns use reference bot names: " + heads.join("|"));
   check((await page.locator("#matrix td.caught").count()) > 0 && (await page.locator("#matrix td.caught").first().getAttribute("title")).length > 0, "caught cells carry the reason as a title");
@@ -221,7 +270,7 @@ async function runMode(browser, name, width, height, scheme) {
   await page.waitForTimeout(500);
   await shot("5-verify");
   await page.reload();
-  await page.waitForSelector("#strip .steps");
+  await page.waitForSelector("#scenario-card .stat-num");
   check((await page.locator("#tab-controls").getAttribute("aria-selected")) === "true", "reload keeps the selected tab");
   const before = scored.length;
   await page.waitForTimeout(500);
@@ -236,7 +285,6 @@ async function runMode(browser, name, width, height, scheme) {
   await shot("6-people");
 
   // Careful bot, run details, copy.
-  await page.click("#tab-checks");
   await page.selectOption("#subject", "careful_bot");
   await page.click("#run");
   await idle(page);
@@ -248,7 +296,8 @@ async function runMode(browser, name, width, height, scheme) {
   check((await page.locator("#run-details").isVisible()), "Run details disclosure appears after a run");
   await page.click("#run-details summary");
   const details = await page.locator("#run-details").innerText();
-  check(details.includes("Run ID") && details.includes("The same scenario and bot always produce this ID.") && details.includes("Test id") && details.includes("Record entries") && details.includes("c.harness"), "Run details holds the ids");
+  check(details.includes("Run ID") && details.includes("Test id") && details.includes("Record entries") && details.includes("c.harness"), "Run details holds the ids");
+  check((await page.locator("#run-details .mono").first().getAttribute("title")) === "The same scenario and bot always produce this ID." && !details.includes("always produce this ID"), "Run ID carries the explanation as a tooltip only");
   await page.click("#run-details .text-button");
   await page.waitForFunction(() => document.querySelector("#run-details .text-button")?.textContent.includes("Copied"), null, { timeout: 3000 }).then(
     () => check(true, "Copy button reads Copied"), () => check(false, "Copy button reads Copied"));
@@ -278,9 +327,10 @@ async function runMode(browser, name, width, height, scheme) {
   check(opts.includes("All channels") && opts.includes("#leads · Ana, Di") && opts.includes("DM with Bo"), "channel select: " + opts.join(" / "));
   check(await page.locator("#timeline .event-meta strong", { hasText: "Ana" }).count() > 0, "authors are named 'Ana', not ids");
   await assertNoIds(page, "the minimal Conversation tab");
-  await page.click("#tab-checks");
-  await assertNoIds(page, "the minimal Results tab");
+  check((await page.locator("#tab-checks").getAttribute("aria-disabled")) === "true", "minimal: Results tab is still disabled before a run");
   await page.click("#run");
+  await page.waitForFunction(() => document.querySelector("#tab-checks").getAttribute("aria-selected") === "true", null, { timeout: 8000 });
+  check(true, "the page switches to Results after the first run");
   await page.waitForFunction(() => document.querySelector(".headline")?.innerText.includes("tests failed"), null, { timeout: 8000 });
   await page.waitForTimeout(500);
   await assertNoIds(page, "the minimal Results tab after a run");
@@ -295,7 +345,7 @@ async function runReduced(browser) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: "light", reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto(base + "?pack=team-ten&subject=naive_bot#checks");
-  await page.waitForSelector("#strip .steps");
+  await page.waitForSelector("#scenario-card .stat-num");
   await page.click("#run");
   await page.waitForFunction(() => document.querySelector(".headline")?.innerText === "8 of 14 tests failed", null, { timeout: 5000 });
   check(true, "reduced motion: the headline shows the final number at once");
@@ -315,7 +365,7 @@ async function runReduced(browser) {
 }
 
 const browser = await chromium.launch({ channel: "msedge" });
-for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]]) {
+for (const [name, width, height] of [["desktop", 1440, 900], ["wide", 2560, 1440], ["phone", 390, 844]]) {
   for (const scheme of ["light", "dark"]) await runMode(browser, name, width, height, scheme);
 }
 await runReduced(browser);
@@ -326,7 +376,7 @@ await runReduced(browser);
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto(base + "?pack=team-ten&subject=naive_bot#checks");
-  await page.waitForSelector("#strip .steps");
+  await page.waitForSelector("#scenario-card .stat-num");
   const seen = [];
   await page.exposeFunction("sample", (v) => seen.push(v));
   await page.evaluate(() => {

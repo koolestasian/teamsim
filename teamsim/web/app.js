@@ -10,13 +10,17 @@ const CONTROL_ORDER = ["null", "oracle"];
 
 const SCENARIOS = {
   minimal: ["Demo day planning",
-    "Four people plan a demo day: a date change, a private budget, a secret and a false claim."],
+    "Four people plan a demo day: a date change, a private budget, a secret and a false claim.",
+    "Four people plan a demo day in one session."],
   "team-ten": ["Team workspace",
-    "A 10-person team chat over three weeks: plans change, one channel is private, a secret is pasted, someone goes away."],
+    "A 10-person team chat over three weeks: plans change, one channel is private, a secret is pasted, someone goes away.",
+    "A 10-person team chats for three weeks."],
   "social-ten": ["Social feed",
-    "Ten people on a social feed: a friends-only post, a block and a deleted post."],
+    "Ten people on a social feed: a friends-only post, a block and a deleted post.",
+    "Ten people share posts on a social feed."],
   solo: ["Personal assistant",
-    "One person over three weeks: changes of mind, a pasted document with a hidden instruction, a week away."],
+    "One person over three weeks: changes of mind, a pasted document with a hidden instruction, a week away.",
+    "One person talks to an assistant for three weeks."],
 };
 // What a user should keep in mind when reading results. The scenario's own technical notes
 // stay available under "Technical notes".
@@ -37,16 +41,16 @@ const SCENARIO_LIMITS = {
 };
 
 const BOTS = {
-  naive_bot: ["Naive bot", "Remembers everything and answers by matching words; ignores who may see what."],
-  careful_bot: ["Careful bot", "Gives the latest answer and only to people allowed to see it."],
+  naive_bot: ["Naive bot", "Remembers everything and answers by matching words."],
+  careful_bot: ["Careful bot", "Tracks the latest answer and who may see it."],
   null: ["Silent", "Never replies."],
-  oracle: ["Perfect", "Always gives the right answer."],
-  "defect:stale": ["Out of date", "Gives the first answer, not the latest."],
-  "defect:gullible": ["Gullible", "Believes claims from anyone."],
-  "defect:leaky": ["Leaky", "Shares private facts."],
-  "defect:echo": ["Echo", "Repeats secrets back."],
-  "defect:amnesiac": ["Forgetful", "Leaves out what someone missed while away."],
-  "defect:deaf": ["DMs only", "Ignores everything except direct messages."],
+  oracle: ["Perfect", "Always right."],
+  "defect:stale": ["Out of date", "Gives old answers."],
+  "defect:gullible": ["Gullible", "Believes anyone."],
+  "defect:leaky": ["Leaky", "Shares private info."],
+  "defect:echo": ["Echo", "Repeats secrets."],
+  "defect:amnesiac": ["Forgetful", "Skips what you missed."],
+  "defect:deaf": ["DMs only", "Ignores channels."],
 };
 const TEST_TYPES = {
   answer: "latest answer", withhold: "kept from outsiders", no_leak: "stays private",
@@ -82,6 +86,7 @@ const when = (t) => (t == null ? "" : "Day " + dayOf(t) + ", " + clock(t));
 const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scenarioName = (pack) => (SCENARIOS[pack.name] ? SCENARIOS[pack.name][0] : String(pack.title || pack.name).split(":")[0]);
+const scenarioLine = (pack) => (SCENARIOS[pack.name] ? SCENARIOS[pack.name][2] : String(pack.title || "").split(":")[0]);
 const scenarioAbout = (pack) => (SCENARIOS[pack.name] ? SCENARIOS[pack.name][1] : String(pack.title || ""));
 const botName = (id) => (BOTS[id] ? BOTS[id][0] : cap(humanize(id)));
 const botAbout = (id) => (BOTS[id] ? BOTS[id][1] : "");
@@ -92,7 +97,7 @@ const $ = (id) => document.getElementById(id);
 const state = {
   packs: [], subjects: [], pack: null, run: null, rows: [], hit: new Set(), digests: {},
   busy: false, tab: "checks", filter: "key", limit: PAGE, selected: null, matrices: {}, matrixBusy: false,
-  catchKeys: {}, ready: false,
+  catchKeys: {}, ready: false, card: null,
 };
 
 function el(tag, props, ...kids) {
@@ -335,8 +340,10 @@ function placeIndicator(animate) {
 
 function showTab(name, keepHash) {
   if (!TABS.includes(name)) name = "checks";
+  if (name === "checks" && !state.run) name = "timeline";
   const changed = name !== state.tab;
   state.tab = name;
+  $("tab-checks").setAttribute("aria-disabled", state.run ? "false" : "true");
   for (const t of TABS) {
     const on = t === name;
     $("tab-" + t).setAttribute("aria-selected", on ? "true" : "false");
@@ -375,17 +382,6 @@ function renderStrip() {
   placeIndicator(false);
   if (!run) {
     $("live").textContent = "";
-    const questions = pack.events.filter((e) => e.probe).length;
-    const step = (n, label, sub) => el("li", { class: "step" }, el("span", { class: "num", text: String(n) }),
-      el("span", null, el("span", { class: "step-label", text: label }),
-        sub ? el("span", { class: "step-sub", text: sub }) : null));
-    strip.append(
-      el("ol", { class: "steps" },
-        step(1, "Choose a scenario", scenarioName(pack)),
-        step(2, "Choose a bot", botName($("subject").value)),
-        step(3, "Run test")),
-      el("p", { class: "muted small facts", text: [plural(pack.checks.length, "test"),
-        plural(questions, "question") + " to the bot", people(summary.users), plural(summary.days, "day")].join(" · ") }));
     return;
   }
   const checks = run.report.checks;
@@ -442,7 +438,8 @@ async function copyDigest(button, text) {
 
 // --- results tab ----------------------------------------------------------------------------------
 
-const NARROW = window.matchMedia("(max-width: 759px)");
+const NARROW = window.matchMedia("(max-width: 1279px)");
+const STACKED = window.matchMedia("(max-width: 1099px)");
 const rowFor = (id) => [...$("check-list").querySelectorAll(".result-row")].find((r) => r.dataset.check === id);
 
 // On a phone the detail opens directly under the selected row; on wider screens it sits in the
@@ -468,14 +465,8 @@ function placeEvidence(animate) {
 
 function renderChecks() {
   const run = state.run;
-  $("checks-empty").hidden = !!run;
   $("result").hidden = !run;
-  if (!run) {
-    const box = $("checks-empty");
-    clear(box);
-    box.append(el("p", { text: "Results appear here after a run." }));
-    return;
-  }
+  if (!run) return;
   const groups = [[], [], []];
   for (const v of run.report.checks) groups[groupOf(v)].push(describeTest(v));
   const labels = ["Failed", "Passed", "Not scored"];
@@ -730,7 +721,7 @@ function renderMatrix(pack, data, reveal) {
   const mism = $("mismatches");
   clear(mism);
   for (const line of data.problems) mism.append(el("li", { class: "fail", text: problemText(pack, line) }));
-  if (!data.problems.length) mism.append(el("li", { class: "pass", text: "Every test behaves as expected." }));
+  if (!data.problems.length) mism.append(el("li", { class: "pass", text: "Every test catches its flaw and passes the Perfect bot." }));
 }
 
 function setVerifyButton(busy) {
@@ -746,7 +737,7 @@ function showControls() {
   const pack = state.pack;
   if (!pack || state.matrixBusy) return;
   const cached = state.matrices[pack.name];
-  $("matrix-note").textContent = "Runs 8 reference bots with known flaws. A test is trustworthy if it catches the flaw it is meant to catch and passes the Perfect bot.";
+  $("matrix-note").textContent = "Runs 8 reference bots with known flaws.";
   $("run-controls").hidden = !!cached;
   if (cached) { renderMatrix(pack, cached, false); return; }
   $("matrix-wrap").hidden = true;
@@ -786,8 +777,7 @@ function renderDetails() {
   const copy = el("button", { type: "button", class: "text-button", text: "Copy" });
   copy.addEventListener("click", () => copyDigest(copy, run.digest));
   box.append(
-    el("p", { class: "id-line" }, el("span", { class: "k", text: "Run ID" }), el("span", { class: "mono", text: run.digest }), copy),
-    el("p", { text: "The same scenario and bot always produce this ID." }),
+    el("p", { class: "id-line" }, el("span", { class: "k", text: "Run ID" }), el("span", { class: "mono", title: "The same scenario and bot always produce this ID.", text: run.digest }), copy),
     el("p", { class: "id-line" }, el("span", { class: "k", text: "Scenario" }), el("span", { class: "mono", text: state.pack.name })),
     el("p", { class: "id-line" }, el("span", { class: "k", text: "Bot" }), el("span", { class: "mono", text: state.runSubject })));
   const table = el("table", { class: "ids" });
@@ -802,25 +792,79 @@ function renderDetails() {
 
 // --- actions ---------------------------------------------------------------------------------------------------
 
-function describe(animate) {
-  const pack = state.packs.find((p) => p.name === $("pack").value);
+function packChips(pack) {
+  const kinds = new Set(pack.checks.map((c) => c.kind));
+  const out = [];
+  if (pack.facts.some((f) => f.supersedes)) out.push("Changed plans");
+  if (kinds.has("withhold") || kinds.has("no_leak")) out.push("Private info");
+  if (kinds.has("no_echo")) out.push("Secrets");
+  if (pack.facts.some((f) => f.kind === "claim")) out.push("False claims");
+  if (kinds.has("catch_up") || pack.events.some((e) => e.kind === "away")) out.push("Time away");
+  return out;
+}
+
+function tween(node, from, to, animate) {
+  if (!animate || reduced() || from === to) { node.textContent = String(to); return; }
+  const start = performance.now(), dur = 320;
+  node.textContent = String(from);
+  const tick = (now) => {
+    const p = Math.min(1, (now - start) / dur);
+    node.textContent = String(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  setTimeout(() => { node.textContent = String(to); }, dur + 120);
+}
+
+// The scenario card needs the loaded scenario, so it is drawn when loadPack finishes.
+function renderScenarioCard(animate) {
+  const pack = state.pack, summary = state.packs.find((p) => p.name === pack.name), box = $("scenario-card");
+  const questions = pack.events.filter((e) => e.probe).length;
+  const nums = [summary.users, summary.days, pack.checks.length, questions];
+  const labels = [["person", "people"], ["day", "days"], ["test", "tests"], ["question to the bot", "questions to the bot"]];
+  const prev = (state.card && state.card.nums) || [0, 0, 0, 0];
+  const body = el("div", { class: "card-body" }, el("h2", { class: "card-name", text: scenarioName(summary) }),
+    el("p", { class: "card-line", text: scenarioLine(summary) }));
+  const grid = el("div", { class: "stats" });
+  nums.forEach((n, i) => {
+    const num = el("span", { class: "stat-num", text: String(n) });
+    tween(num, prev[i], n, animate);
+    grid.append(el("div", { class: "stat" }, num, el("span", { class: "stat-label", text: labels[i][n === 1 ? 0 : 1] })));
+  });
+  body.append(grid);
+  const chips = packChips(pack);
+  if (chips.length) {
+    const row = el("div", { class: "chips" });
+    chips.forEach((c, i) => { const chip = el("span", { class: "tagchip", text: c }); chip.style.setProperty("--i", String(i)); row.append(chip); });
+    body.append(el("div", { class: "tests-for" }, el("span", { text: "Tests for" }), row));
+  }
+  box.replaceChildren(body);
+  if (animate && !reduced()) restart(body, "fade");
+  state.card = { nums };
+}
+
+function renderBotCard(animate) {
   const bot = $("subject").value;
-  const node = $("about-line");
-  node.replaceChildren(
-    el("span", { class: "line" }, el("strong", { text: "Scenario: " }), pack ? scenarioAbout(pack) : ""),
-    el("span", { class: "line" }, el("strong", { text: (BOTS[bot] ? BOTS[bot][0] : "Bot") + ": " }), botAbout(bot)));
-  if (animate && !reduced()) restart(node, "fade");
+  const head = el("div", { class: "bot-head" }, el("h2", { class: "card-name", text: botName(bot) }));
+  if (bot !== "naive_bot" && bot !== "careful_bot" && bot !== "oracle") head.append(el("span", { class: "flaw", text: "Known flaw" }));
+  const body = el("div", { class: "card-body" }, head, el("p", { class: "card-line", text: botAbout(bot) }));
+  $("bot-card").replaceChildren(body);
+  if (animate && !reduced()) restart(body, "fade");
 }
 
 async function loadPack(name) {
   setStatus("Loading scenario…");
   state.pack = index(await api("/api/pack?name=" + encodeURIComponent(name)));
+  const animateCard = state.ready;
   state.run = null;
   state.hit = new Set();
   state.limit = PAGE;
   state.rows = buildRows(state.pack, null);
   renderStrip();
   renderChecks();
+  renderScenarioCard(animateCard);
+  if (state.tab === "checks") showTab("timeline");
+  else $("tab-checks").setAttribute("aria-disabled", "true");
   renderPlaces(state.pack);
   renderUsers(state.pack);
   renderTimeline(false, null);
@@ -837,6 +881,7 @@ async function doRun() {
   try {
     if (!state.pack || state.pack.name !== name) await loadPack(name);
     const run = await api("/api/run", { pack: name, subject });
+    const firstRun = !state.run;
     const key = name + "|" + subject;
     state.previous = state.digests[key] || null;
     state.digests[key] = run.digest;
@@ -849,6 +894,10 @@ async function doRun() {
     renderChecks();
     renderTimeline(false, null);
     renderDetails();
+    if (firstRun) showTab("checks");
+    else $("tab-checks").setAttribute("aria-disabled", "false");
+    // When the setup panel stacks above the results, bring the result into view.
+    if (STACKED.matches) $("strip").scrollIntoView({ block: "start" });
   } catch (error) {
     setStatus(error.message, true);
   } finally {
@@ -857,15 +906,16 @@ async function doRun() {
 }
 
 function onTabKey(ev) {
-  const at = TABS.indexOf(state.tab);
+  const enabled = TABS.filter((t) => t !== "checks" || state.run);
+  const at = enabled.indexOf(state.tab);
   let next = null;
   if (ev.key === "ArrowRight") next = at + 1;
   else if (ev.key === "ArrowLeft") next = at - 1;
   else if (ev.key === "Home") next = 0;
-  else if (ev.key === "End") next = TABS.length - 1;
+  else if (ev.key === "End") next = enabled.length - 1;
   if (next == null) return;
   ev.preventDefault();
-  const name = TABS[(next + TABS.length) % TABS.length];
+  const name = enabled[(next + enabled.length) % enabled.length];
   showTab(name);
   $("tab-" + name).focus();
 }
@@ -896,7 +946,7 @@ async function start() {
     return;
   }
   for (const p of state.packs) {
-    $("pack").append(el("option", { value: p.name, text: scenarioName(p) + " · " + people(p.users) + " · " + plural(p.days, "day") }));
+    $("pack").append(el("option", { value: p.name, text: scenarioName(p) }));
   }
   const bots = state.subjects.filter((s) => s === "naive_bot" || s === "careful_bot");
   const others = state.subjects.filter((s) => !bots.includes(s));
@@ -906,11 +956,11 @@ async function start() {
   $("subject").append(group);
   if (state.packs.some((p) => p.name === params.get("pack"))) $("pack").value = params.get("pack");
   if (state.subjects.includes(params.get("subject"))) $("subject").value = params.get("subject");
-  describe(false);
+  renderBotCard(false);
 
   $("controls").addEventListener("submit", (ev) => { ev.preventDefault(); if (!state.busy && !state.matrixBusy) doRun(); });
-  $("pack").addEventListener("change", () => { describe(true); loadPack($("pack").value).catch((e) => setStatus(e.message, true)); });
-  $("subject").addEventListener("change", () => { describe(true); if (!state.run && state.pack) renderStrip(); });
+  $("pack").addEventListener("change", () => { loadPack($("pack").value).catch((e) => setStatus(e.message, true)); });
+  $("subject").addEventListener("change", () => renderBotCard(true));
   $("place").addEventListener("change", () => { state.limit = PAGE; renderTimeline(false, null); });
   $("seg").addEventListener("click", (ev) => {
     const b = ev.target.closest("button");
@@ -924,7 +974,7 @@ async function start() {
   $("check-list").addEventListener("keydown", onListKey);
   $("tabs").addEventListener("click", (ev) => {
     const b = ev.target.closest("button");
-    if (b) showTab(b.dataset.tab);
+    if (b && b.getAttribute("aria-disabled") !== "true") showTab(b.dataset.tab);
   });
   $("tabs").addEventListener("keydown", onTabKey);
   window.addEventListener("hashchange", () => showTab(location.hash.slice(1), true));

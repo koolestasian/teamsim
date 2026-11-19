@@ -9,25 +9,27 @@
 </head>
 <body>
 <header class="app-header">
-  <div class="inner">
-    <div class="head-row">
-      <div class="brand">teamsim</div>
-      <form id="controls" autocomplete="off">
-        <label class="field"><span>Scenario</span><select id="pack"></select></label>
-        <label class="field"><span>Bot</span><select id="subject"></select></label>
-        <button type="submit" id="run" class="primary"><span class="spin" aria-hidden="true"></span><span id="run-label">Run test</span></button>
-      </form>
-    </div>
-    <p id="about-line" class="muted small"></p>
-    <p id="status" role="status"></p>
-  </div>
+  <div class="inner"><div class="brand">teamsim</div></div>
 </header>
+<div class="page">
+<aside class="setup">
+  <form id="controls" autocomplete="off">
+    <label class="field" for="pack"><span>Scenario</span></label>
+    <select id="pack"></select>
+    <div id="scenario-card" class="card scenario-card"></div>
+    <label class="field" for="subject"><span>Bot</span></label>
+    <select id="subject"></select>
+    <div id="bot-card" class="card bot-card"></div>
+    <button type="submit" id="run" class="primary"><span class="spin" aria-hidden="true"></span><span id="run-label">Run test</span></button>
+  </form>
+  <p id="status" role="status"></p>
+</aside>
 <main>
   <div id="strip" class="strip"></div>
   <p id="live" class="sr-only" role="status" aria-live="polite"></p>
   <div class="tabs-wrap">
     <div class="tabs" role="tablist" id="tabs">
-      <button type="button" role="tab" id="tab-checks" data-tab="checks" aria-controls="panel-checks"></button>
+      <button type="button" role="tab" id="tab-checks" data-tab="checks" aria-controls="panel-checks" aria-disabled="true"></button>
       <button type="button" role="tab" id="tab-timeline" data-tab="timeline" aria-controls="panel-timeline">Conversation</button>
       <button type="button" role="tab" id="tab-users" data-tab="users" aria-controls="panel-users">People</button>
       <button type="button" role="tab" id="tab-controls" data-tab="controls" aria-controls="panel-controls">Verify tests</button>
@@ -36,7 +38,6 @@
     <div class="progress" id="progress" aria-hidden="true"></div>
   </div>
   <section id="panel-checks" role="tabpanel" aria-labelledby="tab-checks" hidden>
-    <div id="checks-empty" class="empty" hidden></div>
     <div id="result" class="result-layout" hidden>
       <div id="check-list" class="check-results"></div>
       <div id="evidence" class="evidence"></div>
@@ -81,6 +82,7 @@
     </details>
   </div>
 </main>
+</div>
 <script src="/app.js"></script>
 </body>
 </html>
