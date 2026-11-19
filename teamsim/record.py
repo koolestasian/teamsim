@@ -19,8 +19,11 @@ platform. Timings go to a separate ``timing.jsonl`` and never enter the digest.
 Codes of ``RecordError``: ``empty``, ``bom``, ``carriage_return``, ``not_utf8``,
 ``blank_line``, ``missing_newline``, ``not_canonical``, ``header_not_first``,
 ``invalid_line``, ``entry_after_verdict``, ``verdict_after_digest``,
-``after_digest``, ``missing_digest``, ``bad_digest``, ``digest_mismatch`` and
-``pack_mismatch`` (replay against another pack).
+``after_digest``, ``missing_digest``, ``bad_digest``, ``digest_mismatch``,
+``bad_numbering`` (an entry whose ``n`` is not its position, counting from 1),
+``unsupported_format`` (a header ``format`` other than ``RECORD_FORMAT``; a
+header ``subject`` that is not a bare ``builtin`` or ``command`` name is an
+``invalid_line``) and ``pack_mismatch`` (replay against another pack).
 
 Imports are the standard library and the core modules only. Nothing here reads a
 clock or a random source. ``engine`` and ``checks`` are imported inside ``replay``.
@@ -212,6 +215,14 @@ def read(path) -> RunResult:
                 head = RecordHeader.from_obj(obj)
             except ModelError as error:
                 raise RecordError("invalid_line", number, str(error)) from None
+            if head.format != RECORD_FORMAT:
+                raise RecordError(
+                    "unsupported_format", number, f"record format {head.format} is not supported"
+                )
+            try:
+                _subject(head.subject)
+            except ValueError as error:
+                raise RecordError("invalid_line", number, str(error)) from None
             objs.append(obj)
             stage = "entries"
             continue
@@ -239,9 +250,14 @@ def read(path) -> RunResult:
             if stage == "verdicts":
                 raise RecordError("entry_after_verdict", number, "a log entry follows a verdict")
             try:
-                entries.append(entry_from_obj(obj))
+                entry = entry_from_obj(obj)
             except ModelError as error:
                 raise RecordError("invalid_line", number, str(error)) from None
+            if entry.n != len(entries) + 1:
+                raise RecordError(
+                    "bad_numbering", number, f"entry number {entry.n}, expected {len(entries) + 1}"
+                )
+            entries.append(entry)
         else:
             raise RecordError("invalid_line", number, f"line type {kind!r} is not allowed here")
         objs.append(obj)

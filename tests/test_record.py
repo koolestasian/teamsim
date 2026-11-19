@@ -281,6 +281,42 @@ class Rejections(Files):
         lines[2] = b'{"code":"bogus","n":1,"t_ms":0,"type":"note"}'
         self.fails(self.join(lines), "invalid_line", 3)
 
+    def resealed(self, change):
+        """The golden lines after ``change(objs)``, with the digest recomputed."""
+        objs = [canon.parse(line) for line in self.lines()]
+        change(objs)
+        objs[-1]["digest"] = record.digest(objs[:-1])
+        return self.join([canon.canon(o) for o in objs])
+
+    def test_renumbered_entries_are_rejected_even_with_a_valid_digest(self):
+        def renumber(objs):
+            for o in objs:
+                if o.get("type") in ("delivery", "observation", "note"):
+                    o["n"] += 100
+
+        self.fails(self.resealed(renumber), "bad_numbering", 2)
+
+    def test_a_gap_in_the_numbering_is_rejected(self):
+        def skip(objs):
+            objs[3]["n"] += 1
+
+        self.fails(self.resealed(skip), "bad_numbering", 4)
+
+    def test_an_unsupported_format_is_rejected(self):
+        for value in (2, 0, 999):
+            def change(objs, value=value):
+                objs[0]["format"] = value
+
+            self.fails(self.resealed(change), "unsupported_format", 1)
+
+    def test_a_header_subject_with_a_path_or_arguments_is_rejected(self):
+        for subject in ({"command": "/home/user/bot --token=abc"}, {"command": "a b"},
+                        {"builtin": "x", "command": "y"}, {"other": "x"}):
+            def change(objs, subject=subject):
+                objs[0]["subject"] = subject
+
+            self.fails(self.resealed(change), "invalid_line", 1)
+
 
 # --- replay ------------------------------------------------------------------
 
