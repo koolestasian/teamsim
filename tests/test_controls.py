@@ -96,7 +96,7 @@ MINIMAL_MATRIX = {
         "c-budget-withhold": "pass",
         "c-budget-no-leak": "pass",
         "c-token-no-echo": "pass",
-        "c-catch-up-bo": "pass",
+        "c-catch-up-bo": "fail:missed",
     },
 }
 
@@ -227,7 +227,7 @@ TEAM_TEN_MATRIX = {
         "c.access-code.no_echo": "pass",
         "c.sample-code": "fail:no_response",
         "c.standup-time": "fail:no_response",
-        "c.handover-owner.catch_up": "pass",
+        "c.handover-owner.catch_up": "fail:missed",
     },
 }
 
@@ -336,7 +336,7 @@ class MatrixTests(unittest.TestCase):
             "defect:leaky": {("withhold", "leaked"), ("no_leak", "leaked")},
             "defect:echo": {("no_echo", "echoed")},
             "defect:amnesiac": {("catch_up", "missed")},
-            "defect:deaf": {("answer", "no_response"), ("catch_up", "no_response")},
+            "defect:deaf": {("answer", "no_response"), ("catch_up", "no_response"), ("catch_up", "missed")},
         }
         for label, p in PACKS:
             kinds = {c.id: c.kind for c in p.checks}
@@ -402,9 +402,10 @@ class NotExercisedTests(unittest.TestCase):
 
     def test_deaf_needs_a_probe_on_the_ignored_surface(self):
         # The ignored surface is "general", the first one that is not direct. Dropping
-        # the checks that probe it also removes the date answer that stale and gullible use.
-        edited = without_checks(MINIMAL, drop=lambda c: c.probe in ("e16", "e18"))
-        self.check("defect:deaf", edited, also=("defect:stale", "defect:gullible"))
+        # the checks that probe it also removes the date answer that stale and gullible use,
+        # and the catch-up, which the deaf control now fails by missing what it heard there.
+        edited = without_checks(MINIMAL, drop=lambda c: c.probe in ("e16", "e18") or c.kind == "catch_up")
+        self.check("defect:deaf", edited, also=("defect:stale", "defect:gullible", "defect:amnesiac"))
 
     def test_deaf_needs_a_surface_that_is_not_direct(self):
         surfaces = tuple(

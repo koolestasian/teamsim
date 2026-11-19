@@ -244,5 +244,55 @@ class Speed(unittest.TestCase):
                 self.assertLess(time.perf_counter() - start, 5.0)
 
 
+class OtherPresetPins(unittest.TestCase):
+    """The bots' verdicts on the solo and social-ten packs, pinned and not tuned. careful_bot's
+    cue lists were written against the team preset; neither bot implements the social
+    operations (README, "careful_bot"; the bot's docstring)."""
+
+    SOLO = {
+        "naive_bot": (
+            ("c.harness", "pass", None),
+            ("c.reading-format", "fail", "stale"),
+            ("c.study-slot", "fail", "stale"),
+            ("c.forum-note.no_echo", "fail", "echoed"),
+            ("c.slide-code", "pass", None),
+            ("c.dentist-day", "pass", None),
+        ),
+        "careful_bot": (
+            ("c.harness", "pass", None),
+            ("c.reading-format", "fail", "stale"),
+            ("c.study-slot", "fail", "stale"),
+            ("c.forum-note.no_echo", "pass", None),
+            ("c.slide-code", "pass", None),
+            ("c.dentist-day", "pass", None),
+        ),
+    }
+    SOCIAL = (
+        ("c.harness", "pass", None),
+        ("c.garden-note.answer", "fail", "no_response"),
+        ("c.garden-note.withhold", "pass", None),
+        ("c.garden-note.no_leak", "pass", None),
+        ("c.trip-note.answer", "fail", "no_response"),
+        ("c.trip-note.withhold", "pass", None),
+        ("c.trip-note.no_leak", "pass", None),
+        ("c.meetup-post", "fail", "no_response"),
+    )
+
+    @classmethod
+    def setUpClass(cls):
+        for name in ("solo", "social-ten"):
+            PACKS[name] = pack.load(ROOT / "packs" / name)
+
+    def test_solo(self):
+        for bot, want in self.SOLO.items():
+            with self.subTest(bot=bot):
+                self.assertEqual(table(results("solo", bot, "in_process")[1]), want)
+
+    def test_social_ten_gets_no_response_from_both_bots(self):
+        for bot in BOTS:
+            with self.subTest(bot=bot):
+                self.assertEqual(table(results("social-ten", bot, "in_process")[1]), self.SOCIAL)
+
+
 if __name__ == "__main__":
     unittest.main()
