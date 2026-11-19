@@ -17,7 +17,7 @@ DOC = ROOT / "docs" / "spec" / "population-format.md"
 
 # Pinned: the hash of packs/team-ten. A change to the generator, the preset or the
 # population changes it on purpose, never by accident.
-TEAM_TEN_HASH = "afd80b27536a354bf5ba67171e2b0c64f8162287d5871c5c5f767e0fec8814bd"
+TEAM_TEN_HASH = "427c2f6e273ea8bb119ae94f8a738ee9a83d4f3322348a59eaada2eeb99a4497"
 
 BASE = {
     "format": 1,

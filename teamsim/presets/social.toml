@@ -14,7 +14,7 @@ limits = [
   "The operations (post, follow, block, delete_post, read_feed) and their arguments are defined by this preset, not by any product. A product under test has to map them to its own actions.",
   "An audience in a pack is an explicit list of users, so a friends-only or followers-only post names who may read it. A rule such as everyone except one user cannot be written.",
   "A deleted post is scored as a post replaced by a later one: the feed must show the later post and not the deleted one. A feed that correctly shows nothing cannot be scored in this version.",
-  "Nobody replies to anyone, so reply_median_s has no effect. Split, typo and wrong-place habits change message text, not operation arguments, so they have none either.",
+  "Nobody replies to anyone, so reply_median_s has no effect. Split, typo and wrong-place habits change message text, not operation arguments, so they have none either. probe_pct has no effect either: a feed read is not a question with a planted answer.",
   "Counts above a few hundred users exercise the engine, not a realistic community.",
 ]
 

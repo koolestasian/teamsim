@@ -48,6 +48,7 @@ MINUTE = 60_000
 SPAN = 120_000
 MAX_USERS = 1000
 MAX_DAYS = 365
+SOLO_MIN_DAYS = 14  # the solo preset's smallest population (population format, section 5)
 _DEFAULT_WINDOW = 9 * HOUR  # the working window turns are scheduled in (09:00 to 18:00)
 
 # A heavy-tailed table of 21 equally likely multipliers, in thousandths of the
@@ -877,6 +878,8 @@ def _plant_solo(ctx, population):
     before leaving). A question about something never said carries no check.
     """
     preset, seed, days = ctx.preset, ctx.seed, ctx.days
+    if days < SOLO_MIN_DAYS:
+        raise _err("days_too_few", f"a solo pack needs at least {SOLO_MIN_DAYS} virtual days, not {days}", "days")
     counts = dict(preset["plant"])
     counts.update(population.get("plant", {}))
     user = ctx.users[0].id
@@ -943,9 +946,7 @@ def _plant_solo(ctx, population):
         ctx.pending.append((probe, user, window[0]))
         ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
     _unanswerable(ctx, counts, days, set())
-    return [
-        "Questions about things that were never said carry no check in this version: a fact must be disclosed before it can be scored."
-    ]
+    return []
 
 
 # --- planted situations: users acting on the product through ops (social) -------

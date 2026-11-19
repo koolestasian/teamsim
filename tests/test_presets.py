@@ -21,8 +21,8 @@ ROOT = pathlib.Path(__file__).parent.parent
 
 # Pinned: the hash of each committed pack. A change to the generator, a preset or a population
 # changes it on purpose, never by accident.
-SOLO_HASH = "584b0fc42ff7511266604001517ec739ad493a8d96527dd5635bf8da7e0d312e"
-SOCIAL_TEN_HASH = "eef012e948131cf4cbc9383b45a81c0ea9cfbbd5544d240534fd183828000940"
+SOLO_HASH = "0e32957df4cfa07e469d1dafc2ba1cfda628a4228e283929d81ec43e6a6bcbe2"
+SOCIAL_TEN_HASH = "f292df15f2f052aba812008ba926fa39a5cc9dff7a5479e02abf43a31c3a34e1"
 
 PACKS = {
     "solo": (ROOT / "populations" / "solo.toml", ROOT / "packs" / "solo", SOLO_HASH),
@@ -166,12 +166,12 @@ class CountAndDayTests(unittest.TestCase):
         self.assertEqual(len(small.facts), len(large.facts))
         self.assertGreater(len(large.events), 5 * len(small.events))
 
-    def test_solo_needs_nine_days_for_its_return(self):
+    def test_solo_needs_fourteen_days(self):
+        # nine of them carry the return; the preset asks for fourteen whatever the plant counts
         with self.assertRaises(PopulationError) as caught:
-            generate.generate(solo(days=8))
+            generate.generate(solo(days=13))
         self.assertEqual(caught.exception.code, "days_too_few")
-        built = generate.generate(solo(days=8, plant={"returns": 0}))
-        pack.validate(built)
+        pack.validate(generate.generate(solo(days=14, plant={"returns": 0})))
 
     def test_a_seed_changes_the_pack_and_the_same_seed_does_not(self):
         for make in (solo, social):
@@ -246,7 +246,7 @@ class SoloSituationTests(unittest.TestCase):
         for event in questions:
             self.assertNotIn(event.id, probes)
             self.assertFalse(event.probe or event.discloses)
-        self.assertTrue(any("never said carry no check" in line for line in self.pack.header.limits))
+        self.assertTrue(any("never said carries no check" in line for line in self.pack.header.limits))
         self.assertTrue(any("not by a catch-up check" in line for line in self.pack.header.limits))
 
     def test_planted_events_are_whole_and_their_values_are_found_by_the_matcher(self):

@@ -13,6 +13,7 @@ limits = [
   "The text is templated. A pack says nothing about how real people write.",
   "For a single-user product only a few kinds of fact can be planted (recall, change of mind, never-said, injected instruction). Audience checks need more than one user.",
   "Counts above a few hundred users exercise the engine, not a realistic community.",
+  "A reply is scheduled from its opener's turn, not from the opener's message: it can answer an opener that was never posted (its author was away or outside active hours) and, rarely, come before an opener that was first posted in the wrong place.",
 ]
 
 [roles]

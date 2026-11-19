@@ -3,6 +3,7 @@ the command line and the report. Each class names the finding it guards."""
 
 import copy
 import pathlib
+import re
 import unittest
 
 from teamsim import checks, controls, engine, generate, pack
@@ -138,6 +139,63 @@ class DeafControlTests(unittest.TestCase):
         oracle = controls.expected("oracle", self.team)
         self.assertNotEqual(want, oracle)
         self.assertEqual(controls.matrix(self.team)["defect:deaf"], want)
+
+
+def solo(**traits):
+    return {
+        "format": 1,
+        "preset": "solo",
+        "seed": "tr-1",
+        "days": 21,
+        "groups": [{"role": "user", "count": 1, "traits": traits}],
+    }
+
+
+def team_ten():
+    return generate.generate(population_file("team-ten"))
+
+
+class StatedLimitsTests(unittest.TestCase):
+    def test_the_team_limits_say_replies_can_answer_an_opener_that_was_never_posted(self):
+        text = " ".join(team_ten().header.limits)
+        self.assertIn("never posted", text)
+        self.assertIn("wrong place", text)
+
+    def test_the_social_limits_say_probe_pct_has_no_effect(self):
+        text = " ".join(generate.generate(social()).header.limits)
+        self.assertIn("probe_pct", text)
+
+    def test_the_solo_limits_state_what_was_never_said_once(self):
+        limits = generate.generate(solo()).header.limits
+        self.assertEqual(sum("never said" in line for line in limits), 1, limits)
+
+
+class SoloDaysTests(unittest.TestCase):
+    def test_solo_needs_fourteen_virtual_days(self):
+        for days in (1, 8, 13):
+            with self.subTest(days=days):
+                with self.assertRaises(PopulationError) as caught:
+                    generate.generate(dict(solo(), days=days, plant={"returns": 0}))
+                self.assertEqual(caught.exception.code, "days_too_few")
+        self.assertEqual(generate.generate(dict(solo(), days=14)).header.id, "solo-1")
+
+
+class SoloTraitEffectTests(unittest.TestCase):
+    """The habits that change text act in the solo preset, which has one user and one surface."""
+
+    def test_split_pct_makes_fragments_in_solo(self):
+        none = generate.generate(solo(split_pct=0), validate=False)
+        many = generate.generate(solo(split_pct=100), validate=False)
+        fragments = lambda built: sum(1 for e in built.events if re.search(r"\.f\d+$", e.id))
+        self.assertEqual(fragments(none), 0)
+        self.assertGreater(fragments(many), 20)
+
+    def test_typo_pct_makes_corrections_in_solo(self):
+        none = generate.generate(solo(typo_pct=0), validate=False)
+        many = generate.generate(solo(typo_pct=100), validate=False)
+        edits = lambda built: sum(1 for e in built.events if e.kind == "edit")
+        self.assertEqual(edits(none), 0)
+        self.assertGreater(edits(many), 20)
 
 
 if __name__ == "__main__":

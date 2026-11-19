@@ -225,7 +225,8 @@ user when the groups hold none. The restricted channel holds the users of the au
 With one user the generator plants only reversals and secrets (a restricted fact, a claim and
 an absence need a second user) and the pack's `limits` say which counts it left out.
 
-For `solo`, one user talks to the product on one `direct` surface and nobody replies:
+For `solo`, one user talks to the product on one `direct` surface and nobody replies. A `solo`
+file needs 14 or more virtual days; fewer raises `days_too_few`:
 
 - Reversal: the user states a preference two or three times with `supersedes` between the
   versions, then asks which one it was. Check: `answer`.
@@ -302,9 +303,12 @@ surfaces, text banks and slot templates fits this format without a change to the
 kind of situation needs a new shape.
 
 The habits that change message text (`split_pct`, `typo_pct`, `wrong_place_pct`) do not apply
-to the arguments of an `op`, so they have no effect in `social`; `reply_median_s` has none in
+to the arguments of an `op`, so they have no effect in `social`; `probe_pct` has none in `social`, whose
+feed reads carry no planted answer to confuse; `reply_median_s` has none in
 `solo` or `social`, where nobody replies; and `wrong_place_pct` has none in `solo`, which has
-one surface. Each preset's `limits` say so in every pack.
+one surface. Each preset's `limits` say so in every pack. A reply is scheduled from its opener's turn, not from
+the opener's message, so in `team` a reply can answer an opener that was never posted (its author
+was away or outside active hours); the `team` limits say so.
 
 ## 7. Rule codes
 
