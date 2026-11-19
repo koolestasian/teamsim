@@ -705,3 +705,74 @@ class Performance(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Interrupted(unittest.TestCase):
+    """A run that raises still stops the session (engine-modules section 2.6)."""
+
+    class Boom(Exception):
+        pass
+
+    def wrap(self, inner, error, on=3):
+        outer = self
+
+        class Wrapper:
+            def __init__(self):
+                self.count = 0
+                self.stops = []
+
+            def start(self, hello):
+                return inner.start(hello)
+
+            def exchange(self, event):
+                self.count += 1
+                if self.count == on:
+                    raise error
+                return inner.exchange(event)
+
+            def stop(self, reason, t_ms):
+                self.stops.append((reason, t_ms))
+                return inner.stop(reason, t_ms)
+
+        return Wrapper()
+
+    def test_the_session_is_stopped_when_the_loop_raises(self):
+        pk = packmod.load(ROOT / "packs" / "minimal")
+        for error in (KeyboardInterrupt(), self.Boom("x"), RuntimeError("transport")):
+            with self.subTest(error=type(error).__name__):
+                inner = FakeSession()
+                wrapper = self.wrap(inner, error)
+                with self.assertRaises(type(error)):
+                    engine.run(pk, wrapper)
+                self.assertEqual([s[0] for s in wrapper.stops], ["error"])
+                self.assertEqual(wrapper.stops[0][1], 40000)  # the time of the third event, the last applied
+
+    def test_a_failed_start_is_not_stopped(self):
+        class Broken(FakeSession):
+            def start(self, hello):
+                raise RuntimeError("cannot start")
+
+        inner = Broken()
+        with self.assertRaises(RuntimeError):
+            engine.run(make_pack([ev("a", at=1)]), inner)
+        self.assertFalse([c for c in inner.calls if c[0] == "stop"])
+
+    def test_a_stop_that_raises_does_not_hide_the_first_error(self):
+        class BadStop(FakeSession):
+            def stop(self, reason, t_ms):
+                raise RuntimeError("stop failed")
+
+        wrapper = self.wrap(BadStop(), KeyboardInterrupt())
+        with self.assertRaises(KeyboardInterrupt):
+            engine.run(packmod.load(ROOT / "packs" / "minimal"), wrapper)
+
+    def test_the_child_process_and_its_directory_are_gone_after_an_interrupt(self):
+        from teamsim import subject
+
+        scripted = str(ROOT / "tests" / "subjects" / "scripted.py")
+        child = subject.ChildProcess([sys.executable, "-I", scripted, "normal"], wall_timeout_ms=3000)
+        wrapper = self.wrap(child, KeyboardInterrupt())
+        with self.assertRaises(KeyboardInterrupt):
+            engine.run(packmod.load(ROOT / "packs" / "minimal"), wrapper)
+        self.assertIsNotNone(child._proc.poll())
+        self.assertFalse(pathlib.Path(child._cwd).exists())

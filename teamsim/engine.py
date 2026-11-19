@@ -654,9 +654,29 @@ def _call(session, send: Send) -> Reply:
 
 
 def run(pack: Pack, session, *, wall_timeout_ms: int = 30000) -> tuple:
-    """Drive ``session`` through ``pack`` and return the log entries."""
+    """Drive ``session`` through ``pack`` and return the log entries.
+
+    If the loop raises (an interrupt, a step error, a transport error) after the
+    session started and before it was stopped, the session is stopped with reason
+    ``error`` at the time of the last applied event, any error from that stop is
+    suppressed and the original exception is raised again.
+    """
     plan = make_plan(pack, wall_timeout_ms)
     state, send = begin(plan)
-    while send is not None:
-        state, send = step(plan, state, _call(session, send))
+    started = stopped = False
+    try:
+        while send is not None:
+            if send.call == "stop":
+                stopped = True
+            reply = _call(session, send)
+            started = started or send.call == "start"
+            state, send = step(plan, state, reply)
+    except BaseException:
+        # An interrupt or an error in the loop must not leave the subject running.
+        if started and not stopped:
+            try:
+                session.stop(SHUTDOWN_ERROR, state.last_applied)
+            except Exception:
+                pass
+        raise
     return entries(state)
