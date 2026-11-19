@@ -14,9 +14,9 @@
 {"id":"e14","at":320000,"actor":"bo","surface":"general","kind":"back"}
 {"id":"e15","after":{"event":"e14","delay_ms":5000},"actor":"bo","surface":"direct:bo","kind":"post","text":"Did I miss anything while I was away?","probe":true}
 {"id":"e16","at":400000,"actor":"bo","surface":"general","kind":"post","text":"When is demo day?","probe":true}
-{"id":"e17","on":{"kind":"subject_post","surface":"general","within_ms":60000,"delay_ms":2000},"actor":"cy","surface":"general","kind":"post","text":"Thanks for the answer."}
+{"id":"e17","depends_on":["e16"],"on":{"kind":"subject_post","surface":"general","within_ms":60000,"delay_ms":2000},"actor":"cy","surface":"general","kind":"post","text":"Thanks for the answer."}
 {"id":"e18","at":450000,"actor":"ana","surface":"general","kind":"post","text":"What was the demo room code?","probe":true}
-{"id":"e19","on":{"kind":"subject_mentions","actor":"ana","within_ms":60000,"delay_ms":5000},"actor":"ana","surface":"general","kind":"post","text":"Seen the mention, thanks."}
+{"id":"e19","depends_on":["e18"],"on":{"kind":"subject_mentions","actor":"ana","within_ms":60000,"delay_ms":5000},"actor":"ana","surface":"general","kind":"post","text":"Seen the mention, thanks."}
 {"id":"e20","at":500000,"actor":"di","surface":"general","kind":"join"}
 {"id":"e21","at":520000,"actor":"bo","surface":"direct:bo","kind":"op","op":"ask","args":{"topic":"budget"},"probe":true}
 {"id":"e22","at":540000,"actor":"di","surface":"leads","kind":"post","text":"What is the budget?","probe":true}

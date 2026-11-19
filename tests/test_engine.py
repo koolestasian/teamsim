@@ -540,10 +540,12 @@ class Minimal(unittest.TestCase):
     def test_runs_end_to_end(self):
         pk, session, log = self.run_minimal()
         d = deliveries(log)
-        self.assertEqual(len(d), len(pk.events) - 2)
-        # e17 and e19 have no depends_on, so their windows open at time 0 and
-        # close at 60000; a subject that answers the later probes cannot fire them.
-        self.assertEqual([n.event for n in notes(log, "not_fired")], ["e17", "e19"])
+        # e17 depends on e16 and e19 on e18, so a subject that answers those probes
+        # (a post on general; a reply that names ana) fires both triggers.
+        self.assertEqual(len(d), len(pk.events))
+        self.assertEqual(notes(log, "not_fired"), [])
+        times = {k: v.t_ms for k, v in d.items()}
+        self.assertEqual((times["e17"], times["e19"]), (402000, 455000))
         actions = [o for o in log if isinstance(o, Observation) and o.kind == "action"]
         self.assertEqual(len(actions), 5)
 
@@ -553,7 +555,7 @@ class Minimal(unittest.TestCase):
         self.assertEqual(digest, PINNED_HASH)
 
 
-PINNED_HASH = "a66b847ff7c73f4690c1ee3d694bffddf6691ffdca5cac6750a9b7a800cb5886"
+PINNED_HASH = "32b6c261cbf9c8d8a23845c540fc10439e4546ad2d3284a52267245ad78a844d"
 
 
 class Determinism(unittest.TestCase):

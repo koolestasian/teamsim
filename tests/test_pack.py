@@ -19,7 +19,7 @@ DOC = ROOT / "docs" / "spec" / "pack-format.md"
 
 # Pinned: the hash of packs/minimal. A change to the pack, the canonical form or the
 # hash definition changes it on purpose, never by accident.
-MINIMAL_HASH = "993e9cc8cd4f82b8c1838e556aa5f877508dbe2f4f87f8a8731d0287aa39a9c1"
+MINIMAL_HASH = "f20422fcec9c7a9645a60fc80bc8879151c6bade2f0ec581bb918f95c256b7fe"
 
 BASE_TOML = tomllib.loads((MINIMAL / "pack.toml").read_text(encoding="utf-8"))
 BASE_EVENTS = [
