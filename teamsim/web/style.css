@@ -147,7 +147,9 @@ th, td { padding: 10px 16px; border-bottom: 1px solid var(--rule); font-size: 13
 thead th { background: var(--head); color: var(--muted); font-size: 12px; padding-top: 13px; padding-bottom: 13px; }
 tbody th { font-weight: 500; }
 tbody tr:last-child > * { border-bottom: 0; }
-td.pass { color: var(--pass); opacity: .75; }
+td.pass { color: var(--muted); }
+.check-results > .evidence { border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: var(--soft); }
+.check-results > .evidence .ev-head { display: none; }
 #matrix-note { margin: 0 0 14px; }
 .problems { list-style: none; padding: 0; margin: 14px 0 0; }
 .problems li { margin: 4px 0; }

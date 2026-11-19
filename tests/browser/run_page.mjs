@@ -88,6 +88,12 @@ for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]
   await page.click('.result-row:has(.key:text-is("venue-room"))');
   const evidence = await page.locator("#evidence").innerText();
   check(evidence.includes("room-2210 → room-3045 → room-1180"), "venue-room shows the full chain");
+  const evidenceAfterRow = await page.evaluate(() => {
+    const prev = document.querySelector("#evidence").previousElementSibling;
+    return !!prev && prev.matches(".result-row[aria-pressed=true]");
+  });
+  check(evidenceAfterRow === (width < 760), width < 760 ? "evidence opens under the tapped row" : "evidence stays in the right column");
+  check((await page.locator("#timeline .tag", { hasText: /^bot$/ }).count()) === 0, "bot rows do not repeat 'bot' as a tag");
   await page.screenshot({ path: path.join(outDir, name + "-3-venue-room.png"), fullPage: true });
 
   await page.click("text=Show in timeline");

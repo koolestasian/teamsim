@@ -147,7 +147,7 @@ function isKey(row) {
 function tagsFor(pack, row) {
   const out = [];
   if (isRestricted(pack, row.surface)) out.push("restricted");
-  if (row.bot) { out.push("bot"); return out; }
+  if (row.bot) return out;
   for (const id of row.event.discloses || []) {
     const f = pack.factById.get(id);
     if (f) out.push("planted " + f.key + " = " + f.value);
@@ -229,7 +229,19 @@ function verdictOf(v) {
   if (v.verdict === "pass") return { text: "pass", cls: "pass" };
   if (v.verdict === "not_applicable") return { text: "n/a", cls: "na" };
   if (v.verdict === "harness_error") return { text: "error", cls: "fail" };
-  return { text: v.reason || "fail", cls: "fail" };
+  return { text: reasonText(v.reason), cls: "fail" };
+}
+
+const reasonText = (reason) => (reason || "fail").replace(/_/g, " ");
+const NARROW = window.matchMedia("(max-width: 759px)");
+
+// On a phone the evidence opens directly under the selected row; on wider screens it sits
+// in the right-hand column.
+function placeEvidence() {
+  const box = $("evidence"), list = $("check-list");
+  const row = state.selected && [...list.querySelectorAll(".result-row")].find((r) => r.dataset.check === state.selected);
+  if (NARROW.matches && row) row.after(box);
+  else if (box.parentElement !== $("result")) list.after(box);
 }
 
 function groupOf(v) {
@@ -252,6 +264,7 @@ function renderChecks() {
   for (const v of run.report.checks) groups[groupOf(v)].push(v);
   const labels = ["Failed", "Not applicable", "Passed"];
   const list = $("check-list");
+  if ($("evidence").parentElement === list) list.after($("evidence"));
   clear(list);
   groups.forEach((items, i) => {
     if (!items.length) return;
@@ -293,8 +306,13 @@ function selectCheck(id, scroll) {
     row.setAttribute("aria-pressed", row.dataset.check === id ? "true" : "false");
   }
   renderEvidence();
-  if (scroll && window.matchMedia("(max-width: 759px)").matches) $("evidence").scrollIntoView({ block: "start" });
+  placeEvidence();
+  if (scroll && NARROW.matches) {
+    const row = $("evidence").previousElementSibling;
+    if (row) row.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
 }
+NARROW.addEventListener("change", placeEvidence);
 
 function renderEvidence() {
   const pack = state.pack, run = state.run, box = $("evidence");
@@ -444,7 +462,7 @@ function renderMatrix(pack, data) {
       const cell = data.matrix[c][check.id];
       if (!cell) return el("td");
       if (cell.verdict === "pass") return el("td", { class: "pass", text: "pass" });
-      if (cell.verdict === "fail") return el("td", { class: "fail", text: cell.reason || "fail" });
+      if (cell.verdict === "fail") return el("td", { class: "fail", text: reasonText(cell.reason) });
       return el("td", { class: "na", text: "n/a" });
     });
     body.append(el("tr", null, el("th", { text: checkKey(check.id) + (check.kind === "answer" || check.kind === "harness" ? "" : " · " + (KIND_LABELS[check.kind] || check.kind)) }), ...cells));
