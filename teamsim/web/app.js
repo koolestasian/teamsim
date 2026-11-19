@@ -766,7 +766,7 @@ function renderChannels() {
     const b = el("button", { type: "button", class: "ch", "aria-pressed": state.ws.surface === id ? "true" : "false" });
     b.dataset.surface = id;
     if (extra) b.append(extra);
-    b.append(el("span", { class: "ch-name", text: label }), el("span", { class: "ch-count", text: String(count) }));
+    b.append(el("span", { class: "ch-name", title: label, text: label }), el("span", { class: "ch-count", text: String(count) }));
     return b;
   };
   nav.append(row("", "All channels", items.length, el("span", { class: "ch-hash", "aria-hidden": "true", text: "◎" })));
@@ -811,7 +811,7 @@ function renderMembers() {
     box.append(el("p", { class: "ws-group", text: (hasRoles || g === "Bot" ? g : "Members") + " — " + list.length }));
     for (const id of list) {
       const b = el("button", { type: "button", class: "mem", "data-actor": id }, avatar(id, 32),
-        el("span", { class: "mem-name " + nameClass(id), text: who(id) }));
+        el("span", { class: "mem-name " + nameClass(id), title: who(id), text: who(id) }));
       if (hasBotTag(id)) b.append(el("span", { class: "bot-tag", text: "BOT" }));
       box.append(b);
     }
@@ -1033,7 +1033,9 @@ function buildCard(id) {
   if (act.ops) dl.append(el("div", null, el("dt", { text: "Product actions" }), el("dd", { text: String(act.ops) })));
   if (act.places.length) dl.append(el("div", null, el("dt", { text: "Places" }), el("dd", { text: act.places.map(place).join(", ") })));
   if (act.first != null) dl.append(el("div", null, el("dt", { text: "Active" }), el("dd", { text: act.first === act.last ? "Day " + act.first : "Day " + act.first + " to Day " + act.last })));
-  if (act.facts.length) dl.append(el("div", null, el("dt", { text: "Facts disclosed" }), el("dd", { text: act.facts.length + ": " + act.facts.join(", ") })));
+  // Topics are listed only when the pack's fact keys are words; otherwise only the count is shown.
+  if (act.facts.length) dl.append(el("div", null, el("dt", { text: "Facts disclosed" }),
+    el("dd", { text: act.facts.every((f) => /^[A-Za-z][A-Za-z ]{2,}$/.test(f)) ? act.facts.length + ": " + act.facts.join(", ") : String(act.facts.length) })));
   card.append(el("h3", { class: "pc-sub", text: "Activity" }), dl);
   const only = el("button", { type: "button", class: "secondary pc-only", text: "Show only their messages" });
   only.addEventListener("click", () => {
