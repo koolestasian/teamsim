@@ -317,6 +317,104 @@ class Environment(unittest.TestCase):
         self.assertFalse(os.path.exists(cwd))
 
 
+def process_alive(pid):
+    """True while the process ``pid`` exists (a zombie counts as gone)."""
+    if os.name == "nt":
+        import ctypes
+        from ctypes import wintypes
+
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.OpenProcess.restype = wintypes.HANDLE
+        kernel32.OpenProcess.argtypes = (wintypes.DWORD, wintypes.BOOL, wintypes.DWORD)
+        kernel32.GetExitCodeProcess.argtypes = (wintypes.HANDLE, ctypes.POINTER(wintypes.DWORD))
+        kernel32.CloseHandle.argtypes = (wintypes.HANDLE,)
+        handle = kernel32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not handle:
+            return False  # no such process
+        try:
+            code = wintypes.DWORD()
+            return bool(kernel32.GetExitCodeProcess(handle, ctypes.byref(code))) and code.value == 259
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    try:
+        with open("/proc/%d/stat" % pid, "rb") as stat:
+            return stat.read().rsplit(b")", 1)[1].split()[0] != b"Z"
+    except OSError:
+        return True
+
+
+class ProcessTree(unittest.TestCase):
+    """The whole tree dies at stop, not only the child (protocol section 5.6)."""
+
+    def test_a_grandchild_is_killed_at_stop(self):
+        import time
+
+        session = child("tree", wall_timeout_ms=5000)
+        try:
+            reply = session.start(hello(5000))
+            self.assertEqual(reply.end, "ready")
+            pid = int(reply.name)
+            self.assertTrue(process_alive(pid))
+            session.stop("end_of_run", 1)
+            deadline = time.monotonic() + 5
+            while process_alive(pid) and time.monotonic() < deadline:
+                time.sleep(0.05)
+            self.assertFalse(process_alive(pid), "the grandchild outlived stop")
+        finally:
+            session.stop("watchdog", 0)
+
+
+class LogMessages(unittest.TestCase):
+    """Subject ``log`` messages go to the redacted standard-error file (protocol 4.2)."""
+
+    def run_log(self, text, secrets, events=0):
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, "err.log")
+            session = child("log", text, stderr_path=path, redact=secrets)
+            try:
+                session.start(hello())
+                for seq in range(1, events + 1):
+                    session.exchange(event(seq))
+            finally:
+                session.stop("end_of_run", 1)
+            return Path(path).read_bytes().decode("utf-8")
+
+    def test_a_log_line_is_written_redacted(self):
+        data = self.run_log("token is hunter2 now", ("hunter2",))
+        self.assertIn("token is [redacted] now", data)
+        self.assertNotIn("hunter2", data)
+
+    def test_only_the_first_hundred_are_kept_and_the_dropped_count_is_written(self):
+        data = self.run_log("hello", (), events=1)
+        self.assertIn("line 99", data)
+        self.assertNotIn("line 100", data)
+        self.assertIn("3 log lines dropped", data)
+
+
+class Limits(unittest.TestCase):
+    def test_the_line_queue_is_small(self):
+        # 64 queued lines of up to 1 MiB would hold 64 MiB; the queue must stay near one line
+        self.assertLessEqual(subject.ChildProcess([sys.executable])._lines.maxsize, 2)
+
+    def test_the_watchdog_comes_from_hello(self):
+        import time
+
+        session = child("stall_hello", wall_timeout_ms=30000)  # the constructor value is a default
+        began = time.monotonic()
+        try:
+            reply = session.start(hello(300))
+            self.assertEqual(codes(reply), [CODE_TIMEOUT])
+            self.assertLess(time.monotonic() - began, 10)
+        finally:
+            session.stop("watchdog", 0)
+
+
 class Transcript(unittest.TestCase):
     """Done when 4: no fact value reaches the subject except in an event that discloses it."""
 

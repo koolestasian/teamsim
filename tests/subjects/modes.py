@@ -23,6 +23,12 @@ def hello(raw):
         send(type="ready", v=1, name=json.dumps(info), version=os.getcwd())
     elif mode == "mirror":
         send(type="ready", v=1, name=raw.decode(), version="1")
+    elif mode == "tree":
+        grandchild = subprocess.Popen([sys.executable, "-I", "-c", "import time; time.sleep(60)"])
+        send(type="ready", v=1, name=str(grandchild.pid), version="1")
+    elif mode == "log":
+        send(type="log", level="info", text=arg)
+        send(type="ready", v=1, name="log", version="1")
     elif mode == "stderr":
         for part in arg.split("|"):
             err.write(part.encode())
@@ -37,6 +43,9 @@ def event(m, raw):
     seq, surface = m["seq"], m["payload"]["surface"]
     if mode == "mirror":
         send(type="action", in_reply_to=seq, kind="post", surface=surface, text=raw.decode())
+    elif mode == "log":
+        for number in range(103):
+            send(type="log", level="debug", text="line %d" % number)
     elif mode == "stall_event":
         time.sleep(60)
     elif mode == "malformed":

@@ -53,6 +53,7 @@ from teamsim.model import (
 
 WINDOWS = sys.platform == "win32"
 LINE_LIMIT = 1024 * 1024  # bytes in one line, terminator included (protocol section 3)
+MAX_LOGS = 100  # log messages kept for one outstanding message (protocol section 4.2)
 MAX_ACTIONS = 100  # actions and rejected messages for one event (protocol section 6)
 MAX_DEPTH = 32  # nesting, the message object being level 1 (protocol section 2)
 MAX_INT = 2**53 - 1
@@ -257,6 +258,8 @@ class _Round:
         self.v, self.seq, self.t_ms = v, seq, t_ms
         self.items: list = []
         self.count = 0
+        self.logs: list = []  # the first MAX_LOGS (level, text) pairs
+        self.log_dropped = 0
 
     def fail(self, code: str, detail: str | None = None) -> Reply:
         self.items.append(Fault(code, None if detail is None else _clip(detail)))
@@ -276,6 +279,10 @@ class _Round:
             return self.fail(bad.code, bad.detail)
         kind = obj["type"]
         if kind == "log":
+            if len(self.logs) < MAX_LOGS:
+                self.logs.append((obj["level"], obj["text"]))
+            else:
+                self.log_dropped += 1
             return None
         if kind == "error":
             return self.fail(CODE_REPORTED, "%s: %s" % (obj["code"], obj["text"]))
@@ -612,9 +619,11 @@ class ChildProcess(Session):
         self._ended = False
         self._stopped = False
         self._stopping = threading.Event()
-        self._lines: queue.Queue = queue.Queue(maxsize=64)
+        self._lines: queue.Queue = queue.Queue(maxsize=2)  # a line can be 1 MiB: keep few
         self._outbox: queue.Queue = queue.Queue()
         self._threads: list = []
+        self._err_lock = threading.Lock()
+        self._err_out = None
 
     # -- starting ------------------------------------------------------------------------
 
@@ -635,6 +644,11 @@ class ChildProcess(Session):
             self._proc.kill()  # still suspended: it has run nothing and started nothing
             self._proc.wait()
             raise
+        if self._stderr_path is not None:
+            try:
+                self._err_out = open(self._stderr_path, "wb")
+            except OSError:
+                self._err_out = None
         for target in (self._read_loop, self._write_loop, self._stderr_loop):
             thread = threading.Thread(target=target, daemon=True)
             self._threads.append(thread)
@@ -643,6 +657,9 @@ class ChildProcess(Session):
     def start(self, hello: dict) -> Reply:
         if self._ended or self._proc is not None:
             raise RuntimeError("the session was already started")
+        wall = hello.get("wall_timeout_ms")
+        if type(wall) is int and wall > 0:
+            self._timeout_ms = wall  # the hello is the authority; the constructor value is a default
         try:
             self._launch()
         except (OSError, ValueError, subprocess.SubprocessError) as exc:
@@ -721,23 +738,10 @@ class ChildProcess(Session):
         split across two reads: the last ``longest secret - 1`` bytes are held back until the
         next read, so a secret cannot straddle the cut."""
         stream = self._proc.stderr
-        out = None
-        if self._stderr_path is not None:
-            try:
-                out = open(self._stderr_path, "wb")
-            except OSError:
-                out = None
         keep = max((len(secret) for secret in self._secrets), default=1) - 1
         hold = b""
 
-        def write(data):
-            nonlocal out
-            if out is not None and data:
-                try:
-                    out.write(data)
-                    out.flush()
-                except OSError:
-                    out = None
+        write = self._write_err
 
         while True:
             try:
@@ -755,8 +759,23 @@ class ChildProcess(Session):
             stream.close()
         except OSError:
             pass
-        if out is not None:
-            out.close()
+
+    def _write_err(self, data: bytes) -> None:
+        with self._err_lock:
+            if self._err_out is not None and data:
+                try:
+                    self._err_out.write(data)
+                    self._err_out.flush()
+                except (OSError, ValueError):
+                    self._err_out = None
+
+    def _write_logs(self, rnd) -> None:
+        """Subject ``log`` messages go through the redactor into the standard-error file."""
+        lines = ["[log %s] %s\n" % pair for pair in rnd.logs]
+        if rnd.log_dropped:
+            lines.append("[teamsim: %d log lines dropped]\n" % rnd.log_dropped)
+        if lines:
+            self._write_err(self._scrub("".join(lines).encode("utf-8")))
 
     # -- one message ---------------------------------------------------------------------
 
@@ -801,6 +820,7 @@ class ChildProcess(Session):
                     code = None
                 reply = rnd.fail(CODE_EXITED, "standard output closed" if code is None
                                  else "exit code %d" % code)
+        self._write_logs(rnd)
         if reply.end == REPLY_ENDED:
             self._ended = True
         return reply
@@ -865,6 +885,10 @@ class ChildProcess(Session):
             self._outbox.put(None)
             for thread in self._threads:
                 thread.join(3)
+            with self._err_lock:
+                if self._err_out is not None:
+                    self._err_out.close()
+                    self._err_out = None
             if self._tree is not None:
                 self._tree.wait_empty(3000)
                 self._tree.close()
