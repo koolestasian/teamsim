@@ -1,6 +1,6 @@
 """The command line: ``python -m teamsim`` (engine spec section 9).
 
-Subcommands: ``demo``, ``run``, ``validate``, ``inspect``, ``replay`` and ``generate``.
+Subcommands: ``demo``, ``run``, ``validate``, ``inspect``, ``replay``, ``generate`` and ``serve``.
 ``reduce`` is listed in the specification but is not part of version 0; it prints that and
 exits 2.
 
@@ -380,6 +380,15 @@ def _cmd_reduce(args, stdout, stderr) -> int:
     raise CliError("reduce is not in version 0")
 
 
+def _cmd_serve(args, stdout, stderr) -> int:
+    from teamsim import serve  # serve imports this module
+
+    argv = ["--port", str(args.port)]
+    if args.tailnet_host:
+        argv += ["--tailnet-host", args.tailnet_host]
+    return serve.main(argv)
+
+
 # --- parsing -----------------------------------------------------------------------
 
 
@@ -427,6 +436,11 @@ def _parser() -> argparse.ArgumentParser:
     gen.add_argument("population", help="population .toml file")
     gen.add_argument("-o", "--out", required=True, help="pack directory to write")
     gen.set_defaults(func=_cmd_generate)
+
+    serve = sub.add_parser("serve", help="serve the local page that runs a built-in bot and shows the checks")
+    serve.add_argument("--port", type=int, default=8765, help="port on 127.0.0.1 (default: 8765)")
+    serve.add_argument("--tailnet-host", default=None, help="extra Host name to accept (needs Tailscale-User-Login)")
+    serve.set_defaults(func=_cmd_serve)
 
     reduce = sub.add_parser("reduce", help="not in version 0")
     reduce.add_argument("args", nargs="*")

@@ -122,7 +122,7 @@ python -m teamsim inspect packs/team-ten                           # who was exp
 python -m teamsim replay teamsim-demo/record-naive_bot.jsonl --pack packs/team-ten
 ```
 
-See a run in the browser: `python -m teamsim.serve`, then open http://127.0.0.1:8765. Pick a pack and one of the built-in
+See a run in the browser: `python -m teamsim serve`, then open http://127.0.0.1:8765. Pick a pack and one of the built-in
 bots; the page lists the checks with the messages behind them. It listens on loopback only.
 
 Each command's `--help` lists its options. How a program speaks to the engine is in the

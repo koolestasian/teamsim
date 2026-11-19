@@ -254,11 +254,22 @@ class RelativeSubjectTests(Tmp):
 
 class HelpTests(unittest.TestCase):
     def test_help(self):
-        commands = ("demo", "run", "validate", "inspect", "replay", "generate")
+        commands = ("demo", "run", "validate", "inspect", "replay", "generate", "serve")
         for argv in [["--help"]] + [[c, "--help"] for c in commands]:
             code, out, _ = call(*argv)
             self.assertEqual(code, 0, argv)
             self.assertIn("usage", out)
+
+    def test_serve_passes_its_options(self):
+        from unittest import mock
+
+        with mock.patch("teamsim.serve.main", return_value=0) as served:
+            code, _, _ = call("serve", "--port", "9001", "--tailnet-host", "example.ts.net")
+        self.assertEqual(code, 0)
+        served.assert_called_once_with(["--port", "9001", "--tailnet-host", "example.ts.net"])
+        with mock.patch("teamsim.serve.main", return_value=0) as served:
+            call("serve")
+        served.assert_called_once_with(["--port", "8765"])
 
     def test_module_help(self):
         code = (
