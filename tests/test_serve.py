@@ -73,6 +73,8 @@ class RoutesTest(ServerTest):
         data = self.get_json("/api/pack?name=minimal")
         self.assertTrue(data["events"] and data["actors"] and data["facts"] and data["checks"])
         self.assertIn("text", data["events"][0])
+        react = [e for e in data["events"] if e["kind"] == "react"]
+        self.assertEqual(react[0]["emoji"], "+1")
 
     def test_run_matches_the_command_line_path(self):
         status, data, head = self.post_json("/api/run", {"pack": "team-ten", "subject": "naive_bot"})
