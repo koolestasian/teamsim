@@ -811,9 +811,9 @@ function renderMembers() {
     const list = groups.get(g);
     box.append(el("p", { class: "ws-group", text: (hasRoles || g === "Bot" ? g : "Members") + " — " + list.length }));
     for (const id of list) {
-      const b = el("button", { type: "button", class: "mem", "data-actor": id }, avatar(id, 32),
-        el("span", { class: "mem-name " + nameClass(id), title: who(id), text: who(id) }));
-      if (hasBotTag(id)) b.append(el("span", { class: "bot-tag", text: "BOT" }));
+      const text = el("span", { class: "mem-text" }, el("span", { class: "mem-name " + nameClass(id), title: who(id), text: who(id) }));
+      if (hasBotTag(id)) text.append(el("span", { class: "bot-tag", text: "BOT" }));
+      const b = el("button", { type: "button", class: "mem", "data-actor": id }, avatar(id, 32), text);
       box.append(b);
     }
   }

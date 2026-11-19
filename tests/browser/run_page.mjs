@@ -572,6 +572,8 @@ async function runCollapse(browser, name, scheme) {
   const cut = await page.evaluate(() => [...document.querySelectorAll("#ws-chlist .ch-name")].filter((n) => n.scrollWidth > n.clientWidth + 1).map((n) => n.textContent));
   check(cut.length === 0, name + ": no channel name is cut off" + (cut.length ? " (" + cut.join(", ") + ")" : ""));
   const runBox = await page.locator("#run").boundingBox();
+  const brokenNames = await page.evaluate(() => [...document.querySelectorAll("#ws-memlist .mem-name")].filter((n) => n.getBoundingClientRect().height > 1.6 * parseFloat(getComputedStyle(n).lineHeight) && !/\s/.test(n.textContent.trim())).map((n) => n.textContent));
+  check(brokenNames.length === 0, name + ": no member name breaks inside a word" + (brokenNames.length ? " (" + brokenNames.join(", ") + ")" : ""));
   check(runBox.width <= 48 && runBox.height >= 39.5 && (await page.locator("#run").getAttribute("title")) === "Run test" && (await page.locator("#run").innerText()).trim() === "Run test", name + ": collapsed Run is an icon button with a name and tooltip (" + Math.round(runBox.width) + "x" + Math.round(runBox.height) + ")");
   check((await scrollWidth(page)) <= 1440, name + ": collapsed layout has no horizontal scroll");
   await page.evaluate(() => window.scrollTo(0, 0));

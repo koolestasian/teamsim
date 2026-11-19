@@ -262,7 +262,8 @@ select {
 .ch-name { flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }
 .ch-count { flex: none; font-size: 0.8125rem; font-variant-numeric: tabular-nums; color: var(--w-faint); }
 .mem { color: var(--w-text); }
-.mem-name { font-weight: 500; min-width: 0; overflow-wrap: anywhere; line-height: 1.25; }
+.mem-text { display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.5rem; min-width: 0; flex: 1; }
+.mem-name { font-weight: 500; min-width: 0; overflow-wrap: break-word; line-height: 1.25; }
 .bot-tag {
   flex: none; display: inline-block; background: var(--w-blurple); color: #fff; font-size: 0.8125rem; font-weight: 600; line-height: 1.25;
   border-radius: 0.1875rem; padding: 0 0.3125rem;
