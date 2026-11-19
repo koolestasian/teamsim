@@ -26,7 +26,7 @@ Each ``defect:*`` control is the oracle with exactly one change:
 - ``echo``: repeats a secret in the surface where it saw it.
 - ``amnesiac``: answers a catch-up probe without the changes it missed.
 - ``deaf``: does nothing for events on one surface, the first surface of the pack
-  that is not ``direct``.
+  that is not ``direct``, and uses no fact it heard only there.
 
 ``expected`` is derived from the ledger of the silent run and the table in engine
 spec section 7, not from a table of verdicts. A defect that changes no expectation
@@ -56,6 +56,7 @@ _PASS = (model.VERDICT_PASS, None)
 _NA = (model.VERDICT_NOT_APPLICABLE, None)
 _LIVE, _NOT_APPLICABLE = "live", "not_applicable"
 
+_MISSING = model.REASON_MISSING
 _REFUSAL = "I do not have that."
 _NOTHING_NEW = "Nothing new that I know of."
 
@@ -151,6 +152,44 @@ class _Ref:
                 found[key] = self.facts[fact_id]
         return found or None
 
+    def heard_off_deaf(self, fact_id, d) -> bool:
+        """Whether the subject got ``fact_id`` by the delivery ``d`` on some surface other
+        than the deaf one (``True`` for every fact when the pack has no deaf surface)."""
+        if self.deaf is None:
+            return True
+        for earlier in self.ledger.deliveries:
+            if earlier.n > d.n:
+                break
+            event = self.events.get(earlier.event) if earlier.event is not None else None
+            if (
+                event is not None
+                and earlier.seq is not None
+                and fact_id in (event.discloses or ())
+                and event.surface != self.deaf
+            ):
+                return True
+        return False
+
+    def deaf_needs(self, event, d) -> bool:
+        """Whether a probe answered by the deaf control lacks a fact it heard only on the
+        deaf surface: the current value for an answer, any required fact for a catch-up."""
+        for check in self.pack.checks:
+            if check.probe != event.id:
+                continue
+            if check.kind == model.CHECK_ANSWER:
+                current = self.current(check.key, d)
+                if (
+                    current is not None
+                    and self.ledger.allowed_cut(event.actor, current, **self.cut(d))
+                    and not self.heard_off_deaf(current, d)
+                ):
+                    return True
+            elif check.kind == model.CHECK_CATCH_UP:
+                found = self.required(event, d) or {}
+                if any(not self.heard_off_deaf(f.id, d) for f in found.values()):
+                    return True
+        return False
+
     def received(self, event_id) -> bool:
         d = self.delivery(event_id)
         return d is not None and d.seq is not None
@@ -208,6 +247,8 @@ def _pieces(name, ref, event, d):
             current = ref.facts.get(ref.current(check.key, d) or "")
             if current is not None and not ref.ledger.allowed_cut(asker, current.id, **ref.cut(d)):
                 current = None
+            if current is not None and name == "defect:deaf" and not ref.heard_off_deaf(current.id, d):
+                current = None
             fact = current
             if name == "defect:stale":
                 fact = ref.stale_pick(check.key, d) or current
@@ -219,7 +260,10 @@ def _pieces(name, ref, event, d):
             if name == "defect:amnesiac":
                 out.append(_NOTHING_NEW)
             else:
-                out.extend(f.value for f in (ref.required(event, d) or {}).values())
+                found = (ref.required(event, d) or {}).values()
+                if name == "defect:deaf":
+                    found = [f for f in found if ref.heard_off_deaf(f.id, d)]
+                out.extend(f.value for f in found)
         elif check.kind == model.CHECK_WITHHOLD and name == "defect:leaky":
             if ref.exposed_at(check.fact, d):
                 out.append(ref.facts[check.fact].value)
@@ -345,8 +389,11 @@ def _verdict(name, ref, check):
             return (model.VERDICT_FAIL, model.REASON_LEAKED)
     elif name == "defect:amnesiac" and kind == model.CHECK_CATCH_UP:
         return (model.VERDICT_FAIL, model.REASON_MISSED)
-    elif name == "defect:deaf" and probe is not None and probe.surface == ref.deaf:
-        return _no_response(kind)
+    elif name == "defect:deaf" and probe is not None:
+        if probe.surface == ref.deaf:
+            return _no_response(kind)
+        if d is not None and ref.deaf_needs(probe, d):
+            return (model.VERDICT_FAIL, model.REASON_MISSED if kind == model.CHECK_CATCH_UP else _MISSING)
     return _PASS
 
 

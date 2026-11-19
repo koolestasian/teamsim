@@ -5,7 +5,7 @@ import copy
 import pathlib
 import unittest
 
-from teamsim import checks, engine, generate
+from teamsim import checks, controls, engine, generate, pack
 from teamsim.generate import PopulationError
 from teamsim.subject import InProcess
 from tests.social_ideal import Ideal
@@ -112,6 +112,32 @@ class PlantedRolesFitTheirUsersTests(unittest.TestCase):
                 with self.assertRaises(PopulationError) as caught:
                     generate.generate(obj)
                 self.assertEqual(caught.exception.code, "planted_conflict")
+
+
+class DeafControlTests(unittest.TestCase):
+    """``defect:deaf`` ignores one surface: it must not use what it heard only there."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.team = pack.load(ROOT / "packs" / "team-ten")
+
+    def test_a_catch_up_needing_a_fact_heard_only_on_the_deaf_surface_is_missed(self):
+        self.assertEqual(
+            controls.expected("defect:deaf", self.team)["c.handover-owner.catch_up"], ("fail", "missed")
+        )
+
+    def test_the_observed_run_agrees_with_the_expectation_on_every_pack(self):
+        for name in ("minimal", "team-ten", "solo", "social-ten"):
+            built = pack.load(ROOT / "packs" / name)
+            lines = [x for x in controls.validate(built) if "not exercised" not in x and "not detected" not in x]
+            with self.subTest(pack=name):
+                self.assertEqual(lines, [])
+
+    def test_the_deaf_control_differs_from_the_oracle_only_through_the_deaf_surface(self):
+        want = controls.expected("defect:deaf", self.team)
+        oracle = controls.expected("oracle", self.team)
+        self.assertNotEqual(want, oracle)
+        self.assertEqual(controls.matrix(self.team)["defect:deaf"], want)
 
 
 if __name__ == "__main__":
