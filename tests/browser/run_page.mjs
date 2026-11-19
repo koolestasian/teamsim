@@ -150,6 +150,19 @@ for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]
   }
   check((await page.locator("#strip").innerText()).includes("same as last run"), "rerun of naive_bot reads 'same as last run'");
 
+  // The minimal pack's timeline before a run: every row says something, and labels are honest.
+  await page.goto(base + "?pack=minimal#timeline");
+  await page.waitForSelector("#timeline .event");
+  await page.click('#seg button[data-filter="all"]');
+  const texts = await page.locator("#timeline .event p").allInnerTexts();
+  check(texts.length > 0 && texts.every((t) => t.trim().length > 0), "every timeline row has text (away, back, react, delete included)");
+  const tags = await page.locator("#timeline .tag").allInnerTexts();
+  check(!tags.includes("restricted"), "no blanket 'restricted' tag");
+  check(tags.some((t) => t.startsWith("claim without authority: date = Monday 13 April")), "the unauthorised claim is not labelled planted");
+  check(tags.some((t) => t.startsWith("secret access-code")), "the secret is labelled secret");
+  check(tags.some((t) => t === "planted budget = 12 units · for leads"), "a private fact names its audience");
+  await page.screenshot({ path: path.join(outDir, name + "-8-minimal-timeline.png") });
+
   check(problems.length === 0, "no console errors or failed requests" + (problems.length ? ": " + problems.join(" | ") : ""));
   await context.close();
 }

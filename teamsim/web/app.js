@@ -71,7 +71,7 @@ function clock(t) {
   return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0");
 }
 const when = (t) => (t == null ? "" : "Day " + dayOf(t) + " " + clock(t));
-const placeName = (id) => (String(id).startsWith("direct:") ? "DM" : id);
+const placeName = (id) => (String(id).startsWith("direct:") ? "DM " + String(id).slice(7) : id);
 
 // --- pack data ---------------------------------------------------------------
 
@@ -82,12 +82,6 @@ function index(pack) {
   pack.actorIds = new Set(pack.actors.map((a) => a.id));
   pack.surfaceById = new Map(pack.surfaces.map((s) => [s.id, s]));
   return pack;
-}
-
-function isRestricted(pack, surfaceId) {
-  const s = pack.surfaceById.get(surfaceId);
-  if (!s) return false;
-  return s.kind === "direct" || s.members.filter((m) => pack.actorIds.has(m)).length < pack.actors.length;
 }
 
 const checkKey = (id) => id.replace(/^c\./, "").replace(/\.(answer|withhold|no_leak|no_echo|catch_up)$/, "");
@@ -144,16 +138,45 @@ function isKey(row) {
   return !!(e.probe || (e.discloses && e.discloses.length) || e.kind === "away" || e.kind === "back");
 }
 
+// Who may know a fact, when that is not everyone.
+function audienceOf(pack, fact) {
+  const names = (fact.audience || []).filter((a) => a !== "*").map((a) => a.replace(/^group:/, ""));
+  return names.length && !fact.audience.includes("*") ? names.join(", ") : "";
+}
+
 function tagsFor(pack, row) {
   const out = [];
-  if (isRestricted(pack, row.surface)) out.push("restricted");
   if (row.bot) return out;
-  for (const id of row.event.discloses || []) {
+  const e = row.event;
+  for (const id of e.discloses || []) {
     const f = pack.factById.get(id);
-    if (f) out.push("planted " + f.key + " = " + f.value);
+    if (!f) continue;
+    const value = f.key + " = " + f.value;
+    if (f.kind === "claim") out.push("claim without authority: " + value);
+    else if (f.kind === "secret") out.push("secret " + value);
+    else {
+      const who = audienceOf(pack, f);
+      out.push("planted " + value + (who ? " · for " + who : ""));
+    }
   }
-  if (row.event.probe) out.push("question");
+  if (e.probe) out.push("question");
+  if (e.kind === "edit") out.push("edited");
   return out;
+}
+
+// Events without text still say what happened.
+function actionText(pack, row) {
+  const e = row.event;
+  if (!e || row.text != null) return null;
+  const target = e.target && pack.eventById.get(e.target);
+  switch (e.kind) {
+    case "away": return "Away";
+    case "back": return "Back";
+    case "react": return target ? "Reacted to " + target.actor + "'s message" : "Reacted to a message";
+    case "delete": return target ? "Deleted " + (target.actor === e.actor ? "their" : target.actor + "'s") + " message" : "Deleted a message";
+    case "subject_join": return "Bot joined " + placeName(e.surface);
+    default: return e.kind;
+  }
 }
 
 // --- tabs ----------------------------------------------------------------------
@@ -394,15 +417,18 @@ function renderTimeline(scrollToHit) {
   }
   const frag = document.createDocumentFragment();
   for (const r of rows.slice(0, limit)) {
-    const meta = el("div", { class: "event-meta" }, el("strong", { text: r.who }), el("span", { text: placeName(r.surface) }));
+    const who = r.who === "subject" ? "bot" : r.who;
+    const meta = el("div", { class: "event-meta" }, el("strong", { text: who }), el("span", { text: placeName(r.surface) }));
     for (const t of tagsFor(pack, r)) meta.append(el("span", { class: "tag", text: t }));
     const cls = "event" + (r.bot ? " bot" : "") + (state.hit.has(r.n) ? " hit" : "");
     frag.append(el("div", { class: cls },
       el("time", null, el("span", { text: "Day " + dayOf(r.t) }), el("span", { text: clock(r.t) })),
-      el("div", null, meta, el("p", { text: r.text == null ? "" : r.text }))));
+      el("div", null, meta, actionText(pack, r) != null
+        ? el("p", { class: "action", text: actionText(pack, r) })
+        : el("p", { text: r.text == null ? "" : r.text }))));
   }
   box.replaceChildren(frag);
-  $("count").textContent = Math.min(rows.length, limit) + " of " + rows.length;
+  $("count").textContent = rows.length + " of " + state.rows.length + " events";
   const more = $("more");
   more.hidden = rows.length <= limit;
   more.textContent = "Show " + Math.min(PAGE, rows.length - limit) + " more";
@@ -437,7 +463,11 @@ function renderPlaces(pack) {
   const select = $("place");
   const all = el("option", { text: "All places", value: "" });
   select.replaceChildren(all);
-  for (const s of pack.surfaces) select.append(el("option", { text: s.id, value: s.id }));
+  for (const s of pack.surfaces) {
+    const readers = s.members.filter((m) => pack.actorIds.has(m));
+    const label = s.kind === "direct" || readers.length === pack.actors.length ? placeName(s.id) : s.id + " · " + readers.join(", ");
+    select.append(el("option", { text: label, value: s.id }));
+  }
 }
 
 function renderAbout(pack) {

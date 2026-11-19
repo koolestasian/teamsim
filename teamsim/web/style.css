@@ -178,3 +178,4 @@ td.pass { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
+.event p.action { color: var(--muted); font-style: italic; }
