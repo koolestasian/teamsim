@@ -52,6 +52,19 @@ class LanternShelfPackTest(unittest.TestCase):
             len(self.cases), len(summary["kept"]) + len(summary["old_only"]) + len(summary["skipped"])
         )
 
+    def test_skipped_cases_and_aspect_keys(self):
+        _, summary = self.converter.build(self.dataset, self.cases)
+        # No message of the dataset states these values; nothing is invented for them.
+        self.assertEqual(
+            sorted(c for c, _ in summary["skipped"]), ["para-10", "para-21", "rev-09", "rev-10"]
+        )
+        self.assertEqual(len(summary["aspects"]), 10)
+        facts = {f.key: f for f in self.pack.facts if "." in f.key}
+        self.assertEqual(len(facts), 10)
+        for fact in facts.values():
+            self.assertIsNone(fact.supersedes)
+        self.assertEqual(summary["fallback"][0][0], "rev-11")
+
     def test_every_value_is_in_its_disclosing_message(self):
         facts = {f.id: f for f in self.pack.facts}
         disclosed = set()

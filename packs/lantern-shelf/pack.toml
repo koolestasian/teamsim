@@ -125,6 +125,14 @@ audience = ["*"]
 supersedes = "f.d-8"
 
 [[facts]]
+id = "f.d-16.thread-context"
+key = "d-16.thread-context"
+kind = "decision"
+value = "just want to read my book"
+authority = ["pell"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-22"
 key = "d-22"
 kind = "decision"
@@ -216,12 +224,29 @@ audience = ["*"]
 supersedes = "f.d-27"
 
 [[facts]]
+id = "f.d-39.thread-context"
+key = "d-39.thread-context"
+kind = "decision"
+value = "jumps back to page 12"
+authority = ["pell"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-14"
+key = "d-46"
+kind = "decision"
+value = "API 26"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-46"
 key = "d-46"
 kind = "decision"
 value = "API 24"
 authority = ["dov"]
 audience = ["*"]
+supersedes = "f.d-14"
 
 [[facts]]
 id = "f.d-48"
@@ -247,6 +272,14 @@ value = "96 MB"
 authority = ["dov"]
 audience = ["*"]
 supersedes = "f.d-29"
+
+[[facts]]
+id = "f.d-29.thread-context"
+key = "d-51.thread-context"
+kind = "decision"
+value = "216 MB"
+authority = ["dov"]
+audience = ["*"]
 
 [[facts]]
 id = "f.d-54"
@@ -283,6 +316,14 @@ audience = ["*"]
 supersedes = "f.d-50"
 
 [[facts]]
+id = "f.d-56.thread-context"
+key = "d-56.thread-context"
+kind = "decision"
+value = "debugging it on a Saturday"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
 id = "f.d-59"
 key = "d-59"
 kind = "decision"
@@ -306,6 +347,14 @@ value = "spacing sliders"
 authority = ["wren"]
 audience = ["*"]
 supersedes = "f.d-47"
+
+[[facts]]
+id = "f.d-63.thread-context"
+key = "d-63.thread-context"
+kind = "decision"
+value = "rag badly"
+authority = ["nadia"]
+audience = ["*"]
 
 [[facts]]
 id = "f.d-67"
@@ -430,6 +479,14 @@ authority = ["wren"]
 audience = ["*"]
 
 [[facts]]
+id = "f.t-64.date"
+key = "t-64.date"
+kind = "date"
+value = "May 15"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
 id = "f.t-65"
 key = "t-65"
 kind = "assignment"
@@ -438,10 +495,26 @@ authority = ["wren"]
 audience = ["*"]
 
 [[facts]]
+id = "f.t-65.date"
+key = "t-65.date"
+kind = "date"
+value = "Apr 17"
+authority = ["wren", "imke"]
+audience = ["*"]
+
+[[facts]]
 id = "f.t-72"
 key = "t-72"
 kind = "assignment"
 value = "Tavish"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-72.date"
+key = "t-72.date"
+kind = "date"
+value = "Fri 1 May"
 authority = ["wren"]
 audience = ["*"]
 
@@ -454,10 +527,26 @@ authority = ["wren"]
 audience = ["*"]
 
 [[facts]]
+id = "f.t-73.date"
+key = "t-73.date"
+kind = "date"
+value = "Fri 8 May"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
 id = "f.t-75"
 key = "t-75"
 kind = "assignment"
 value = "Nadia"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-75.date"
+key = "t-75.date"
+kind = "date"
+value = "Apr 28"
 authority = ["wren"]
 audience = ["*"]
 
@@ -640,6 +729,36 @@ key = "t-42"
 probe = "q.name-09"
 
 [[checks]]
+id = "date-01"
+kind = "answer"
+key = "t-72.date"
+probe = "q.date-01"
+
+[[checks]]
+id = "date-02"
+kind = "answer"
+key = "t-73.date"
+probe = "q.date-02"
+
+[[checks]]
+id = "date-03"
+kind = "answer"
+key = "t-64.date"
+probe = "q.date-03"
+
+[[checks]]
+id = "date-04"
+kind = "answer"
+key = "t-75.date"
+probe = "q.date-04"
+
+[[checks]]
+id = "date-05"
+kind = "answer"
+key = "t-65.date"
+probe = "q.date-05"
+
+[[checks]]
 id = "date-06"
 kind = "answer"
 key = "d-76"
@@ -682,7 +801,31 @@ key = "d-36"
 probe = "q.ctx-03"
 
 [[checks]]
+id = "ctx-04"
+kind = "answer"
+key = "d-16.thread-context"
+probe = "q.ctx-04"
+
+[[checks]]
+id = "ctx-06"
+kind = "answer"
+key = "d-56.thread-context"
+probe = "q.ctx-06"
+
+[[checks]]
 id = "ctx-07"
 kind = "answer"
 key = "d-59"
 probe = "q.ctx-07"
+
+[[checks]]
+id = "ctx-08"
+kind = "answer"
+key = "d-63.thread-context"
+probe = "q.ctx-08"
+
+[[checks]]
+id = "ctx-09"
+kind = "answer"
+key = "d-39.thread-context"
+probe = "q.ctx-09"

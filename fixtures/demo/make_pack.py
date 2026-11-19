@@ -23,9 +23,13 @@ Mapping
   ``answer_contains``; it must appear in one of the case's expected messages, and
   those messages are the events that disclose the fact. A case about a superseded
   entry gives the old value only and has no check. A case whose fragment appears in
-  none of its expected messages is skipped. When two cases give different values
-  for one entry, the first is used and the other case is skipped (listed in the
-  printed summary).
+  none of its expected messages is read from the nearest earlier message of the same
+  channel that has it verbatim and is written by one of the expected authors (case
+  rev-11, "I'd say API 26", confirmed there by "26 it is"); otherwise it is skipped
+  and listed with its reason. When a case gives a different value for an entry that
+  already has one, it asks about another aspect of that entry (owner or due date, say):
+  it gets its own key, ``<entry key>.<category>`` (``.<case id>`` if that is taken), and
+  its own fact, without a ``supersedes`` link.
 * Checks: one ``harness`` check and one ``answer`` check per kept case. The probe
   is a new ``post`` after the last transcript message, 5 minutes apart in case
   order, asking the case's question on the surface of its first expected message,
@@ -120,9 +124,10 @@ def build(dataset, cases):
             entry_id = entries[entry_id]["superseded_by"]
         return entry_id
 
-    summary = {"skipped": [], "kept": [], "old_only": []}
-    facts = {}  # entry id -> value, kind, first case, disclosing message ids
+    summary = {"skipped": [], "kept": [], "old_only": [], "aspects": [], "fallback": []}
+    facts = {}  # (entry id, aspect or None) -> value, kind, first case, disclosing message ids
     case_entry = {}
+    order = {m["id"]: i for i, m in enumerate(messages)}
     for case in cases:
         entry_id = int(case["expected_entries"][0].split("-")[1])
         fragment = case["answer_contains"]
@@ -130,22 +135,41 @@ def build(dataset, cases):
             mid for mid in case["expected_messages"] if fragment.lower() in by_message[mid]["content"].lower()
         ]
         if not disclosing:
-            summary["skipped"].append((case["id"], "fragment %r is in none of the expected messages" % fragment))
+            # The expected messages may only confirm a value that an earlier message of the
+            # same channel proposed in the words of the fragment.
+            first = by_message[case["expected_messages"][0]]
+            authors = {by_message[mid]["author_id"] for mid in case["expected_messages"]}
+            earlier = [
+                m
+                for m in messages[: order[first["id"]]]
+                if m["channel_id"] == first["channel_id"]
+                and m["author_id"] in authors
+                and fragment.lower() in m["content"].lower()
+            ]
+            if earlier:
+                disclosing = [earlier[-1]["id"]]
+                summary["fallback"].append((case["id"], disclosing[0]))
+        if not disclosing:
+            summary["skipped"].append(
+                (case["id"], "no message states %r: the expected messages put it in other words" % fragment)
+            )
             continue
         entry = entries[entry_id]
         kind = "date" if case["category"] == "date" else KIND_OF_ENTRY[entry["kind"]]
-        have = facts.get(entry_id)
+        slot = (entry_id, None)
+        have = facts.get(slot)
         if have is not None and have["value"].lower() != fragment.lower():
-            summary["skipped"].append(
-                (case["id"], "entry %s already has the value %r from %s" % (entry_id, have["value"], have["case"]))
-            )
-            continue
-        if have is None:
-            facts[entry_id] = {"value": fragment, "kind": kind, "case": case["id"], "messages": []}
+            aspect = case["category"]
+            if (entry_id, aspect) in facts:
+                aspect = case["id"]
+            slot = (entry_id, aspect)
+            summary["aspects"].append((case["id"], "%s-%d.%s" % (PREFIX[entry["kind"]], entry_id, aspect)))
+        if slot not in facts:
+            facts[slot] = {"value": fragment, "kind": kind, "case": case["id"], "messages": []}
         for mid in disclosing:
-            if mid not in facts[entry_id]["messages"]:
-                facts[entry_id]["messages"].append(mid)
-        case_entry[case["id"]] = entry_id
+            if mid not in facts[slot]["messages"]:
+                facts[slot]["messages"].append(mid)
+        case_entry[case["id"]] = slot
         if case["expected_status"] == "superseded":
             summary["old_only"].append(case["id"])
 
@@ -153,15 +177,22 @@ def build(dataset, cases):
         top = newest(entry_id)
         return "%s-%d" % (PREFIX[entries[top]["kind"]], top)
 
-    def fact_id(entry_id):
-        return "f.%s-%d" % (PREFIX[entries[entry_id]["kind"]], entry_id)
+    def fact_id(slot):
+        entry_id, aspect = slot
+        suffix = "" if aspect is None else ".%s" % aspect
+        return "f.%s-%d%s" % (PREFIX[entries[entry_id]["kind"]], entry_id, suffix)
+
+    def fact_key(slot):
+        entry_id, aspect = slot
+        return key_of(entry_id) + ("" if aspect is None else ".%s" % aspect)
 
     fact_list = []
-    for entry_id in sorted(facts, key=lambda i: (key_of(i), i)):
-        f = facts[entry_id]
-        # The nearest older entry in the chain that has a fact.
-        prev = older.get(entry_id)
-        while prev is not None and prev not in facts:
+    for slot in sorted(facts, key=lambda t: (fact_key(t), t[0])):
+        f = facts[slot]
+        entry_id, aspect = slot
+        # The nearest older entry in the chain that has a fact (not for another aspect).
+        prev = older.get(entry_id) if aspect is None else None
+        while prev is not None and (prev, None) not in facts:
             prev = older.get(prev)
         authors = []
         for mid in f["messages"]:
@@ -170,35 +201,35 @@ def build(dataset, cases):
                 authors.append(a)
         fact_list.append(
             Fact(
-                id=fact_id(entry_id),
-                key=key_of(entry_id),
+                id=fact_id(slot),
+                key=fact_key(slot),
                 kind=f["kind"],
                 value=_nfc(f["value"]),
                 authority=tuple(authors),
                 audience=("*",),
-                supersedes=fact_id(prev) if prev is not None else None,
+                supersedes=fact_id((prev, None)) if prev is not None else None,
             )
         )
         for mid in f["messages"]:
-            event_by_id[event_of[mid]].setdefault("discloses", []).append(fact_id(entry_id))
+            event_by_id[event_of[mid]].setdefault("discloses", []).append(fact_id(slot))
 
     # Probes and checks.
     checks = [Check(id="c.harness", kind="harness")]
     probes = []
     cursor = 0
     for case in cases:
-        entry_id = case_entry.get(case["id"])
-        if entry_id is None or case["expected_status"] == "superseded":
+        slot = case_entry.get(case["id"])
+        if slot is None or case["expected_status"] == "superseded":
             continue
-        chain = [entry_id]
-        while chain[-1] in older:
+        chain = [slot[0]]
+        while slot[1] is None and chain[-1] in older:
             chain.append(older[chain[-1]])
         depends = []
         authors = set()
         for c in chain:
-            if c not in facts:
+            if (c, slot[1]) not in facts:
                 continue
-            for mid in facts[c]["messages"]:
+            for mid in facts[(c, slot[1])]["messages"]:
                 depends.append(event_of[mid])
                 authors.add(actor_id[by_message[mid]["author_id"]])
         asker = people[cursor % len(people)]
@@ -218,7 +249,7 @@ def build(dataset, cases):
                 "depends_on": tuple(dict.fromkeys(depends)),
             }
         )
-        checks.append(Check(id=case["id"], kind="answer", key=key_of(entry_id), probe=probe_id))
+        checks.append(Check(id=case["id"], kind="answer", key=fact_key(slot), probe=probe_id))
         summary["kept"].append(case["id"])
         cursor += 1
 
@@ -301,6 +332,12 @@ def main(argv=None):
     )
     print("kept cases (%d): %s" % (len(summary["kept"]), " ".join(summary["kept"])))
     print("cases about an old value, no check (%d): %s" % (len(summary["old_only"]), " ".join(summary["old_only"])))
+    print("cases with their own key, another aspect of an entry (%d):" % len(summary["aspects"]))
+    for case_id, key in summary["aspects"]:
+        print("  %s: %s" % (case_id, key))
+    print("cases disclosed by an earlier message of the channel (%d):" % len(summary["fallback"]))
+    for case_id, mid in summary["fallback"]:
+        print("  %s: m.%s" % (case_id, mid))
     print("skipped cases (%d):" % len(summary["skipped"]))
     for case_id, why in summary["skipped"]:
         print("  %s: %s" % (case_id, why))
