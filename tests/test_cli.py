@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from unittest import mock
 
@@ -150,12 +151,27 @@ class CommandTests(Tmp):
         self.assertEqual(len(err.strip().splitlines()), 1)
 
     def test_missing_example_exits_2(self):
-        with mock.patch.dict(sys.modules, {"examples.naive_bot": None}):
+        with mock.patch.object(cli, "ROOT", self.tmp):
             code, _, err = call(
                 "run", str(MINIMAL), "--builtin", "naive_bot", "--out", str(self.tmp / "o")
             )
         self.assertEqual(code, 2)
         self.assertEqual(len(err.strip().splitlines()), 1)
+
+    def test_another_package_named_examples_does_not_shadow_the_bots(self):
+        shadow = types.ModuleType("examples")
+        shadow.__path__ = []
+        with mock.patch.dict(sys.modules, {"examples": shadow}):
+            sys.modules.pop("examples.naive_bot", None)
+            code, _, err = call(
+                "run", str(MINIMAL), "--builtin", "naive_bot", "--out", str(self.tmp / "o")
+            )
+        self.assertEqual((code, err), (1, ""))  # naive_bot fails a check on minimal; it ran
+
+    def test_loading_a_bot_leaves_sys_path_alone(self):
+        before = list(sys.path)
+        call("run", str(MINIMAL), "--builtin", "careful_bot", "--out", str(self.tmp / "o"))
+        self.assertEqual(sys.path, before)
 
 
 class SubjectTests(Tmp):

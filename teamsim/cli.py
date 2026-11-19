@@ -23,7 +23,7 @@ It is the only core module that does.
 """
 
 import argparse
-import importlib
+import importlib.util
 import os
 import shlex
 import shutil
@@ -55,10 +55,13 @@ def _line(text: object) -> str:
 
 
 def _example_bot(name: str):
-    if str(ROOT) not in sys.path:
-        sys.path.append(str(ROOT))
+    """Load ``examples/<name>.py`` from this checkout by path, under a private module name,
+    so another package called ``examples`` on the path cannot take its place."""
     try:
-        module = importlib.import_module("examples." + name)
+        path = ROOT / "examples" / (name + ".py")
+        spec = importlib.util.spec_from_file_location("_teamsim_example_" + name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
         return module.Bot()
     except Exception as error:  # a missing or broken example is an input problem
         raise CliError(
