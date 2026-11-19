@@ -60,8 +60,18 @@ for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]
   page.on("console", (m) => { if (m.type() === "error") problems.push("console: " + m.text()); });
   page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
   page.on("response", (r) => { if (r.status() >= 400) problems.push(r.status() + " " + r.url()); });
+  const scored = [];
+  page.on("request", (r) => { if (/\/api\/(run|validate)$/.test(new URL(r.url()).pathname)) scored.push(r.url()); });
 
-  await page.goto(base + "?pack=team-ten&subject=naive_bot");
+  // Nothing is scored until a button is pressed, whatever the URL asks for.
+  await page.goto(base + "?pack=team-ten&subject=naive_bot&run=1&validate=1#controls");
+  await page.waitForSelector("#strip .strip-empty");
+  await page.waitForTimeout(500);
+  check(scored.length === 0, "no run or validation on load, even with run=1, validate=1 and #controls");
+  check(await page.locator("#run-controls").isVisible(), "Controls tab offers Run controls instead of running");
+  check(!(await page.locator("body").innerText()).includes("Every control matches"), "no control result before Run controls");
+
+  await page.goto(base + "?pack=team-ten&subject=naive_bot#checks");
   await page.waitForSelector("#strip .strip-empty");
   check((await page.locator("#strip").innerText()).includes("Run a bot to score the checks."), "empty state before a run");
   await page.screenshot({ path: path.join(outDir, name + "-1-empty.png") });
@@ -107,6 +117,7 @@ for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]
   await page.screenshot({ path: path.join(outDir, name + "-4-timeline.png") });
 
   await page.click("#tab-controls");
+  await page.click("#run-controls");
   await page.waitForFunction(() => document.body.innerText.includes("Every control matches the ledger."), null, { timeout: 60000 });
   check(true, "Controls tab shows 'Every control matches the ledger.'");
   check((await scrollWidth(page)) === width, "controls tab scrollWidth equals " + width);
@@ -114,7 +125,9 @@ for (const [name, width, height] of [["desktop", 1440, 900], ["phone", 390, 844]
   await page.reload();
   await page.waitForSelector("#strip .strip-empty");
   check((await page.locator("#tab-controls").getAttribute("aria-selected")) === "true", "reload keeps the selected tab");
-  await page.waitForFunction(() => document.body.innerText.includes("Every control matches the ledger."), null, { timeout: 60000 });
+  const before = scored.length;
+  await page.waitForTimeout(500);
+  check(scored.length === before && await page.locator("#run-controls").isVisible(), "reload on #controls does not run the controls");
 
   await page.click("#tab-users");
   check((await scrollWidth(page)) === width, "users tab scrollWidth equals " + width);

@@ -170,7 +170,7 @@ function showTab(name, keepHash) {
   if (!keepHash) {
     try { history.replaceState(null, "", location.pathname + location.search + "#" + name); } catch (_) { /* ignore */ }
   }
-  if (name === "controls") ensureMatrix();
+  if (name === "controls") showControls();
 }
 
 // --- strip -----------------------------------------------------------------------
@@ -479,12 +479,22 @@ function controlCount() {
   return state.subjects.filter((s) => s !== "naive_bot" && s !== "careful_bot").length;
 }
 
-async function ensureMatrix() {
+// Opening the tab only shows what has already run; the controls run on the button alone.
+function showControls() {
   const pack = state.pack;
   if (!pack || state.matrixBusy) return;
   const cached = state.matrices[pack.name];
   $("matrix-note").textContent = "Each defect control is the oracle with one known defect. Its own checks should fail; all others pass.";
+  $("run-controls").hidden = !!cached;
   if (cached) { renderMatrix(pack, cached); return; }
+  $("matrix-wrap").hidden = true;
+  clear($("mismatches"));
+}
+
+async function runControls() {
+  const pack = state.pack;
+  if (!pack || state.matrixBusy || state.busy) return;
+  $("run-controls").hidden = true;
   state.matrixBusy = true;
   $("matrix-wrap").hidden = true;
   clear($("mismatches"));
@@ -523,7 +533,7 @@ async function loadPack(name) {
   renderTimeline(false);
   renderAbout(state.pack);
   setStatus("");
-  if (state.tab === "controls") ensureMatrix();
+  if (state.tab === "controls") showControls();
 }
 
 async function doRun() {
@@ -603,10 +613,11 @@ async function start() {
   });
   window.addEventListener("hashchange", () => showTab(location.hash.slice(1), true));
 
-  const wantsControls = params.get("validate") === "1";
-  showTab(wantsControls ? "controls" : location.hash.slice(1) || "checks", !wantsControls);
+  $("run-controls").addEventListener("click", runControls);
+
+  // Nothing runs on load: URL parameters only preselect the pack and bot.
+  showTab(location.hash.slice(1) || "checks", true);
   await loadPack($("pack").value).catch((e) => setStatus(e.message, true));
-  if (params.get("run") === "1") await doRun();
 }
 
 start();
