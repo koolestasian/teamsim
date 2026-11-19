@@ -127,8 +127,8 @@ key = "trip-note"
 kind = "item"
 value = "mountain cabin"
 forms = ["mountain cabin"]
-authority = ["member-10"]
-audience = ["member-10", "member-1"]
+authority = ["member-5"]
+audience = ["member-5", "member-1"]
 
 [[facts]]
 id = "f.meetup-post.1"
@@ -136,7 +136,7 @@ key = "meetup-post"
 kind = "item"
 value = "Saturday market"
 forms = ["Saturday market"]
-authority = ["member-2"]
+authority = ["member-7"]
 audience = ["*"]
 
 [[facts]]
@@ -145,7 +145,7 @@ key = "meetup-post"
 kind = "item"
 value = "Sunday market"
 forms = ["Sunday market"]
-authority = ["member-2"]
+authority = ["member-7"]
 audience = ["*"]
 supersedes = "f.meetup-post.1"
 

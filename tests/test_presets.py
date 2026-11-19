@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).parent.parent
 # Pinned: the hash of each committed pack. A change to the generator, a preset or a population
 # changes it on purpose, never by accident.
 SOLO_HASH = "584b0fc42ff7511266604001517ec739ad493a8d96527dd5635bf8da7e0d312e"
-SOCIAL_TEN_HASH = "1f8b58fd196d371508fdb13dcfccc931941d0cc6b524aeb242c4a304fd310b51"
+SOCIAL_TEN_HASH = "eef012e948131cf4cbc9383b45a81c0ea9cfbbd5544d240534fd183828000940"
 
 PACKS = {
     "solo": (ROOT / "populations" / "solo.toml", ROOT / "packs" / "solo", SOLO_HASH),
@@ -364,16 +364,24 @@ class SocialSituationTests(unittest.TestCase):
                 self.assertFalse(event.discloses or event.probe)
         self.assertFalse(any(".r." in e.id for e in self.pack.events))
 
-    def test_one_or_two_users_plant_only_what_they_can_carry_and_say_so(self):
+    def test_a_population_with_too_few_users_plants_only_what_it_can_carry_and_says_so(self):
+        # every situation takes users that no other situation takes
         for total in (1, 2):
             with self.subTest(users=total):
                 built = generate.generate(social(total))
                 self.assertEqual({c.kind for c in built.checks}, {"harness", "answer"})
-                self.assertTrue(any("need at least three users" in line for line in built.header.limits))
+                note = next(line for line in built.header.limits if line.startswith("Not planted"))
+                self.assertIn("friends-only posts", note)
+                self.assertIn("blocks", note)
                 self.assertTrue(any(f.supersedes for f in built.facts))
         three = generate.generate(social(3))
         self.assertEqual({c.kind for c in three.checks}, {"harness", "answer", "withhold", "no_leak"})
-        self.assertFalse(any("need at least three users" in line for line in three.header.limits))
+        note = next(line for line in three.header.limits if line.startswith("Not planted"))
+        self.assertNotIn("friends-only posts", note)
+        self.assertIn("blocks", note)
+        self.assertIn("deleted posts", note)
+        ten = generate.generate(social())
+        self.assertFalse(any(line.startswith("Not planted") for line in ten.header.limits))
 
     def test_away_windows_keep_a_user_from_acting(self):
         away = next(a for a in generate.generate(social()).actors if a.id == "member-3")

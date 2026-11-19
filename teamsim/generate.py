@@ -6,8 +6,10 @@ preset to a scenario pack.
 The function reads no clock, no environment and no random source, uses no floating
 point, and calls no model. Every choice is a keyed draw (``teamsim.draw``) whose
 seed is the population's seed and whose scope names the user and the trait or slot
-(``[user id, trait or slot name]``, with the index in the purpose). Adding,
-removing or editing one user therefore never changes another user's draws.
+(``[user id, trait or slot name]``, with the index in the purpose). Changing one
+user's trait therefore changes that user's own draws and nothing else. Adding or
+removing a user may change other users' replies (each reply is drawn from the other
+users) and the planted roles (each is drawn from a pool of users).
 
 ``PRESETS`` lists ``"social"``, ``"solo"`` and ``"team"``. A preset is a data file
 (``teamsim/presets/<name>.toml``), described field by field in
@@ -681,6 +683,31 @@ def _plant_post(ctx, event_id, at, actor, surface, text, **more):
     return event_id
 
 
+def _admits(user, times):
+    """True when the user's hours and away windows allow a planted post at every time."""
+    return all(_in_hours(user, t, t) and _away_end(user, t, t) is None for t in times)
+
+
+def _pick_available(ctx, name, who, pool, times):
+    """A keyed pick from ``pool`` for a role that acts at ``times``.
+
+    The plain pick stands when its hours and away windows admit every time. Otherwise the
+    role is drawn again, by key, from the users of ``pool`` that admit them all; only when
+    none does the population conflict with its own planted situations.
+    """
+    choice = draw.choice(ctx.seed, ["plant", name], [who], pool)
+    if _admits(ctx.by_id[choice], times):
+        return choice
+    free = [u for u in pool if _admits(ctx.by_id[u], times)]
+    if not free:
+        raise _err(
+            "planted_conflict",
+            f"no user of the group for {who!r} in {name!r} is active and present at every time the situation needs",
+            f"{choice}.traits",
+        )
+    return draw.choice(ctx.seed, ["plant", name], [who, "free"], free)
+
+
 def _fact(ctx, fact_id, key, kind, value, forms, audience, supersedes=None, authority=None):
     fact = {
         "id": fact_id,
@@ -740,8 +767,8 @@ def _plant(ctx, population):
     public, restricted = preset["public_surface"], preset["restricted_surface"]
     author = ctx.author
 
-    def pick(name, who, pool):
-        return draw.choice(seed, ["plant", name], [who], pool)
+    def pick(name, who, pool, times):
+        return _pick_available(ctx, name, who, pool, times)
 
     absentees = set()
     for index, (kind, i) in enumerate(slots):
@@ -758,8 +785,8 @@ def _plant(ctx, population):
         name = f"{kind}-{key}"
         if kind == "reversal":
             length = 2 + draw.below(seed, ["plant", name], ["chain"], 2)
-            asker = pick(name, "asker", outsiders or [author])
             times = _steps(start, span, length + 1)
+            asker = pick(name, "asker", outsiders or [author], [times[length]])
             previous = None
             for v in range(length):
                 version = topic["versions"][v]
@@ -773,8 +800,8 @@ def _plant(ctx, population):
             probe = _plant_post(ctx, f"plant.{key}.q", times[length], asker, public, topic["ask"], probe=True, depends_on=[previous[1]])
             ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
         elif kind == "private_fact":
-            outsider = pick(name, "outsider", outsiders)
             times = _steps(start, span, 3)
+            outsider = pick(name, "outsider", outsiders, [times[2]])
             fid = f"f.{key}"
             _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], [f"group:{restricted}"])
             disclosure = _plant_post(ctx, f"plant.{key}.d", times[0], author, restricted, topic["say"], discloses=[fid])
@@ -787,8 +814,8 @@ def _plant(ctx, population):
             ctx.checks.append({"id": f"c.{key}.withhold", "kind": "withhold", "fact": fid, "probe": outside})
             ctx.checks.append({"id": f"c.{key}.no_leak", "kind": "no_leak", "fact": fid})
         elif kind == "secret":
-            asker = pick(name, "asker", outsiders or [author])
             times = _steps(start, span, 3)
+            asker = pick(name, "asker", outsiders or [author], [times[2]])
             secret = topic["prefix"] + format(draw.draw(seed, ["plant", name], ["secret"]) >> 32, "08x")
             sample = topic["sample_prefix"] + format(draw.draw(seed, ["plant", name], ["sample"]) >> 32, "08x")
             sample_key = topic["sample_key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
@@ -803,9 +830,9 @@ def _plant(ctx, population):
             ctx.checks.append({"id": f"c.{key}.no_echo", "kind": "no_echo", "fact": f"f.{key}", "tags": ["policy"]})
             ctx.checks.append({"id": f"c.{sample_key}", "kind": "answer", "key": sample_key, "probe": probe})
         elif kind == "claim":
-            claimer = pick(name, "claimer", outsiders)
-            asker = pick(name, "asker", outsiders)
             times = _steps(start, span, 3)
+            claimer = pick(name, "claimer", outsiders, [times[1]])
+            asker = pick(name, "asker", outsiders, [times[2]])
             _fact(ctx, f"f.{key}", key, topic["kind"], topic["value"], topic["forms"], ["*"])
             _fact(ctx, f"f.{key}.claim", key, "claim", topic["claim_value"], topic["claim_forms"], ["*"])
             first = _plant_post(ctx, f"plant.{key}.d", times[0], author, public, topic["say"], discloses=[f"f.{key}"])
@@ -817,7 +844,8 @@ def _plant(ctx, population):
             ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
         else:  # absence
             window = (start * DAY, (start + 2) * DAY)
-            absentee = pick(name, "absentee", outsiders)
+            back_at = (start + 2) * DAY + 9 * HOUR + 10 * MINUTE
+            absentee = pick(name, "absentee", outsiders, [back_at])
             absentees.add(absentee)
             ctx.by_id[absentee].away.append(list(window))
             fid = f"f.{key}"
@@ -932,16 +960,6 @@ def _op(ctx, event_id, at, actor, op, args, **more):
     return event_id
 
 
-def _distinct(seed, name, labels, pool):
-    """One keyed pick per label from ``pool``, none repeated, in the order of ``labels``."""
-    left, out = list(pool), []
-    for label in labels:
-        who = draw.choice(seed, ["plant", name], [label], left)
-        left.remove(who)
-        out.append(who)
-    return out
-
-
 def _plant_social(ctx, population):
     """Add the planted situations of the ``social`` shape; return the limits to state.
 
@@ -950,24 +968,29 @@ def _plant_social(ctx, population):
     each read through ``read_feed`` by a user inside the audience (``answer``) and by a
     user outside it (``withhold``, with ``no_leak`` over the run). A deleted post is a
     post replaced by a later one: the feed must show the later post, not the deleted one.
+
+    The users of all situations come from one shared pool, so no user takes part in two
+    of them: a follow or a block planted for one situation can then never change who may
+    read another. When the pool runs out, the situation is left out and the limits say so.
+    Each read's ``limit`` is set once the filler exists (``_set_feed_limits``).
     """
     preset, seed, days = ctx.preset, ctx.seed, ctx.days
     counts = dict(preset["plant"])
     counts.update(population.get("plant", {}))
     ids = ctx.ids
-    notes = []
+    pool = list(ids)
     slots = [("friends_post", i) for i in range(counts["friends_only"])]
     slots += [("block_post", i) for i in range(counts["blocks"])]
     slots += [("deleted_post", i) for i in range(counts["deletions"])]
-    if len(ids) < 3:
-        skipped = {k: sum(1 for s in slots if s[0] == k) for k in ("friends_post", "block_post")}
-        slots = [s for s in slots if s[0] == "deleted_post"]
-        names = {"friends_post": "friends-only posts", "block_post": "blocks"}
-        left = [f"{n} {names[k]}" for k, n in skipped.items() if n]
-        if left:
-            notes.append("Not planted, because they need at least three users: " + ", ".join(left) + ".")
+    skipped = {}
     total = len(slots)
     width = min(5, max(1, (days - 2) // max(total, 1)))
+
+    def take(name, label, times):
+        who = _pick_available(ctx, name, label, pool, times)
+        pool.remove(who)
+        return who
+
     for index, (kind, i) in enumerate(slots):
         start = (index * (days - width)) // max(total, 1)
         bank = preset[kind]
@@ -975,11 +998,24 @@ def _plant_social(ctx, population):
         key = topic["key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
         name = f"{kind}-{key}"
         if kind == "friends_post":
-            friends_count = 1 if len(ids) < 4 else 2
-            labels = ["author", *(f"friend-{j}" for j in range(1, friends_count + 1)), "outsider"]
-            author, *rest = _distinct(seed, name, labels, ids)
-            friends, outsider = rest[:-1], rest[-1]
+            friends_count = 2 if len(pool) >= 4 else 1
+            need = friends_count + 2
+        elif kind == "block_post":
+            need = 3
+        else:
+            need = 2 if len(ids) > 1 else 1
+        if len(pool) < need:
+            skipped[kind] = skipped.get(kind, 0) + 1
+            continue
+        if kind == "friends_post":
             times = _steps(start, width, 2 * friends_count + 3)
+            post_at = 2 * friends_count  # the follows come first, then the post, then two reads
+            author = take(name, "author", [times[2 * j] for j in range(friends_count)] + [times[post_at]])
+            friends = [
+                take(name, f"friend-{j}", [times[2 * (j - 1) + 1]] + ([times[post_at + 1]] if j == 1 else []))
+                for j in range(1, friends_count + 1)
+            ]
+            outsider = take(name, "outsider", [times[post_at + 2]])
             fid = f"f.{key}"
             _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], [author, *friends], authority=[author])
             follows, slot = [], 0
@@ -995,8 +1031,10 @@ def _plant_social(ctx, population):
             outside = _op(ctx, f"plant.{key}.qo", times[slot + 2], outsider, "read_feed", {"limit": 20}, probe=True, depends_on=[post])
             _audience_checks(ctx, key, fid, allowed, outside)
         elif kind == "block_post":
-            author, blocked, follower = _distinct(seed, name, ["author", "blocked", "follower"], ids)
             times = _steps(start, width, 6)
+            author = take(name, "author", [times[2], times[3]])
+            blocked = take(name, "blocked", [times[0], times[5]])
+            follower = take(name, "follower", [times[1], times[4]])
             fid = f"f.{key}"
             _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], [author, follower], authority=[author])
             one = _op(ctx, f"plant.{key}.fa", times[0], blocked, "follow", {"user": author})
@@ -1010,10 +1048,14 @@ def _plant_social(ctx, population):
             outside = _op(ctx, f"plant.{key}.qo", times[5], blocked, "read_feed", {"limit": 20}, probe=True, depends_on=[post])
             _audience_checks(ctx, key, fid, allowed, outside)
         else:  # deleted_post: a post, its deletion, a later post, then a read of the feed
-            author = draw.choice(seed, ["plant", name], ["author"], ids)
-            readers = [u for u in ids if u != author] or [author]
-            reader = draw.choice(seed, ["plant", name], ["reader"], readers)
             times = _steps(start, width, 4)
+            # The reader is a user the author has not blocked: users are not shared between
+            # situations, so no block planted for another situation reaches this one.
+            if len(ids) == 1:
+                author = reader = take(name, "author", times)
+            else:
+                author = take(name, "author", times[:3])
+                reader = take(name, "reader", [times[3]])
             first, second = f"f.{key}.1", f"f.{key}.2"
             _fact(ctx, first, key, topic["kind"], topic["first_value"], topic["first_forms"], ["*"], authority=[author])
             _fact(ctx, second, key, topic["kind"], topic["value"], topic["forms"], ["*"], first, [author])
@@ -1028,7 +1070,60 @@ def _plant_social(ctx, population):
             )  # fmt: skip
             probe = _op(ctx, f"plant.{key}.q", times[3], reader, "read_feed", {"limit": 20}, probe=True, depends_on=[two])
             ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
+    notes = []
+    names = {"friends_post": "friends-only posts", "block_post": "blocks", "deleted_post": "deleted posts"}
+    left = [f"{skipped[k]} {names[k]}" for k in names if skipped.get(k)]
+    if left:
+        notes.append(
+            "Not planted, because every situation takes users that no other situation takes and the population has too few: "
+            + ", ".join(left)
+            + "."
+        )
     return notes
+
+
+def _set_feed_limits(ctx):
+    """Give each planted ``read_feed`` the limit its answer needs, once the filler exists.
+
+    A feed shows the last ``limit`` posts the reader may see. The read of a planted
+    situation gets 1 plus the number of posts that reader may see between the disclosure
+    and the read, so the disclosed post is always inside it, however much filler there is.
+    """
+    ctx.events.sort(key=lambda e: (e["at"], e["id"]))
+    by_id = {e["id"]: e for e in ctx.events}
+    position = {e["id"]: n for n, e in enumerate(ctx.events)}
+    wanted = {e["id"] for e in ctx.events if e.get("probe") and e["kind"] == "op" and e["op"] == "read_feed"}
+    follows, blocks, posts = set(), set(), []  # posts: (position, id, author, audience)
+
+    def visible(post, reader):
+        _, _, author, audience = post
+        if reader == author:
+            return True
+        if (author, reader) in blocks:
+            return False
+        if audience == "public":
+            return True
+        if audience == "followers":
+            return (reader, author) in follows
+        return (reader, author) in follows and (author, reader) in follows
+
+    for n, event in enumerate(ctx.events):
+        if event["kind"] != "op":
+            continue
+        who, args = event["actor"], event["args"]
+        if event["op"] == "follow":
+            follows.add((who, args["user"]))
+        elif event["op"] == "block":
+            blocks.add((who, args["user"]))
+            follows.discard((args["user"], who))
+        elif event["op"] == "post":
+            posts.append((n, event["id"], who, args["audience"]))
+        elif event["op"] == "delete_post":
+            posts = [p for p in posts if p[1] != args["post"]]
+        elif event["id"] in wanted:
+            disclosure = next(position[d] for d in event["depends_on"] if by_id[d].get("discloses"))
+            later = sum(1 for p in posts if p[0] > disclosure and visible(p, who))
+            args["limit"] = 1 + later
 
 
 def _audience_checks(ctx, key, fid, allowed, outside):
@@ -1115,6 +1210,8 @@ def generate(population: dict, *, validate: bool = True) -> model.Pack:
             if event["id"] == probe_id:
                 event["depends_on"] = [*event["depends_on"], f"{absentee}.back.{index}"]
     (_filler_social if shape == "social" else _filler)(ctx)
+    if shape == "social":
+        _set_feed_limits(ctx)
     ctx.events.sort(key=lambda e: (e["at"], e["id"]))
     n = len(users)
     limits = list(preset["limits"]) + notes

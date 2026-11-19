@@ -17,8 +17,9 @@ file gives the same pack, byte for byte, on every platform.
 Every choice is a keyed draw (`teamsim/draw.py`). The seed is the population's `seed`; the
 scope is `[user id, trait or slot name]` and the purpose holds the index (a turn number, a
 message id). Planted situations use the scope `["plant", slot name]`. A draw depends on
-nothing but its own key, so adding, removing or editing one user never changes another
-user's draws, and editing a trait changes only that user's messages.
+nothing but its own key, so changing one user's trait changes only that user's own draws
+and messages. Adding or removing a user may change other users' replies (each reply is drawn
+from the other users) and the planted roles (each is drawn from a pool of users).
 
 The population hash in the pack's provenance is the SHA-256 of the canonical form
 (`pack-format.md`, section 8) of the object the file holds, so comments, key order and
@@ -213,6 +214,12 @@ For `team`:
   author's hours or inside an away window moves to the author's next free time, and is left
   out if that is after the last day.
 
+A planted role is drawn by key from its pool. When that user's active hours or away windows
+rule out one of the times the role acts in its situation, the role is drawn again, by key,
+from the users of the pool who admit every such time; `planted_conflict` is raised only when
+no user does. One user's traits can therefore change who is picked for a role. A role is never
+drawn again when the first pick fits, so packs keep their bytes where no trait conflicts.
+
 Authority is held by the first user of an authority role (`lead` in `team`), or by the first
 user when the groups hold none. The restricted channel holds the users of the authority role.
 With one user the generator plants only reversals and secrets (a restricted fact, a claim and
@@ -235,13 +242,17 @@ For `social`, every user acts on the product through `op` events on its own `dir
 The operations are defined by the preset and not by any product: `post` with `audience`
 (`public`, `friends` or `followers`) and `text`, `follow` and `block` with `user`, `delete_post`
 with `post` (an event id) and `read_feed` with `limit`. A subject receives them as `op` events and
-answers a `read_feed` with a message that lists what that user may see. The users are drawn
-by key from the population, and one user may take part in several situations.
+answers a `read_feed` with a message that lists what that user may see. The users of all situations
+are drawn by key from one shared pool, so no user takes part in two situations: a follow or a block
+planted for one situation never changes who may read another. When the pool runs out, the generator
+leaves the remaining situations out and the pack's `limits` say how many. The `limit` of each planted
+`read_feed` is 1 plus the number of posts the reader may see between the disclosure and the read,
+so the disclosed post is inside the feed however much filler there is.
 
 - Friends-only post: the author and each friend follow each other, the author posts to
   `friends`, a friend reads the feed (`answer`) and a user who is not a friend reads it
   (`withhold`). The fact's audience is the list of the author and the friends, and `no_leak`
-  covers every other message of the subject. With four users or more there are two friends.
+  covers every other message of the subject. With four or more users left in the pool there are two friends.
 - Block: a user and a follower follow the author, the author blocks the first, then posts to
   `followers`. The follower reads the feed (`answer`) and the blocked user reads it
   (`withhold`, with `no_leak`).
@@ -249,8 +260,9 @@ by key from the population, and one user may take part in several situations.
   superseded by the second, so a feed that still shows the deleted post fails `answer` as
   `stale`, and a feed that shows neither post fails as `missing` or `no_response`. Another user reads the feed.
 - The feed read by someone outside the audience is the `withhold` probe of the first two.
-- Fewer than three users cannot carry the first two situations; the generator then plants only
-  deletions and the pack's `limits` say so.
+- A friends-only post takes three or four users, a block three and a deleted post two (one when the
+  population holds one user). With fewer users left in the pool, that situation is not planted and
+  the pack's `limits` say which and how many were left out.
 
 ## 6. The preset file
 

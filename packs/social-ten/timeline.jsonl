@@ -63,7 +63,7 @@
 {"actor":"member-10","args":{"limit":20},"at":234262951,"id":"member-10.q4","kind":"op","op":"read_feed","surface":"direct:member-10"}
 {"actor":"member-2","args":{"audience":"public","text":"The evening train was packed but everyone was in a good mood."},"at":234948813,"id":"member-2.t4","kind":"op","op":"post","surface":"direct:member-2"}
 {"actor":"member-2","args":{"audience":"public","text":"Finished a long walk along the river and the light was lovely."},"at":236996273,"id":"member-2.t5","kind":"op","op":"post","surface":"direct:member-2"}
-{"actor":"member-8","args":{"limit":20},"at":292200000,"depends_on":["plant.garden-note.d"],"id":"plant.garden-note.qa","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-8"}
+{"actor":"member-8","args":{"limit":11},"at":292200000,"depends_on":["plant.garden-note.d"],"id":"plant.garden-note.qa","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-8"}
 {"actor":"member-3","args":{"audience":"public","text":"The evening train was packed but everyone was in a good mood."},"at":292881216,"id":"member-3.t7","kind":"op","op":"post","surface":"direct:member-3"}
 {"actor":"member-7","args":{"limit":20},"at":293145862,"id":"member-7.q6","kind":"op","op":"read_feed","surface":"direct:member-7"}
 {"actor":"member-8","args":{"audience":"public","text":"Quiet night."},"at":294391186,"id":"member-8.t7","kind":"op","op":"post","surface":"direct:member-8"}
@@ -84,7 +84,7 @@
 {"actor":"member-5","args":{"limit":20},"at":321033916,"id":"member-5.q6","kind":"op","op":"read_feed","surface":"direct:member-5"}
 {"actor":"member-9","args":{"audience":"public","text":"Tried a new route to work and found a bakery on the way."},"at":321983853,"id":"member-9.t7","kind":"op","op":"post","surface":"direct:member-9"}
 {"actor":"member-6","args":{"audience":"public","text":"Back online."},"at":323545576,"id":"member-6.t7","kind":"op","op":"post","surface":"direct:member-6"}
-{"actor":"member-3","args":{"limit":20},"at":378600000,"depends_on":["plant.garden-note.d"],"id":"plant.garden-note.qo","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-3"}
+{"actor":"member-3","args":{"limit":23},"at":378600000,"depends_on":["plant.garden-note.d"],"id":"plant.garden-note.qo","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-3"}
 {"actor":"member-1","args":{"limit":20},"at":381278198,"id":"member-1.q8","kind":"op","op":"read_feed","surface":"direct:member-1"}
 {"actor":"member-2","args":{"limit":20},"at":383186639,"id":"member-2.q8","kind":"op","op":"read_feed","surface":"direct:member-2"}
 {"actor":"member-8","args":{"audience":"public","text":"Coffee time."},"at":386268311,"id":"member-8.t9","kind":"op","op":"post","surface":"direct:member-8"}
@@ -105,11 +105,11 @@
 {"actor":"member-7","args":{"limit":20},"at":408909061,"id":"member-7.q9","kind":"op","op":"read_feed","surface":"direct:member-7"}
 {"actor":"member-8","args":{"limit":20},"at":409363953,"id":"member-8.q8","kind":"op","op":"read_feed","surface":"direct:member-8"}
 {"actor":"member-3","args":{"audience":"public","text":"Quiet night."},"at":409910931,"id":"member-3.t8","kind":"op","op":"post","surface":"direct:member-3"}
-{"actor":"member-8","args":{"user":"member-10"},"at":465000000,"id":"plant.trip-note.fa","kind":"op","op":"follow","surface":"direct:member-8"}
+{"actor":"member-10","args":{"user":"member-5"},"at":465000000,"id":"plant.trip-note.fa","kind":"op","op":"follow","surface":"direct:member-10"}
 {"actor":"member-1","args":{"audience":"public","text":"Back online."},"at":465063072,"id":"member-1.t11","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-3","args":{"limit":20},"at":466228961,"id":"member-3.q11","kind":"op","op":"read_feed","surface":"direct:member-3"}
 {"actor":"member-9","args":{"limit":20},"at":467040688,"id":"member-9.q11","kind":"op","op":"read_feed","surface":"direct:member-9"}
-{"actor":"member-1","args":{"user":"member-10"},"at":469800000,"id":"plant.trip-note.fb","kind":"op","op":"follow","surface":"direct:member-1"}
+{"actor":"member-1","args":{"user":"member-5"},"at":469800000,"id":"plant.trip-note.fb","kind":"op","op":"follow","surface":"direct:member-1"}
 {"actor":"member-2","args":{"audience":"public","text":"Finally repotted the big fern and it already looks happier."},"at":472434293,"id":"member-2.t10","kind":"op","op":"post","surface":"direct:member-2"}
 {"actor":"member-1","args":{"audience":"public","text":"Good morning!"},"at":476323286,"id":"member-1.t10","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-7","args":{"audience":"public","text":"The market had the first strawberries of the year this morning."},"at":482055355,"id":"member-7.t10","kind":"op","op":"post","surface":"direct:member-7"}
@@ -128,7 +128,7 @@
 {"actor":"member-10","args":{"audience":"public","text":"Made soup from whatever was left in the fridge and it worked."},"at":495831017,"id":"member-10.t10","kind":"op","op":"post","surface":"direct:member-10"}
 {"actor":"member-5","args":{"audience":"public","text":"Finally repotted the big fern and it already looks happier."},"at":496316726,"id":"member-5.t10","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-7","args":{"audience":"public","text":"Made soup from whatever was left in the fridge and it worked."},"at":551189411,"id":"member-7.t12","kind":"op","op":"post","surface":"direct:member-7"}
-{"actor":"member-10","args":{"user":"member-8"},"at":551400000,"depends_on":["plant.trip-note.fa"],"id":"plant.trip-note.b","kind":"op","op":"block","surface":"direct:member-10"}
+{"actor":"member-5","args":{"user":"member-10"},"at":551400000,"depends_on":["plant.trip-note.fa"],"id":"plant.trip-note.b","kind":"op","op":"block","surface":"direct:member-5"}
 {"actor":"member-1","args":{"audience":"public","text":"Quiet night."},"at":551710337,"id":"member-1.t13","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-5","args":{"audience":"public","text":"Rain all day today so I stayed in and sorted my bookshelf."},"at":552341327,"id":"member-5.t12","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-3","args":{"limit":20},"at":552850107,"id":"member-3.q12","kind":"op","op":"read_feed","surface":"direct:member-3"}
@@ -148,7 +148,7 @@
 {"actor":"member-10","args":{"limit":20},"at":581603145,"id":"member-10.q12","kind":"op","op":"read_feed","surface":"direct:member-10"}
 {"actor":"member-3","args":{"limit":20},"at":581908697,"id":"member-3.q13","kind":"op","op":"read_feed","surface":"direct:member-3"}
 {"actor":"member-9","args":{"audience":"public","text":"Finally Friday."},"at":582227582,"id":"member-9.t13","kind":"op","op":"post","surface":"direct:member-9"}
-{"actor":"member-10","args":{"audience":"followers","text":"For my followers: I booked a mountain cabin for the long weekend."},"at":637800000,"depends_on":["plant.trip-note.b","plant.trip-note.fb"],"discloses":["f.trip-note"],"id":"plant.trip-note.d","kind":"op","op":"post","surface":"direct:member-10"}
+{"actor":"member-5","args":{"audience":"followers","text":"For my followers: I booked a mountain cabin for the long weekend."},"at":637800000,"depends_on":["plant.trip-note.b","plant.trip-note.fb"],"discloses":["f.trip-note"],"id":"plant.trip-note.d","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-8","args":{"audience":"public","text":"The market had the first strawberries of the year this morning."},"at":638393482,"id":"member-8.t15","kind":"op","op":"post","surface":"direct:member-8"}
 {"actor":"member-6","args":{"audience":"public","text":"The evening train was packed but everyone was in a good mood."},"at":639730063,"id":"member-6.t14","kind":"op","op":"post","surface":"direct:member-6"}
 {"actor":"member-2","args":{"audience":"public","text":"The street choir practised outside my window for an hour tonight."},"at":640995952,"id":"member-2.t14","kind":"op","op":"post","surface":"direct:member-2"}
@@ -170,7 +170,7 @@
 {"actor":"member-6","args":{"limit":20},"at":668321843,"id":"member-6.q15","kind":"op","op":"read_feed","surface":"direct:member-6"}
 {"actor":"member-4","args":{"audience":"public","text":"Spent the afternoon at the library reading old travel magazines."},"at":669230395,"id":"member-4.t14","kind":"op","op":"post","surface":"direct:member-4"}
 {"actor":"member-3","at":691200000,"id":"member-3.away.0","kind":"away","surface":"direct:member-3"}
-{"actor":"member-1","args":{"limit":20},"at":724200000,"depends_on":["plant.trip-note.d"],"id":"plant.trip-note.qa","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-1"}
+{"actor":"member-1","args":{"limit":12},"at":724200000,"depends_on":["plant.trip-note.d"],"id":"plant.trip-note.qa","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-1"}
 {"actor":"member-8","args":{"audience":"public","text":"Tried a new route to work and found a bakery on the way."},"at":725349110,"id":"member-8.t17","kind":"op","op":"post","surface":"direct:member-8"}
 {"actor":"member-1","args":{"limit":20},"at":727299516,"id":"member-1.q16","kind":"op","op":"read_feed","surface":"direct:member-1"}
 {"actor":"member-9","args":{"limit":20},"at":728009729,"id":"member-9.q17","kind":"op","op":"read_feed","surface":"direct:member-9"}
@@ -190,7 +190,7 @@
 {"actor":"member-5","args":{"audience":"public","text":"The street choir practised outside my window for an hour tonight."},"at":751444470,"id":"member-5.t16","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-7","args":{"audience":"public","text":"The evening train was packed but everyone was in a good mood."},"at":753640503,"id":"member-7.t16","kind":"op","op":"post","surface":"direct:member-7"}
 {"actor":"member-8","args":{"audience":"public","text":"Our neighbours put fairy lights on the balcony and it looks great."},"at":810367586,"id":"member-8.t18","kind":"op","op":"post","surface":"direct:member-8"}
-{"actor":"member-8","args":{"limit":20},"at":810600000,"depends_on":["plant.trip-note.d"],"id":"plant.trip-note.qo","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-8"}
+{"actor":"member-10","args":{"limit":22},"at":810600000,"depends_on":["plant.trip-note.d"],"id":"plant.trip-note.qo","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-10"}
 {"actor":"member-10","args":{"limit":20},"at":811027476,"id":"member-10.q18","kind":"op","op":"read_feed","surface":"direct:member-10"}
 {"actor":"member-8","args":{"limit":20},"at":814511493,"id":"member-8.q19","kind":"op","op":"read_feed","surface":"direct:member-8"}
 {"actor":"member-9","args":{"limit":20},"at":816754975,"id":"member-9.q19","kind":"op","op":"read_feed","surface":"direct:member-9"}
@@ -208,7 +208,7 @@
 {"actor":"member-10","args":{"audience":"public","text":"Found a stack of old postcards while cleaning out the drawer."},"at":838031441,"id":"member-10.t19","kind":"op","op":"post","surface":"direct:member-10"}
 {"actor":"member-2","args":{"limit":20},"at":841676123,"id":"member-2.q19","kind":"op","op":"read_feed","surface":"direct:member-2"}
 {"actor":"member-2","args":{"limit":20},"at":842010079,"id":"member-2.q18","kind":"op","op":"read_feed","surface":"direct:member-2"}
-{"actor":"member-2","args":{"audience":"public","text":"Meet me at the Saturday market at ten."},"at":897000000,"discloses":["f.meetup-post.1"],"id":"plant.meetup-post.d1","kind":"op","op":"post","surface":"direct:member-2"}
+{"actor":"member-7","args":{"audience":"public","text":"Meet me at the Saturday market at ten."},"at":897000000,"discloses":["f.meetup-post.1"],"id":"plant.meetup-post.d1","kind":"op","op":"post","surface":"direct:member-7"}
 {"actor":"member-5","args":{"audience":"public","text":"Finished a long walk along the river and the light was lovely."},"at":898958041,"id":"member-5.t20","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-5","args":{"audience":"public","text":"Coffee time."},"at":899494628,"id":"member-5.t21","kind":"op","op":"post","surface":"direct:member-5"}
 {"actor":"member-6","args":{"limit":20},"at":901758393,"id":"member-6.q21","kind":"op","op":"read_feed","surface":"direct:member-6"}
@@ -227,7 +227,7 @@
 {"actor":"member-4","args":{"limit":20},"at":918366669,"id":"member-4.q20","kind":"op","op":"read_feed","surface":"direct:member-4"}
 {"actor":"member-1","args":{"audience":"public","text":"Good morning!"},"at":918583792,"id":"member-1.t21","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-2","args":{"limit":20},"at":923753601,"id":"member-2.q20","kind":"op","op":"read_feed","surface":"direct:member-2"}
-{"actor":"member-2","args":{"post":"plant.meetup-post.d1"},"at":983400000,"depends_on":["plant.meetup-post.d1"],"id":"plant.meetup-post.x","kind":"op","op":"delete_post","surface":"direct:member-2"}
+{"actor":"member-7","args":{"post":"plant.meetup-post.d1"},"at":983400000,"depends_on":["plant.meetup-post.d1"],"id":"plant.meetup-post.x","kind":"op","op":"delete_post","surface":"direct:member-7"}
 {"actor":"member-10","args":{"audience":"public","text":"Spent the afternoon at the library reading old travel magazines."},"at":986253882,"id":"member-10.t23","kind":"op","op":"post","surface":"direct:member-10"}
 {"actor":"member-6","args":{"audience":"public","text":"Back online."},"at":987383666,"id":"member-6.t23","kind":"op","op":"post","surface":"direct:member-6"}
 {"actor":"member-4","args":{"audience":"public","text":"Finished a long walk along the river and the light was lovely."},"at":988220424,"id":"member-4.t22","kind":"op","op":"post","surface":"direct:member-4"}
@@ -246,7 +246,7 @@
 {"actor":"member-8","args":{"audience":"public","text":"Cycled to the lake after work and watched the sun go down."},"at":1010357822,"id":"member-8.t22","kind":"op","op":"post","surface":"direct:member-8"}
 {"actor":"member-8","args":{"audience":"public","text":"Cycled to the lake after work and watched the sun go down."},"at":1014714768,"id":"member-8.t23","kind":"op","op":"post","surface":"direct:member-8"}
 {"actor":"member-10","args":{"audience":"public","text":"Spent the afternoon at the library reading old travel magazines."},"at":1014910826,"id":"member-10.t22","kind":"op","op":"post","surface":"direct:member-10"}
-{"actor":"member-2","args":{"audience":"public","text":"Meet me at the Sunday market at ten, the first plan fell through."},"at":1069800000,"depends_on":["plant.meetup-post.x"],"discloses":["f.meetup-post.2"],"id":"plant.meetup-post.d2","kind":"op","op":"post","surface":"direct:member-2"}
+{"actor":"member-7","args":{"audience":"public","text":"Meet me at the Sunday market at ten, the first plan fell through."},"at":1069800000,"depends_on":["plant.meetup-post.x"],"discloses":["f.meetup-post.2"],"id":"plant.meetup-post.d2","kind":"op","op":"post","surface":"direct:member-7"}
 {"actor":"member-10","args":{"limit":20},"at":1070348558,"id":"member-10.q25","kind":"op","op":"read_feed","surface":"direct:member-10"}
 {"actor":"member-10","args":{"audience":"public","text":"Quiet night."},"at":1070450300,"id":"member-10.t24","kind":"op","op":"post","surface":"direct:member-10"}
 {"actor":"member-6","args":{"audience":"public","text":"Found a stack of old postcards while cleaning out the drawer."},"at":1070543486,"id":"member-6.t25","kind":"op","op":"post","surface":"direct:member-6"}
@@ -266,7 +266,7 @@
 {"actor":"member-2","args":{"limit":20},"at":1096258887,"id":"member-2.q24","kind":"op","op":"read_feed","surface":"direct:member-2"}
 {"actor":"member-6","args":{"audience":"public","text":"Our neighbours put fairy lights on the balcony and it looks great."},"at":1100166778,"id":"member-6.t24","kind":"op","op":"post","surface":"direct:member-6"}
 {"actor":"member-3","at":1123200000,"id":"member-3.back.0","kind":"back","surface":"direct:member-3"}
-{"actor":"member-9","args":{"limit":20},"at":1156200000,"depends_on":["plant.meetup-post.d2"],"id":"plant.meetup-post.q","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-9"}
+{"actor":"member-6","args":{"limit":13},"at":1156200000,"depends_on":["plant.meetup-post.d2"],"id":"plant.meetup-post.q","kind":"op","op":"read_feed","probe":true,"surface":"direct:member-6"}
 {"actor":"member-1","args":{"audience":"public","text":"Our neighbours put fairy lights on the balcony and it looks great."},"at":1158486616,"id":"member-1.t26","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-1","args":{"audience":"public","text":"Found a stack of old postcards while cleaning out the drawer."},"at":1158695807,"id":"member-1.t27","kind":"op","op":"post","surface":"direct:member-1"}
 {"actor":"member-9","args":{"limit":20},"at":1163027147,"id":"member-9.q26","kind":"op","op":"read_feed","surface":"direct:member-9"}
