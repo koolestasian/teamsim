@@ -61,6 +61,20 @@ class ReportTests(unittest.TestCase):
         obj = report.json_obj(results[0], repeats=results)
         self.assertTrue(all(r["repeats"] == 2 for r in obj["repeats"]))
 
+    def test_repeats_count_not_applicable_as_not_failing_like_the_command_line(self):
+        from teamsim import cli
+
+        base = run_result("oracle")
+        quiet = dataclasses.replace(base.verdicts[3], verdict="not_applicable", reason=None)
+        result = dataclasses.replace(base, verdicts=base.verdicts[:3] + (quiet,) + base.verdicts[4:])
+        self.assertFalse(cli._failed(result))
+        obj = report.json_obj(result, repeats=[result, result])
+        row = next(r for r in obj["repeats"] if r["check"] == quiet.check)
+        self.assertEqual((row["not_failed"], row["repeats"]), (2, 2))
+        text = report.markdown(result, repeats=[result, result])
+        self.assertIn("Not failed in", text)
+        self.assertIn("Checks not failed in every repeat: %d of %d" % (len(result.verdicts), len(result.verdicts)), text)
+
     def test_hostile_text_is_inert(self):
         text = report.markdown(hostile_result(), matrix=controls.matrix(MINIMAL))
         self.assertNotIn("](", text)

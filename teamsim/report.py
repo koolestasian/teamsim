@@ -75,7 +75,8 @@ def _counts(result: RunResult) -> dict:
 
 
 def _repeat_rows(result: RunResult, repeats) -> list:
-    """Per check: repeats run, repeats that passed it (``None`` when no repeats)."""
+    """Per check: repeats run and repeats that did not fail it (a pass or a check that does
+    not apply), the same rule the command line uses for a repeat that passed."""
     if not repeats:
         return []
     rows = []
@@ -83,9 +84,9 @@ def _repeat_rows(result: RunResult, repeats) -> list:
         passed = 0
         for other in repeats:
             for w in other.verdicts:
-                if w.check == v.check and w.verdict == VERDICT_PASS:
+                if w.check == v.check and w.verdict in (VERDICT_PASS, VERDICT_NOT_APPLICABLE):
                     passed += 1
-        rows.append({"check": v.check, "passed": passed, "repeats": len(repeats)})
+        rows.append({"check": v.check, "not_failed": passed, "repeats": len(repeats)})
     return rows
 
 
@@ -188,15 +189,15 @@ def markdown(result: RunResult, *, matrix=None, repeats=None) -> str:
         out.append("")
         out.extend(
             _table(
-                ["Check", "Passed in", "Repeats"],
-                [[e(r["check"]), str(r["passed"]), str(r["repeats"])] for r in repeat_rows],
+                ["Check", "Not failed in", "Repeats"],
+                [[e(r["check"]), str(r["not_failed"]), str(r["repeats"])] for r in repeat_rows],
             )
         )
         out.append("")
-        total = sum(r["passed"] for r in repeat_rows)
-        every = sum(1 for r in repeat_rows if r["passed"] == r["repeats"])
+        total = sum(r["not_failed"] for r in repeat_rows)
+        every = sum(1 for r in repeat_rows if r["not_failed"] == r["repeats"])
         out.append(
-            "Checks passed in every repeat: %d of %d. Passes over all check runs: %d of %d."
+            "Checks not failed in every repeat: %d of %d. Check runs not failed: %d of %d."
             % (every, len(repeat_rows), total, len(repeat_rows) * len(repeats))
         )
         out.append("")
