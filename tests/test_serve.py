@@ -62,9 +62,9 @@ class ServerTest(unittest.TestCase):
 
 
 class RoutesTest(ServerTest):
-    def test_packs_lists_the_four_packs(self):
+    def test_packs_lists_the_shipped_packs(self):
         data = self.get_json("/api/packs")
-        self.assertEqual([p["name"] for p in data["packs"]], ["minimal", "social-ten", "solo", "team-ten"])
+        self.assertEqual([p["name"] for p in data["packs"]], ["lantern-shelf", "minimal", "social-ten", "solo", "team-ten"])
         team = next(p for p in data["packs"] if p["name"] == "team-ten")
         self.assertEqual((team["users"], team["days"]), (10, 21))
         self.assertEqual(data["subjects"], list(cli.BUILTINS))
