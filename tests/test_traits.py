@@ -210,6 +210,21 @@ class EffectTests(unittest.TestCase):
             self.assertLessEqual(low - 1e-12, value / 100, f"{hits}/{total}")
             self.assertGreaterEqual(high + 1e-12, value / 100, f"{hits}/{total}")
 
+    def test_unplanted_questions_come_from_the_unplanted_bank_and_the_rest_from_the_question_bank(self):
+        bank = generate._preset("team")["text"]
+        unplanted = set(bank["unplanted_long"]) | set(bank["unplanted_short"])
+        asked = set(bank["question_long"]) | set(bank["question_short"])
+        self.assertFalse(unplanted & asked)
+        seen = {"x": 0, "q": 0}
+        for built in self.collect({"probe_pct": 50, "typo_pct": 0, "split_pct": 0}):
+            for main, text, _ in messages(built, "member-1"):
+                letter = re.fullmatch(r"member-1\.([qx])\d+", main.id)
+                if letter:
+                    seen[letter.group(1)] += 1
+                    self.assertIn(text, unplanted if letter.group(1) == "x" else asked, main.id)
+        self.assertGreater(seen["x"], 100)
+        self.assertGreater(seen["q"], 100)
+
     def test_no_unplanted_questions_at_zero(self):
         for built in self.collect({"probe_pct": 0}):
             self.assertFalse(any(re.fullmatch(r"member-1\.x\d+", e.id) for e in built.events))
@@ -240,6 +255,20 @@ class EffectTests(unittest.TestCase):
             )
         self.assertGreater(inside_without, 1000)  # the same days are busy without the trait
         self.assertGreater(inside_lead, 1000)  # and others keep posting: the user misses what happens
+
+    def test_what_the_others_decide_while_a_user_is_away_is_missed(self):
+        from teamsim import controls, engine, ledger
+        from teamsim.subject import InProcess
+
+        for seed in range(6):
+            obj = population(f"w{seed}", member={"away": [{"from_day": 1, "to_day": 2}]})
+            obj["plant"] = dict(NO_PLANT, reversals=1)
+            built = generate.generate(obj)
+            entries = engine.run(built, InProcess(controls.make("null", built)))
+            missed = ledger.Ledger(built, entries).missed("member-1", 1 * DAY, 3 * DAY)
+            with self.subTest(seed=seed):
+                self.assertTrue(missed)
+                self.assertEqual(missed, ("demo-date",))
 
     def test_away_and_back_events_bound_the_window(self):
         built = build(population("w", member={"away": [{"from_day": 2, "to_day": 4}]}))
