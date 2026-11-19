@@ -16,6 +16,7 @@ HOSTILE = (
     "x [link](http://evil.example/a) ![img](http://evil.example/i.png) "
     "<script>alert(1)</script> a|b\n# pwned\n- item"
 )
+BIDI_AND_C1 = (0x202A, 0x202B, 0x202C, 0x202D, 0x202E, 0x2066, 0x2067, 0x2068, 0x2069, 0x200E, 0x200F, 0x61C, 0x80, 0x9F)
 PIPE = re.compile(r"(?<!\\)\|")
 
 
@@ -92,6 +93,22 @@ class ReportTests(unittest.TestCase):
         obj = report.json_obj(hostile_result())
         self.assertEqual(json.loads(json.dumps(obj)), obj)
         self.assertEqual(obj["limits"], [HOSTILE])
+
+    def test_escape_replaces_bidirectional_and_c1_controls(self):
+        hostile = "a" + "x".join(chr(c) for c in BIDI_AND_C1) + "o"
+        out = report.escape(hostile)
+        for char in out:
+            self.assertFalse(
+                ord(char) in BIDI_AND_C1
+                or 0x80 <= ord(char) <= 0x9F,
+                hex(ord(char)),
+            )
+        self.assertEqual(out.replace(" ", ""), "a" + "x" * (len(BIDI_AND_C1) - 1) + "o")
+
+    def test_escape_leaves_no_text_that_a_markdown_renderer_would_link_as_an_email(self):
+        out = report.escape("mail me: someone@example.com or x.y+z@sub.example.org")
+        self.assertNotIn("@", out)  # the GFM extended email autolink needs a literal @ in the text
+        self.assertIn("&#64;", out)
 
     def test_escape_makes_one_line(self):
         self.assertNotIn("\n", report.escape("a\r\nb c"))

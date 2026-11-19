@@ -30,15 +30,31 @@ _ENTITIES = {"&": "&amp;", "<": "&lt;", ">": "&gt;"}
 _PUNCTUATION = frozenset("!\"#$%'()*+,-./:;=?@[\\]^_`{|}~")
 
 
+# Code points that change how text is ordered or shown, or that end a line: replaced by a space.
+_BIDI = frozenset(
+    [0x061C, 0x200E, 0x200F, 0x2028, 0x2029]
+    + list(range(0x202A, 0x202F))
+    + list(range(0x2066, 0x206A))
+)
+
+
 def escape(text: object) -> str:
-    """``text`` made inert for Markdown and HTML, on one line."""
+    """``text`` made inert for Markdown and HTML, on one line.
+
+    Control characters (C0 and C1), line separators and the bidirectional controls become
+    a space. ``@`` becomes the entity ``&#64;``, so no text is left that a renderer's
+    extended autolink would turn into a mailto link.
+    """
     out = []
     for char in str(text):
+        code = ord(char)
         if char in _ENTITIES:
             out.append(_ENTITIES[char])
+        elif char == "@":
+            out.append("&#64;")
         elif char in _PUNCTUATION:
             out.append("\\" + char)
-        elif ord(char) < 32 or ord(char) == 127 or char in "  \u0085":
+        elif code < 32 or 127 <= code <= 0x9F or code in _BIDI:
             out.append(" ")
         else:
             out.append(char)
