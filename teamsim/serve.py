@@ -160,7 +160,7 @@ def _days(p) -> int:
 def _event_obj(event) -> dict:
     obj = event.to_obj()
     out = {"id": obj["id"], "at": obj.get("at"), "actor": obj["actor"], "surface": obj["surface"], "kind": obj["kind"]}
-    for name in ("text", "target", "discloses", "depends_on", "probe"):
+    for name in ("text", "target", "emoji", "op", "discloses", "depends_on", "probe"):
         if name in obj:
             out[name] = obj[name]
     return out

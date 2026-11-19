@@ -13,6 +13,7 @@
 </header>
 <div class="page">
 <aside class="setup">
+  <button type="button" id="setup-toggle" class="setup-toggle" aria-expanded="true" aria-controls="controls" title="Hide setup"><svg class="chev" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="setup-toggle-label">Hide setup</span></button>
   <form id="controls" autocomplete="off">
     <label class="field" for="pack"><span>Scenario</span></label>
     <select id="pack"></select>
@@ -20,7 +21,7 @@
     <label class="field" for="subject"><span>Bot</span></label>
     <select id="subject"></select>
     <div id="bot-card" class="card bot-card"></div>
-    <button type="submit" id="run" class="primary"><span class="spin" aria-hidden="true"></span><span id="run-label">Run test</span></button>
+    <button type="submit" id="run" class="primary" title="Run test"><span class="spin" aria-hidden="true"></span><svg class="run-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg><span id="run-label">Run test</span></button>
   </form>
   <p id="status" role="status"></p>
 </aside>
@@ -44,16 +45,26 @@
     </div>
   </section>
   <section id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline" hidden>
-    <div class="toolbar">
-      <div class="segmented" id="seg">
-        <button type="button" data-filter="key" aria-pressed="true">Highlights</button>
-        <button type="button" data-filter="all" aria-pressed="false">Everything</button>
-      </div>
-      <select id="place" aria-label="Channel"></select>
-      <span id="count" class="muted small"></span>
+    <div class="ws" id="ws">
+      <aside class="ws-side ws-channels" id="ws-channels" aria-label="Channels">
+        <div class="ws-scn" id="ws-scn"></div>
+        <nav id="ws-chlist" class="ws-scroll"></nav>
+      </aside>
+      <section class="ws-main">
+        <header class="ws-head">
+          <button type="button" id="ws-chbtn" class="ws-chbtn" aria-haspopup="dialog"></button>
+          <h2 id="ws-title" class="ws-title"></h2>
+          <span id="count" class="ws-count"></span>
+          <span id="ws-chips" class="ws-chips"></span>
+          <label class="ws-key"><input type="checkbox" id="key-only"><span>Only key messages</span></label>
+          <button type="button" id="ws-membtn" class="ws-membtn" aria-haspopup="dialog">Members</button>
+        </header>
+        <div id="timeline" class="ws-feed" tabindex="-1"></div>
+      </section>
+      <aside class="ws-side ws-members" id="ws-members" aria-label="Members">
+        <div id="ws-memlist" class="ws-scroll"></div>
+      </aside>
     </div>
-    <div id="timeline" class="timeline"></div>
-    <button type="button" id="more" class="secondary" hidden></button>
   </section>
   <section id="panel-users" role="tabpanel" aria-labelledby="tab-users" hidden>
     <div class="table-scroll"><table id="users"></table></div>
@@ -83,6 +94,8 @@
   </div>
 </main>
 </div>
+<div id="scrim" class="scrim" hidden></div>
+<div id="profile" class="profile" role="dialog" aria-modal="false" tabindex="-1" hidden></div>
 <script src="/app.js"></script>
 </body>
 </html>

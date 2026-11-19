@@ -4,11 +4,16 @@
 //   2. PW_PATH=<path to the playwright package> node tests/browser/run_page.mjs <page url> <screenshot dir>
 //
 // PW_PATH points at an installed `playwright` module folder (it is not a repo dependency).
-// Runs at 1440x900, 2560x1440 and 390x844, each in a light and a dark colour scheme, then once more with
-// reduced motion. Exits 1 when any assertion fails.
+// Runs at 1440x900, 2560x1440 and 390x844, each in a light and a dark colour scheme, then the conversation
+// workspace at 1440x900 and 390x844 for every scenario (the Lantern Shelf one only when packs/lantern-shelf
+// exists), then once more with reduced motion. Exits 1 when any assertion fails. WS_ONLY=1 runs only the
+// workspace checks.
 import { createRequire } from "node:module";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, existsSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const lanternPack = existsSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "packs", "lantern-shelf"));
 
 const pwPath = process.env.PW_PATH;
 const base = process.argv[2];
@@ -47,7 +52,8 @@ const ID_PATTERNS = [
   /defect:/, /direct:/, /\bsubject\b/, /\bnull\b/, /record entries/i, /\b[a-z]+_[a-z]+\b/,
 ];
 async function assertNoIds(page, label) {
-  const text = await bodyText(page);
+  // "ana_k" is the display name the minimal scenario gives its first person.
+  const text = (await bodyText(page)).replace(/\bana_k\b/g, "Ana");
   const hits = ID_PATTERNS.map((re) => { const m = re.exec(text); return m ? m[0] + " (" + re + ")" : null; }).filter(Boolean);
   check(hits.length === 0, "no internal identifier on " + label + (hits.length ? ": " + hits.join(", ") : ""));
 }
@@ -104,7 +110,7 @@ async function runMode(browser, name, width, height, scheme) {
   });
   check(minText >= 13 - 0.01, "no visible text below 13px (smallest " + minText.toFixed(1) + "px)");
   const optTexts = await page.locator("#pack option").allInnerTexts();
-  check(optTexts.length === 4 && ["Team workspace", "Demo day planning", "Social feed", "Personal assistant"].every((n) => optTexts.includes(n)), "scenario options show only the name: " + optTexts.join("|"));
+  check(optTexts.length === (lanternPack ? 5 : 4) && ["Team workspace", "Demo day planning", "Social feed", "Personal assistant"].every((n) => optTexts.includes(n)) && (!lanternPack || optTexts.includes("Lantern Shelf")), "scenario options show only the name: " + optTexts.join("|"));
   const botTexts = await page.locator("#subject option").allInnerTexts();
   check(botTexts.slice(0, 2).join("|") === "Naive bot|Careful bot" && botTexts.every((t) => !/[·:(]/.test(t)), "bot options show only the name: " + botTexts.join("|"));
   const stats = await page.locator("#scenario-card .stat").evaluateAll((n) => n.map((x) => x.querySelector(".stat-num").textContent + " " + x.querySelector(".stat-label").textContent));
@@ -232,20 +238,30 @@ async function runMode(browser, name, width, height, scheme) {
   await page.click('.result-row:has(.key:text-is("Venue room"))');
   await page.waitForTimeout(450);
   await page.click("text=Show in conversation");
-  await page.waitForSelector(".event.hit");
-  check((await page.locator(".event.hit").count()) >= 2, ">= 2 highlighted conversation rows");
+  await page.waitForSelector(".msg.hit");
+  check((await page.locator(".msg.hit").count()) >= 2, ">= 2 highlighted conversation rows");
   check((await page.evaluate(() => location.hash)) === "#timeline", "conversation tab in the URL hash");
-  await page.waitForFunction((h) => { const r = document.querySelector(".event.hit").getBoundingClientRect(); return r.top >= 0 && r.bottom <= h; }, height, { timeout: 4000 }).then(
+  await page.waitForFunction(() => {
+    const r = document.querySelector(".msg.hit").getBoundingClientRect(), f = document.querySelector("#timeline").getBoundingClientRect();
+    return r.top >= f.top - 1 && r.bottom <= f.bottom + 1 && r.top >= 0 && r.bottom <= window.innerHeight;
+  }, null, { timeout: 4000 }).then(
     () => check(true, "first highlight scrolled into view"), () => check(false, "first highlight scrolled into view"));
-  check(await page.evaluate(() => { const t = document.querySelector("#timeline"); return t.scrollHeight <= t.clientHeight + 1; }), "conversation has no inner scroll");
   await page.waitForTimeout(350);
   const ind = await indicatorMatches(page, "tab-timeline");
   check(ind.dl <= 2 && ind.dw <= 2, "tab indicator sits under Conversation (left off by " + ind.dl.toFixed(1) + "px, width off by " + ind.dw.toFixed(1) + "px)");
   const ct = await page.locator("#count").innerText();
-  check(/^\d+ of \d+ messages$/.test(ct), "count reads '{shown} of {total} messages': " + ct);
-  const tl = await page.locator("#timeline").innerText();
-  check(tl.includes("Question for the bot"), "question rows carry the 'Question for the bot' tag");
-  check(await page.locator("#timeline .event.bot").count() > 0 && (await page.locator("#timeline .event.bot strong").first().innerText()) === "Bot", "bot rows name the author 'Bot'");
+  check(/^\d+ messages$/.test(ct), "count reads '{n} messages' with every message shown: " + ct);
+  check(await page.locator("#timeline .tag", { hasText: "Question for the bot" }).count() > 0, "question rows carry the 'Question for the bot' tag");
+  check(await page.locator("#timeline .msg.bot").count() > 0 && (await page.locator("#timeline .msg.bot .name").first().textContent()) === "Naive bot" && (await page.locator("#timeline .msg.bot .bot-tag").first().textContent()) === "BOT", "bot rows name the bot and carry a BOT tag");
+  // With "Only key messages" on, a highlighted message is still shown.
+  await page.check("#key-only");
+  await page.click("#tab-checks");
+  await page.click('.result-row:has(.key:text-is("Venue room"))');
+  await page.waitForTimeout(450);
+  await page.click("text=Show in conversation");
+  await page.waitForSelector(".msg.hit");
+  check(/^\d+ of \d+ messages$/.test(await page.locator("#count").innerText()) && (await page.locator(".msg.hit").count()) >= 2, "Show in conversation works with Only key messages on");
+  await page.uncheck("#key-only");
   await assertNoIds(page, "the Conversation tab");
   await shot("4-conversation");
 
@@ -312,22 +328,22 @@ async function runMode(browser, name, width, height, scheme) {
 
   // The minimal scenario's conversation before a run.
   await page.goto(base + "?pack=minimal#timeline");
-  await page.waitForSelector("#timeline .event");
-  await page.click('#seg button[data-filter="all"]');
-  const texts = await page.locator("#timeline .event p").allInnerTexts();
-  check(texts.length > 0 && texts.every((t) => t.trim().length > 0), "every conversation row has text (away, back, reacted, deleted included)");
-  check(texts.some((t) => t === "Reacted to Ana's message") && texts.some((t) => t === "Away"), "textless events read 'Reacted to Ana's message' and 'Away'");
-  const tags = await page.locator("#timeline .tag").allInnerTexts();
+  await page.waitForSelector("#timeline .msg");
+  const texts = await page.locator("#timeline .mtext").allTextContents();
+  check(texts.length > 0 && texts.every((t) => t.trim().length > 0), "every message row has text");
+  check(await page.locator("#timeline .sys").filter({ hasText: "went away" }).count() === 1 && await page.locator("#timeline .reacts .react").count() === 1, "away shows as a system row and the reaction as a pill under its message");
+  const tags = await page.locator("#timeline .tag").allTextContents();
   check(tags.some((t) => t.startsWith("Unverified claim: date = Monday 13 April")), "the unauthorised claim reads 'Unverified claim'");
   check(tags.some((t) => t === "Secret: access code"), "the secret is labelled 'Secret: access code'");
   check(tags.some((t) => t === "Fact: budget = 12 units · private to leads"), "a private fact names its audience");
   check(tags.some((t) => t === "Update: date → Thursday 16 April"), "a changed fact reads 'Update: date → …'");
-  const cueTime = await page.locator("#timeline .event", { hasText: "Did I miss anything while I was away?" }).first().locator("time").innerText();
+  check(await page.locator("#timeline .msg.key.upd").count() > 0 && await page.locator("#timeline .msg.key.priv").count() > 0 && await page.locator("#timeline .msg.key.ask").count() > 0, "key messages carry update, private and question accents");
+  const cueTime = await page.locator("#timeline .msg", { hasText: "Did I miss anything while I was away?" }).first().locator(".stamp").innerText();
   check(cueTime.trim() === "—", "an event timed by the run shows a dash before a run, not Day 1 00:00");
-  check(tags.includes("Edited"), "edits are tagged 'Edited'");
-  const opts = await page.locator("#place option").allInnerTexts();
-  check(opts.includes("All channels") && opts.includes("#leads · Ana, Di") && opts.includes("DM with Bo"), "channel select: " + opts.join(" / "));
-  check(await page.locator("#timeline .event-meta strong", { hasText: "Ana" }).count() > 0, "authors are named 'Ana', not ids");
+  check(await page.locator("#timeline .edited").count() === 1 && await page.locator("#timeline .gone-note").first().innerText() === "Deleted on Day 1", "an edited message shows (edited) and a deleted one says when");
+  const chans = await page.locator("#ws-chlist .ch-name").allTextContents();
+  check(chans.join("|") === "All channels|general|leads|Bo" || width < 760, "channel list: " + chans.join("|"));
+  check(await page.locator("#timeline .name", { hasText: "ana_k" }).count() > 0, "authors use the display name 'ana_k'");
   await assertNoIds(page, "the minimal Conversation tab");
   check((await page.locator("#tab-checks").getAttribute("aria-disabled")) === "true", "minimal: Results tab is still disabled before a run");
   await page.click("#run");
@@ -366,10 +382,318 @@ async function runReduced(browser) {
   await context.close();
 }
 
-const browser = await chromium.launch({ channel: "msedge" });
-for (const [name, width, height] of [["desktop", 1440, 900], ["wide", 2560, 1440], ["phone", 390, 844]]) {
-  for (const scheme of ["light", "dark"]) await runMode(browser, name, width, height, scheme);
+const NON_MESSAGE = new Set(["edit", "delete", "react"]);
+async function packOf(page, name) {
+  return page.evaluate(async (n) => (await fetch("/api/pack?name=" + n)).json(), name);
 }
+const expectedRows = (pack, surface) => pack.events.filter((e) => (!surface || e.surface === surface) && !NON_MESSAGE.has(e.kind)).length;
+const rowCount = (page) => page.locator("#timeline .msg, #timeline .sys").count();
+const counterWord = (pack) => (pack.events.some((e) => e.kind === "post") ? "messages" : "actions");
+
+async function pickSurface(page, id, phone) {
+  if (phone) {
+    await page.click("#ws-chbtn");
+    await page.waitForSelector("#ws-channels.open");
+  }
+  await page.click('#ws-chlist .ch[data-surface="' + id + '"]');
+  await page.waitForTimeout(80);
+}
+
+// The conversation workspace for one scenario at one size.
+async function runWorkspace(browser, name, width, height, scheme) {
+  const phone = width < 760;
+  const tag = "ws-" + name + "-" + width + "-" + scheme;
+  console.log("--- workspace " + name + " " + width + "x" + height + " " + scheme);
+  const context = await browser.newContext({ viewport: { width, height }, colorScheme: scheme });
+  const page = await context.newPage();
+  const problems = [];
+  page.on("console", (m) => { if (m.type() === "error") problems.push("console: " + m.text()); });
+  page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
+  page.on("response", (r) => { if (r.status() >= 400) problems.push(r.status() + " " + r.url()); });
+  const shot = async (label) => { await page.evaluate(() => document.querySelector("#ws").scrollIntoView({ block: "start" })); await page.waitForTimeout(150); await page.screenshot({ path: path.join(outDir, tag + "-" + label + ".png") }); };
+
+  await page.goto(base + "?pack=" + name + "#timeline");
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  const pack = await packOf(page, name);
+  const word = counterWord(pack);
+  const expected = expectedRows(pack, "");
+  const rows = await rowCount(page);
+  check(rows === expected, name + ": every event of All channels renders (" + rows + " of " + expected + ")");
+  check((await page.locator("#count").innerText()) === expected + " " + word, name + ": counter reads '" + expected + " " + word + "': " + (await page.locator("#count").innerText()));
+  check(!(await page.locator("#more").count()), name + ": no 'Show more' button");
+  check(await page.evaluate(() => !document.querySelector(".grp") || getComputedStyle(document.querySelector(".grp")).contentVisibility === "auto"), name + ": message groups use content-visibility");
+  await shot("1-all");
+
+  // Only key messages.
+  check(!(await page.locator("#key-only").isChecked()), name + ": Only key messages is off by default");
+  await page.check("#key-only");
+  const keyRows = await rowCount(page);
+  const nonKey = await page.locator("#timeline .msg:not(.key):not(.hit), #timeline .sys").count();
+  const keySys = await page.locator("#timeline .sys").count();
+  check(keyRows <= expected && (keyRows < expected || pack.events.every((e) => e.probe || (e.discloses && e.discloses.length) || NON_MESSAGE.has(e.kind))), name + ": Only key messages shows fewer rows (" + keyRows + " of " + expected + ")");
+  check(nonKey === keySys, name + ": with Only key messages every message is a key message");
+  if (keyRows < expected) check(/^\d+ of \d+ /.test(await page.locator("#count").innerText()), name + ": counter reads '{shown} of {total}': " + (await page.locator("#count").innerText()));
+  await page.reload();
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  check(await page.locator("#key-only").isChecked() && (await rowCount(page)) === keyRows, name + ": the setting survives a reload");
+  await shot("2-key");
+  await page.uncheck("#key-only");
+  check((await rowCount(page)) === expected, name + ": unchecking restores every row");
+
+  // Channel and direct-message filters.
+  const channel = pack.surfaces.find((s) => s.kind !== "direct" && expectedRows(pack, s.id) > 0);
+  if (channel) {
+    await pickSurface(page, channel.id, phone);
+    check((await rowCount(page)) === expectedRows(pack, channel.id), name + ": # " + channel.id + " shows only its own rows (" + (await rowCount(page)) + ")");
+    check((await page.locator("#ws-title").textContent()) === "#" + channel.id, name + ": header names the channel");
+    check((await page.locator("#timeline .chan").count()) === 0, name + ": no channel chips inside a single channel");
+  }
+  const direct = pack.surfaces.find((s) => s.kind === "direct" && expectedRows(pack, s.id) > 1);
+  if (direct) {
+    await pickSurface(page, direct.id, phone);
+    check((await rowCount(page)) === expectedRows(pack, direct.id), name + ": a direct message shows only its own rows (" + (await rowCount(page)) + ")");
+  }
+  const members = await (async () => {
+    if (phone) { await page.click("#ws-membtn"); await page.waitForSelector("#ws-members.open"); }
+    const n = await page.locator("#ws-memlist .mem").count();
+    if (phone) { await page.keyboard.press("Escape"); await page.waitForSelector("#ws-members.open", { state: "detached", timeout: 1000 }).catch(() => {}); }
+    return n;
+  })();
+  check(members >= 2, name + ": member list shows people and the bot (" + members + ")");
+  check(phone || (await page.locator("#ws-members").isVisible()) !== (await page.locator("#ws-membtn").isVisible()), name + ": the member list is a column or a Members button, never both");
+  await pickSurface(page, "", phone);
+
+  // Profile card.
+  const opener = (await page.locator("#timeline .av-btn").count()) ? page.locator("#timeline .av-btn").first() : page.locator("#timeline .sys .name").first();
+  const authorName = await page.locator("#timeline .name").first().innerText();
+  const authorId = await page.locator("#timeline .name").first().getAttribute("data-actor");
+  await opener.click();
+  await page.waitForSelector("#profile:not([hidden])");
+  check((await page.locator("#pc-title").innerText()) === authorName, name + ": the avatar opens the profile of " + authorName);
+  if (name === "minimal") check(authorName === "ana_k" && (await page.locator("#profile").innerText()).includes("@ana"), "minimal: the profile shows the display name 'ana_k' and @ana");
+  const card = await page.locator("#profile").innerText();
+  check(/(Messages sent|Product actions)\s*\d+/.test(card) && card.includes("Synthetic user") && card.includes("Show only their messages"), name + ": the card shows activity and the filter button");
+  const box = await page.locator("#profile").boundingBox();
+  check(box.x >= -0.5 && box.y >= -0.5 && box.x + box.width <= width + 0.5 && box.y + box.height <= height + 0.5, name + ": the card stays inside the viewport");
+  check(await page.evaluate(() => document.querySelector("#profile").contains(document.activeElement) || document.activeElement === document.querySelector("#profile")), name + ": focus moves into the card");
+  check(!(await page.evaluate(() => /\b(undefined|NaN)\b|\bnull\b/.test(document.querySelector("#profile").textContent))), name + ": the card has no undefined, null or NaN");
+  await shot("3-card");
+  await page.keyboard.press("Escape");
+  check(await page.locator("#profile").isHidden(), name + ": Esc closes the card");
+  check(await page.evaluate(() => document.activeElement && document.activeElement.matches(".av-btn, .name")), name + ": focus returns to the avatar");
+  await opener.click();
+  await page.waitForSelector("#profile:not([hidden])");
+  await page.mouse.click(4, 4);
+  check(await page.locator("#profile").isHidden(), name + ": an outside click closes the card");
+  // Names open the same card.
+  await page.locator("#timeline .name").first().click();
+  check((await page.locator("#profile:not([hidden]) #pc-title").innerText()) === authorName, name + ": a name opens the same card");
+  await page.locator("#profile .pc-only").click();
+  check(await page.locator("#profile").isHidden() && (await page.locator(".chip-person").innerText()).startsWith("From " + authorName), name + ": Show only their messages closes the card and adds a 'From " + authorName + "' chip");
+  const owners = await page.locator("#timeline .msg, #timeline .sys").evaluateAll((n) => [...new Set(n.map((x) => x.dataset.who))]);
+  check(owners.length === 1 && owners[0] === authorId, name + ": only " + authorId + " messages remain (" + owners.join(",") + ")");
+  await shot("4-person");
+  await page.locator(".chip-person").click();
+  check((await rowCount(page)) === expected && (await page.locator(".chip-person").count()) === 0, name + ": removing the chip restores every row");
+
+  // The People tab opens the same card.
+  await page.click("#tab-users");
+  await page.locator("#users .link-name").first().click();
+  check((await page.locator("#profile:not([hidden]) #pc-title").count()) === 1, name + ": a name in the People tab opens the profile card");
+  await page.keyboard.press("Escape");
+  await page.click("#tab-timeline");
+
+  // Layout.
+  check((await scrollWidth(page)) <= width, name + ": no horizontal scroll (" + (await scrollWidth(page)) + " <= " + width + ")");
+  check(!(await page.evaluate(() => {
+    const bad = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const p = n.parentElement;
+      if (p.closest(".mtext, .orig, script")) continue;
+      if (/\b(undefined|NaN)\b|\bnull\b/.test(n.textContent)) bad.push(n.textContent.slice(0, 40));
+    }
+    return bad.length;
+  })), name + ": no text node says undefined, null or NaN");
+  if (phone) {
+    await page.click("#ws-chbtn");
+    await page.click('#ws-chlist .ch[data-surface=""]');
+    const small = await page.evaluate(() => {
+      const bad = [];
+      for (const n of document.querySelectorAll(".ws-head button, .ws-head label, .ws-head input, #ws-chlist .ch, .av-btn")) {
+        const r = n.getBoundingClientRect(), s = getComputedStyle(n);
+        if (s.display === "none" || r.width === 0) continue;
+        if (n.tagName === "INPUT") continue;
+        if (r.height < 39.5 || r.width < 39.5) bad.push((n.className || n.tagName) + "=" + Math.round(r.width) + "x" + Math.round(r.height));
+      }
+      return bad;
+    });
+    check(small.length === 0, name + ": touch targets are at least 40px" + (small.length ? " (" + small.join(", ") + ")" : ""));
+    await page.click("#ws-membtn");
+    await page.waitForSelector("#ws-members.open");
+    check(await page.evaluate(() => [...document.querySelectorAll("#ws-members .mem")].every((n) => n.getBoundingClientRect().height >= 39.5)), name + ": member rows are at least 40px");
+    await shot("5-members");
+    await page.mouse.click(10, 10);
+    check(await page.locator("#ws-members.open").count() === 0, name + ": an outside tap closes the member sheet");
+  }
+  check(problems.length === 0, name + ": no console errors or failed requests" + (problems.length ? ": " + problems.join(" | ") : ""));
+  await context.close();
+}
+
+// The setup column collapses on wide screens, which gives the feed room.
+async function runCollapse(browser, name, scheme) {
+  const tag = "collapse-" + name + "-" + scheme;
+  console.log("--- setup collapse " + name + " 1440x900 " + scheme);
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: scheme });
+  const page = await context.newPage();
+  const problems = [];
+  page.on("console", (m) => { if (m.type() === "error") problems.push("console: " + m.text()); });
+  page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
+  await page.goto(base + "?pack=" + name + "#timeline");
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  const toggle = page.locator("#setup-toggle");
+  check((await toggle.getAttribute("aria-expanded")) === "true" && (await toggle.innerText()) === "Hide setup", name + ": setup starts expanded with a 'Hide setup' button");
+  await page.waitForTimeout(300);
+  const feedOn = (await page.locator("#timeline").boundingBox()).width;
+  check(await page.locator("#ws-membtn").isVisible() && !(await page.locator("#ws-members").isVisible()), name + ": a narrow workspace swaps the member column for the Members button (feed " + Math.round(feedOn) + "px)");
+  check((await scrollWidth(page)) <= 1440, name + ": expanded layout has no horizontal scroll");
+  await page.evaluate(() => document.querySelector("#ws").scrollIntoView({ block: "start" }));
+  await page.screenshot({ path: path.join(outDir, tag + "-expanded.png") });
+  // Keyboard: focus the button and press Enter.
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(450);
+  check((await toggle.getAttribute("aria-expanded")) === "false" && await page.locator(".page.setup-off").count() === 1, name + ": Enter on the button collapses the setup column");
+  const bar = await page.locator(".setup").boundingBox();
+  check(bar.width <= 72, name + ": the collapsed column is a slim bar (" + Math.round(bar.width) + "px)");
+  const feedOff = (await page.locator("#timeline").boundingBox()).width;
+  check(feedOff >= 820, name + ": the feed is at least 820px wide when collapsed (" + Math.round(feedOff) + "px)");
+  check(await page.locator("#ws-members").isVisible() && !(await page.locator("#ws-membtn").isVisible()), name + ": the member column returns when the workspace is wide");
+  const cut = await page.evaluate(() => [...document.querySelectorAll("#ws-chlist .ch-name")].filter((n) => n.scrollWidth > n.clientWidth + 1).map((n) => n.textContent));
+  check(cut.length === 0, name + ": no channel name is cut off" + (cut.length ? " (" + cut.join(", ") + ")" : ""));
+  const runBox = await page.locator("#run").boundingBox();
+  check(runBox.width <= 48 && runBox.height >= 39.5 && (await page.locator("#run").getAttribute("title")) === "Run test" && (await page.locator("#run").innerText()).trim() === "Run test", name + ": collapsed Run is an icon button with a name and tooltip (" + Math.round(runBox.width) + "x" + Math.round(runBox.height) + ")");
+  check((await scrollWidth(page)) <= 1440, name + ": collapsed layout has no horizontal scroll");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(100);
+  await page.screenshot({ path: path.join(outDir, tag + "-collapsed.png") });
+  await page.reload();
+  await page.waitForSelector("#timeline .msg, #timeline .sys");
+  check((await page.locator("#setup-toggle").getAttribute("aria-expanded")) === "false" && (await page.locator("#setup-toggle").getAttribute("title")) === "Show setup", name + ": the collapsed state survives a reload");
+  await page.click("#run");
+  await page.waitForSelector(".headline");
+  check(true, name + ": the icon Run button runs the test");
+  await page.click("#setup-toggle");
+  await page.waitForTimeout(400);
+  check((await page.locator("#setup-toggle").getAttribute("aria-expanded")) === "true" && (await page.locator("#pack").isVisible()), name + ": Show setup brings the controls back");
+  await page.click("#setup-toggle");
+  await page.reload();
+  await page.click("#setup-toggle");
+  check(problems.length === 0, name + ": no console errors" + (problems.length ? ": " + problems.join(" | ") : ""));
+  await context.close();
+}
+
+// Reactions and operation names come from the pack.
+async function runEmoji(browser) {
+  console.log("--- reactions and operations");
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(base + "?pack=minimal#timeline");
+  await page.waitForSelector("#timeline .react");
+  check((await page.locator("#timeline .react").first().innerText()).replace(/\s+/g, "") === "\u{1F44D}1", "a +1 reaction shows 👍 with its count");
+  await page.goto(base + "?pack=social-ten#timeline");
+  await page.waitForSelector("#timeline .sys");
+  const op = await page.evaluate(async () => (await (await fetch("/api/pack?name=social-ten")).json()).events.find((e) => e.kind === "op").op);
+  check(!!op && (await page.locator("#timeline .sys").first().textContent()).includes("used the product: " + op), "an operation row names the operation (" + op + ")");
+  await context.close();
+}
+
+// Card, sheet, Esc, outside click and focus at a tablet width.
+async function runTablet(browser) {
+  console.log("--- tablet 900x800");
+  const context = await browser.newContext({ viewport: { width: 900, height: 800 }, colorScheme: "light" });
+  const page = await context.newPage();
+  await page.goto(base + "?pack=minimal#timeline");
+  await page.waitForSelector("#timeline .msg");
+  const opener = page.locator("#timeline .av-btn").first();
+  await opener.click();
+  check(await page.locator("#profile").isVisible(), "tablet: the avatar opens the profile card");
+  await page.keyboard.press("Escape");
+  check(await page.locator("#profile").isHidden() && await page.evaluate(() => document.activeElement.classList.contains("av-btn")), "tablet: Esc closes the card and focus returns to the avatar");
+  await opener.click();
+  await page.mouse.click(4, 4);
+  check(await page.locator("#profile").isHidden(), "tablet: an outside click closes the card");
+  await page.click("#ws-membtn");
+  check(await page.locator("#ws-members.open").count() === 1 && await page.evaluate(() => document.querySelector("#ws-members").contains(document.activeElement)), "tablet: Members opens a sheet and focus moves into it");
+  await page.keyboard.press("Escape");
+  check(await page.locator("#ws-members.open").count() === 0 && await page.evaluate(() => document.activeElement.id === "ws-membtn"), "tablet: Esc closes the sheet and focus returns to Members");
+  await page.click("#ws-membtn");
+  await page.mouse.click(10, 10);
+  check(await page.locator("#ws-members.open").count() === 0, "tablet: an outside click closes the sheet");
+  // The person chip sits on its own line under the controls.
+  await opener.click();
+  await page.locator("#profile .pc-only").click();
+  const lay = await page.evaluate(() => {
+    const chip = document.querySelector(".chip-person").getBoundingClientRect(), key = document.querySelector(".ws-key").getBoundingClientRect(), head = document.querySelector(".ws-head").getBoundingClientRect();
+    return { below: chip.top >= key.bottom - 1, inside: chip.bottom <= head.bottom + 1 && chip.right <= head.right };
+  });
+  check(lay.below && lay.inside, "tablet: the person chip wraps under the controls without overlap");
+  check((await scrollWidth(page)) <= 900, "tablet: no horizontal scroll");
+  await context.close();
+}
+
+async function runWorkspaceRun(browser, width, height) {
+  console.log("--- workspace after a run " + width + "x" + height);
+  const context = await browser.newContext({ viewport: { width, height }, colorScheme: "dark" });
+  const page = await context.newPage();
+  const problems = [];
+  page.on("console", (m) => { if (m.type() === "error") problems.push("console: " + m.text()); });
+  page.on("pageerror", (e) => problems.push("pageerror: " + e.message));
+  await page.goto(base + "?pack=minimal&subject=naive_bot#timeline");
+  await page.waitForSelector("#timeline .msg");
+  const before = await rowCount(page);
+  await page.click("#run");
+  await page.waitForSelector(".headline");
+  await page.click("#tab-timeline");
+  await page.waitForSelector("#timeline .msg.bot");
+  const botRows = await page.locator("#timeline .msg.bot").count();
+  const expectedAfter = await page.evaluate(async () => {
+    const pack = await (await fetch("/api/pack?name=minimal")).json();
+    const run = await (await fetch("/api/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pack: "minimal", subject: "naive_bot" }) })).json();
+    const byId = new Map(pack.events.map((e) => [e.id, e]));
+    let n = 0;
+    for (const x of run.entries) {
+      if (x.type === "delivery" && x.event && byId.has(x.event) && !["edit", "delete", "react"].includes(byId.get(x.event).kind)) n += 1;
+      else if (x.type === "observation" && x.kind === "action" && x.action) n += 1;
+    }
+    return n;
+  });
+  check(botRows > 0 && (await rowCount(page)) === expectedAfter && (await rowCount(page)) !== before, "minimal after a run: the feed shows what the run delivered plus the bot's replies (" + (await rowCount(page)) + " rows, " + botRows + " from the bot)");
+  check(await page.locator("#timeline .msg.bot .bot-tag").count() === botRows, "minimal after a run: every bot reply carries a BOT tag");
+  check(await page.locator("#ws-memlist .mem .bot-tag").count() >= 1, "minimal after a run: the bot is listed under Bot");
+  await page.locator("#timeline .msg.bot .av-btn").first().click();
+  check((await page.locator("#pc-title").innerText()) === "Naive bot" && (await page.locator("#profile").innerText()).includes("Bot"), "the bot's avatar opens a Bot profile");
+  await page.keyboard.press("Escape");
+  check(problems.length === 0, "workspace after a run: no console errors" + (problems.length ? ": " + problems.join(" | ") : ""));
+  await context.close();
+}
+
+const browser = await chromium.launch({ channel: "msedge" });
+// WS_ONLY=1 runs only the conversation workspace checks.
+if (!process.env.WS_ONLY) {
+  for (const [name, width, height] of [["desktop", 1440, 900], ["wide", 2560, 1440], ["phone", 390, 844]]) {
+    for (const scheme of ["light", "dark"]) await runMode(browser, name, width, height, scheme);
+  }
+}
+for (const [width, height] of [[1440, 900], [390, 844]]) {
+  const names = ["minimal", "team-ten", "solo", "social-ten"].concat(lanternPack ? ["lantern-shelf"] : []);
+  for (const name of names) await runWorkspace(browser, name, width, height, width > 760 ? "dark" : "light");
+  await runWorkspace(browser, "minimal", width, height, width > 760 ? "light" : "dark");
+  await runWorkspaceRun(browser, width, height);
+}
+for (const name of ["team-ten", "minimal"].concat(lanternPack ? ["lantern-shelf"] : [])) await runCollapse(browser, name, name === "team-ten" ? "dark" : "light");
+await runEmoji(browser);
+await runTablet(browser);
 await runReduced(browser);
 
 // Motion check: the count-up starts at 0 and ends on the exact number; the tab indicator follows the tab.
