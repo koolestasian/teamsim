@@ -1,0 +1,20 @@
+# Ten synthetic users acting on a social feature through operations for 21 virtual days. Fictional.
+# Regenerate the pack with: python -c "from teamsim.generate import generate_file; generate_file('populations/social-ten.toml', 'packs/social-ten')"
+format = 1
+preset = "social"
+seed = "social-ten-1"
+days = 21
+
+[[groups]]
+role = "member"
+count = 10
+traits = { short_pct = 29 }
+
+[[overrides]]
+user = "member-3"
+traits = { away = [{ from_day = 8, to_day = 12 }] }
+
+[plant]
+friends_only = 1
+blocks = 1
+deletions = 1
