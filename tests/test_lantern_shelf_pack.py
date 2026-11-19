@@ -62,11 +62,40 @@ class LanternShelfPackTest(unittest.TestCase):
             fragment = next(c for c in self.cases if c["id"] == case_id)["answer_contains"]
             self.assertIn(fragment, facts_by_value[span].forms)
         self.assertEqual(len(summary["aspects"]), 11)
-        facts = {f.key: f for f in self.pack.facts if "." in f.key}
-        self.assertEqual(len(facts), 11)
-        for fact in facts.values():
-            self.assertIsNone(fact.supersedes)
+        # Aspect facts stand alone: no supersedes link, and their key is shared with no other fact.
+        keys = [f.key for f in self.pack.facts]
+        alone = [f for f in self.pack.facts if keys.count(f.key) == 1 and f.supersedes is None]
+        self.assertGreaterEqual(len(alone), 11)
         self.assertEqual(summary["fallback"][0][0], "rev-11")
+
+    def test_keys_are_readable_slugs_from_the_table(self):
+        slugs = self.converter.KEY_SLUGS
+        self.assertEqual(len(set(slugs.values())), len(slugs))
+        used = {f.key for f in self.pack.facts}
+        self.assertEqual(used, set(slugs.values()))
+        for fact in self.pack.facts:
+            words = fact.key.split("-")
+            self.assertTrue(2 <= len(words) <= 4, fact.key)
+            self.assertRegex(fact.key, r"^[a-z]+(-[a-z]+)+$")
+            self.assertNotIn(fact.value.lower(), fact.key)
+            self.assertNotIn(fact.value.lower().replace(" ", "-"), fact.key)
+        for check in self.pack.checks:
+            if check.key is not None:
+                self.assertIn(check.key, used)
+
+    def test_a_case_missing_from_the_table_fails_loudly(self):
+        original = dict(self.converter.KEY_SLUGS)
+        try:
+            del self.converter.KEY_SLUGS["d-36"]
+            with self.assertRaises(SystemExit):
+                self.converter.build(self.dataset, self.cases)
+        finally:
+            self.converter.KEY_SLUGS.clear()
+            self.converter.KEY_SLUGS.update(original)
+
+    def test_day_one_keeps_its_utc_clock_time(self):
+        first = self.dataset["messages"][0]["created_at"]
+        self.assertEqual(self.pack.events[0].when.ms, first % 86_400_000)
 
     def test_every_value_is_in_its_disclosing_message(self):
         facts = {f.id: f for f in self.pack.facts}

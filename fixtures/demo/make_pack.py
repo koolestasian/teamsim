@@ -13,8 +13,8 @@ Mapping
   traits for the people, so none are written.
 * Surfaces: each of the four channels, each followed by its threads; every surface
   has all seven actors and the subject as members.
-* Timeline: one ``post`` per message, in dataset order, at ``created_at`` minus the
-  first message's ``created_at``. ``reply_to`` and ``edited_at`` are dropped: the
+* Timeline: one ``post`` per message, in dataset order, at ``created_at`` minus UTC
+  midnight of the first message's day. ``reply_to`` and ``edited_at`` are dropped: the
   pack format has no field for either. An empty message would use its attachment
   names as ``[attachment: <name>]``.
 * Facts: one fact per record entry that an eval case asks about. Entries linked by
@@ -78,6 +78,61 @@ VERBATIM_SPANS = {
     "rev-10": "no curl",
 }
 
+# Fact keys. The converter names each entry chain (and each aspect of an entry that has its
+# own question) by the id of its newest entry, for example "d-36" or "t-72.date". The run
+# page titles a test from its fact key, so this table gives each one a short slug that
+# names the topic. A slug never holds a value, a date or a name, so a test title does not
+# give its answer away. A key missing from this table stops the conversion.
+KEY_SLUGS = {
+    "d-12": "scanned-papers",
+    "d-13": "store-bought-books",
+    "d-16": "first-launch-signup",
+    "d-16.thread-context": "signup-change-reason",
+    "d-22": "usage-statistics",
+    "d-23": "epub-parser-library",
+    "d-28": "note-merge-method",
+    "d-30": "transfer-limit",
+    "d-31": "highlight-export-format",
+    "d-34": "edit-delete-conflict",
+    "d-36": "full-app-price",
+    "d-39": "reading-position-sync",
+    "d-39.thread-context": "position-sync-reason",
+    "d-43": "cover-source",
+    "d-46": "min-android-version",
+    "d-48": "tap-target-size",
+    "d-51": "chapter-image-limit",
+    "d-51.thread-context": "image-memory-cause",
+    "d-54": "mobile-data-downloads",
+    "d-56": "beta-release-date",
+    "d-56.thread-context": "beta-delay-reason",
+    "d-59": "page-curl-setting",
+    "d-59.thread-context": "page-curl-return-reason",
+    "d-63": "dyslexia-support-plan",
+    "d-63.thread-context": "dyslexia-font-removal-reason",
+    "d-67": "crash-urgency-rule",
+    "d-68": "bug-review-day",
+    "d-7": "reading-typeface",
+    "d-71": "read-aloud-support",
+    "d-74": "trial-length",
+    "d-76": "store-submission-date",
+    "t-2": "tester-confirmation-due-date",
+    "t-24": "android-reader-due-date",
+    "t-25": "test-corpus-owner",
+    "t-32": "resumable-downloads-owner",
+    "t-42": "cover-cdn-owner",
+    "t-60": "curl-battery-test-owner",
+    "t-64": "dyslexia-eval-owner",
+    "t-64.date": "dyslexia-eval-due-date",
+    "t-65": "accessibility-audit-owner",
+    "t-65.date": "accessibility-audit-due-date",
+    "t-72": "privacy-page-owner",
+    "t-72.date": "privacy-page-due-date",
+    "t-73": "store-screenshots-owner",
+    "t-73.date": "store-screenshots-due-date",
+    "t-75": "trial-banner-owner",
+    "t-75.date": "trial-banner-due-date",
+}
+
 PROBE_GAP_MS = 5 * 60 * 1000
 KIND_OF_ENTRY = {"decision": "decision", "task": "assignment", "question": "item"}
 PREFIX = {"decision": "d", "task": "t", "question": "q"}
@@ -110,7 +165,8 @@ def build(dataset, cases):
     surfaces = tuple(Surface(id=c["name"], kind="channel", members=everyone) for c in ordered)
 
     messages = dataset["messages"]
-    origin = messages[0]["created_at"]
+    # Day 1 starts at UTC midnight of the first message's day, so times keep their clock time.
+    origin = messages[0]["created_at"] // 86400000 * 86400000
     events = []
     event_of = {}
     for m in messages:
@@ -211,7 +267,10 @@ def build(dataset, cases):
 
     def fact_key(slot):
         entry_id, aspect = slot
-        return key_of(entry_id) + ("" if aspect is None else ".%s" % aspect)
+        derived = key_of(entry_id) + ("" if aspect is None else ".%s" % aspect)
+        if derived not in KEY_SLUGS:
+            raise SystemExit("no readable key for %s in KEY_SLUGS" % derived)
+        return KEY_SLUGS[derived]
 
     fact_list = []
     for slot in sorted(facts, key=lambda t: (fact_key(t), t[0])):
