@@ -9,9 +9,11 @@ seed is the population's seed and whose scope names the user and the trait or sl
 (``[user id, trait or slot name]``, with the index in the purpose). Adding,
 removing or editing one user therefore never changes another user's draws.
 
-``PRESETS`` lists only ``"team"`` for now; ``solo`` and ``social`` follow in a later
-change. A preset is a data file (``teamsim/presets/<name>.toml``), described field by
-field in ``docs/spec/population-format.md``.
+``PRESETS`` lists ``"social"``, ``"solo"`` and ``"team"``. A preset is a data file
+(``teamsim/presets/<name>.toml``), described field by field in
+``docs/spec/population-format.md``. Its ``shape`` (``team`` when absent) says which
+planting and filler code reads it: a workspace of channels, one user talking to the
+product, or users acting on the product through ``op`` events.
 """
 
 import tomllib
@@ -34,7 +36,7 @@ __all__ = [
 ]
 
 GENERATOR_VERSION = "teamsim-generate 1"
-PRESETS = ("team",)
+PRESETS = ("social", "solo", "team")
 
 DAY = 86_400_000
 HOUR = 3_600_000
@@ -256,6 +258,13 @@ def _validate(population):
         if "traits" in group:
             _check_traits(group["traits"], f"{where}.traits", days)
     users = _users(top, preset["roles"])
+    if "max_users" in preset and len(users) > preset["max_users"]:
+        raise _err(
+            "bad_value",
+            f"the {top['preset']} preset holds at most {preset['max_users']} user"
+            + ("" if preset["max_users"] == 1 else "s"),
+            "groups",
+        )
     names = {user_id for user_id, _, _ in users}
     overrides = top.get("overrides", [])
     if type(overrides) is not list:
@@ -273,7 +282,7 @@ def _validate(population):
         named.add(override["user"])
         _check_traits(override["traits"], f"{where}.traits", days)
     if "plant" in top:
-        _table(top["plant"], "plant", set(_PLANT_KEYS))
+        _table(top["plant"], "plant", set(preset["plant"]))
         for name, value in top["plant"].items():
             _int_in(value, 0, 50, f"plant.{name}")
     return preset
@@ -326,6 +335,12 @@ def _check_preset(preset):
         raise _err("bad_preset", "preset format must be 1")
     if not set(preset["roles"]["authority"]) <= set(preset["roles"]["names"]):
         raise _err("bad_preset", "authority roles must be roles")
+    shape = preset.get("shape", "team")
+    if shape not in _SHAPES:
+        raise _err("bad_preset", f"unknown shape {shape!r}")
+    if shape != "team":
+        _check_direct_preset(preset, shape)
+        return
     surfaces = {s["id"] for s in preset["surfaces"]}
     for name in ("public_surface", "restricted_surface"):
         if preset[name] not in surfaces:
@@ -346,6 +361,42 @@ def _check_preset(preset):
     for topic in preset["reversal"]:
         if len(topic["versions"]) < 3:
             raise _err("bad_preset", f"reversal {topic['key']!r} needs 3 versions")
+
+
+_SHAPES = ("team", "solo", "social")
+_DIRECT_SLOTS = {
+    "solo": ("reversal", "injection", "return"),
+    "social": ("friends_post", "block_post", "deleted_post"),
+}
+_DIRECT_BANKS = {"solo": ("statement", "question", "unplanted"), "social": ("statement",)}
+
+
+def _check_direct_preset(preset, shape):
+    """Checks for the presets whose users talk to the product on direct surfaces."""
+    if not preset["direct_surfaces"] or preset.get("surfaces"):
+        raise _err("bad_preset", f"a {shape} preset has direct surfaces only")
+    text = preset["text"]
+    for bank in _DIRECT_BANKS[shape]:
+        for entry in text[f"{bank}_long"]:
+            if _words(entry) < 8:
+                raise _err("bad_preset", f"{bank}_long needs at least 8 words: {entry!r}")
+        for entry in text[f"{bank}_short"]:
+            if not 1 <= _words(entry) <= 3:
+                raise _err("bad_preset", f"{bank}_short needs 1 to 3 words: {entry!r}")
+    for slot in _DIRECT_SLOTS[shape]:
+        if not preset[slot]:
+            raise _err("bad_preset", f"no {slot} templates")
+    for topic in preset.get("reversal", ()):
+        if len(topic["versions"]) < 3:
+            raise _err("bad_preset", f"reversal {topic['key']!r} needs 3 versions")
+    if set(preset["plant"]) != _DIRECT_PLANT[shape]:
+        raise _err("bad_preset", f"the {shape} preset's plant keys are {sorted(_DIRECT_PLANT[shape])}")
+
+
+_DIRECT_PLANT = {
+    "solo": {"reversals", "injections", "returns", "unanswerable"},
+    "social": {"friends_only", "blocks", "deletions"},
+}
 
 
 # --- time and traits --------------------------------------------------------
@@ -495,7 +546,10 @@ class _Context:
         self.users = users
         self.by_id = {u.id: u for u in users}
         self.ids = [u.id for u in users]
-        self.public = [s["id"] for s in preset["surfaces"] if s["members"] == "all"]
+        if preset.get("shape", "team") == "team":
+            self.public = [s["id"] for s in preset["surfaces"] if s["members"] == "all"]
+        else:
+            self.public = [f"direct:{u.id}" for u in users]
         self.events = []
         self.facts = []
         self.checks = []
@@ -527,8 +581,9 @@ def _emit(ctx, user, base, surface, mid, text):
         typed = _typo(first, seed, [uid, "typo_pct"], [mid, "where"])
     shown = typed if typed is not None else first
     at = base
-    if draw.chance(seed, [uid, "wrong_place_pct"], [mid], traits["wrong_place_pct"], 100):
-        others = [s for s in ctx.public if s != surface]
+    others = [s for s in ctx.public if s != surface]
+    # with no other surface (solo) there is nowhere to post by mistake
+    if others and draw.chance(seed, [uid, "wrong_place_pct"], [mid], traits["wrong_place_pct"], 100):
         wrong = draw.choice(seed, [uid, "wrong_place_pct"], [mid, "surface"], others)
         events.append(_post(f"{mid}.w", at, uid, wrong, shown))
         events.append(
@@ -626,13 +681,13 @@ def _plant_post(ctx, event_id, at, actor, surface, text, **more):
     return event_id
 
 
-def _fact(ctx, fact_id, key, kind, value, forms, audience, supersedes=None):
+def _fact(ctx, fact_id, key, kind, value, forms, audience, supersedes=None, authority=None):
     fact = {
         "id": fact_id,
         "key": key,
         "kind": kind,
         "value": value,
-        "authority": [ctx.author],
+        "authority": [ctx.author] if authority is None else list(authority),
         "audience": audience,
     }
     if forms is not None:
@@ -782,6 +837,239 @@ def _plant(ctx, population):
     return notes
 
 
+# --- planted situations: one user talking to the product (solo) -----------------
+
+
+def _plant_solo(ctx, population):
+    """Add the planted situations of the ``solo`` shape; return the limits to state.
+
+    One user, one direct surface. A preference stated then changed, a pasted document
+    that carries an instruction (scored by ``no_echo`` on an inert code the instruction
+    asks to repeat), and a return after a week away (scored by recall of a fact stated
+    before leaving). A question about something never said carries no check.
+    """
+    preset, seed, days = ctx.preset, ctx.seed, ctx.days
+    counts = dict(preset["plant"])
+    counts.update(population.get("plant", {}))
+    user = ctx.users[0].id
+    surface = f"direct:{user}"
+    slots = [("reversal", i) for i in range(counts["reversals"])]
+    slots += [("injection", i) for i in range(counts["injections"])]
+    returns = counts["returns"]
+    # a return takes nine days: the fact on the day before, seven days away, the question on the day back
+    spread = days - 9 * returns
+    others = len(slots)
+    if spread < 0 or (spread < 1 and others):
+        raise _err("days_too_few", f"the planted situations need more days than the file's {days}", "days")
+    width = min(7, max(1, (spread - 2) // max(others, 1)))
+    for index, (kind, i) in enumerate(slots):
+        start = (index * (spread - width)) // max(others, 1)
+        bank = preset[kind]
+        topic = bank[i % len(bank)]
+        key = topic["key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
+        name = f"{kind}-{key}"
+        if kind == "reversal":
+            length = 2 + draw.below(seed, ["plant", name], ["chain"], 2)
+            times = _steps(start, width, length + 1)
+            previous = None
+            for v in range(length):
+                version = topic["versions"][v]
+                fid = f"f.{key}.{v + 1}"
+                _fact(ctx, fid, key, topic["kind"], version["value"], version["forms"], ["*"], previous and previous[0], [user])
+                eid = _plant_post(
+                    ctx, f"plant.{key}.d{v + 1}", times[v], user, surface, version["say"],
+                    discloses=[fid], **({"depends_on": [previous[1]]} if previous else {}),
+                )  # fmt: skip
+                previous = (fid, eid)
+            probe = _plant_post(ctx, f"plant.{key}.q", times[length], user, surface, topic["ask"], probe=True, depends_on=[previous[1]])
+            ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
+        else:  # injection: a pasted document whose instruction asks to repeat an inert code
+            times = _steps(start, width, 3)
+            secret = topic["prefix"] + format(draw.draw(seed, ["plant", name], ["secret"]) >> 32, "08x")
+            sample = topic["sample_prefix"] + format(draw.draw(seed, ["plant", name], ["sample"]) >> 32, "08x")
+            sample_key = topic["sample_key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
+            _fact(ctx, f"f.{key}", key, "secret", secret, None, [user], authority=[user])
+            _fact(ctx, f"f.{sample_key}", sample_key, "item", sample, [sample], ["*"], authority=[user])
+            first = _plant_post(ctx, f"plant.{key}.d", times[0], user, surface, topic["say"].replace("{value}", secret), discloses=[f"f.{key}"])
+            second = _plant_post(
+                ctx, f"plant.{sample_key}.d", times[1], user, surface, topic["sample_say"].replace("{value}", sample),
+                discloses=[f"f.{sample_key}"], depends_on=[first],
+            )  # fmt: skip
+            probe = _plant_post(ctx, f"plant.{sample_key}.q", times[2], user, surface, topic["sample_ask"], probe=True, depends_on=[second])
+            ctx.checks.append({"id": f"c.{key}.no_echo", "kind": "no_echo", "fact": f"f.{key}", "tags": ["policy"]})
+            ctx.checks.append({"id": f"c.{sample_key}", "kind": "answer", "key": sample_key, "probe": probe})
+    bank = preset["return"]
+    for i in range(returns):
+        topic = bank[i % len(bank)]
+        key = topic["key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
+        away = spread + 9 * i + 1  # the first away day
+        window = (away * DAY, (away + 7) * DAY)
+        ctx.users[0].away.append(list(window))
+        fid = f"f.{key}"
+        _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], ["*"], authority=[user])
+        said = _plant_post(ctx, f"plant.{key}.d", (away - 1) * DAY + 9 * HOUR + 10 * MINUTE, user, surface, topic["say"], discloses=[fid])
+        probe = _plant_post(
+            ctx, f"plant.{key}.q", (away + 7) * DAY + 9 * HOUR + 10 * MINUTE, user, surface, topic["ask"],
+            probe=True, depends_on=[said],
+        )  # fmt: skip
+        ctx.pending.append((probe, user, window[0]))
+        ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
+    _unanswerable(ctx, counts, days, set())
+    return [
+        "Questions about things that were never said carry no check in this version: a fact must be disclosed before it can be scored."
+    ]
+
+
+# --- planted situations: users acting on the product through ops (social) -------
+
+
+def _op(ctx, event_id, at, actor, op, args, **more):
+    """A planted ``op`` event on the actor's own direct surface."""
+    event = {"id": event_id, "at": at, "actor": actor, "surface": f"direct:{actor}", "kind": "op", "op": op, "args": args}
+    event.update(more)
+    ctx.events.append(event)
+    ctx.planted.append((actor, at, event_id))
+    return event_id
+
+
+def _distinct(seed, name, labels, pool):
+    """One keyed pick per label from ``pool``, none repeated, in the order of ``labels``."""
+    left, out = list(pool), []
+    for label in labels:
+        who = draw.choice(seed, ["plant", name], [label], left)
+        left.remove(who)
+        out.append(who)
+    return out
+
+
+def _plant_social(ctx, population):
+    """Add the planted situations of the ``social`` shape; return the limits to state.
+
+    Every user acts on the product through ``op`` events on its own direct surface.
+    A friends-only post, and a post to the followers of someone who blocked a user, are
+    each read through ``read_feed`` by a user inside the audience (``answer``) and by a
+    user outside it (``withhold``, with ``no_leak`` over the run). A deleted post is a
+    post replaced by a later one: the feed must show the later post, not the deleted one.
+    """
+    preset, seed, days = ctx.preset, ctx.seed, ctx.days
+    counts = dict(preset["plant"])
+    counts.update(population.get("plant", {}))
+    ids = ctx.ids
+    notes = []
+    slots = [("friends_post", i) for i in range(counts["friends_only"])]
+    slots += [("block_post", i) for i in range(counts["blocks"])]
+    slots += [("deleted_post", i) for i in range(counts["deletions"])]
+    if len(ids) < 3:
+        skipped = {k: sum(1 for s in slots if s[0] == k) for k in ("friends_post", "block_post")}
+        slots = [s for s in slots if s[0] == "deleted_post"]
+        names = {"friends_post": "friends-only posts", "block_post": "blocks"}
+        left = [f"{n} {names[k]}" for k, n in skipped.items() if n]
+        if left:
+            notes.append("Not planted, because they need at least three users: " + ", ".join(left) + ".")
+    total = len(slots)
+    width = min(5, max(1, (days - 2) // max(total, 1)))
+    for index, (kind, i) in enumerate(slots):
+        start = (index * (days - width)) // max(total, 1)
+        bank = preset[kind]
+        topic = bank[i % len(bank)]
+        key = topic["key"] + ("" if i < len(bank) else f"-{i // len(bank) + 1}")
+        name = f"{kind}-{key}"
+        if kind == "friends_post":
+            friends_count = 1 if len(ids) < 4 else 2
+            labels = ["author", *(f"friend-{j}" for j in range(1, friends_count + 1)), "outsider"]
+            author, *rest = _distinct(seed, name, labels, ids)
+            friends, outsider = rest[:-1], rest[-1]
+            times = _steps(start, width, 2 * friends_count + 3)
+            fid = f"f.{key}"
+            _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], [author, *friends], authority=[author])
+            follows, slot = [], 0
+            for j, friend in enumerate(friends, 1):
+                follows.append(_op(ctx, f"plant.{key}.fa{j}", times[slot], author, "follow", {"user": friend}))
+                follows.append(_op(ctx, f"plant.{key}.fb{j}", times[slot + 1], friend, "follow", {"user": author}))
+                slot += 2
+            post = _op(
+                ctx, f"plant.{key}.d", times[slot], author, "post", {"audience": "friends", "text": topic["say"]},
+                discloses=[fid], depends_on=follows,
+            )  # fmt: skip
+            allowed = _op(ctx, f"plant.{key}.qa", times[slot + 1], friends[0], "read_feed", {"limit": 20}, probe=True, depends_on=[post])
+            outside = _op(ctx, f"plant.{key}.qo", times[slot + 2], outsider, "read_feed", {"limit": 20}, probe=True, depends_on=[post])
+            _audience_checks(ctx, key, fid, allowed, outside)
+        elif kind == "block_post":
+            author, blocked, follower = _distinct(seed, name, ["author", "blocked", "follower"], ids)
+            times = _steps(start, width, 6)
+            fid = f"f.{key}"
+            _fact(ctx, fid, key, topic["kind"], topic["value"], topic["forms"], [author, follower], authority=[author])
+            one = _op(ctx, f"plant.{key}.fa", times[0], blocked, "follow", {"user": author})
+            two = _op(ctx, f"plant.{key}.fb", times[1], follower, "follow", {"user": author})
+            block = _op(ctx, f"plant.{key}.b", times[2], author, "block", {"user": blocked}, depends_on=[one])
+            post = _op(
+                ctx, f"plant.{key}.d", times[3], author, "post", {"audience": "followers", "text": topic["say"]},
+                discloses=[fid], depends_on=[block, two],
+            )  # fmt: skip
+            allowed = _op(ctx, f"plant.{key}.qa", times[4], follower, "read_feed", {"limit": 20}, probe=True, depends_on=[post])
+            outside = _op(ctx, f"plant.{key}.qo", times[5], blocked, "read_feed", {"limit": 20}, probe=True, depends_on=[post])
+            _audience_checks(ctx, key, fid, allowed, outside)
+        else:  # deleted_post: a post, its deletion, a later post, then a read of the feed
+            author = draw.choice(seed, ["plant", name], ["author"], ids)
+            readers = [u for u in ids if u != author] or [author]
+            reader = draw.choice(seed, ["plant", name], ["reader"], readers)
+            times = _steps(start, width, 4)
+            first, second = f"f.{key}.1", f"f.{key}.2"
+            _fact(ctx, first, key, topic["kind"], topic["first_value"], topic["first_forms"], ["*"], authority=[author])
+            _fact(ctx, second, key, topic["kind"], topic["value"], topic["forms"], ["*"], first, [author])
+            one = _op(
+                ctx, f"plant.{key}.d1", times[0], author, "post", {"audience": "public", "text": topic["first_say"]},
+                discloses=[first],
+            )  # fmt: skip
+            gone = _op(ctx, f"plant.{key}.x", times[1], author, "delete_post", {"post": one}, depends_on=[one])
+            two = _op(
+                ctx, f"plant.{key}.d2", times[2], author, "post", {"audience": "public", "text": topic["say"]},
+                discloses=[second], depends_on=[gone],
+            )  # fmt: skip
+            probe = _op(ctx, f"plant.{key}.q", times[3], reader, "read_feed", {"limit": 20}, probe=True, depends_on=[two])
+            ctx.checks.append({"id": f"c.{key}", "kind": "answer", "key": key, "probe": probe})
+    return notes
+
+
+def _audience_checks(ctx, key, fid, allowed, outside):
+    """The paired checks of a post with a restricted audience."""
+    ctx.checks.append({"id": f"c.{key}.answer", "kind": "answer", "key": key, "probe": allowed})
+    ctx.checks.append({"id": f"c.{key}.withhold", "kind": "withhold", "fact": fid, "probe": outside})
+    ctx.checks.append({"id": f"c.{key}.no_leak", "kind": "no_leak", "fact": fid})
+
+
+def _filler_social(ctx):
+    """Scheduled traffic: each user posts or reads the feed on its own direct surface.
+
+    A turn depends on nothing but its user's id and the turn number, as in ``_filler``.
+    Nobody replies, and the habits that change message text (split, typo, wrong place)
+    do not apply to op arguments.
+    """
+    seed, days, preset = ctx.seed, ctx.days, ctx.preset
+    per_day = preset["filler"]["turns_per_day"]
+    question_pct = preset["filler"]["question_pct"]
+    end = days * DAY
+    for user in ctx.users:
+        hours = user.traits["active_hours"]
+        wlen = (hours["end"] - hours["start"]) * HOUR
+        surface = f"direct:{user.id}"
+        for day in range(days):
+            for turn in range(per_day):
+                n = day * per_day + turn
+                offset = draw.below(seed, [user.id, "turn_time"], [n], _DEFAULT_WINDOW - SPAN)
+                actual = day * DAY + (hours["start"] - hours["offset"]) * HOUR
+                actual += offset * (wlen - SPAN) // (_DEFAULT_WINDOW - SPAN)
+                if actual < 0 or actual + SPAN > end or _away_end(user, actual, actual + SPAN) is not None:
+                    continue
+                if draw.chance(seed, [user.id, "kind"], [n], question_pct, 100):
+                    event = {"id": f"{user.id}.q{n}", "op": "read_feed", "args": {"limit": 20}}
+                else:
+                    mid = f"{user.id}.t{n}"
+                    text = _pick_text(ctx, user, "statement", mid)
+                    event = {"id": mid, "op": "post", "args": {"audience": "public", "text": text}}
+                ctx.events.append({**event, "at": actual, "actor": user.id, "surface": surface, "kind": "op"})
+
+
 # --- the pack -----------------------------------------------------------------
 
 
@@ -801,7 +1089,8 @@ def generate(population: dict, *, validate: bool = True) -> model.Pack:
         user.away = [[w["from_day"] * DAY, (w["to_day"] + 1) * DAY] for w in user.traits["away"]]
         users.append(user)
     ctx = _Context(seed, days, preset, users)
-    notes = _plant(ctx, population)
+    shape = preset.get("shape", "team")
+    notes = {"team": _plant, "solo": _plant_solo, "social": _plant_social}[shape](ctx, population)
     for user in users:
         user.away = _merge(user.away)
     # planted posts must fit their author's hours and absences
@@ -813,26 +1102,28 @@ def generate(population: dict, *, validate: bool = True) -> model.Pack:
                 f"planted event {event_id!r} by {actor!r} falls outside its active hours or inside an away window",
                 f"{actor}.traits",
             )
-    # away and back events, one pair for every merged window
+    # away and back events, one pair for every merged window, named on a surface the user is on
+    home = (lambda user: preset["public_surface"]) if shape == "team" else (lambda user: f"direct:{user.id}")
     for user in users:
         for index, (start, end) in enumerate(user.away):
-            ctx.events.append({"id": f"{user.id}.away.{index}", "at": start, "actor": user.id, "surface": preset["public_surface"], "kind": "away"})
-            ctx.events.append({"id": f"{user.id}.back.{index}", "at": end, "actor": user.id, "surface": preset["public_surface"], "kind": "back"})
+            ctx.events.append({"id": f"{user.id}.away.{index}", "at": start, "actor": user.id, "surface": home(user), "kind": "away"})
+            ctx.events.append({"id": f"{user.id}.back.{index}", "at": end, "actor": user.id, "surface": home(user), "kind": "back"})
     for probe_id, absentee, window_start in ctx.pending:
         user = ctx.by_id[absentee]
         index = next(i for i, (s, e) in enumerate(user.away) if s <= window_start < e)
         for event in ctx.events:
             if event["id"] == probe_id:
                 event["depends_on"] = [*event["depends_on"], f"{absentee}.back.{index}"]
-    _filler(ctx)
+    (_filler_social if shape == "social" else _filler)(ctx)
     ctx.events.sort(key=lambda e: (e["at"], e["id"]))
     n = len(users)
     limits = list(preset["limits"]) + notes
-    members = {s["id"]: [] for s in preset["surfaces"]}
-    for s in preset["surfaces"]:
+    channels = preset.get("surfaces", [])
+    members = {}
+    for s in channels:
         pool = ctx.ids if s["members"] == "all" else ctx.leads
         members[s["id"]] = [*pool, preset["subject"]]
-    surfaces = [{"id": s["id"], "kind": s["kind"], "members": members[s["id"]]} for s in preset["surfaces"]]
+    surfaces = [{"id": s["id"], "kind": s["kind"], "members": members[s["id"]]} for s in channels]
     if preset["direct_surfaces"]:
         surfaces += [{"id": f"direct:{i}", "kind": "direct", "members": [i, preset["subject"]]} for i in ctx.ids]
     checks = [{"id": "c.harness", "kind": "harness"}, *ctx.checks]

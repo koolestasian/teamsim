@@ -201,7 +201,7 @@ class LoadPopulationTests(unittest.TestCase):
         self.assertEqual(documented, set(generate.POPULATION_RULES))
 
     def test_presets_list(self):
-        self.assertEqual(generate.PRESETS, ("team",))
+        self.assertEqual(generate.PRESETS, ("social", "solo", "team"))
 
 
 class BundleTests(unittest.TestCase):

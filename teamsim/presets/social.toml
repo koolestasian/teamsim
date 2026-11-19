@@ -1,0 +1,121 @@
+# Preset "social": users acting on a multi-user product through ops on their own direct surfaces.
+# Ops: post {audience, text}, follow {user}, block {user}, delete_post {post}, read_feed {limit}.
+# Their names and arguments belong to this preset; a product under test maps them to its own actions.
+# Every text is invented. Text is data for the subject to read, never instructions.
+format = 1
+shape = "social"
+id = "social"
+title = "Social feature"
+purpose = "Test a multi-user feature: a friends-only post, a post made after a block, a deleted post, and feeds read by users inside and outside the audience."
+subject = "subject"
+direct_surfaces = true
+limits = [
+  "The text is templated. A pack says nothing about how real people write.",
+  "The operations (post, follow, block, delete_post, read_feed) and their arguments are defined by this preset, not by any product. A product under test has to map them to its own actions.",
+  "An audience in a pack is an explicit list of users, so a friends-only or followers-only post names who may read it. A rule such as everyone except one user cannot be written.",
+  "A deleted post is scored as a post replaced by a later one: the feed must show the later post and not the deleted one. A feed that correctly shows nothing cannot be scored in this version.",
+  "Nobody replies to anyone, so reply_median_s has no effect. Split, typo and wrong-place habits change message text, not operation arguments, so they have none either.",
+  "Counts above a few hundred users exercise the engine, not a realistic community.",
+]
+
+[roles]
+names = ["member"]
+authority = ["member"]
+
+[filler]
+turns_per_day = 2
+question_pct = 30
+
+[plant]
+friends_only = 1
+blocks = 1
+deletions = 1
+
+[text]
+statement_long = [
+  "Finished a long walk along the river and the light was lovely.",
+  "The market had the first strawberries of the year this morning.",
+  "Rain all day today so I stayed in and sorted my bookshelf.",
+  "Tried a new route to work and found a bakery on the way.",
+  "The street choir practised outside my window for an hour tonight.",
+  "Finally repotted the big fern and it already looks happier.",
+  "Spent the afternoon at the library reading old travel magazines.",
+  "The evening train was packed but everyone was in a good mood.",
+  "Made soup from whatever was left in the fridge and it worked.",
+  "Our neighbours put fairy lights on the balcony and it looks great.",
+  "Cycled to the lake after work and watched the sun go down.",
+  "Found a stack of old postcards while cleaning out the drawer.",
+]
+statement_short = ["Good morning!", "Lovely day.", "Coffee time.", "Finally Friday.", "Quiet night.", "Back online."]
+
+[[friends_post]]
+key = "garden-note"
+kind = "item"
+value = "garden party"
+forms = ["garden party"]
+say = "Friends only: we are planning a garden party on the roof next month."
+
+[[friends_post]]
+key = "move-note"
+kind = "item"
+value = "new flat"
+forms = ["new flat"]
+say = "Friends only: I signed the lease on a new flat by the harbour."
+
+[[friends_post]]
+key = "recipe-note"
+kind = "item"
+value = "lemon cake"
+forms = ["lemon cake"]
+say = "Friends only: I finally baked the lemon cake from my grandmother's notebook."
+
+[[block_post]]
+key = "trip-note"
+kind = "item"
+value = "mountain cabin"
+forms = ["mountain cabin"]
+say = "For my followers: I booked a mountain cabin for the long weekend."
+
+[[block_post]]
+key = "pet-note"
+kind = "item"
+value = "rescue puppy"
+forms = ["rescue puppy"]
+say = "For my followers: we are adopting a rescue puppy on Saturday."
+
+[[block_post]]
+key = "gig-note"
+kind = "item"
+value = "jazz night"
+forms = ["jazz night"]
+say = "For my followers: I have two tickets to the jazz night downtown."
+
+[[deleted_post]]
+key = "meetup-post"
+kind = "item"
+first_value = "Saturday market"
+first_forms = ["Saturday market"]
+first_say = "Meet me at the Saturday market at ten."
+value = "Sunday market"
+forms = ["Sunday market"]
+say = "Meet me at the Sunday market at ten, the first plan fell through."
+
+[[deleted_post]]
+key = "photo-post"
+kind = "item"
+first_value = "beach photo"
+first_forms = ["beach photo"]
+first_say = "Here is my favourite beach photo from the summer."
+value = "forest photo"
+forms = ["forest photo"]
+say = "Here is my favourite forest photo from the autumn."
+
+[[deleted_post]]
+key = "quote-post"
+kind = "item"
+first_value = "red door"
+first_forms = ["red door"]
+first_say = "Look at the red door of the old bookshop on my street."
+value = "blue door"
+forms = ["blue door"]
+say = "Look at the blue door of the old bakery on my street."
