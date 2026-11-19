@@ -179,6 +179,8 @@ class Handler(BaseHTTPRequestHandler):
     server_version = "teamsim-serve"
     sys_version = ""
     protocol_version = "HTTP/1.0"
+    # Python 3.12 answers a malformed request line as HTTP/0.9 (no status line); keep 1.0.
+    default_request_version = "HTTP/1.0"
 
     timeout = 10  # a client that stalls mid-request does not hold a thread forever
 
