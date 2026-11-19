@@ -90,7 +90,7 @@ class Ledger:
                 self._should[d.n] = not down
                 sub_in.add(surface)
             elif kind == model.EVENT_SUBJECT_LEAVE:
-                self._should[d.n] = not down
+                self._should[d.n] = surface in sub_in and not down
                 sub_in.discard(surface)
             elif kind == model.EVENT_SUBJECT_DOWN:
                 self._should[d.n] = not down

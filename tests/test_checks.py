@@ -467,6 +467,21 @@ class Harness(unittest.TestCase):
 
         self.assertEqual(self.tamper(go).reason, "out_of_order")
 
+    def test_a_second_subject_leave_is_not_expected_by_the_subject(self):
+        # the engine sends subject_leave only to a member; the ledger must agree
+        from teamsim import controls, engine
+        from teamsim.subject import InProcess
+
+        p = with_events(
+            P,
+            extra=[{"id": "e28", "at": 660000, "actor": "subject", "surface": "leads",
+                    "kind": "subject_leave"}],
+        )
+        for name in ("null", "oracle"):
+            log = engine.run(p, InProcess(controls.make(name, p)))
+            v = {x.check: x for x in evaluate(p, log)}["c-harness"]
+            self.assertEqual((v.verdict, v.reason), ("pass", None), name)
+
     def test_out_of_order_outranks_not_delivered(self):
         def go(log):
             i = at(log, "e04")

@@ -25,9 +25,14 @@ Choices where the contract is silent (each the stricter reading):
   not happened when it falls due never happens; it is not postponed.
 - A trigger fires only when every dependency, ``target`` included, has
   happened; the window opens at the last ``depends_on`` time.
+- Pending ticks are a set of times: each requested time gets one tick, requests
+  for the same time merge, and a later request does not cancel an earlier one.
 - A ``wake_at_ms`` that is not later than the message time is recorded and
-  ignored, and leaves any pending tick in place.
-- A tick pending when the session ends is dropped silently.
+  ignored, and leaves the pending ticks in place (the transport already ends a
+  session whose subject sends one, as ``invalid_message``).
+- Ticks pending when the session ends early (a fault or a stalled subject) are
+  dropped without a note; at the normal end of the run each is dropped with a
+  ``tick_dropped`` note.
 - The detail of a ``rejected_action`` is ``surface`` or ``reply_to``, the
   field that failed (the surface is checked first).
 - ``subject_down`` and ``subject_up`` reach a live subject whatever surface
@@ -185,7 +190,7 @@ class State:
     away: _Map  # actor id -> bool
     down: bool
     live: bool
-    tick: int | None
+    ticks: tuple  # pending tick times, ascending, without duplicates
     happened: _Map  # event id -> time
     fired: _Map  # event id -> True
     delivered: _Map  # (surface id, event id) -> True, for the subject
@@ -276,7 +281,7 @@ def _initial(plan: Plan) -> State:
         away=_Map(),
         down=False,
         live=True,
-        tick=None,
+        ticks=(),
         happened=_Map(),
         fired=_Map(),
         delivered=_Map(),
@@ -389,7 +394,7 @@ def _consume(plan: Plan, w: _Work, reply: Reply):
         reason = SHUTDOWN_ERROR
         if isinstance(last, Fault) and last.code == CODE_TIMEOUT:
             reason = SHUTDOWN_WATCHDOG
-        w.tick = None
+        w.ticks = ()
         _note(w, t, NOTE_SHUTDOWN, detail=reason)
         w.awaiting = _Awaiting("stop", 0, t, reason)
         return Send("stop", {"type": "shutdown", "reason": reason, "t_ms": t})
@@ -398,7 +403,7 @@ def _consume(plan: Plan, w: _Work, reply: Reply):
         return None
     _observe(w, t, seq, OBS_DONE, wake_at_ms=reply.wake_at_ms)
     if reply.wake_at_ms is not None and reply.wake_at_ms > t:
-        w.tick = reply.wake_at_ms
+        w.ticks = tuple(sorted({*w.ticks, reply.wake_at_ms}))
     return None
 
 
@@ -482,7 +487,7 @@ def _advance(plan: Plan, w: _Work):
             from_static = False
         if head is None:
             break
-        if w.tick is not None and w.tick < head[0]:
+        if w.ticks and w.ticks[0] < head[0]:
             send = _tick(w)
             if send is not None:
                 return send
@@ -507,9 +512,9 @@ def _advance(plan: Plan, w: _Work):
 
 def _finish(plan: Plan, w: _Work) -> None:
     t = w.last_applied
-    if w.tick is not None:
+    for _ in w.ticks:
         _note(w, t, NOTE_TICK_DROPPED, detail="after_end")
-        w.tick = None
+    w.ticks = ()
     for event in plan.pack.events:
         if w.happened.get(event.id) is None:
             _note(w, t, NOTE_NOT_FIRED, event=event.id)
@@ -517,8 +522,8 @@ def _finish(plan: Plan, w: _Work) -> None:
 
 
 def _tick(w: _Work):
-    t = w.tick
-    w.tick = None
+    t = w.ticks[0]
+    w.ticks = w.ticks[1:]
     w.time = t
     if w.down:
         _note(w, t, NOTE_TICK_DROPPED, detail="down")

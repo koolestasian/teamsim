@@ -410,7 +410,7 @@ class Triggers(unittest.TestCase):
 
 
 class Ticks(unittest.TestCase):
-    def test_new_request_replaces_the_pending_one(self):
+    def test_a_later_request_does_not_cancel_an_earlier_one(self):
         events = [ev("a", at=10), ev("b", at=11), ev("c", at=100)]
 
         def handler(m):
@@ -418,7 +418,17 @@ class Ticks(unittest.TestCase):
 
         log = engine.run(make_pack(events), FakeSession(handler))
         ticks = [e for e in log if isinstance(e, Delivery) and e.kind == "tick"]
-        self.assertEqual([t.t_ms for t in ticks], [20])
+        self.assertEqual([t.t_ms for t in ticks], [20, 50])
+
+    def test_requests_for_the_same_time_give_one_tick(self):
+        events = [ev("a", at=10), ev("b", at=11), ev("c", at=100)]
+
+        def handler(m):
+            return {"a": done(wake_at_ms=50), "b": done(wake_at_ms=50)}.get(eid(m))
+
+        log = engine.run(make_pack(events), FakeSession(handler))
+        ticks = [e for e in log if isinstance(e, Delivery) and e.kind == "tick"]
+        self.assertEqual([t.t_ms for t in ticks], [50])
 
     def test_wake_not_later_is_ignored(self):
         events = [ev("a", at=10), ev("b", at=100)]
