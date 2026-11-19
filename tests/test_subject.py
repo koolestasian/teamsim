@@ -467,6 +467,43 @@ class Transcript(unittest.TestCase):
         self.assertTrue(any("12 units" in text for _, text in lines))
 
 
+class EngineTranscript(unittest.TestCase):
+    """Done when 4, over the engine: nothing the subject is sent carries a fact outside the
+    event that discloses it, for every shipped pack and for a silent and an honest subject."""
+
+    def test_no_fact_reaches_the_subject_outside_its_disclosing_event(self):
+        from teamsim import controls, engine, match
+
+        class Recorder:
+            def __init__(self, inner):
+                self.inner, self.messages = inner, []
+
+            def handle(self, message):
+                self.messages.append(json.loads(json.dumps(message)))
+                return self.inner.handle(message)
+
+        for name in ("minimal", "team-ten", "solo", "social-ten"):
+            pack = packmod.load(ROOT / "packs" / name)
+            events = {e.id: e for e in pack.events}
+            for control in ("null", "oracle"):
+                with self.subTest(pack=name, control=control):
+                    recorder = Recorder(controls.make(control, pack))
+                    engine.run(pack, subject.InProcess(recorder))
+                    self.assertGreater(len(recorder.messages), 2)
+                    for message in recorder.messages:
+                        blob = json.dumps(message, ensure_ascii=False)
+                        source = message["payload"].get("id") if message["type"] == "event" else None
+                        allowed = set(events[source].discloses or ()) if source in events else set()
+                        for fact in pack.facts:
+                            if fact.id in allowed:
+                                continue
+                            for form in (fact.value, *(fact.forms or ())):
+                                self.assertFalse(
+                                    match.contains(blob, form),
+                                    (name, control, message.get("seq"), fact.id),
+                                )
+
+
 class Redaction(unittest.TestCase):
     """Done when 5."""
 
