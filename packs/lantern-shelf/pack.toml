@@ -1,0 +1,688 @@
+format = 1
+id = "lantern-shelf"
+title = "Lantern Shelf: six people and a crash bot build an e-reader app"
+purpose = "Test an assistant that joins a team chat: it must recall the current value of decisions, task owners and dates after plans changed over eight weeks."
+seed = "lantern-shelf-1"
+limits = ["The chat is a fixed hand-written transcript, so it is the same in every run.", "Every channel is public, so there are no privacy, secret or catch-up checks.", "Answers are matched against the evidence fragments of the eval set, not judged for meaning.", "Replies and message edits in the original chat are not kept: the pack format has no field for them."]
+
+[subject]
+id = "subject"
+
+[provenance]
+generator_version = "fixtures/demo/make_pack.py"
+transformation = "converted from fixtures/demo/dataset.json and fixtures/demo/eval.toml"
+
+[[actors]]
+id = "wren"
+display = "Wren Calloway"
+
+[[actors]]
+id = "dov"
+display = "Dov Kestrel"
+
+[[actors]]
+id = "imke"
+display = "Imke Brandt"
+
+[[actors]]
+id = "tavish"
+display = "Tavish Orme"
+
+[[actors]]
+id = "nadia"
+display = "Nadia Quill"
+
+[[actors]]
+id = "pell"
+display = "Pell Hartnoll"
+
+[[actors]]
+id = "crashwatch"
+role = "bot"
+display = "crashwatch"
+
+[[surfaces]]
+id = "general"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "pricing-numbers"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "engineering"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "epub-parser-crashes"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "sync-conflicts"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "design"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "onboarding-v2"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "dyslexia-and-accessibility"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "release-ops"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[surfaces]]
+id = "beta-1-checklist"
+kind = "channel"
+members = ["wren", "dov", "imke", "tavish", "nadia", "pell", "crashwatch", "subject"]
+
+[[facts]]
+id = "f.d-12"
+key = "d-12"
+kind = "decision"
+value = "PDF"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-13"
+key = "d-13"
+kind = "decision"
+value = "DRM"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-8"
+key = "d-16"
+kind = "decision"
+value = "account at first launch"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-16"
+key = "d-16"
+kind = "decision"
+value = "optional"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-8"
+
+[[facts]]
+id = "f.d-22"
+key = "d-22"
+kind = "decision"
+value = "third-party analytics"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-3"
+key = "d-23"
+kind = "decision"
+value = "libspine"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-23"
+key = "d-23"
+kind = "decision"
+value = "junk bytes"
+authority = ["imke"]
+audience = ["*"]
+supersedes = "f.d-3"
+
+[[facts]]
+id = "f.d-28"
+key = "d-28"
+kind = "decision"
+value = "union"
+authority = ["tavish", "wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-30"
+key = "d-30"
+kind = "decision"
+value = "2 at a time"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-31"
+key = "d-31"
+kind = "decision"
+value = "Markdown"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-34"
+key = "d-34"
+kind = "decision"
+value = "edit wins"
+authority = ["tavish", "wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-18"
+key = "d-36"
+kind = "decision"
+value = "$4.99"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-36"
+key = "d-36"
+kind = "decision"
+value = "$7.99"
+authority = ["wren", "dov"]
+audience = ["*"]
+supersedes = "f.d-18"
+
+[[facts]]
+id = "f.d-27"
+key = "d-39"
+kind = "decision"
+value = "last write wins"
+authority = ["tavish"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-39"
+key = "d-39"
+kind = "decision"
+value = "furthest page"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-27"
+
+[[facts]]
+id = "f.d-46"
+key = "d-46"
+kind = "decision"
+value = "API 24"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-48"
+key = "d-48"
+kind = "decision"
+value = "48dp"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-29"
+key = "d-51"
+kind = "decision"
+value = "2048 px"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-51"
+key = "d-51"
+kind = "decision"
+value = "96 MB"
+authority = ["dov"]
+audience = ["*"]
+supersedes = "f.d-29"
+
+[[facts]]
+id = "f.d-54"
+key = "d-54"
+kind = "decision"
+value = "25 MB"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-1"
+key = "d-56"
+kind = "decision"
+value = "3 April"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-50"
+key = "d-56"
+kind = "decision"
+value = "10 April"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-1"
+
+[[facts]]
+id = "f.d-56"
+key = "d-56"
+kind = "date"
+value = "14 April"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-50"
+
+[[facts]]
+id = "f.d-59"
+key = "d-59"
+kind = "decision"
+value = "1.1%"
+authority = ["imke"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-47"
+key = "d-63"
+kind = "decision"
+value = "Easeread"
+authority = ["wren", "nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-63"
+key = "d-63"
+kind = "decision"
+value = "spacing sliders"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-47"
+
+[[facts]]
+id = "f.d-67"
+key = "d-67"
+kind = "decision"
+value = "1% of sessions"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-21"
+key = "d-68"
+kind = "decision"
+value = "Thursday"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-68"
+key = "d-68"
+kind = "decision"
+value = "Tuesdays"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-21"
+
+[[facts]]
+id = "f.d-7"
+key = "d-7"
+kind = "decision"
+value = "Fenwick Serif"
+authority = ["nadia"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-71"
+key = "d-71"
+kind = "decision"
+value = "no text-to-speech"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-20"
+key = "d-74"
+kind = "decision"
+value = "14-day"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.d-74"
+key = "d-74"
+kind = "decision"
+value = "7 days"
+authority = ["wren"]
+audience = ["*"]
+supersedes = "f.d-20"
+
+[[facts]]
+id = "f.d-76"
+key = "d-76"
+kind = "date"
+value = "2 June"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-2"
+key = "t-2"
+kind = "date"
+value = "Mar 31"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-24"
+key = "t-24"
+kind = "date"
+value = "Apr 1"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-25"
+key = "t-25"
+kind = "assignment"
+value = "Pell"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-32"
+key = "t-32"
+kind = "assignment"
+value = "Tav"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-42"
+key = "t-42"
+kind = "assignment"
+value = "Tavish"
+authority = ["dov"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-60"
+key = "t-60"
+kind = "assignment"
+value = "Imke"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-64"
+key = "t-64"
+kind = "assignment"
+value = "Nadia"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-65"
+key = "t-65"
+kind = "assignment"
+value = "Imke"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-72"
+key = "t-72"
+kind = "assignment"
+value = "Tavish"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-73"
+key = "t-73"
+kind = "assignment"
+value = "Pell"
+authority = ["wren"]
+audience = ["*"]
+
+[[facts]]
+id = "f.t-75"
+key = "t-75"
+kind = "assignment"
+value = "Nadia"
+authority = ["wren"]
+audience = ["*"]
+
+[[checks]]
+id = "c.harness"
+kind = "harness"
+
+[[checks]]
+id = "para-01"
+kind = "answer"
+key = "d-7"
+probe = "q.para-01"
+
+[[checks]]
+id = "para-02"
+kind = "answer"
+key = "d-46"
+probe = "q.para-02"
+
+[[checks]]
+id = "para-03"
+kind = "answer"
+key = "d-36"
+probe = "q.para-03"
+
+[[checks]]
+id = "para-04"
+kind = "answer"
+key = "d-74"
+probe = "q.para-04"
+
+[[checks]]
+id = "para-05"
+kind = "answer"
+key = "d-39"
+probe = "q.para-05"
+
+[[checks]]
+id = "para-06"
+kind = "answer"
+key = "d-16"
+probe = "q.para-06"
+
+[[checks]]
+id = "para-07"
+kind = "answer"
+key = "d-23"
+probe = "q.para-07"
+
+[[checks]]
+id = "para-08"
+kind = "answer"
+key = "d-51"
+probe = "q.para-08"
+
+[[checks]]
+id = "para-09"
+kind = "answer"
+key = "d-54"
+probe = "q.para-09"
+
+[[checks]]
+id = "para-11"
+kind = "answer"
+key = "d-71"
+probe = "q.para-11"
+
+[[checks]]
+id = "para-12"
+kind = "answer"
+key = "d-12"
+probe = "q.para-12"
+
+[[checks]]
+id = "para-13"
+kind = "answer"
+key = "d-13"
+probe = "q.para-13"
+
+[[checks]]
+id = "para-14"
+kind = "answer"
+key = "d-22"
+probe = "q.para-14"
+
+[[checks]]
+id = "para-15"
+kind = "answer"
+key = "d-28"
+probe = "q.para-15"
+
+[[checks]]
+id = "para-16"
+kind = "answer"
+key = "d-68"
+probe = "q.para-16"
+
+[[checks]]
+id = "para-17"
+kind = "answer"
+key = "d-30"
+probe = "q.para-17"
+
+[[checks]]
+id = "para-18"
+kind = "answer"
+key = "d-48"
+probe = "q.para-18"
+
+[[checks]]
+id = "para-19"
+kind = "answer"
+key = "d-31"
+probe = "q.para-19"
+
+[[checks]]
+id = "para-20"
+kind = "answer"
+key = "d-63"
+probe = "q.para-20"
+
+[[checks]]
+id = "para-22"
+kind = "answer"
+key = "d-67"
+probe = "q.para-22"
+
+[[checks]]
+id = "name-01"
+kind = "answer"
+key = "t-72"
+probe = "q.name-01"
+
+[[checks]]
+id = "name-02"
+kind = "answer"
+key = "t-73"
+probe = "q.name-02"
+
+[[checks]]
+id = "name-03"
+kind = "answer"
+key = "t-64"
+probe = "q.name-03"
+
+[[checks]]
+id = "name-04"
+kind = "answer"
+key = "t-25"
+probe = "q.name-04"
+
+[[checks]]
+id = "name-05"
+kind = "answer"
+key = "t-65"
+probe = "q.name-05"
+
+[[checks]]
+id = "name-06"
+kind = "answer"
+key = "t-32"
+probe = "q.name-06"
+
+[[checks]]
+id = "name-07"
+kind = "answer"
+key = "t-75"
+probe = "q.name-07"
+
+[[checks]]
+id = "name-08"
+kind = "answer"
+key = "t-60"
+probe = "q.name-08"
+
+[[checks]]
+id = "name-09"
+kind = "answer"
+key = "t-42"
+probe = "q.name-09"
+
+[[checks]]
+id = "date-06"
+kind = "answer"
+key = "d-76"
+probe = "q.date-06"
+
+[[checks]]
+id = "date-07"
+kind = "answer"
+key = "d-56"
+probe = "q.date-07"
+
+[[checks]]
+id = "date-08"
+kind = "answer"
+key = "t-2"
+probe = "q.date-08"
+
+[[checks]]
+id = "date-09"
+kind = "answer"
+key = "t-24"
+probe = "q.date-09"
+
+[[checks]]
+id = "ctx-01"
+kind = "answer"
+key = "d-7"
+probe = "q.ctx-01"
+
+[[checks]]
+id = "ctx-02"
+kind = "answer"
+key = "d-34"
+probe = "q.ctx-02"
+
+[[checks]]
+id = "ctx-03"
+kind = "answer"
+key = "d-36"
+probe = "q.ctx-03"
+
+[[checks]]
+id = "ctx-07"
+kind = "answer"
+key = "d-59"
+probe = "q.ctx-07"
