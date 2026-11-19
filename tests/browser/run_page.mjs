@@ -608,6 +608,40 @@ async function runEmoji(browser) {
   await context.close();
 }
 
+// Card, sheet, Esc, outside click and focus at a tablet width.
+async function runTablet(browser) {
+  console.log("--- tablet 900x800");
+  const context = await browser.newContext({ viewport: { width: 900, height: 800 }, colorScheme: "light" });
+  const page = await context.newPage();
+  await page.goto(base + "?pack=minimal#timeline");
+  await page.waitForSelector("#timeline .msg");
+  const opener = page.locator("#timeline .av-btn").first();
+  await opener.click();
+  check(await page.locator("#profile").isVisible(), "tablet: the avatar opens the profile card");
+  await page.keyboard.press("Escape");
+  check(await page.locator("#profile").isHidden() && await page.evaluate(() => document.activeElement.classList.contains("av-btn")), "tablet: Esc closes the card and focus returns to the avatar");
+  await opener.click();
+  await page.mouse.click(4, 4);
+  check(await page.locator("#profile").isHidden(), "tablet: an outside click closes the card");
+  await page.click("#ws-membtn");
+  check(await page.locator("#ws-members.open").count() === 1 && await page.evaluate(() => document.querySelector("#ws-members").contains(document.activeElement)), "tablet: Members opens a sheet and focus moves into it");
+  await page.keyboard.press("Escape");
+  check(await page.locator("#ws-members.open").count() === 0 && await page.evaluate(() => document.activeElement.id === "ws-membtn"), "tablet: Esc closes the sheet and focus returns to Members");
+  await page.click("#ws-membtn");
+  await page.mouse.click(10, 10);
+  check(await page.locator("#ws-members.open").count() === 0, "tablet: an outside click closes the sheet");
+  // The person chip sits on its own line under the controls.
+  await opener.click();
+  await page.locator("#profile .pc-only").click();
+  const lay = await page.evaluate(() => {
+    const chip = document.querySelector(".chip-person").getBoundingClientRect(), key = document.querySelector(".ws-key").getBoundingClientRect(), head = document.querySelector(".ws-head").getBoundingClientRect();
+    return { below: chip.top >= key.bottom - 1, inside: chip.bottom <= head.bottom + 1 && chip.right <= head.right };
+  });
+  check(lay.below && lay.inside, "tablet: the person chip wraps under the controls without overlap");
+  check((await scrollWidth(page)) <= 900, "tablet: no horizontal scroll");
+  await context.close();
+}
+
 async function runWorkspaceRun(browser, width, height) {
   console.log("--- workspace after a run " + width + "x" + height);
   const context = await browser.newContext({ viewport: { width, height }, colorScheme: "dark" });
@@ -659,6 +693,7 @@ for (const [width, height] of [[1440, 900], [390, 844]]) {
 }
 for (const name of ["team-ten", "minimal"].concat(lanternPack ? ["lantern-shelf"] : [])) await runCollapse(browser, name, name === "team-ten" ? "dark" : "light");
 await runEmoji(browser);
+await runTablet(browser);
 await runReduced(browser);
 
 // Motion check: the count-up starts at 0 and ends on the exact number; the tab indicator follows the tab.
