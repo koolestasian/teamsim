@@ -1,4 +1,8 @@
-# teamsim (working name)
+
+
+
+
+# teamsim 
 
 **Synthetic users for testing your software: one person, a team or a whole community.**
 
@@ -6,6 +10,8 @@
 ![Status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-orange)
 ![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue)
 ![Licence: MIT or Apache-2.0](https://img.shields.io/badge/licence-MIT%20or%20Apache--2.0-lightgrey)
+
+https://github.com/user-attachments/assets/962ef99f-e9a9-408c-a2ac-170bce61b1d2
 
 Testing a product properly needs people using it: someone who enters things, changes their
 mind, makes mistakes and comes back a week later, or a group who post, decide, message each
@@ -63,11 +69,6 @@ who knew what, where and when:
 A trait changes what a synthetic user does (how fast it responds, how carefully it follows
 instructions, how often it makes a mistake), never what it thinks of your product.
 
-The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine),
-[ADR 0007](docs/adr/0007-scope-simulated-teammates-sandbox.md) and
-[ADR 0008](docs/adr/0008-scope-synthetic-users-any-software.md) (scope), and
-[ADR 0009](docs/adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)
-(what version 0 contains).
 
 ## Status
 
@@ -78,17 +79,6 @@ The decisions behind this are in [ADR 0006](docs/adr/0006-core-shape.md) (engine
 | Design | **Decided.** Stack, engine shape, scope and version 0 ([ADRs 0004 and 0006 to 0009](docs/adr/)) |
 | Engine ([`teamsim/`](teamsim/)) | **Version 0 runs.** Tested on Python 3.12 and 3.14: the [scenario pack format](docs/spec/pack-format.md), the population generator with `solo`, `team` and `social` presets, the scheduler and built-in workspace, both [subject protocol](docs/spec/subject-protocol.md) transports, the record of who was exposed to what, six check kinds, control subjects that test the checks, run records with replay, and the command line. Not built yet: reduction of a failing run, an HTTP adapter, model-driven users, a package release |
 
-### Roadmap
-
-1. Version 0 of the engine ([ADR 0009](docs/adr/0009-version-0-built-in-workspace-subject-protocol-python-floor.md)):
-   simulated time, a workspace built into the engine, the record of who knows what, checks,
-   run records and replay, with software under test connected in process or as a child
-   process over standard input and output, and presets that generate packs. Runs now;
-   reduction of a failing run and a package release remain.
-2. One product other than teamctx tested end to end, with the prototype's checks ported.
-3. Synthetic users that operate software directly (an API, a command line, a browser), after
-   research into existing tools.
-4. Optional model-driven users, recorded for replay.
 
 ## Try it
 
